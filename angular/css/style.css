@@ -2,20 +2,20 @@
     max-width: 860px;
 }
 
-.backlog-story.show-requirements .backlog-story-requirements {
-    display: block;
+.backlog-story .backlog-story-requirements {
+    display: none;
 }
 
-.backlog-story.show-requirements .backlog-story-basic {
+.backlog-story .backlog-story-basic {
     display: none;
+}
+
+.backlog-story .backlog-story-title .show {
+    display: flex;
 }
 
 .backlog-list {
     max-width: 860px;
-}
-
-.backlog-story .backlog-story-requirements {
-    display: none;
 }
 
 .backlog-story .backlog-story-requirements ul {
