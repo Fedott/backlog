@@ -1,0 +1,23 @@
+.backlog-story {
+    max-width: 860px;
+}
+
+.backlog-story.show-requirements .backlog-story-requirements {
+    display: block;
+}
+
+.backlog-story.show-requirements .backlog-story-basic {
+    display: none;
+}
+
+.backlog-list {
+    max-width: 860px;
+}
+
+.backlog-story .backlog-story-requirements {
+    display: none;
+}
+
+.backlog-story .backlog-story-requirements ul {
+    list-style-type: none;
+}
