@@ -5,23 +5,14 @@ backlog-story {
 .backlog-story {
     max-width: 860px;
 }
-
-.backlog-story .backlog-story-requirements {
-    display: none;
-}
-
-.backlog-story .backlog-story-basic {
-    display: none;
-}
-
-.backlog-story .backlog-story-title .show {
-    display: flex;
-}
-
 .backlog-list {
     max-width: 860px;
 }
 
-.backlog-story .backlog-story-requirements ul {
-    list-style-type: none;
+.backlog-story-title-block {
+    width: 100%;
+}
+
+.hide {
+    display: none;
 }
