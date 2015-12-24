@@ -1,23 +1,26 @@
 import {Component} from 'angular2/core';
 import {Story} from "./story";
 import {StoryComponent} from "./story.component"
-
-var STORIES: Story[] = [
-    {id: 1, text: 'Как владелец продукта, я хочу нормальный бэклог, что бы можно было работать', requirements: ['Дизайн', 'Вёрстка', 'Переводы']},
-    {id: 2, text: 'Как владелец продукта, я хочу иметь возможность редактировать истории, что бы исправлять ошибки', requirements: ['qwe']},
-    {id: 3, text: 'Как владелец продукта, я хочу создавать новые истории, что бы контролировать бэклог', requirements: ['qwe']},
-];
+import {StoryService} from "./story.service";
+import {OnInit} from "angular2/core";
 
 @Component({
     selector: 'my-app',
     directives: [StoryComponent],
+    providers: [StoryService],
     template: `
         <div class="backlog-list mdl-grid">
             <backlog-story *ngFor="#story of stories" [story]="story"></backlog-story>
         </div>
         `
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     public title = 'Backlog';
-    public stories = STORIES;
+    public stories: Story[];
+
+    constructor (private _storyService: StoryService) { }
+
+    ngOnInit() {
+        this.stories = this._storyService.getStories();
+    }
 }
