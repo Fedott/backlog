@@ -1,0 +1,3 @@
+stories:
+    type:     rest
+    resource: "@BacklogBundle/Controller/StoriesController.php"

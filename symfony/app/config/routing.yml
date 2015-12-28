@@ -1,0 +1,2 @@
+backlog:
+    resource: "@BacklogBundle/Resources/config/routing.yml"
