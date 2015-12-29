@@ -1,4 +1,10 @@
 services:
+    sensio_framework_extra.converter.doctrine.orm:
+        class: %sensio_framework_extra.converter.doctrine.class%
+        arguments: ["@doctrine_mongodb"]
+        tags:
+            - { name: request.param_converter, converter: doctrine.orm }
+
     backlog.repository.stories:
         class: BacklogBundle\Document\Story\StoriesRepository
         factory: ["@doctrine_mongodb", getRepository]

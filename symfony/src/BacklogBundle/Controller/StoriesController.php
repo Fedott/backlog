@@ -28,10 +28,11 @@ class StoriesController extends FOSRestController
 
     /**
      * @param Story $story
+     * @return Story
      */
     public function getStoryAction(Story $story)
     {
-
+        return $story;
     }
 
     /**
