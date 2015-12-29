@@ -10,3 +10,9 @@ services:
         factory: ["@doctrine_mongodb", getRepository]
         arguments:
             - BacklogBundle:Story\Story
+
+    backlog.repository.requirements:
+        class: BacklogBundle\Document\Requirement\RequirementsRepository
+        factory: ["@doctrine_mongodb", getRepository]
+        arguments:
+            - BacklogBundle:Requirement\Requirement

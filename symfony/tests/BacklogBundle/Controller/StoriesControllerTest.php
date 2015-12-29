@@ -2,38 +2,35 @@
 
 namespace BacklogBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use BacklogBundle\Test\WebTestCase;
 
 class StoriesControllerTest extends WebTestCase
 {
     public function testGetStoriesAction()
     {
-        $client = static::createClient();
+        $this->getClient()->request('GET', '/stories');
 
-        $client->request('GET', '/stories');
+        $this->assertEquals(200, $this->getClient()->getResponse()->getStatusCode(), $this->getClient()->getResponse()->getContent());
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
-
-        $this->assertEquals('[]', $client->getResponse()->getContent());
+        $this->assertEquals('[]', $this->getClient()->getResponse()->getContent());
     }
 
     public function testPostStoriesAction()
     {
-        $client = static::createClient();
-
-        $body = json_encode([
+        $body = [
             'text' => 'Text test text',
-        ]);
-        $response = $client->request('POST', '/stories', [], [], ['CONTENT_TYPE' => 'application/json', 'CONTENT_LENGTH' => strlen($body)], $body);
+        ];
+        $this->requestJson('POST', '/stories', $body);
+        $response = $this->getClient()->getResponse();
+        $this->assertEquals(201, $response->getStatusCode(), $response->getContent());
+        $this->assertJson($response->getContent());
+        $this->assertContains('Text test text', $response->getContent());
 
-        $this->assertEquals(201, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
-        $this->assertJson($client->getResponse()->getContent());
-        $this->assertContains('Text test text', $client->getResponse()->getContent());
+        $storyArray = json_decode($response->getContent(), true);
 
-        $storyArray = json_decode($client->getResponse()->getContent(), true);
+        $this->requestJson("GET", "/stories/{$storyArray['id']}");
 
-        $client->request("GET", "/stories/{$storyArray['id']}");
-
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
+        $response = $this->getClient()->getResponse();
+        $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
     }
 }

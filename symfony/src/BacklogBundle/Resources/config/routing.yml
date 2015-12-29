@@ -1,3 +1,7 @@
 stories:
     type:     rest
     resource: "@BacklogBundle/Controller/StoriesController.php"
+
+requirements:
+    type:     rest
+    resource: "@BacklogBundle/Controller/RequirementsController.php"

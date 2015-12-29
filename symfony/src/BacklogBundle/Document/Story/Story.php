@@ -1,6 +1,7 @@
 <?php
 namespace BacklogBundle\Document\Story;
 
+use BacklogBundle\Document\Requirement\Requirement;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -25,6 +26,13 @@ class Story
      * @var string
      */
     protected $text;
+
+    /**
+     * @ODM\ReferenceMany(targetDocument="BacklogBundle\Document\Requirement\Requirement")
+     *
+     * @var Requirement[]
+     */
+    protected $requirements = [];
 
     /**
      * @return mixed
