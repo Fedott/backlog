@@ -2,24 +2,20 @@
 namespace BacklogBundle\Controller;
 
 use BacklogBundle\Document\StoriesRepository;
+use FOS\RestBundle\Controller\FOSRestController;
 
-class StoriesController
+class StoriesController extends FOSRestController
 {
     /**
-     * @var StoriesRepository
+     * @return StoriesRepository
      */
-    protected $storiesRepository;
-
-    /**
-     * @param StoriesRepository $storiesRepository
-     */
-    public function __construct(StoriesRepository $storiesRepository)
+    protected function getStoriesRepository()
     {
-        $this->storiesRepository = $storiesRepository;
+        return $this->container->get('backlog.repository.stories');
     }
 
     public function getStoriesAction()
     {
-        return [];
+        return $this->getStoriesRepository()->findAll();
     }
 }

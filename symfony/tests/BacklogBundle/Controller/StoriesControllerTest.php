@@ -11,7 +11,7 @@ class StoriesControllerTest extends WebTestCase
 
         $client->request('GET', '/stories');
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
 
         $this->assertEquals('[]', $client->getResponse()->getContent());
     }
