@@ -1,6 +1,6 @@
 services:
     backlog.repository.stories:
-        class: BacklogBundle\Document\StoriesRepository
+        class: BacklogBundle\Document\Story\StoriesRepository
         factory: ["@doctrine_mongodb", getRepository]
         arguments:
-            - BacklogBundle:Story
+            - BacklogBundle:Story\Story

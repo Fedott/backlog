@@ -1,5 +1,5 @@
 <?php
-namespace BacklogBundle\Document;
+namespace BacklogBundle\Document\Story;
 
 use Doctrine\ODM\MongoDB\DocumentRepository;
 

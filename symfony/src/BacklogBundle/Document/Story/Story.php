@@ -1,5 +1,5 @@
 <?php
-namespace BacklogBundle\Document;
+namespace BacklogBundle\Document\Story;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
