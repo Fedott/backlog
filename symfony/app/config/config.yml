@@ -63,3 +63,10 @@ fos_rest:
         default_format: json
     view:
         view_response_listener: force
+    param_fetcher_listener: true
+    body_listener: true
+
+sensio_framework_extra:
+    view:    { annotations: false }
+    router:  { annotations: true }
+    request: { converters: true, auto_convert: true }

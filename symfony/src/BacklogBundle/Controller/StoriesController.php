@@ -27,6 +27,14 @@ class StoriesController extends FOSRestController
     }
 
     /**
+     * @param Story $story
+     */
+    public function getStoryAction(Story $story)
+    {
+
+    }
+
+    /**
      * @View(statusCode=201)
      *
      * @param Request $request

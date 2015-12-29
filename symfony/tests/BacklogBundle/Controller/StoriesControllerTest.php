@@ -1,8 +1,8 @@
 <?php
+
 namespace BacklogBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Request;
 
 class StoriesControllerTest extends WebTestCase
 {
@@ -29,5 +29,11 @@ class StoriesControllerTest extends WebTestCase
         $this->assertEquals(201, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
         $this->assertJson($client->getResponse()->getContent());
         $this->assertContains('Text test text', $client->getResponse()->getContent());
+
+        $storyArray = json_decode($client->getResponse()->getContent(), true);
+
+        $client->request("GET", "/stories/{$storyArray['id']}");
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
     }
 }
