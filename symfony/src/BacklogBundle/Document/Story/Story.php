@@ -28,7 +28,7 @@ class Story
     protected $text;
 
     /**
-     * @ODM\ReferenceMany(targetDocument="BacklogBundle\Document\Requirement\Requirement")
+     * @ODM\ReferenceMany(targetDocument="BacklogBundle\Document\Requirement\Requirement", cascade="all")
      *
      * @var Requirement[]
      */
@@ -70,5 +70,24 @@ class Story
         $this->text = $text;
 
         return $this;
+    }
+
+    /**
+     * @param Requirement $requirement
+     * @return $this
+     */
+    public function addRequirement(Requirement $requirement)
+    {
+        $this->requirements[] = $requirement;
+
+        return $this;
+    }
+
+    /**
+     * @return Requirement[]
+     */
+    public function getRequirements()
+    {
+        return $this->requirements;
     }
 }

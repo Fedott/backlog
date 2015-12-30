@@ -3,7 +3,11 @@ namespace BacklogBundle\Document\Requirement;
 
 use BacklogBundle\Document\Story\Story;
 use Doctrine\ODM\MongoDB\DocumentRepository;
+use Doctrine\ODM\MongoDB\LockMode;
 
+/**
+ * @method Story find($id, $lockMode = LockMode::NONE, $lockVersion = null)
+ */
 class RequirementsRepository extends DocumentRepository
 {
     /**
