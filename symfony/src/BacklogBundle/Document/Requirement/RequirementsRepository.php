@@ -2,6 +2,7 @@
 namespace BacklogBundle\Document\Requirement;
 
 use BacklogBundle\Document\Story\Story;
+use Doctrine\MongoDB\CursorInterface;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use Doctrine\ODM\MongoDB\LockMode;
 
@@ -12,7 +13,7 @@ class RequirementsRepository extends DocumentRepository
 {
     /**
      * @param Story $story
-     * @return array
+     * @return CursorInterface
      */
     public function findByStory(Story $story)
     {

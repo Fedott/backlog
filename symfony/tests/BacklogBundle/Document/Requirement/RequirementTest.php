@@ -54,4 +54,29 @@ class RequirementTest extends KernelTestCase
         $this->assertEquals($requirement->getId(), $loadedRequirement->getId());
         $this->assertEquals($story->getId(), $loadedRequirement->getStory()->getId());
     }
+
+    public function testRepositoryFindByStore()
+    {
+        static::bootKernel();
+
+        $requirementRepository = static::$kernel->getContainer()->get('backlog.repository.requirements');
+        $documentManager = $requirementRepository->getDocumentManager();
+
+        $story = new Story();
+        $story->setText("Story text");
+
+        $requirement = new Requirement();
+        $requirement->setName('design');
+        $requirement->setStory($story);
+
+        $documentManager->persist($story);
+        $documentManager->flush();
+
+        $documentManager->persist($requirement);
+        $documentManager->flush();
+
+        $foundRequirements = $requirementRepository->findByStory($story);
+        $this->assertCount(1, $foundRequirements);
+        $this->assertEquals($requirement, $foundRequirements->getNext());
+    }
 }
