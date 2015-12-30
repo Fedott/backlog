@@ -1,6 +1,7 @@
 <?php
 namespace BacklogBundle\Test;
 
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
@@ -12,6 +13,14 @@ class WebTestCase extends BaseWebTestCase
      */
     protected $client;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->client = static::createClient();
+        $this->clearMongoDb();
+    }
+
     /**
      * @return Client
      */
@@ -22,6 +31,14 @@ class WebTestCase extends BaseWebTestCase
         }
 
         return $this->client;
+    }
+
+    /**
+     * @return DocumentManager
+     */
+    protected function getDocumentManager()
+    {
+        return $this->client->getContainer()->get('doctrine_mongodb.odm.document_manager');
     }
 
     /**
@@ -37,6 +54,11 @@ class WebTestCase extends BaseWebTestCase
         }
 
         return $this->getClient()->request($method, $uri, [], [], ['CONTENT_TYPE' => 'application/json'], $body);
+    }
+
+    protected function clearMongoDb()
+    {
+        $this->getDocumentManager()->getSchemaManager()->dropDatabases();
     }
 
     /**
