@@ -2,9 +2,10 @@
 namespace BacklogBundle\Test;
 
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 
-class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
+class WebTestCase extends BaseWebTestCase
 {
     /**
      * @var Client
