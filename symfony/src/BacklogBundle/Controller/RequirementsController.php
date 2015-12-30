@@ -1,9 +1,9 @@
 <?php
 namespace BacklogBundle\Controller;
 
+use BacklogBundle\Document\DocumentCollection;
 use BacklogBundle\Document\Requirement\RequirementsRepository;
 use BacklogBundle\Document\Story\Story;
-use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\Controller\FOSRestController;
 
 class RequirementsController extends FOSRestController
@@ -22,7 +22,9 @@ class RequirementsController extends FOSRestController
      */
     public function getStoryRequirementsAction(Story $story)
     {
-        return $this->getRequirementsRepository()
+        $requirements = $this->getRequirementsRepository()
             ->findByStory($story);
+
+        return new DocumentCollection($requirements);
     }
 }
