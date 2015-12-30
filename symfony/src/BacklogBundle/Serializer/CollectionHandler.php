@@ -1,33 +1,16 @@
 <?php
-namespace BacklogBundle;
+namespace BacklogBundle\Serializer;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\MongoDB\CursorInterface;
 use Doctrine\MongoDB\Iterator;
-use Doctrine\ODM\MongoDB\Cursor;
 use JMS\Serializer\Context;
 use JMS\Serializer\EventDispatcher\PreSerializeEvent;
-use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\JsonSerializationVisitor;
-use JMS\Serializer\Metadata\ClassMetadata;
-use JMS\Serializer\XmlSerializationVisitor;
 use Metadata\MetadataFactoryInterface;
 use ArrayObject;
 
 /**
- * @DI\Service("lighthouse.core.serializer.handler.collection")
- * @DI\Tag("jms_serializer.handler", attributes={
- *      "type": "Collection",
- *      "format": "json",
- *      "direction": "serialization"
- * })
- * @DI\Tag("jms_serializer.handler", attributes={
- *      "type": "Collection",
- *      "format": "xml",
- *      "direction": "serialization"
- * })
- * @DI\Tag("jms_serializer.event_listener", attributes={
- *      "event": "serializer.pre_serialize"
- * })
  */
 class CollectionHandler
 {
@@ -37,9 +20,6 @@ class CollectionHandler
     protected $metadataFactory;
 
     /**
-     * @DI\InjectParams({
-     *      "metadataFactory" = @DI\Inject("jms_serializer.metadata_factory")
-     * })
      * @param MetadataFactoryInterface $metadataFactory
      */
     public function __construct(MetadataFactoryInterface $metadataFactory)
@@ -83,7 +63,7 @@ class CollectionHandler
      */
     public function onSerializerPreSerialize(PreSerializeEvent $event)
     {
-        if ($event->getObject() instanceof Collection || $event->getObject() instanceof Cursor) {
+        if ($event->getObject() instanceof Collection || $event->getObject() instanceof CursorInterface) {
             $event->setType('Collection');
         }
     }

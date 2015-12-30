@@ -6,7 +6,7 @@ services:
             - { name: request.param_converter, converter: doctrine.orm }
 
     backlog.serializer.handler.collection:
-        class: BacklogBundle\CollectionHandler
+        class: BacklogBundle\Serializer\CollectionHandler
         arguments:
             - "@jms_serializer.metadata_factory"
         tags:

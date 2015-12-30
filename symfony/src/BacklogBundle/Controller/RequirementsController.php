@@ -22,9 +22,7 @@ class RequirementsController extends FOSRestController
      */
     public function getStoryRequirementsAction(Story $story)
     {
-        $requirements = $this->getRequirementsRepository()
+        return $this->getRequirementsRepository()
             ->findByStory($story);
-
-        return new DocumentCollection($requirements);
     }
 }
