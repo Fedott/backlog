@@ -3,10 +3,11 @@ import {Story} from "./story";
 import {Input} from "angular2/core";
 import {Nl2BrPipe} from "./pipes/nl2br.pipe";
 import {ElementRef} from "angular2/core";
+import {StoryService} from "./story.service";
 
 @Component({
     selector: 'backlog-story',
-    inputs: ['story'],
+    inputs: ['story', 'isEditMode'],
     templateUrl: 'app/templates/story.component.html',
     pipes: [Nl2BrPipe]
 })
@@ -59,6 +60,9 @@ export class StoryComponent {
     }
 
     save() {
+        if (null == this.story.id) {
+            //this._storyService.createStory(this.story);
+        }
         this.toggleEditMode();
     }
 

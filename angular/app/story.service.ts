@@ -10,6 +10,8 @@ var STORIES: Story[] = [
 @Injectable()
 export class StoryService {
     getStories() {
-        return STORIES;
+        return Promise.resolve(STORIES);
     }
+
+    public createStory (story: Story) { return story; };
 }
