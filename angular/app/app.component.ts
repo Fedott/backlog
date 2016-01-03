@@ -10,11 +10,17 @@ import {OnInit} from "angular2/core";
     providers: [StoryService],
     template: `
         <div class="backlog-list mdl-grid">
-            <backlog-story *ngIf="isAddStoryFormShow" [story]="newStory" [isEditMode]="true"></backlog-story>
+            <backlog-story
+                *ngIf="isAddStoryFormShow"
+                [story]="newStory"
+                [isEditMode]="true"
+                (saveEvent)="hideAddForm()"
+                (cancelEvent)="hideAddForm()"
+                ></backlog-story>
             <backlog-story *ngFor="#story of stories" [story]="story"></backlog-story>
         </div>
 
-        <button (click)="addStoryFrom()" id="add-story-button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+        <button (click)="showAddForm()" id="add-story-button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
             <i class="material-icons">add</i>
         </button>
         `
@@ -33,10 +39,12 @@ export class AppComponent implements OnInit {
         this._storyService.getStories().then((stories) => this.stories = stories);
     }
 
-    addStoryFrom() {
-        console.log('show form');
-
+    showAddForm() {
         this.newStory = {id:null, text:null, requirements: null};
         this.isAddStoryFormShow = true;
+    }
+
+    hideAddForm() {
+        this.isAddStoryFormShow = false;
     }
 }

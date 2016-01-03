@@ -1,9 +1,10 @@
-import {Component} from 'angular2/core';
+import {Component, EventEmitter} from 'angular2/core';
 import {Story} from "./story";
 import {Input} from "angular2/core";
 import {Nl2BrPipe} from "./pipes/nl2br.pipe";
 import {ElementRef} from "angular2/core";
 import {StoryService} from "./story.service";
+import {Output} from "angular2/core";
 
 @Component({
     selector: 'backlog-story',
@@ -22,6 +23,9 @@ export class StoryComponent {
     textHeight: String;
 
     element: ElementRef;
+
+    @Output() saveEvent: EventEmitter<Story> = new EventEmitter();
+    @Output() cancelEvent: EventEmitter<Story> = new EventEmitter();
 
     constructor (myElement: ElementRef) {
         this.element = myElement;
@@ -64,9 +68,11 @@ export class StoryComponent {
             //this._storyService.createStory(this.story);
         }
         this.toggleEditMode();
+        this.saveEvent.emit(this.story);
     }
 
     cancel() {
         this.toggleEditMode();
+        this.cancelEvent.emit(this.story);
     }
 }
