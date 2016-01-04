@@ -14,6 +14,7 @@ import {OnInit} from "angular2/core";
                 *ngIf="isAddStoryFormShow"
                 [story]="newStory"
                 [isEditMode]="true"
+                [storyService]="storyService"
                 (saveEvent)="hideAddForm()"
                 (cancelEvent)="hideAddForm()"
                 ></backlog-story>
@@ -33,14 +34,14 @@ export class AppComponent implements OnInit {
 
     public isAddStoryFormShow = false;
 
-    constructor (private _storyService: StoryService) { }
+    constructor (public storyService: StoryService) { }
 
     ngOnInit() {
-        this._storyService.getStories().then((stories) => this.stories = stories);
+        this.storyService.getStories().then((stories) => this.stories = stories);
     }
 
     showAddForm() {
-        this.newStory = {id:null, text:null, requirements: null};
+        this.newStory = new Story;
         this.isAddStoryFormShow = true;
     }
 

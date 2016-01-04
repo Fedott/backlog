@@ -13,5 +13,8 @@ export class StoryService {
         return Promise.resolve(STORIES);
     }
 
-    public createStory (story: Story) { return story; };
+    public createStory (story: Story) {
+        console.log(story);
+        return story;
+    };
 }

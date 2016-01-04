@@ -1,6 +1,5 @@
 import {Component, EventEmitter} from 'angular2/core';
 import {Story} from "./story";
-import {Input} from "angular2/core";
 import {Nl2BrPipe} from "./pipes/nl2br.pipe";
 import {ElementRef} from "angular2/core";
 import {StoryService} from "./story.service";
@@ -8,12 +7,14 @@ import {Output} from "angular2/core";
 
 @Component({
     selector: 'backlog-story',
-    inputs: ['story', 'isEditMode'],
+    inputs: ['story', 'isEditMode', 'storyService'],
     templateUrl: 'app/templates/story.component.html',
     pipes: [Nl2BrPipe]
 })
 export class StoryComponent {
     story: Story;
+
+    storyService: StoryService;
 
     showBasic = true;
     showRequirements = false;
@@ -65,7 +66,7 @@ export class StoryComponent {
 
     save() {
         if (null == this.story.id) {
-            //this._storyService.createStory(this.story);
+            this.storyService.createStory(this.story);
         }
         this.toggleEditMode();
         this.saveEvent.emit(this.story);
