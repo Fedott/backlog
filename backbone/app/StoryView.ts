@@ -28,8 +28,16 @@ export class StoryView extends Backbone.View<StoryModel> {
     }
 
     toggleEdit() {
+        if (this.state.isEditMode) {
+            var a = autosize.destroy(this.el.querySelector('#text'));
+        }
+
         this.state.isEditMode = !this.state.isEditMode;
         this.render();
+
+        if (this.state.isEditMode) {
+            autosize(this.el.querySelector('#text'));
+        }
     }
 
     save() {
@@ -48,6 +56,8 @@ export class StoryView extends Backbone.View<StoryModel> {
             story: this.model.attributes,
             state: this.state
         }));
+
+        (<any>window).componentHandler.upgradeAllRegistered();
 
         return this;
     }

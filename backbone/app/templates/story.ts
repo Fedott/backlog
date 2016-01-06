@@ -35,19 +35,19 @@ export const template = hbs.compile(`
 
     {{^if state.isEditMode}}
         <div class="mdl-card__actions mdl-card--border">
-            <a class="edit mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+            <a class="edit mdl-button mdl-button--colored mdl-js-button">
                 Редактировать
             </a>
-            <a class="requirements mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+            <a class="requirements mdl-button mdl-button--colored mdl-js-button">
                 Требования
             </a>
         </div>
     {{else}}
         <div class="mdl-card__actions mdl-card--border">
-            <a class="save mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+            <a class="save mdl-button mdl-button--colored mdl-js-button">
                 Сохранить
             </a>
-            <a class="cancel mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+            <a class="cancel mdl-button mdl-button--colored mdl-js-button">
                 Отмена
             </a>
         </div>

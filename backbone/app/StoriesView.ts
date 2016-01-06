@@ -32,9 +32,11 @@ export class StoriesView extends Backbone.View<StoryModel> {
     addOne(story: StoryModel) {
         var view = new StoryView({model: story});
         this.$('.backlog-list').append(view.render().el);
+        (<any>window).componentHandler.upgradeAllRegistered();
     }
 
     addAll() {
         this.collection.each(this.addOne);
+        (<any>window).componentHandler.upgradeAllRegistered();
     }
 }

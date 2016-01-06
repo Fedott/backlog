@@ -11,6 +11,7 @@
     <script src="node_modules/underscore/underscore.js"></script>
     <script src="node_modules/backbone/backbone.js"></script>
     <script src="node_modules/backbone.syphon/lib/backbone.syphon.js"></script>
+    <script src="node_modules/autosize/dist/autosize.js"></script>
 
     <script src="node_modules/systemjs/dist/system.src.js"></script>
 
@@ -35,7 +36,8 @@
             },
             map: {
                 text: 'node_modules/system-text/text.js',
-                handlebars: 'node_modules/handlebars/dist/handlebars.js'
+                handlebars: 'node_modules/handlebars/dist/handlebars.js',
+                autosize: 'node_modules/autosize/dist/autosize.js'
             }
         });
         System.import('app/boot')
