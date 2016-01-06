@@ -37,6 +37,7 @@ export class StoryView extends Backbone.View<StoryModel> {
 
         if (this.state.isEditMode) {
             autosize(this.el.querySelector('#text'));
+            this.$('#text').focus();
         }
     }
 
