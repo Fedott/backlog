@@ -1,4 +1,4 @@
-import {AppView} from "./AppView";
+import {StoriesView} from "./StoriesView";
 import * as hbs from 'handlebars';
 
 hbs.registerHelper('nl2br', function(text) {
@@ -9,4 +9,4 @@ hbs.registerHelper('nl2br', function(text) {
     return new hbs.SafeString(nl2br);
 });
 
-new AppView();
+new StoriesView();
