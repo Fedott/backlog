@@ -12,12 +12,6 @@ export class StoryModel extends Backbone.Model {
             this.set({ 'text': this.defaults().text });
         }
 
-        this.url = function() {
-            if (this.id) {
-                return null;
-            }
-
-            return Config.apiUrl + 'stories';
-        }
+        this.urlRoot = Config.apiUrl + 'stories';
     }
 }
