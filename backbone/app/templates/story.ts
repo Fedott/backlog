@@ -9,11 +9,12 @@ export const template = hbs.compile(`
                 {{/state.isEditMode}}
 
                 {{#state.isEditMode}}
-                    <div>
+                    <div class="mdl-textfield mdl-js-textfield">
                         <textarea
                                 id="text"
                                 name="text"
                                 class="mdl-textfield__input">{{story.text}}</textarea>
+                        <label class="mdl-textfield__label" for="text">Story text</label>
                     </div>
                 {{/state.isEditMode}}
             </div>
