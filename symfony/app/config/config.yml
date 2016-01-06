@@ -70,3 +70,16 @@ sensio_framework_extra:
     view:    { annotations: false }
     router:  { annotations: true }
     request: { converters: true, auto_convert: true }
+
+nelmio_cors:
+    paths:
+        '^/oauth/':
+            allow_origin: ['*']
+            allow_headers: ['Content-Type', 'Authorization']
+            allow_methods: ['POST', 'PUT', 'GET', 'DELETE', 'OPTIONS', 'LINK', 'UNLINK']
+            max_age: 3600
+        '^/':
+            allow_origin: ['*']
+            allow_headers: ['Content-Type', 'Authorization', 'Link', 'X-File-Name', 'X-Total-Count']
+            allow_methods: ['POST', 'PUT', 'GET', 'DELETE', 'OPTIONS', 'LINK', 'UNLINK']
+            max_age: 3600
