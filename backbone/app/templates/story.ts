@@ -5,7 +5,7 @@ export const template = hbs.compile(`
         {{#if state.showText}}
             <div class="backlog-story-title-block">
                 {{^state.isEditMode}}
-                    <h4>{{ story.text }}</h4>
+                    <h4>{{nl2br story.text }}</h4>
                 {{/state.isEditMode}}
 
                 {{#state.isEditMode}}
