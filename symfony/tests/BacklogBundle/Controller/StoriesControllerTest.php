@@ -2,6 +2,7 @@
 
 namespace BacklogBundle\Controller;
 
+use BacklogBundle\Document\Story\Story;
 use BacklogBundle\Test\WebTestCase;
 
 class StoriesControllerTest extends WebTestCase
@@ -32,5 +33,33 @@ class StoriesControllerTest extends WebTestCase
 
         $response = $this->getClient()->getResponse();
         $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
+    }
+
+    public function testPutStoryAction()
+    {
+        $story = new Story();
+        $story->setText('Before edit');
+
+        $this->getDocumentManager()->persist($story);
+        $this->getDocumentManager()->flush();
+
+        $body = [
+            'text' => 'After edit',
+        ];
+
+        $this->requestJson('PUT', "/stories/{$story->getId()}", $body);
+        $response = $this->getClient()->getResponse();
+        $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
+        $this->assertJson($response->getContent());
+        $this->assertContains('After edit', $response->getContent());
+        $storyArray = json_decode($response->getContent(), true);
+        $this->assertEquals('After edit', $storyArray['text']);
+
+        $this->requestJson("GET", "/stories/{$story->getId()}");
+
+        $response = $this->getClient()->getResponse();
+        $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
+        $storyArray = json_decode($response->getContent(), true);
+        $this->assertEquals('After edit', $storyArray['text']);
     }
 }

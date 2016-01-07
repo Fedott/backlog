@@ -56,4 +56,24 @@ class StoriesController extends FOSRestController
             return $form;
         }
     }
+
+    /**
+     * @param Story $story
+     * @param Request $request
+     * @return Story|\Symfony\Component\Form\Form
+     */
+    public function putStoryAction(Story $story, Request $request)
+    {
+        $form = $this->createForm(StoryType::class, $story);
+        $form->submit(json_decode($request->getContent(), true));
+
+        if ($form->isValid()) {
+            $this->getStoriesRepository()->getDocumentManager()->persist($story);
+            $this->getStoriesRepository()->getDocumentManager()->flush();
+
+            return $story;
+        } else {
+            return $form;
+        }
+    }
 }
