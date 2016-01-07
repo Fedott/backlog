@@ -53,5 +53,7 @@ class RequirementsControllerTest extends WebTestCase
         $this->assertJson($response->getContent());
         $responseArray = json_decode($response->getContent(), true);
         $this->assertCount(1, $responseArray['requirements']);
+        $requirementArray = $responseArray['requirements'][0];
+        $this->assertArrayHasKey('isComplete', $requirementArray);
     }
 }
