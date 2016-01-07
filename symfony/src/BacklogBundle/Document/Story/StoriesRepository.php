@@ -9,4 +9,14 @@ use Doctrine\ODM\MongoDB\LockMode;
  */
 class StoriesRepository extends DocumentRepository
 {
+    /**
+     * @param bool $completed
+     * @return array
+     */
+    public function findByCompleted($completed)
+    {
+        return $this->findBy([
+            'completed' => $completed,
+        ]);
+    }
 }

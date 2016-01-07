@@ -23,7 +23,7 @@ class StoriesController extends FOSRestController
      */
     public function getStoriesAction()
     {
-        return $this->getStoriesRepository()->findAll();
+        return $this->getStoriesRepository()->findByCompleted(false);
     }
 
     /**

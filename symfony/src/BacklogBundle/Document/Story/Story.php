@@ -30,6 +30,13 @@ class Story
     protected $text;
 
     /**
+     * @ODM\Boolean()
+     *
+     * @var bool
+     */
+    protected $completed = false;
+
+    /**
      * @ODM\ReferenceMany(
      *     targetDocument="BacklogBundle\Document\Requirement\Requirement",
      *     cascade="all",
@@ -75,6 +82,25 @@ class Story
     public function setText($text)
     {
         $this->text = $text;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isCompleted()
+    {
+        return $this->completed;
+    }
+
+    /**
+     * @param boolean $completed
+     * @return Story
+     */
+    public function setCompleted($completed)
+    {
+        $this->completed = $completed;
 
         return $this;
     }
