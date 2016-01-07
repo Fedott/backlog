@@ -42,5 +42,16 @@ class RequirementsControllerTest extends WebTestCase
 
         $response = $this->getClient()->getResponse();
         $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
+        $this->assertJson($response->getContent());
+        $responseArray = json_decode($response->getContent(), true);
+        $this->assertCount(1, $responseArray);
+
+        $this->requestJson("GET", "/stories/{$story->getId()}");
+
+        $response = $this->getClient()->getResponse();
+        $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
+        $this->assertJson($response->getContent());
+        $responseArray = json_decode($response->getContent(), true);
+        $this->assertCount(1, $responseArray['requirements']);
     }
 }

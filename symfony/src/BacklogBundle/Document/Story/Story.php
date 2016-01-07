@@ -4,7 +4,9 @@ namespace BacklogBundle\Document\Story;
 use BacklogBundle\Document\Requirement\Requirement;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
+use Doctrine\ODM\MongoDB\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @Document(repositoryClass="StoriesRepository")
@@ -28,9 +30,14 @@ class Story
     protected $text;
 
     /**
-     * @ODM\ReferenceMany(targetDocument="BacklogBundle\Document\Requirement\Requirement", cascade="all")
+     * @ODM\ReferenceMany(
+     *     targetDocument="BacklogBundle\Document\Requirement\Requirement",
+     *     cascade="all",
+     *     mappedBy="story"
+     * )
+     * @Serializer\MaxDepth(depth=2);
      *
-     * @var Requirement[]
+     * @var Requirement[]|PersistentCollection
      */
     protected $requirements = [];
 
@@ -78,13 +85,14 @@ class Story
      */
     public function addRequirement(Requirement $requirement)
     {
+        $requirement->setStory($this);
         $this->requirements[] = $requirement;
 
         return $this;
     }
 
     /**
-     * @return Requirement[]
+     * @return Requirement[]|PersistentCollection
      */
     public function getRequirements()
     {

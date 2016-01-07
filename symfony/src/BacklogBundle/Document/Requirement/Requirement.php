@@ -3,6 +3,7 @@ namespace BacklogBundle\Document\Requirement;
 
 use BacklogBundle\Document\Story\Story;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -35,7 +36,8 @@ class Requirement
     protected $isComplete = false;
 
     /**
-     * @ODM\ReferenceOne(targetDocument="BacklogBundle\Document\Story\Story")
+     * @ODM\ReferenceOne(targetDocument="BacklogBundle\Document\Story\Story", inversedBy="requirements", cascade="all")
+     * @Serializer\Exclude()
      *
      * @var Story
      */
