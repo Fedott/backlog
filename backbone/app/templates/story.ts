@@ -4,11 +4,9 @@ export const template = hbs.compile(`
     <div class="mdl-card__title mdl-card--expand backlog-story-title">
         {{#if state.showText}}
             <div class="backlog-story-title-block">
-                {{^state.isEditMode}}
+                {{^if state.isEditMode}}
                     <h4>{{nl2br story.text }}</h4>
-                {{/state.isEditMode}}
-
-                {{#state.isEditMode}}
+                {{else}}
                     <div class="mdl-textfield mdl-js-textfield">
                         <textarea
                                 id="text"
@@ -16,19 +14,34 @@ export const template = hbs.compile(`
                                 class="mdl-textfield__input">{{story.text}}</textarea>
                         <label class="mdl-textfield__label" for="text">Story text</label>
                     </div>
-                {{/state.isEditMode}}
+                {{/if}}
             </div>
         {{else}}
             <div class="backlog-story-title-block">
                 <h5>Требования</h5>
                 <ul class="mdl-list">
-                    <li *ngFor="#requirement of story.requirements" class="mdl-list__item">
-                        <span class="mdl-list__item-primary-content">
-                            <i class="material-icons">crop_original</i>
-                            {{requirement}}
-                        </span>
-                        <a class="mdl-list__item-secondary-action"><i class="material-icons">star</i></a>
-                    </li>
+                    {{#story.requirements}}
+                        <li class="mdl-list__item">
+                            <span class="mdl-list__item-primary-content">
+                                <i class="material-icons">crop_original</i>
+                                {{name}}
+                            </span>
+                            <a class="mdl-list__item-secondary-action"><i class="material-icons">star</i></a>
+                        </li>
+                    {{/story.requirements}}
+                    {{#state.isEditMode}}
+                        <li class="mdl-list__item">
+                            <span class="mdl-list__item-primary-content">
+                                <div class="mdl-textfield mdl-js-textfield">
+                                    <input name="name" class="mdl-textfield__input" type="text" id="name">
+                                    <label class="mdl-textfield__label" for="name">Name...</label>
+                                </div>
+                            </span>
+                            <button class="add-requirement mdl-list__item-secondary-action mdl-button mdl-js-button mdl-button--icon">
+                                <i class="material-icons">add</i>
+                            </button>
+                        </li>
+                    {{/state.isEditMode}}
                 </ul>
             </div>
         {{/if}}

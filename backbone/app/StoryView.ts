@@ -22,9 +22,16 @@ export class StoryView extends Backbone.View<StoryModel> {
     events():Backbone.EventsHash {
         return {
             'click .edit': 'toggleEdit',
+            'click .requirements': 'toggleView',
             'click .save': 'save',
             'click .cancel': 'cancel',
+            'click .add-requirement': 'addRequirement',
         };
+    }
+
+    toggleView() {
+        this.state.showText = !this.state.showText;
+        this.render();
     }
 
     toggleEdit() {
@@ -50,6 +57,14 @@ export class StoryView extends Backbone.View<StoryModel> {
 
     cancel() {
         this.toggleEdit();
+    }
+
+    addRequirement() {
+        var requirementName = this.$("#name").val();
+        this.model.requirements.create({
+            name: requirementName,
+        });
+        this.render();
     }
 
     render():Backbone.View<StoryModel> {
