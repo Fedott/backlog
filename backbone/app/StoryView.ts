@@ -26,6 +26,7 @@ export class StoryView extends Backbone.View<StoryModel> {
             'click .save': 'save',
             'click .cancel': 'cancel',
             'click .add-requirement': 'addRequirement',
+            'keyup #name': 'addRequirementEnter',
         };
     }
 
@@ -57,6 +58,12 @@ export class StoryView extends Backbone.View<StoryModel> {
 
     cancel() {
         this.toggleEdit();
+    }
+
+    addRequirementEnter(event) {
+        if (13 == event.keyCode) {
+            this.addRequirement();
+        }
     }
 
     addRequirement() {

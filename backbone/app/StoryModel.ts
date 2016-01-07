@@ -26,6 +26,7 @@ export class StoryModel extends Backbone.Model {
 
     parse(response:any, options?:any):any {
         this.requirements.reset(response['requirements']);
+
         return super.parse(response, options);
     }
 }
