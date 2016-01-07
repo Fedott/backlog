@@ -30,6 +30,7 @@ class RequirementsControllerTest extends WebTestCase
 
         $body = [
             'name' => 'Requirement text',
+            'isComplete' => false,
         ];
         $this->requestJson('POST', "/stories/{$story->getId()}/requirements", $body);
         $response = $this->getClient()->getResponse();

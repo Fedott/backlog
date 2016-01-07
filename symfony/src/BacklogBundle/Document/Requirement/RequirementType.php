@@ -2,6 +2,7 @@
 namespace BacklogBundle\Document\Requirement;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,6 +16,7 @@ class RequirementType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
+            ->add('isComplete', CheckboxType::class)
         ;
     }
 
