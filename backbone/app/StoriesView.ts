@@ -6,12 +6,18 @@ import template from "./templates/storiesList";
 export class StoriesView extends Backbone.View<StoryModel> {
     public template;
     collection: Backbone.Collection<StoryModel> = new StoriesCollection();
+    public state;
+    protected createForm: StoryView;
 
     constructor() {
         super();
 
         this.tagName = "backlog";
         this.setElement($('backlog'), true);
+
+        this.state = {
+            createForm: false,
+        };
 
         this.render();
 
@@ -21,6 +27,12 @@ export class StoriesView extends Backbone.View<StoryModel> {
         this.collection.bind('reset', this.addAll);
 
         this.collection.fetch();
+    }
+
+    events():Backbone.EventsHash {
+        return {
+            'click #add-story-button': 'toggleCreateForm',
+        };
     }
 
     render():Backbone.View<StoryModel> {
@@ -38,5 +50,17 @@ export class StoriesView extends Backbone.View<StoryModel> {
     addAll() {
         this.collection.each(this.addOne);
         (<any>window).componentHandler.upgradeAllRegistered();
+    }
+
+    toggleCreateForm() {
+        if (null == this.createForm) {
+            this.createForm = new StoryView({model: new StoryModel(), isEditMode: true});
+            this.$('.backlog-list').prepend(this.createForm.el);
+            this.createForm.render();
+            (<any>window).componentHandler.upgradeAllRegistered();
+        } else {
+            this.createForm.remove();
+            this.createForm = null;
+        }
     }
 }

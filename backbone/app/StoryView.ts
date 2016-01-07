@@ -12,8 +12,8 @@ export class StoryView extends Backbone.View<StoryModel> {
         super(options);
 
         this.state = {
-            isEditMode: false,
-            showText: true
+            isEditMode: options.isEditMode || false,
+            showText: options.showText || true
         };
 
         this.template = template;
@@ -42,11 +42,6 @@ export class StoryView extends Backbone.View<StoryModel> {
 
         this.state.isEditMode = !this.state.isEditMode;
         this.render();
-
-        if (this.state.isEditMode) {
-            autosize(this.el.querySelector('#text'));
-            this.$('#text').focus();
-        }
     }
 
     save() {
@@ -81,6 +76,11 @@ export class StoryView extends Backbone.View<StoryModel> {
         }));
 
         (<any>window).componentHandler.upgradeAllRegistered();
+
+        if (this.state.isEditMode) {
+            autosize(this.el.querySelector('#text'));
+            this.$('#text').focus();
+        }
 
         return this;
     }
