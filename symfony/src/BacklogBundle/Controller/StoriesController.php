@@ -4,8 +4,10 @@ namespace BacklogBundle\Controller;
 use BacklogBundle\Document\Story\StoriesRepository;
 use BacklogBundle\Document\Story\Story;
 use BacklogBundle\Document\Story\StoryType;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Request;
 
 class StoriesController extends FOSRestController
@@ -19,11 +21,19 @@ class StoriesController extends FOSRestController
     }
 
     /**
+     * @QueryParam(name="completed", requirements="(true|false|all)", strict=true, default="all")
+     *
+     * @param ParamFetcher $paramFetcher
      * @return array
      */
-    public function getStoriesAction()
+    public function getStoriesAction(ParamFetcher $paramFetcher)
     {
-        return $this->getStoriesRepository()->findByCompleted(false);
+        $completed = $paramFetcher->get('completed');
+        if ($completed !== 'all') {
+            return $this->getStoriesRepository()->findByCompleted($completed === 'true');
+        } else {
+            return $this->getStoriesRepository()->findAll();
+        }
     }
 
     /**

@@ -88,7 +88,7 @@ class StoriesControllerTest extends WebTestCase
         $this->getDocumentManager()->persist($story5);
         $this->getDocumentManager()->flush();
 
-        $this->requestJson("GET", "/stories");
+        $this->requestJson("GET", "/stories?completed=false");
 
         $response = $this->getClient()->getResponse();
         $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
@@ -102,7 +102,7 @@ class StoriesControllerTest extends WebTestCase
         $this->getDocumentManager()->persist($story3);
         $this->getDocumentManager()->flush();
 
-        $this->requestJson("GET", "/stories");
+        $this->requestJson("GET", "/stories?completed=false");
 
         $response = $this->getClient()->getResponse();
         $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
@@ -117,7 +117,7 @@ class StoriesControllerTest extends WebTestCase
         $this->getDocumentManager()->persist($story1);
         $this->getDocumentManager()->flush();
 
-        $this->requestJson("GET", "/stories");
+        $this->requestJson("GET", "/stories?completed=false");
 
         $response = $this->getClient()->getResponse();
         $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
@@ -126,6 +126,29 @@ class StoriesControllerTest extends WebTestCase
         $this->assertNotContains($story3->getText(), $response->getContent());
         $responseArray = json_decode($response->getContent(), true);
         $this->assertCount(3, $responseArray);
+
+        $this->requestJson("GET", "/stories?completed=true");
+
+        $response = $this->getClient()->getResponse();
+        $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
+        $this->assertJson($response->getContent());
+        $this->assertContains($story1->getText(), $response->getContent());
+        $this->assertContains($story3->getText(), $response->getContent());
+        $responseArray = json_decode($response->getContent(), true);
+        $this->assertCount(2, $responseArray);
+
+        $this->requestJson("GET", "/stories?completed=all");
+
+        $response = $this->getClient()->getResponse();
+        $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
+        $this->assertJson($response->getContent());
+        $this->assertContains($story1->getText(), $response->getContent());
+        $this->assertContains($story2->getText(), $response->getContent());
+        $this->assertContains($story3->getText(), $response->getContent());
+        $this->assertContains($story4->getText(), $response->getContent());
+        $this->assertContains($story5->getText(), $response->getContent());
+        $responseArray = json_decode($response->getContent(), true);
+        $this->assertCount(5, $responseArray);
 
 
         $this->getDocumentManager()->clear();
@@ -136,7 +159,7 @@ class StoriesControllerTest extends WebTestCase
         $this->getDocumentManager()->persist($story4);
         $this->getDocumentManager()->persist($story5);
         $this->getDocumentManager()->flush();
-        $this->requestJson("GET", "/stories");
+        $this->requestJson("GET", "/stories?completed=false");
 
         $response = $this->getClient()->getResponse();
         $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
