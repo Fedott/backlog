@@ -53,4 +53,25 @@ class StoryTest extends KernelTestCase
         $this->assertEquals($story->getRequirements()[0]->getId(), $loadedStory->getRequirements()[0]->getId());
         $this->assertEquals($story->getRequirements()[1]->getId(), $loadedStory->getRequirements()[1]->getId());
     }
+
+    public function testStoryCompleted()
+    {
+        static::bootKernel();
+
+        $repository = static::$kernel->getContainer()->get('backlog.repository.stories');
+        $dm = $repository->getDocumentManager();
+
+
+        $story = new Story();
+        $story->setText('Text');
+        $story->setCompleted(true);
+
+        $dm->persist($story);
+        $dm->flush();
+        $dm->clear();
+
+        $loadedStory = $repository->find($story->getId());
+        $this->assertEquals('Text', $loadedStory->getText());
+        $this->assertEquals(true, $loadedStory->isCompleted());
+    }
 }

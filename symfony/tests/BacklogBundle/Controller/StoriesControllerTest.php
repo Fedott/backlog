@@ -45,6 +45,7 @@ class StoriesControllerTest extends WebTestCase
 
         $body = [
             'text' => 'After edit',
+            'completed' => true,
         ];
 
         $this->requestJson('PUT', "/stories/{$story->getId()}", $body);
@@ -54,6 +55,7 @@ class StoriesControllerTest extends WebTestCase
         $this->assertContains('After edit', $response->getContent());
         $storyArray = json_decode($response->getContent(), true);
         $this->assertEquals('After edit', $storyArray['text']);
+        $this->assertEquals(true, $storyArray['completed']);
 
         $this->requestJson("GET", "/stories/{$story->getId()}");
 
@@ -61,6 +63,7 @@ class StoriesControllerTest extends WebTestCase
         $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
         $storyArray = json_decode($response->getContent(), true);
         $this->assertEquals('After edit', $storyArray['text']);
+        $this->assertEquals(true, $storyArray['completed']);
     }
 
     public function testGetStoriesActionWithReadyStories()

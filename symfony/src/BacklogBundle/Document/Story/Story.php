@@ -32,6 +32,8 @@ class Story
     /**
      * @ODM\Boolean()
      *
+     * @Assert\Type(type="bool")
+     *
      * @var bool
      */
     protected $completed = false;
