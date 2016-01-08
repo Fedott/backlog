@@ -26,7 +26,7 @@ export const template = hbs.compile(`
                                 <i class="material-icons">crop_original</i>
                                 {{name}}
                             </span>
-                            <a class="mdl-list__item-secondary-action"><i class="material-icons">star</i></a>
+                            <a class="mdl-list__item-secondary-action"><i class="material-icons">star_border</i></a>
                         </li>
                     {{/story.requirements}}
                     {{#state.isEditMode}}
@@ -69,7 +69,7 @@ export const template = hbs.compile(`
 
     <div class="mdl-card__menu">
         <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-            <i class="material-icons">assignment_late</i>
+            <i class="material-icons">{{#if story.completed}}check_box{{else}}check_box_outline_blank{{/if}}</i>
         </button>
     </div>
 `);

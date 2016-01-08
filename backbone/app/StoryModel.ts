@@ -7,6 +7,7 @@ export class StoryModel extends Backbone.Model {
     defaults() {
         return {
             text: null,
+            completed: false,
         };
     }
 
@@ -19,6 +20,9 @@ export class StoryModel extends Backbone.Model {
     initialize() {
         if (!this.get('text')) {
             this.set({ 'text': this.defaults().text });
+        }
+        if (!this.get('completed')) {
+            this.set({ 'completed': this.defaults().completed });
         }
 
         this.urlRoot = Config.apiUrl + 'stories';
