@@ -4,6 +4,13 @@ import {RequirementsCollection} from "./RequirementsCollection";
 export class StoryModel extends Backbone.Model {
     public requirements: RequirementsCollection;
 
+    blacklistProperties() {
+        return [
+            'id',
+            'requirements',
+        ];
+    }
+
     defaults() {
         return {
             text: null,
@@ -33,4 +40,23 @@ export class StoryModel extends Backbone.Model {
 
         return super.parse(response, options);
     }
+
+    save(attributes?:any, options?:ModelSaveOptions):any {
+        options = options || {};
+        options.isSave = true;
+
+        return super.save(attributes, options);
+    }
+
+    toJSON(options?:any):any {
+        if (options.isSave) {
+            return _.omit(super.toJSON(options), this.blacklistProperties());
+        }
+
+        return super.toJSON(options);
+    }
+}
+
+interface ModelSaveOptions extends Backbone.ModelSaveOptions {
+    isSave?: boolean;
 }
