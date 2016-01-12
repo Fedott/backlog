@@ -1,0 +1,3 @@
+export default class Config {
+    public static apiUrl:string = 'http://__API_HOST__/';
+}
