@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4571b2e71e09e7dca5f687926571fd9e",
-    "content-hash": "a15c0c60dbd33dbb694c53e49e829642",
+    "hash": "3cb577ec1ac0031aebaafe0a2e145159",
+    "content-hash": "1cd1d8dc377f735c8566aee8016f8f87",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -3515,8 +3515,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "mongofill/mongofill": 20,
-        "doctrine/mongodb-odm-bundle": 20
+        "doctrine/mongodb-odm-bundle": 20,
+        "mongofill/mongofill": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
