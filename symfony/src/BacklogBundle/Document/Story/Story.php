@@ -21,7 +21,7 @@ class Story
     protected $id;
 
     /**
-     * @ODM\String()
+     * @ODM\Field(type="string")
      *
      * @Assert\NotBlank()
      *

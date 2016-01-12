@@ -19,7 +19,7 @@ class Requirement
     protected $id;
 
     /**
-     * @ODM\String()
+     * @ODM\Field(type="string")
      *
      * @Assert\NotBlank()
      * @Assert\Length(max="100");
