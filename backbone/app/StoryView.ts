@@ -26,6 +26,7 @@ export class StoryView extends Backbone.View<StoryModel> {
             'click .save': 'save',
             'click .cancel': 'cancel',
             'click .add-requirement': 'addRequirement',
+            'click .mark-as-completed': 'markAsCompleted',
             'keyup #name': 'addRequirementEnter',
         };
     }
@@ -67,6 +68,11 @@ export class StoryView extends Backbone.View<StoryModel> {
             name: requirementName,
         });
         this.render();
+    }
+
+    markAsCompleted() {
+        this.model.set('completed', true);
+        this.model.save();
     }
 
     render():Backbone.View<StoryModel> {

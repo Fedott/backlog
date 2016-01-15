@@ -68,7 +68,7 @@ export const template = hbs.compile(`
     {{/if}}
 
     <div class="mdl-card__menu">
-        <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+        <button class="mark-as-completed mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
             <i class="material-icons">{{#if story.completed}}check_box{{else}}check_box_outline_blank{{/if}}</i>
         </button>
     </div>
