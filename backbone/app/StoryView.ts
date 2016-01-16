@@ -1,5 +1,6 @@
 import {StoryModel} from "./StoryModel";
 import template from './templates/story';
+import ViewOptions = Backbone.ViewOptions;
 
 export class StoryView extends Backbone.View<StoryModel> {
     public template;
@@ -17,6 +18,11 @@ export class StoryView extends Backbone.View<StoryModel> {
         };
 
         this.template = template;
+    }
+
+    initialize(options?: ViewOptions<StoryModel>): void {
+        _.bindAll(this, 'render');
+        this.model.bind('sync', this.render);
     }
 
     events():Backbone.EventsHash {
@@ -71,7 +77,7 @@ export class StoryView extends Backbone.View<StoryModel> {
     }
 
     markAsCompleted() {
-        this.model.set('completed', true);
+        this.model.set('completed', !this.model.get('completed'));
         this.model.save();
     }
 
