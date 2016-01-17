@@ -23,6 +23,7 @@ export class StoryView extends Backbone.View<StoryModel> {
     initialize(options?: ViewOptions<StoryModel>): void {
         _.bindAll(this, 'render');
         this.model.bind('sync', this.render);
+        this.model.requirements.bind('change', this.render);
     }
 
     events():Backbone.EventsHash {
@@ -72,7 +73,7 @@ export class StoryView extends Backbone.View<StoryModel> {
         var requirementName = this.$("#name").val();
         this.model.requirements.create({
             name: requirementName,
-        });
+        }, {wait: true});
         this.render();
     }
 

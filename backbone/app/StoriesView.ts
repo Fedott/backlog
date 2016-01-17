@@ -21,7 +21,7 @@ export class StoriesView extends Backbone.View<StoryModel> {
 
         this.render();
 
-        _.bindAll(this, 'addOne', 'addAll', 'render');
+        _.bindAll(this, 'addOne', 'addAll', 'render', 'toggleCreateForm');
 
         this.collection.bind('add', this.addOne);
         this.collection.bind('reset', this.addAll);
@@ -43,7 +43,7 @@ export class StoriesView extends Backbone.View<StoryModel> {
 
     addOne(story: StoryModel) {
         var view = new StoryView({model: story});
-        this.$('.backlog-list').append(view.render().el);
+        this.$('.backlog-list').prepend(view.render().el);
         (<any>window).componentHandler.upgradeAllRegistered();
     }
 
@@ -55,10 +55,13 @@ export class StoriesView extends Backbone.View<StoryModel> {
     toggleCreateForm() {
         if (null == this.createForm) {
             this.createForm = new StoryView({model: new StoryModel(), isEditMode: true});
+            this.createForm.model.on('sync', this.addOne);
+            this.createForm.model.on('sync', this.toggleCreateForm);
             this.$('.backlog-list').prepend(this.createForm.el);
             this.createForm.render();
             (<any>window).componentHandler.upgradeAllRegistered();
         } else {
+            this.createForm.model.off();
             this.createForm.remove();
             this.createForm = null;
         }
