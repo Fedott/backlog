@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES5",
+    "jsx": "react",
     "module": "system",
     "moduleResolution": "node",
     "sourceMap": true,

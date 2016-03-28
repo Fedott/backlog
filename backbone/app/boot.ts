@@ -1,12 +1,8 @@
-import {StoriesView} from "./StoriesView";
-import * as hbs from 'handlebars';
+/// <reference path="../typings/react/react.d.ts" />
+/// <reference path="../typings/react/react-dom.d.ts" />
 
-hbs.registerHelper('nl2br', function(text) {
-    if (null == text) {
-        return null;
-    }
-    var nl2br = (text + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + '<br>' + '$2');
-    return new hbs.SafeString(nl2br);
-});
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import {StoriesList} from "./StoriesList";
 
-new StoriesView();
+ReactDOM.render(React.createElement(StoriesList), document.querySelector("backlog"));

@@ -37,7 +37,13 @@
             map: {
                 text: 'node_modules/system-text/text.js',
                 handlebars: 'node_modules/handlebars/dist/handlebars.js',
-                autosize: 'node_modules/autosize/dist/autosize.js'
+                autosize: 'node_modules/autosize/dist/autosize.js',
+                react: 'node_modules/react/dist/react.js',
+                React: 'node_modules/react/dist/react.js',
+                ReactDOM: 'node_modules/react-dom/dist/react-dom.js',
+                'react-dom': 'node_modules/react-dom/dist/react-dom.js',
+                'react-mdl': 'node_modules/react-mdl/out/ReactMDL.js',
+                'react-nl2br': 'node_modules/react-nl2br/index.js'
             }
         });
         System.import('app/boot')
@@ -48,6 +54,7 @@
 
 <!-- 3. Display the application -->
 <body>
+    <div id="test"></div>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <header class="mdl-layout__header">
             <div class="mdl-layout__header-row">
@@ -71,7 +78,7 @@
                 <a class="mdl-navigation__link" href="">Completed stories</a>
             </nav>
         </div>
-        <main class="mdl-layout__content">
+        <main class="mdl-layout__content" id="main">
             <backlog>
             </backlog>
         </main>
