@@ -19,12 +19,12 @@ export class StoryModel extends Backbone.Model {
     }
 
     constructor(attributes?: any, options?: any) {
-        this.requirements = new RequirementsCollection([], {story: this});
-
         super(attributes, options);
     }
 
     initialize() {
+        this.initRequirementCollection();
+        
         if (!this.get('text')) {
             this.set({ 'text': this.defaults().text });
         }
@@ -36,10 +36,18 @@ export class StoryModel extends Backbone.Model {
     }
 
     parse(response:any, options?:any):any {
+        this.initRequirementCollection();
+        
         this.requirements.reset(response['requirements']);
 
         return super.parse(response, options);
     }
+
+    protected initRequirementCollection() {
+        if (!this.requirements) {
+            this.requirements = new RequirementsCollection([], {story: this});
+        }
+    };
 
     save(attributes?:any, options?:ModelSaveOptions):any {
         options = options || {};
@@ -60,3 +68,4 @@ export class StoryModel extends Backbone.Model {
 interface ModelSaveOptions extends Backbone.ModelSaveOptions {
     isSave?: boolean;
 }
+ 
