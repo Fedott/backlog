@@ -44,6 +44,17 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
         this.toggleEditMode();
     }
 
+    nl2br(text: string) {
+        return text.split("\n").map((part:string) => {
+            return (
+                <span key={part}>
+                    {part}
+                    <br />
+                </span>
+            )
+        })
+    }
+
     render():JSX.Element {
         var title;
         if (this.state.isEdit) {
@@ -58,7 +69,7 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
         } else {
             title = (
                 <h4>
-                    {this.props.storyModel.get('text')}
+                    {this.nl2br(this.props.storyModel.get('text'))}
                 </h4>
             );
         }
