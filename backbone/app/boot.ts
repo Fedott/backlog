@@ -3,6 +3,6 @@
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {StoriesList} from "./StoriesList";
+import {Application} from "./Application";
 
-ReactDOM.render(React.createElement(StoriesList), document.querySelector("backlog"));
+ReactDOM.render(React.createElement(Application), document.getElementById("container"));

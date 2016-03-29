@@ -10,7 +10,9 @@ declare namespace __ReactMDL {
     export class Textfield extends Component<any, any> {}
     export class IconToggle extends Component<any, any> {}
     export class IconButton extends Component<any, any> {}
+    export class Icon extends Component<any, any> {}
     export class Button extends Component<any, any> {}
+    export class FABButton extends Component<any, any> {}
     export class Dialog extends Component<any, any> {}
     export class DialogTitle extends Component<any, any> {}
     export class DialogContent extends Component<any, any> {}
@@ -20,6 +22,13 @@ declare namespace __ReactMDL {
     export class CardText extends Component<any, any> {}
     export class CardActions extends Component<any, any> {}
     export class CardMenu extends Component<any, any> {}
+
+    export class Layout extends Component<any, any> {}
+    export class Header extends Component<any, any> {}
+    export class HeaderRow extends Component<any, any> {}
+    export class Navigation extends Component<any, any> {}
+    export class Drawer extends Component<any, any> {}
+    export class Content extends Component<any, any> {}
 }
 
 declare module 'react-mdl' {
