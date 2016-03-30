@@ -4,6 +4,10 @@ import * as ReactMDL from 'react-mdl'
 
 export interface IStoryItemProps {
     storyModel: StoryModel;
+    isEdit?: boolean;
+    isRequirements?: boolean;
+    onSave?:Function;
+    onCancel?:Function;
 }
 
 export interface IStoryItemState {
@@ -17,7 +21,10 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
     constructor(props: IStoryItemProps, context:any) {
         super(props, context);
         
-        this.state = {isEdit: false, isRequirements: false};
+        this.state = {
+            isEdit: props.isEdit || false,
+            isRequirements: props.isRequirements || false,
+        };
 
         this.tempStoryText = this.props.storyModel.get('text');
     }
@@ -33,26 +40,48 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
     }
 
     saveStory() {
+        var isNew:boolean = this.props.storyModel.isNew();
+        
         this.props.storyModel.save({
             text: this.tempStoryText,
         });
+        
         this.toggleEditMode();
+        
+        if (isNew) {
+            this.props.storyModel.collection.add(this.props.storyModel);
+        }
+
+        if (this.props.onSave) {
+            this.props.onSave();
+        }
     }
 
     cancelStory() {
         this.tempStoryText = this.props.storyModel.get('text');
         this.toggleEditMode();
+        
+        if (this.props.onCancel) {
+            this.props.onCancel();
+        }
     }
 
     nl2br(text: string) {
-        return text.split("\n").map((part:string) => {
-            return (
-                <span key={part}>
+        var result;
+        if (null == text) {
+            result = <span />;
+        } else {
+            result = text.split("\n").map((part:string) => {
+                return (
+                    <span key={part}>
                     {part}
-                    <br />
+                        <br />
                 </span>
-            )
-        })
+                )
+            });
+        }
+
+        return result;
     }
 
     render():JSX.Element {

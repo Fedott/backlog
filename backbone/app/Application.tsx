@@ -3,9 +3,21 @@ import {Layout, Header, Navigation, Drawer, Content, FABButton, Icon} from 'reac
 import {StoriesList} from './StoriesList';
 
 export interface IApplicationProps {}
-export interface IApplicationState {}
+export interface IApplicationState {
+    createForm?: boolean;
+}
 
 export class Application extends React.Component<IApplicationProps, IApplicationState> {
+    constructor(props:IApplicationProps, context:any) {
+        super(props, context);
+
+        this.state = {createForm: false};
+    }
+
+    toggleCreateForm() {
+        this.setState({createForm: !this.state.createForm});
+    }
+
     render():JSX.Element {
         return (
             <div>
@@ -25,8 +37,11 @@ export class Application extends React.Component<IApplicationProps, IApplication
                         </Navigation>
                     </Drawer>
                     <Content>
-                        <StoriesList/>
-                        <FABButton id="add-story-button" colored ripple>
+                        <StoriesList
+                            createForm={this.state.createForm}
+                            onChangeCreateForm={this.toggleCreateForm.bind(this)}
+                        />
+                        <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
                             <Icon name="add" />
                         </FABButton>
                     </Content>
