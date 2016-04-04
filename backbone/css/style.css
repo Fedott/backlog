@@ -21,8 +21,16 @@ backlog-story {
     display: none;
 }
 
-.backlog-story .mdl-textfield {
+.backlog-story .mdl-textfield,
+.backlog-story h4 {
     width: 100%;
+    padding: 20px 0;
+    margin: 0;
+}
+
+.backlog-story h4 {
+    padding: 24px 0 25px;
+
 }
 
 .backlog-story textarea {

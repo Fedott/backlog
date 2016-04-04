@@ -13,6 +13,7 @@ export interface IStoryItemProps {
 export interface IStoryItemState {
     isEdit?: boolean;
     isRequirements?: boolean;
+    rows?: number;
 }
 
 export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState> {
@@ -20,17 +21,34 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
 
     constructor(props: IStoryItemProps, context:any) {
         super(props, context);
-        
+
+        this.tempStoryText = this.props.storyModel.get('text');
+
         this.state = {
             isEdit: props.isEdit || false,
             isRequirements: props.isRequirements || false,
+            rows: this.calcRows(),
         };
+    }
 
-        this.tempStoryText = this.props.storyModel.get('text');
+    calcRows():number {
+        var newLines = this.tempStoryText.match(/\n/g);
+        var rows = newLines ? newLines.length + 1 : 3;
+
+        if (rows >= 3) {
+            return rows;
+        }
+
+        return 3;
     }
 
     textChangeHandler(event) {
         this.tempStoryText = event.target.value;
+
+        var rows = this.calcRows();
+        if (rows != this.state.rows) {
+            this.setState({rows: rows});
+        }
     }
 
     toggleEditMode() {
@@ -41,13 +59,13 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
 
     saveStory() {
         var isNew:boolean = this.props.storyModel.isNew();
-        
+
         this.props.storyModel.save({
             text: this.tempStoryText,
         });
-        
+
         this.toggleEditMode();
-        
+
         if (isNew) {
             this.props.storyModel.collection.add(this.props.storyModel);
         }
@@ -60,7 +78,7 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
     cancelStory() {
         this.tempStoryText = this.props.storyModel.get('text');
         this.toggleEditMode();
-        
+
         if (this.props.onCancel) {
             this.props.onCancel();
         }
@@ -90,7 +108,8 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
             title = (
                 <ReactMDL.Textfield
                     maxRows={10}
-                    defaultValue={this.props.storyModel.get('text')}
+                    rows={this.state.rows}
+                    defaultValue={this.tempStoryText}
                     label="text"
                     onChange={this.textChangeHandler.bind(this)}
                 />
