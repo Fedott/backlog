@@ -84,6 +84,13 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
         }
     }
 
+    toggleCompleteStory() {
+        this.props.storyModel.set('completed', !this.props.storyModel.get('completed'));
+        this.props.storyModel.save();
+
+        this.forceUpdate();
+    }
+
     nl2br(text: string) {
         var result;
         if (null == text) {
@@ -147,12 +154,22 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
             );
         }
 
+        var completeIcon;
+        if (this.props.storyModel.get('completed')) {
+            completeIcon = 'check_box';
+        } else {
+            completeIcon = 'check_box_outline_blank';
+        }
+
         return (
             <ReactMDL.Card shadow={2} className="backlog-story mdl-cell mdl-cell--12-col">
                 <ReactMDL.CardTitle expand className="backlog-story-title">
                     {title}
                 </ReactMDL.CardTitle>
                 {actions}
+                <ReactMDL.CardMenu>
+                    <ReactMDL.IconButton name={completeIcon} onClick={this.toggleCompleteStory.bind(this)} />
+                </ReactMDL.CardMenu>
             </ReactMDL.Card>
         );
     }
