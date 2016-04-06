@@ -1,4 +1,4 @@
-import {StoryModel} from "./StoryModel";
+import {StoryModel} from "../../StoryModel";
 import * as React from 'react';
 import * as ReactMDL from 'react-mdl'
 
@@ -32,6 +32,9 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
     }
 
     calcRows():number {
+        if (!this.tempStoryText) {
+            return 3;
+        }
         var newLines = this.tempStoryText.match(/\n/g);
         var rows = newLines ? newLines.length + 1 : 3;
 

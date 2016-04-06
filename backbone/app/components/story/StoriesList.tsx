@@ -1,7 +1,7 @@
-import {StoriesCollection} from "./StoriesCollection";
+import {StoriesCollection} from "./../../StoriesCollection";
 import * as React from 'react';
 import * as ReactMDL from 'react-mdl'
-import {StoryModel} from "./StoryModel";
+import {StoryModel} from "./../../StoryModel";
 import {StoryItem} from "./StoryItem";
 
 export interface IStoriesListState {

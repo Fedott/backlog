@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Layout, Header, Navigation, Drawer, Content, FABButton, Icon} from 'react-mdl';
-import {StoriesList} from './StoriesList';
+import {StoriesList} from './story/StoriesList';
 
 export interface IApplicationProps {}
 export interface IApplicationState {
