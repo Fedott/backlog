@@ -12,6 +12,8 @@
     "backbone.syphon": "^0.6.3",
     "es6-promise": "^3.0.2",
     "es6-shim": "^0.33.3",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^2.12.2",
     "handlebars": "^4.0.5",
     "jquery": "^2",
     "json2": "*",
