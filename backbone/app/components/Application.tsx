@@ -56,7 +56,7 @@ export class Application extends React.Component<IApplicationProps, IApplication
                         <StoriesList
                             createForm={this.state.createForm}
                             onChangeCreateForm={this.toggleCreateForm.bind(this)}
-                            filter={this.state.storyStatusFilter}
+                            statusFilter={this.state.storyStatusFilter}
                         />
                         <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
                             <Icon name="add" />

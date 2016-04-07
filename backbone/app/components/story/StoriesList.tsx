@@ -14,7 +14,7 @@ export interface IStoriesListState {
 export interface IStoriesListProps {
     createForm?:boolean;
     onChangeCreateForm?:Function;
-    filter?: StoryFilter;
+    statusFilter?: StoryFilter;
 }
 
 export class StoriesList extends React.Component<IStoriesListProps, IStoriesListState> {
@@ -24,7 +24,7 @@ export class StoriesList extends React.Component<IStoriesListProps, IStoriesList
         this.state = {
             storiesCollection: new StoriesCollection(),
             createForm: props.createForm || false,
-            filter: props.filter || StoryFilter.All,
+            filter: props.statusFilter || StoryFilter.All,
         };
     }
 
@@ -36,8 +36,8 @@ export class StoriesList extends React.Component<IStoriesListProps, IStoriesList
 
 
     componentWillUpdate(nextProps:IStoriesListProps, nextState:IStoriesListState, nextContext:any):void {
-        if (this.state.storiesCollection.statusFilter != nextProps.filter) {
-            this.state.storiesCollection.setStatusFilter(nextProps.filter);
+        if (this.state.storiesCollection.statusFilter != nextProps.statusFilter) {
+            this.state.storiesCollection.setStatusFilter(nextProps.statusFilter);
             this.state.storiesCollection.fetch();
         }
     }
