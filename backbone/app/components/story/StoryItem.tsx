@@ -1,4 +1,5 @@
 import {StoryModel} from "../../StoryModel";
+import {RequirementsList} from "../requirement/RequirementsList";
 import * as React from 'react';
 import * as ReactMDL from 'react-mdl'
 
@@ -60,6 +61,12 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
         });
     }
 
+    toggleRequirements() {
+        this.setState({
+            isRequirements: !this.state.isRequirements,
+        });
+    }
+
     saveStory() {
         var isNew:boolean = this.props.storyModel.isNew();
 
@@ -114,24 +121,27 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
 
     render():JSX.Element {
         var title;
-        if (this.state.isEdit) {
-            title = (
-                <ReactMDL.Textfield
-                    maxRows={10}
-                    rows={this.state.rows}
-                    defaultValue={this.tempStoryText}
-                    label="text"
-                    onChange={this.textChangeHandler.bind(this)}
-                />
-            );
+        if (!this.state.isRequirements) {
+            if (this.state.isEdit) {
+                title = (
+                    <ReactMDL.Textfield
+                        maxRows={10}
+                        rows={this.state.rows}
+                        defaultValue={this.tempStoryText}
+                        label="text"
+                        onChange={this.textChangeHandler.bind(this)}
+                    />
+                );
+            } else {
+                title = (
+                    <h4>
+                        {this.nl2br(this.props.storyModel.get('text'))}
+                    </h4>
+                );
+            }
         } else {
-            title = (
-                <h4>
-                    {this.nl2br(this.props.storyModel.get('text'))}
-                </h4>
-            );
+            title = <RequirementsList requirementsCollection={this.props.storyModel.requirements}/>
         }
-
         var actions;
         if (this.state.isEdit) {
             actions = (
@@ -150,7 +160,7 @@ export class StoryItem extends React.Component<IStoryItemProps, IStoryItemState>
                     <ReactMDL.Button onClick={this.toggleEditMode.bind(this)}>
                         Редактировать
                     </ReactMDL.Button>
-                    <ReactMDL.Button>
+                    <ReactMDL.Button onClick={this.toggleRequirements.bind(this)}>
                         Требования
                     </ReactMDL.Button>
                 </ReactMDL.CardActions>
