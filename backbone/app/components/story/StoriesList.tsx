@@ -3,15 +3,18 @@ import * as React from 'react';
 import * as ReactMDL from 'react-mdl'
 import {StoryModel} from "./../../StoryModel";
 import {StoryItem} from "./StoryItem";
+import {StoryFilter} from "../Application";
 
 export interface IStoriesListState {
     storiesCollection?: StoriesCollection;
     createForm?: boolean;
+    filter?: StoryFilter;
 }
 
 export interface IStoriesListProps {
     createForm?:boolean;
     onChangeCreateForm?:Function;
+    filter?: StoryFilter;
 }
 
 export class StoriesList extends React.Component<IStoriesListProps, IStoriesListState> {
@@ -21,12 +24,22 @@ export class StoriesList extends React.Component<IStoriesListProps, IStoriesList
         this.state = {
             storiesCollection: new StoriesCollection(),
             createForm: props.createForm || false,
+            filter: props.filter || StoryFilter.All,
         };
     }
 
     componentDidMount():void {
+        this.state.storiesCollection.setStatusFilter(this.state.filter);
         this.state.storiesCollection.on('add remove change', this.forceUpdate.bind(this, null));
         this.state.storiesCollection.fetch();
+    }
+
+
+    componentWillUpdate(nextProps:IStoriesListProps, nextState:IStoriesListState, nextContext:any):void {
+        if (this.state.storiesCollection.statusFilter != nextProps.filter) {
+            this.state.storiesCollection.setStatusFilter(nextProps.filter);
+            this.state.storiesCollection.fetch();
+        }
     }
 
     componentWillUnmount():void {
