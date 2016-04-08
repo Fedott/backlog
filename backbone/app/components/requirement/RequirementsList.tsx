@@ -24,7 +24,7 @@ export class RequirementsList extends React.Component<IRequirementsListProps, IR
         });
         
         return (
-            <ReactMDL.List>
+            <ReactMDL.List className="requirements-list">
                 {items}
             </ReactMDL.List>
         );
