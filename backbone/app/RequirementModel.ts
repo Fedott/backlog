@@ -1,4 +1,11 @@
-export class RequirementModel extends Backbone.Model {
+import {AbstractModel} from "./AbstractModel";
+
+export class RequirementModel extends AbstractModel {
+    blacklistProperties() {
+        return [
+            'id',
+        ];
+    }
     defaults() {
         return {
             name: null,

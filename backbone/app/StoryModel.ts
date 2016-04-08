@@ -1,7 +1,8 @@
 import Config from './config';
 import {RequirementsCollection} from "./RequirementsCollection";
+import {AbstractModel} from "./AbstractModel";
 
-export class StoryModel extends Backbone.Model {
+export class StoryModel extends AbstractModel {
     public requirements: RequirementsCollection;
 
     blacklistProperties() {
@@ -48,24 +49,5 @@ export class StoryModel extends Backbone.Model {
             this.requirements = new RequirementsCollection([], {story: this});
         }
     };
-
-    save(attributes?:any, options?:ModelSaveOptions):any {
-        options = options || {};
-        options.isSave = true;
-
-        return super.save(attributes, options);
-    }
-
-    toJSON(options?:any):any {
-        if (options.isSave) {
-            return _.omit(super.toJSON(options), this.blacklistProperties());
-        }
-
-        return super.toJSON(options);
-    }
-}
-
-interface ModelSaveOptions extends Backbone.ModelSaveOptions {
-    isSave?: boolean;
 }
  
