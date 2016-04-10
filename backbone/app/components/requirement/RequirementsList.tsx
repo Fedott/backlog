@@ -20,12 +20,22 @@ export class RequirementsList extends React.Component<IRequirementsListProps, IR
 
     render():JSX.Element {
         var items = this.props.requirementsCollection.map((requirement:RequirementModel) => {
-            return <RequirementItem requirementModel={requirement} key={requirement.id} />
+            return <RequirementItem requirementModel={requirement} key={requirement.cid} />
         });
-        
+
+        var newRequirement = new RequirementModel();
+        newRequirement.collection = this.props.requirementsCollection;
+        var newRequirementComponent = <RequirementItem
+            requirementModel={newRequirement}
+            isEditMode={true}
+            isCreateForm={true}
+            key={'createForm'}
+        />;
+
         return (
             <ReactMDL.List className="requirements-list">
                 {items}
+                {newRequirementComponent}
             </ReactMDL.List>
         );
     }

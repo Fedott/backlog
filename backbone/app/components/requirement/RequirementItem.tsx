@@ -3,21 +3,27 @@ import * as ReactMDL from 'react-mdl'
 import {RequirementModel} from "../../RequirementModel";
 
 export interface IRequirementItemState {
+    requirementModel?: RequirementModel;
     isEditMode?: boolean;
+    isCreateForm?: boolean;
 }
 export interface IRequirementItemProps {
     requirementModel: RequirementModel;
     isEditMode?: boolean;
+    isCreateForm?: boolean;
 }
 
 export class RequirementItem extends React.Component<IRequirementItemProps, IRequirementItemState> {
     protected tempNameValue: string;
+    protected nameInput;
 
     constructor(props:IRequirementItemProps, context:any) {
         super(props, context);
 
         this.state = {
+            requirementModel: props.requirementModel,
             isEditMode: props.isEditMode || false,
+            isCreateForm: props.isCreateForm || false,
         }
     }
 
@@ -34,15 +40,41 @@ export class RequirementItem extends React.Component<IRequirementItemProps, IReq
 
     save() {
         if (this.tempNameValue) {
-            this.props.requirementModel.set('name', this.tempNameValue);
-            this.props.requirementModel.save();
+            if (!this.state.isCreateForm) {
+                this.state.requirementModel.set('name', this.tempNameValue);
+                this.state.requirementModel.save();
+            }
+
+            if (this.state.isCreateForm) {
+                this.state.requirementModel.collection.create({
+                    'name': this.tempNameValue,
+                });
+                this.initCreateForm();
+            }
         }
 
-        this.toggleEditMode();
+        if (!this.state.isCreateForm) {
+            this.toggleEditMode();
+        }
+    }
+
+    private initCreateForm() {
+        if (this.state.isCreateForm) {
+            this.tempNameValue = '';
+            console.log(this.nameInput.refs.input.value);
+            this.nameInput.refs.input.value = '';
+            console.log(this.nameInput.refs.input.value);
+
+            this.forceUpdate();
+        }
     }
 
     cancel() {
-        this.toggleEditMode();
+        if (!this.state.isCreateForm) {
+            this.toggleEditMode();
+        } else {
+            this.initCreateForm();
+        }
     }
 
     render():JSX.Element {
@@ -64,14 +96,15 @@ export class RequirementItem extends React.Component<IRequirementItemProps, IReq
             content = <ReactMDL.Textfield
                 label="Name"
                 onChange={this.changeHandler.bind(this)}
-                defaultValue={this.props.requirementModel.get('name')}
+                defaultValue={this.state.requirementModel.get('name')}
+                ref={(ref) => {this.nameInput = ref;}}
             />;
         } else {
             actions = <ReactMDL.IconButton
                 name="edit"
                 onClick={this.toggleEditMode.bind(this)}
             />;
-            content = this.props.requirementModel.get('name');
+            content = this.state.requirementModel.get('name');
         }
 
         return (
