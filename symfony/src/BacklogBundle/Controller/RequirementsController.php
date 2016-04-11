@@ -54,4 +54,26 @@ class RequirementsController extends FOSRestController
             return $form;
         }
     }
+
+    /**
+     * @param Story       $story
+     * @param Requirement $requirement
+     * @param Request     $request
+     *
+     * @return Requirement|\Symfony\Component\Form\Form
+     */
+    public function putStoryRequirementAction(Story $story, Requirement $requirement, Request $request)
+    {
+        $form = $this->createForm(RequirementType::class, $requirement);
+        $form->submit(json_decode($request->getContent(), true));
+
+        if ($form->isValid()) {
+            $this->getRequirementsRepository()->getDocumentManager()->persist($requirement);
+            $this->getRequirementsRepository()->getDocumentManager()->flush();
+
+            return $requirement;
+        } else {
+            return $form;
+        }
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace BacklogBundle\Controller;
 
+use BacklogBundle\Document\Requirement\Requirement;
 use BacklogBundle\Document\Story\Story;
 use BacklogBundle\Test\WebTestCase;
 
@@ -55,5 +56,30 @@ class RequirementsControllerTest extends WebTestCase
         $this->assertCount(1, $responseArray['requirements']);
         $requirementArray = $responseArray['requirements'][0];
         $this->assertArrayHasKey('isComplete', $requirementArray);
+    }
+
+    public function testPutRequirement()
+    {
+        $story = new Story();
+        $story->setText('Text');
+        $this->getDocumentManager()->persist($story);
+
+        $requirement = new Requirement();
+        $requirement
+            ->setStory($story)
+            ->setName("Test requirement")
+        ;
+        $this->getDocumentManager()->persist($requirement);
+
+        $this->getDocumentManager()->flush();
+
+        $body = [
+            'name' => 'Edited test requirement',
+        ];
+        $this->requestJson('PUT', "/stories/{$story->getId()}/requirements/{$requirement->getId()}", $body);
+        $response = $this->getClient()->getResponse();
+        $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
+        $this->assertJson($response->getContent());
+        $this->assertContains('Edited test requirement', $response->getContent());
     }
 }

@@ -7,10 +7,10 @@ export class StoryView extends Backbone.View<StoryModel> {
     public state;
 
     constructor(options?) {
+        super(options);
+
         this.className = 'backlog-story mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col';
         this.tagName = 'div';
-
-        super(options);
 
         this.state = {
             isEditMode: options.isEditMode || false,

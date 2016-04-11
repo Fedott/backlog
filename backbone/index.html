@@ -37,7 +37,13 @@
             map: {
                 text: 'node_modules/system-text/text.js',
                 handlebars: 'node_modules/handlebars/dist/handlebars.js',
-                autosize: 'node_modules/autosize/dist/autosize.js'
+                autosize: 'node_modules/autosize/dist/autosize.js',
+                react: 'node_modules/react/dist/react.js',
+                React: 'node_modules/react/dist/react.js',
+                ReactDOM: 'node_modules/react-dom/dist/react-dom.js',
+                'react-dom': 'node_modules/react-dom/dist/react-dom.js',
+                'react-mdl': 'node_modules/react-mdl/out/ReactMDL.js',
+                'react-nl2br': 'node_modules/react-nl2br/index.js'
             }
         });
         System.import('app/boot')
@@ -48,34 +54,7 @@
 
 <!-- 3. Display the application -->
 <body>
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-        <header class="mdl-layout__header">
-            <div class="mdl-layout__header-row">
-                <!-- Title -->
-                <span class="mdl-layout-title">Backlog</span>
-                <!-- Add spacer, to align navigation to the right -->
-                <div class="mdl-layout-spacer"></div>
-                <!-- Navigation. We hide it in small screens. -->
-                <nav class="mdl-navigation mdl-layout--large-screen-only">
-                    <a class="mdl-navigation__link" href="">All stories</a>
-                    <a class="mdl-navigation__link" href="">Not completed stories</a>
-                    <a class="mdl-navigation__link" href="">Completed stories</a>
-                </nav>
-            </div>
-        </header>
-        <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title">Title</span>
-            <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="">All stories</a>
-                <a class="mdl-navigation__link" href="">Not completed stories</a>
-                <a class="mdl-navigation__link" href="">Completed stories</a>
-            </nav>
-        </div>
-        <main class="mdl-layout__content">
-            <backlog>
-            </backlog>
-        </main>
-    </div>
+    <div id="container"></div>
 </body>
 
 </html>
