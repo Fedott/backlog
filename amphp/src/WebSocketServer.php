@@ -8,9 +8,31 @@ use Aerys\Websocket;
 class WebSocketServer implements Websocket
 {
     /**
+     * @var SerializerService
+     */
+    protected $serializerService;
+
+    /**
+     * @var RequestProcessor
+     */
+    protected $requestProcessor;
+
+    /**
      * @var Websocket\Endpoint
      */
     protected $endpoint;
+
+    /**
+     * WebSocketServer constructor.
+     *
+     * @param SerializerService $serializerService
+     * @param RequestProcessor  $requestProcessor
+     */
+    public function __construct(SerializerService $serializerService, RequestProcessor $requestProcessor)
+    {
+        $this->serializerService = $serializerService;
+        $this->requestProcessor = $requestProcessor;
+    }
 
     /**
      * @inheritDoc
@@ -43,12 +65,20 @@ class WebSocketServer implements Websocket
      */
     public function onData(int $clientId, Websocket\Message $msg)
     {
-        $msgBody = json_decode(yield $msg, true);
-        $this->endpoint->send($clientId, json_encode([
-            "id" => $msgBody['id'],
-            "type" => "echo",
-            "body" => json_encode($msgBody),
-        ]));
+        $this->processMessage($clientId, yield $msg);
+    }
+
+    /**
+     * @param int    $clientId
+     * @param string $message
+     */
+    public function processMessage(int $clientId, string $message)
+    {
+        $request = $this->serializerService->unserializeRequest($message);
+        $request->setClientId($clientId);
+        $request->setEndpoint($this->endpoint);
+
+        $this->requestProcessor->process($request);
     }
 
     /**
@@ -56,7 +86,6 @@ class WebSocketServer implements Websocket
      */
     public function onClose(int $clientId, int $code, string $reason)
     {
-        // TODO: Implement onClose() method.
     }
 
     /**
@@ -64,6 +93,5 @@ class WebSocketServer implements Websocket
      */
     public function onStop()
     {
-        // TODO: Implement onStop() method.
     }
 }
