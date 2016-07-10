@@ -74,7 +74,7 @@ class WebSocketServer implements Websocket
      */
     public function processMessage(int $clientId, string $message)
     {
-        $request = $this->serializerService->unserializeRequest($message);
+        $request = $this->serializerService->parseRequest($message);
         $request->setClientId($clientId);
         $request->setEndpoint($this->endpoint);
 

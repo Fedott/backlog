@@ -27,7 +27,7 @@ class WebSocketServerTest extends PHPUnit_Framework_TestCase
         $request = new Request();
 
         $serializerServiceMock->expects($this->once())
-            ->method('unserializeRequest')
+            ->method('parseRequest')
             ->with("jj")
             ->willReturn($request)
         ;

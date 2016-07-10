@@ -16,17 +16,56 @@ class Request
     protected $endpoint;
 
     /**
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * @var string
+     */
+    protected $type;
+
+    /**
+     * @var PayloadInterface
+     */
+    protected $payload;
+
+    /**
+     * Request constructor.
+     *
+     * @param int              $id
+     * @param string           $type
+     * @param PayloadInterface $payload
+     */
+    public function __construct(int $id, string $type, PayloadInterface $payload)
+    {
+        $this->id      = $id;
+        $this->type    = $type;
+        $this->payload = $payload;
+    }
+
+    /**
      * @return int
      */
     public function getId(): int
     {
+        return $this->id;
     }
 
     /**
-     * @return Payload
+     * @return PayloadInterface
      */
-    public function getPayload(): Payload
+    public function getPayload(): PayloadInterface
     {
+        return $this->payload;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
     }
 
     /**
