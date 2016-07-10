@@ -1,0 +1,26 @@
+{
+  "name": "react-simple",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "dependencies": {
+    "babel-core": "^6.10.4",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-syntax-async-functions": "^6.8.0",
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-plugin-transform-class-properties": "^6.10.2",
+    "babel-polyfill": "^6.9.1",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.11.1",
+    "react": "^15.2.0",
+    "react-dom": "^15.2.0",
+    "react-mdl": "^1.6.0",
+    "webpack": "^1.13.1"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.13.0",
+    "browser-sync-webpack-plugin": "^1.0.3"
+  },
+  "author": "",
+  "license": "MIT"
+}

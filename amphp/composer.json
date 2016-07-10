@@ -1,0 +1,14 @@
+{
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fedot\\Backlog\\": "src/"
+        }
+    },
+    "require": {
+        "amphp/aerys": "^0.4.3",
+        "symfony/console": "^3.1"
+    }
+}
