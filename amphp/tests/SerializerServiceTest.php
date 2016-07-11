@@ -2,7 +2,7 @@
 namespace Tests\Fedot\Backlog;
 
 use Fedot\Backlog\PayloadInterface;
-use Fedot\Backlog\Request;
+use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\SerializerService;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;

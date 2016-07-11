@@ -1,7 +1,7 @@
 <?php
 use Aerys\Websocket\Endpoint;
-use Fedot\Backlog\Request;
-use Fedot\Backlog\RequestProcessor;
+use Fedot\Backlog\Request\Request;
+use Fedot\Backlog\Request\RequestProcessorManager;
 use Fedot\Backlog\SerializerService;
 use Fedot\Backlog\WebSocketServer;
 
@@ -13,7 +13,7 @@ class WebSocketServerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $requestProcessorMock = $this->getMockBuilder(RequestProcessor::class)
+        $requestProcessorMock = $this->getMockBuilder(RequestProcessorManager::class)
             ->disableOriginalConstructor()
             ->getMock()
         ;

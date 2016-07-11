@@ -1,0 +1,57 @@
+<?php
+namespace Tests\Fedot\Backlog\Request;
+
+use Fedot\Backlog\Request\Processor\ProcessorInterface;
+use Fedot\Backlog\Request\Request;
+use Fedot\Backlog\Request\RequestProcessorManager;
+
+class RequestProcessorTest extends \PHPUnit_Framework_TestCase
+{
+    public function testProcess()
+    {
+        $request = new Request();
+
+        $testProcessor1 = $this->createMock(ProcessorInterface::class);
+        $testProcessor2 = $this->createMock(ProcessorInterface::class);
+        $testProcessor3 = $this->createMock(ProcessorInterface::class);
+
+        $testProcessor1->expects($this->once())
+            ->method('supportsRequest')
+            ->with($request)
+            ->willReturn(false)
+        ;
+        $testProcessor1->expects($this->never())
+            ->method('process')
+            ->with($request)
+        ;
+        $testProcessor2->expects($this->once())
+            ->method('supportsRequest')
+            ->with($request)
+            ->willReturn(true)
+        ;
+        $testProcessor2->expects($this->once())
+            ->method('process')
+            ->with($request)
+            ->willReturn(false)
+        ;
+        $testProcessor3->expects($this->once())
+            ->method('supportsRequest')
+            ->with($request)
+            ->willReturn(true)
+        ;
+        $testProcessor3->expects($this->once())
+            ->method('process')
+            ->with($request)
+            ->willReturn(true)
+        ;
+
+        $manager = new RequestProcessorManager();
+        $manager->addProcessors([
+            $testProcessor1,
+            $testProcessor2,
+            $testProcessor3,
+        ]);
+
+        $manager->process($request);
+    }
+}

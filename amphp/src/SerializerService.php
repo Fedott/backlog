@@ -1,6 +1,7 @@
 <?php
 namespace Fedot\Backlog;
 
+use Fedot\Backlog\Request\Request;
 use Symfony\Component\Serializer\Serializer;
 
 class SerializerService

@@ -4,6 +4,7 @@ namespace Fedot\Backlog;
 use Aerys\Request;
 use Aerys\Response;
 use Aerys\Websocket;
+use Fedot\Backlog\Request\RequestProcessorManager;
 
 class WebSocketServer implements Websocket
 {
@@ -13,7 +14,7 @@ class WebSocketServer implements Websocket
     protected $serializerService;
 
     /**
-     * @var RequestProcessor
+     * @var RequestProcessorManager
      */
     protected $requestProcessor;
 
@@ -25,10 +26,10 @@ class WebSocketServer implements Websocket
     /**
      * WebSocketServer constructor.
      *
-     * @param SerializerService $serializerService
-     * @param RequestProcessor  $requestProcessor
+     * @param SerializerService       $serializerService
+     * @param RequestProcessorManager $requestProcessor
      */
-    public function __construct(SerializerService $serializerService, RequestProcessor $requestProcessor)
+    public function __construct(SerializerService $serializerService, RequestProcessorManager $requestProcessor)
     {
         $this->serializerService = $serializerService;
         $this->requestProcessor = $requestProcessor;
