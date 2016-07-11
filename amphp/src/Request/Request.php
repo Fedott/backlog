@@ -3,6 +3,7 @@ namespace Fedot\Backlog\Request;
 
 use Aerys\Websocket\Endpoint;
 use Fedot\Backlog\PayloadInterface;
+use Fedot\Backlog\Response\ResponseSender;
 
 class Request
 {
@@ -27,9 +28,9 @@ class Request
     protected $clientId;
 
     /**
-     * @var Endpoint
+     * @var ResponseSender
      */
-    protected $endpoint;
+    protected $responseSender;
 
     /**
      * @return int
@@ -52,21 +53,21 @@ class Request
     }
 
     /**
-     * @return Endpoint
+     * @return ResponseSender
      */
-    public function getEndpoint(): Endpoint
+    public function getResponseSender(): ResponseSender
     {
-        return $this->endpoint;
+        return $this->responseSender;
     }
 
     /**
-     * @param Endpoint $endpoint
+     * @param ResponseSender $responseSender
      *
      * @return $this
      */
-    public function setEndpoint(Endpoint $endpoint)
+    public function setResponseSender(ResponseSender $responseSender)
     {
-        $this->endpoint = $endpoint;
+        $this->responseSender = $responseSender;
 
         return $this;
     }

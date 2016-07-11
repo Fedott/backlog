@@ -1,9 +1,13 @@
 <?php
+namespace Tests\Fedot\Backlog;
+
 use Aerys\Websocket\Endpoint;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Request\RequestProcessorManager;
+use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\SerializerService;
 use Fedot\Backlog\WebSocketServer;
+use PHPUnit_Framework_TestCase;
 
 class WebSocketServerTest extends PHPUnit_Framework_TestCase
 {
@@ -39,6 +43,8 @@ class WebSocketServerTest extends PHPUnit_Framework_TestCase
         $webSocketServer->processMessage(123, "jj");
 
         $this->assertEquals(123, $request->getClientId());
-        $this->assertEquals($endpointMock, $request->getEndpoint());
+
+        $responseSender = $request->getResponseSender();
+        $this->assertInstanceOf(ResponseSender::class, $responseSender);
     }
 }

@@ -5,6 +5,7 @@ use Aerys\Request;
 use Aerys\Response;
 use Aerys\Websocket;
 use Fedot\Backlog\Request\RequestProcessorManager;
+use Fedot\Backlog\Response\ResponseSender;
 
 class WebSocketServer implements Websocket
 {
@@ -24,6 +25,11 @@ class WebSocketServer implements Websocket
     protected $endpoint;
 
     /**
+     * @var ResponseSender
+     */
+    protected $responseSender;
+
+    /**
      * WebSocketServer constructor.
      *
      * @param SerializerService       $serializerService
@@ -41,6 +47,7 @@ class WebSocketServer implements Websocket
     public function onStart(Websocket\Endpoint $endpoint)
     {
         $this->endpoint = $endpoint;
+        $this->responseSender = new ResponseSender($endpoint);
     }
 
     /**
@@ -77,7 +84,7 @@ class WebSocketServer implements Websocket
     {
         $request = $this->serializerService->parseRequest($message);
         $request->setClientId($clientId);
-        $request->setEndpoint($this->endpoint);
+        $request->setResponseSender($this->responseSender);
 
         $this->requestProcessor->process($request);
     }
