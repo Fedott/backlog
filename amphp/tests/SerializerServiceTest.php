@@ -33,11 +33,11 @@ JSON;
         $serializerService->addPayloadType('test', TestPayload::class);
 
         $actualRequest = $serializerService->parseRequest($requestJsonString);
-        $actualPayload = $actualRequest->getPayload();
+        $actualPayload = $actualRequest->payload;
 
         $this->assertInstanceOf(Request::class, $actualRequest);
-        $this->assertEquals('test', $actualRequest->getType());
-        $this->assertEquals('234', $actualRequest->getId());
+        $this->assertEquals('test', $actualRequest->type);
+        $this->assertEquals('234', $actualRequest->id);
 
         $this->assertInstanceOf(TestPayload::class, $actualPayload);
         $this->assertEquals(564, $actualPayload->field1);

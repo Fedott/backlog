@@ -54,9 +54,23 @@ class SerializerService
         return '';
     }
 
-    public function parsePayload($json, $type): PayloadInterface
+    /**
+     * @param $request
+     * @param string $type
+     *
+     * @return PayloadInterface
+     */
+    public function parsePayload($request, string $type): PayloadInterface
     {
+        if (!array_key_exists($type, $this->payloadTypes)) {
+            throw new \RuntimeException("Not found payload type: {$type}");
+        }
 
+        $payloadTypeClass = $this->payloadTypes[$type];
+
+        $payload = $this->serializer->denormalize($request->payload, $payloadTypeClass);
+
+        return $payload;
     }
 
     /**
@@ -66,23 +80,10 @@ class SerializerService
      */
     public function parseRequest(string $requestJson): Request
     {
-        $requestJson = json_decode($requestJson, true);
+        /** @var Request $request */
+        $request = $this->serializer->deserialize($requestJson, Request::class, 'json');
 
-        $type = $requestJson['type'];
-
-        if (!array_key_exists($type, $this->payloadTypes)) {
-            throw new \RuntimeException("Not found payload type: {$type}");
-        }
-
-        $payloadTypeClass = $this->payloadTypes[$type];
-
-        $payload = $this->serializer->deserialize(json_encode($requestJson['payload']), $payloadTypeClass, 'json');
-
-        $request = new Request(
-            $requestJson['id'],
-            $type,
-            $payload
-        );
+        $request->payload = $this->parsePayload($request, $request->type);
 
         return $request;
     }
