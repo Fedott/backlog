@@ -44,5 +44,5 @@ webSocket.connect().then(function () {
 });
 
 async function test() {
-    return await webSocket.sendRequest({body: "AtaAtaAta"});
+    return await webSocket.sendRequest({type: "ping"});
 }

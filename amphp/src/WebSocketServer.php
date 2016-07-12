@@ -17,7 +17,7 @@ class WebSocketServer implements Websocket
     /**
      * @var RequestProcessorManager
      */
-    protected $requestProcessor;
+    protected $requestProcessorManager;
 
     /**
      * @var Websocket\Endpoint
@@ -33,12 +33,12 @@ class WebSocketServer implements Websocket
      * WebSocketServer constructor.
      *
      * @param SerializerService       $serializerService
-     * @param RequestProcessorManager $requestProcessor
+     * @param RequestProcessorManager $requestProcessorManager
      */
-    public function __construct(SerializerService $serializerService, RequestProcessorManager $requestProcessor)
+    public function __construct(SerializerService $serializerService, RequestProcessorManager $requestProcessorManager)
     {
-        $this->serializerService = $serializerService;
-        $this->requestProcessor = $requestProcessor;
+        $this->serializerService       = $serializerService;
+        $this->requestProcessorManager = $requestProcessorManager;
     }
 
     /**
@@ -86,7 +86,7 @@ class WebSocketServer implements Websocket
         $request->setClientId($clientId);
         $request->setResponseSender($this->responseSender);
 
-        $this->requestProcessor->process($request);
+        $this->requestProcessorManager->process($request);
     }
 
     /**
