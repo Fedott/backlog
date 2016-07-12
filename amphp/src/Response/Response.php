@@ -11,6 +11,11 @@ class Response
     public $requestId;
 
     /**
+     * @var string
+     */
+    public $type;
+
+    /**
      * @var PayloadInterface
      */
     public $payload;

@@ -59,6 +59,7 @@ class PingTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback(function (Response $response, $clientId = null) {
                 $this->assertEquals(777, $clientId);
                 $this->assertEquals(321, $response->requestId);
+                $this->assertEquals('pong', $response->type);
                 $this->assertInstanceOf(PongPayload::class, $response->payload);
             })
         ;

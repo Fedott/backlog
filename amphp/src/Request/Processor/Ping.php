@@ -26,6 +26,7 @@ class Ping implements ProcessorInterface
     {
         $response = new Response();
         $response->requestId = $request->id;
+        $response->type = 'pong';
         $response->payload = new PongPayload();
 
         $request->getResponseSender()->sendResponse($response, $request->getClientId());

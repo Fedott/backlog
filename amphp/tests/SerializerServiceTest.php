@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Fedot\Backlog;
 
-use Fedot\Backlog\PayloadInterface;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\SerializerService;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
@@ -43,17 +42,4 @@ JSON;
         $this->assertEquals(564, $actualPayload->field1);
         $this->assertEquals("dfsdf", $actualPayload->field3);
     }
-}
-
-class TestPayload implements PayloadInterface
-{
-    /**
-     * @var int
-     */
-    public $field1;
-
-    /**
-     * @var string
-     */
-    public $field3;
 }

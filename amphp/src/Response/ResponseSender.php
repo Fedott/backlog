@@ -21,10 +21,10 @@ class ResponseSender
 
     /**
      * @param Response $response
-     * @param int|null $clientId
+     * @param int|null|array $clientId
      */
-    public function sendResponse(Response $response, int $clientId = null)
+    public function sendResponse(Response $response, $clientId = null)
     {
-
+        $this->endpoint->send($clientId, json_encode($response));
     }
 }
