@@ -1,22 +1,12 @@
 <?php
+use Fedot\Backlog\WebSocketServer;
+
+require_once __DIR__ . "/bootstrap.php";
 
 $root = Aerys\root(__DIR__."/../../react-simple/web");
 
-$serializer = new \Symfony\Component\Serializer\Serializer([
-    new \Symfony\Component\Serializer\Normalizer\ObjectNormalizer(),
-], [
-    new \Symfony\Component\Serializer\Encoder\JsonEncoder(),
-]);
-$serializerService = new \Fedot\Backlog\SerializerService($serializer);
-$serializerService->addPayloadType('ping', \Fedot\Backlog\Response\Payload\EmptyPayload::class);
-
-$requestProcessor = new \Fedot\Backlog\Request\RequestProcessorManager();
-$requestProcessor->addProcessor(new \Fedot\Backlog\Request\Processor\Ping());
-
-$websocket = \Aerys\websocket(new \Fedot\Backlog\WebSocketServer(
-    $serializerService,
-    $requestProcessor
-));
+$webSocketServer = $container->get(WebSocketServer::class);
+$websocket       = \Aerys\websocket($webSocketServer);
 
 $router = \Aerys\router()
     ->route('GET', '/websocket', $websocket)
