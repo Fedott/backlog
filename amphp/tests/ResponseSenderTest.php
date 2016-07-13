@@ -9,7 +9,7 @@ class ResponseSenderTest extends \PHPUnit_Framework_TestCase
 {
     public function testSendResponse()
     {
-        $endpointMock = $this->getMockBuilder(Endpoint::class)->getMock();
+        $endpointMock = $this->createMock(Endpoint::class);
 
         $sender = new ResponseSender($endpointMock);
 

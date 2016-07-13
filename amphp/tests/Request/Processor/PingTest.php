@@ -43,10 +43,7 @@ class PingTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $responseSenderMock = $this->getMockBuilder(ResponseSender::class)
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        $responseSenderMock = $this->createMock(ResponseSender::class);
 
         $request = new Request();
         $request->id = 321;

@@ -13,18 +13,9 @@ class WebSocketServerTest extends PHPUnit_Framework_TestCase
 {
     public function testProcessMessage()
     {
-        $serializerServiceMock = $this->getMockBuilder(SerializerService::class)
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-        $requestProcessorMock = $this->getMockBuilder(RequestProcessorManager::class)
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-        $endpointMock = $this->getMockBuilder(Endpoint::class)
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        $serializerServiceMock = $this->createMock(SerializerService::class);
+        $requestProcessorMock = $this->createMock(RequestProcessorManager::class);
+        $endpointMock = $this->createMock(Endpoint::class);
         $webSocketServer = new WebSocketServer($serializerServiceMock, $requestProcessorMock);
         $webSocketServer->onStart($endpointMock);
 
