@@ -1,6 +1,9 @@
 import * as React from "react";
 import {Layout, Header, Navigation, Drawer, Content, FABButton, Icon} from 'react-mdl';
-import {StoriesList} from '../StoriesList/StoriesList.jsx';
+import StoriesList from '../Story/StoriesList.jsx';
+
+// Import styles.
+import '../../../node_modules/material-design-lite/material.js';
 
 class Application extends React.Component {
     constructor(props:any, context:any) {
@@ -41,6 +44,7 @@ class Application extends React.Component {
                         </Navigation>
                     </Drawer>
                     <Content>
+                        <StoriesList />
                         <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
                             <Icon name="add" />
                         </FABButton>

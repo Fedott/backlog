@@ -14,9 +14,12 @@ export class WebSocketRequestExecutor {
     }
 }
 
-class WebSocketClient {
+export class WebSocketClient {
     uri = "";
     webSocketConnection: WebSocket;
+    status = "disconnected";
+
+    connectPromisors = [];
 
     requestsIds = 0;
     requests = {};
@@ -26,24 +29,47 @@ class WebSocketClient {
     }
 
     async connect() {
-        this.webSocketConnection = new WebSocket(this.uri);
-        this.webSocketConnection.onmessage = this.onMessage.bind(this);
+        if (this.status == 'connected') {
+            return Promise.resolve();
+        }
+
+        if (this.status == 'disconnected') {
+            this.webSocketConnection = new WebSocket(this.uri);
+            this.webSocketConnection.onmessage = this.onMessage.bind(this);
+            this.webSocketConnection.onopen = this.connectResolve.bind(this);
+            this.webSocketConnection.onerror = this.connectReject.bind(this);
+            this.status = 'connecting';
+        }
 
         return new Promise(function (resolve, reject) {
-            this.webSocketConnection.onopen = function () {
-                resolve();
-            };
-            this.webSocketConnection.onerror = function () {
-                reject();
-            }
+            this.connectPromisors.push({
+                resolve: resolve,
+                reject: reject,
+            });
         }.bind(this));
+    }
+
+    connectResolve() {
+        this.status = 'connected';
+
+        this.connectPromisors.map((promiser) => {
+            promiser['resolve']();
+        })
+    }
+
+    connectReject() {
+        this.status = 'disconnected';
+
+        this.connectPromisors.map((promiser) => {
+            promiser['reject']();
+        })
     }
 
     onMessage(event) {
         console.log(this.requestsIds, event);
         var response = JSON.parse(event.data);
-        if (response.id) {
-            var requestExecutor = this.requests[response.id];
+        if (response.requestId) {
+            var requestExecutor = this.requests[response.requestId];
             requestExecutor.resolveFunction(response);
         }
     }
@@ -53,6 +79,8 @@ class WebSocketClient {
     }
 
     async sendRequest(request) {
+        await this.connect();
+
         request.id = this.getNextRequestId();
         var requestExecutor = new WebSocketRequestExecutor(request);
         this.requests[request.id] = requestExecutor;
@@ -65,4 +93,6 @@ class WebSocketClient {
     }
 }
 
-export default WebSocketClient;
+var webSocketClient = new WebSocketClient("ws://localhost:8080/websocket");
+
+export default webSocketClient;
