@@ -19,10 +19,8 @@ class Ping implements ProcessorInterface
 
     /**
      * @param Request $request
-     *
-     * @return bool
      */
-    public function process(Request $request): bool
+    public function process(Request $request)
     {
         $response = new Response();
         $response->requestId = $request->id;
@@ -30,7 +28,5 @@ class Ping implements ProcessorInterface
         $response->payload = new PongPayload();
 
         $request->getResponseSender()->sendResponse($response, $request->getClientId());
-
-        return true;
     }
 }

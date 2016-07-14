@@ -32,17 +32,15 @@ class RequestProcessorTest extends \PHPUnit_Framework_TestCase
         $testProcessor2->expects($this->once())
             ->method('process')
             ->with($request)
-            ->willReturn(false)
+            ->willReturn(true)
         ;
-        $testProcessor3->expects($this->once())
+        $testProcessor3->expects($this->never())
             ->method('supportsRequest')
             ->with($request)
-            ->willReturn(true)
         ;
-        $testProcessor3->expects($this->once())
+        $testProcessor3->expects($this->never())
             ->method('process')
             ->with($request)
-            ->willReturn(true)
         ;
 
         $manager = new RequestProcessorManager();

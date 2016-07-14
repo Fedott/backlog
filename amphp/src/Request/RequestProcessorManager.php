@@ -30,19 +30,15 @@ class RequestProcessorManager
 
     /**
      * @param Request $request
-     *
-     * @return bool
      */
-    public function process(Request $request): bool
+    public function process(Request $request)
     {
         foreach ($this->processors as $processor) {
             if ($processor->supportsRequest($request)) {
-                if ($processor->process($request)) {
-                    return true;
-                }
+                $processor->process($request);
+
+                return;
             }
         }
-
-        return false;
     }
 }

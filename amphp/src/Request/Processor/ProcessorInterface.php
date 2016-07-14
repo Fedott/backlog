@@ -14,8 +14,6 @@ interface ProcessorInterface
 
     /**
      * @param Request $request
-     *
-     * @return bool
      */
-    public function process(Request $request): bool;
+    public function process(Request $request);
 }

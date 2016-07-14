@@ -44,5 +44,10 @@ webSocket.connect().then(function () {
 });
 
 async function test() {
-    return await webSocket.sendRequest({type: "ping"});
+    // return await webSocket.sendRequest({type: "ping"});
+    return await webSocket.sendRequest({type: "get-stories"});
+    return await webSocket.sendRequest({
+        type: "create-story",
+        "payload": {"number": "1", "title": "First story", "text": "First story text"}
+    });
 }
