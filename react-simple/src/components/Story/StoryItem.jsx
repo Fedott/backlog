@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as ReactMDL from 'react-mdl';
+import nl2br from 'react-nl2br';
 
 class StoryItem extends React.Component {
     constructor(props, context:any) {
@@ -14,12 +15,13 @@ class StoryItem extends React.Component {
         return (
             <ReactMDL.Card shadow={2} className="backlog-story mdl-cell mdl-cell--12-col">
                 <ReactMDL.CardTitle expand className="backlog-story-title">
-                    <h4>
-                        {this.state.story.text}
-                    </h4>
+                    {this.state.story.title}
                 </ReactMDL.CardTitle>
+                <ReactMDL.CardText>
+                    {nl2br(this.state.story.text)}
+                </ReactMDL.CardText>
 
-                <ReactMDL.CardActions>
+                <ReactMDL.CardActions border>
                     <ReactMDL.Button>
                         Редактировать
                     </ReactMDL.Button>

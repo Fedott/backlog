@@ -13,7 +13,6 @@ class StoriesList extends React.Component {
         };
 
         webSocketClient.sendRequest({type: "get-stories"}).then(function (response) {
-            console.log('load stories', response);
             this.setState({storiesCollection: response.payload.stories});
         }.bind(this));
     }

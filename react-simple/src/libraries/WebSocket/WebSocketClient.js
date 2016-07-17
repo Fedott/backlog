@@ -66,7 +66,6 @@ export class WebSocketClient {
     }
 
     onMessage(event) {
-        console.log(this.requestsIds, event);
         var response = JSON.parse(event.data);
         if (response.requestId) {
             var requestExecutor = this.requests[response.requestId];
@@ -93,6 +92,6 @@ export class WebSocketClient {
     }
 }
 
-var webSocketClient = new WebSocketClient("ws://localhost:8080/websocket");
+var webSocketClient = new WebSocketClient("ws://192.168.1.17:8080/websocket");
 
 export default webSocketClient;
