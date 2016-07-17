@@ -6,9 +6,9 @@ use Fedot\Backlog\PayloadInterface;
 class Story implements PayloadInterface
 {
     /**
-     * @var int
+     * @var string
      */
-    public $number;
+    public $id;
 
     /**
      * @var string

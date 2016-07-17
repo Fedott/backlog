@@ -6,6 +6,7 @@ use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\StoriesRepository;
+use Ramsey\Uuid\UuidFactory;
 
 class CreateStory implements ProcessorInterface
 {
@@ -15,13 +16,22 @@ class CreateStory implements ProcessorInterface
     protected $storiesRepository;
 
     /**
+     * @var UuidFactory
+     */
+    protected $uuidFactory;
+
+    /**
      * CreateStory constructor.
      *
      * @param StoriesRepository $storiesRepository
+     * @param UuidFactory       $uuidFactory
      */
-    public function __construct(StoriesRepository $storiesRepository)
-    {
+    public function __construct(
+        StoriesRepository $storiesRepository,
+        UuidFactory $uuidFactory
+    ) {
         $this->storiesRepository = $storiesRepository;
+        $this->uuidFactory = $uuidFactory;
     }
 
     /**
@@ -42,6 +52,8 @@ class CreateStory implements ProcessorInterface
         \Amp\immediately(function () use ($request) {
             /** @var Story $story */
             $story = $request->payload;
+            $story->id = $this->uuidFactory->uuid4();
+
             $result = yield $this->storiesRepository->save($story);
 
             $response            = new Response();
@@ -53,7 +65,7 @@ class CreateStory implements ProcessorInterface
             } else {
                 $response->type             = 'error';
                 $response->payload          = new ErrorPayload();
-                $response->payload->message = "Story number {$story->number} already exists";
+                $response->payload->message = "Story id '{$story->id}' already exists";
             }
 
             $request->getResponseSender()->sendResponse($response, $request->getClientId());

@@ -10,6 +10,7 @@ use Fedot\Backlog\Response\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\StoriesRepository;
+use Ramsey\Uuid\UuidFactory;
 use Tests\Fedot\Backlog\BaseTestCase;
 
 class CreateStoryTest extends BaseTestCase
@@ -22,7 +23,10 @@ class CreateStoryTest extends BaseTestCase
      */
     public function testSupportsRequest(Request $request, bool $expectedResult)
     {
-        $processor = new CreateStory($this->createMock(StoriesRepository::class));
+        $processor = new CreateStory(
+            $this->createMock(StoriesRepository::class),
+            $this->createMock(UuidFactory::class)
+        );
         $actualResult = $processor->supportsRequest($request);
 
         $this->assertEquals($expectedResult, $actualResult);
@@ -49,23 +53,29 @@ class CreateStoryTest extends BaseTestCase
     {
         $responseSenderMock = $this->createMock(ResponseSender::class);
         $storiesRepositoryMock = $this->createMock(StoriesRepository::class);
+        $uuidFactoryMock = $this->createMock(UuidFactory::class);
 
         $request = new Request();
         $request->id = 33;
         $request->type = 'create-story';
         $request->payload = new Story();
-        $request->payload->number = 123;
         $request->payload->title = 'story title';
         $request->payload->text = 'story text';
         $request->setClientId(432);
         $request->setResponseSender($responseSenderMock);
 
-        $processor = new CreateStory($storiesRepositoryMock);
+        $processor = new CreateStory($storiesRepositoryMock, $uuidFactoryMock);
+
+        $uuidFactoryMock
+            ->expects($this->once())
+            ->method('uuid4')
+            ->willReturn('UUIDSuperUnique')
+        ;
 
         $storiesRepositoryMock->expects($this->once())
             ->method('save')
             ->willReturnCallback(function (Story $story) {
-                $this->assertEquals(123, $story->number);
+                $this->assertEquals('UUIDSuperUnique', $story->id);
                 $this->assertEquals('story title', $story->title);
                 $this->assertEquals('story text', $story->text);
 
@@ -82,7 +92,7 @@ class CreateStoryTest extends BaseTestCase
                 /** @var Story $responsePayload */
                 $responsePayload = $response->payload;
                 $this->assertInstanceOf(Story::class, $responsePayload);
-                $this->assertEquals(123, $responsePayload->number);
+                $this->assertEquals('UUIDSuperUnique', $responsePayload->id);
                 $this->assertEquals('story title', $responsePayload->title);
                 $this->assertEquals('story text', $responsePayload->text);
 
@@ -99,23 +109,29 @@ class CreateStoryTest extends BaseTestCase
     {
         $responseSenderMock = $this->createMock(ResponseSender::class);
         $storiesRepositoryMock = $this->createMock(StoriesRepository::class);
+        $uuidFactoryMock = $this->createMock(UuidFactory::class);
 
         $request = new Request();
         $request->id = 33;
         $request->type = 'create-story';
         $request->payload = new Story();
-        $request->payload->number = 123;
         $request->payload->title = 'story title';
         $request->payload->text = 'story text';
         $request->setClientId(432);
         $request->setResponseSender($responseSenderMock);
 
-        $processor = new CreateStory($storiesRepositoryMock);
+        $processor = new CreateStory($storiesRepositoryMock, $uuidFactoryMock);
+
+        $uuidFactoryMock
+            ->expects($this->once())
+            ->method('uuid4')
+            ->willReturn('UUIDSuperUnique')
+        ;
 
         $storiesRepositoryMock->expects($this->once())
             ->method('save')
             ->willReturnCallback(function (Story $story) {
-                $this->assertEquals(123, $story->number);
+                $this->assertEquals('UUIDSuperUnique', $story->id);
                 $this->assertEquals('story title', $story->title);
                 $this->assertEquals('story text', $story->text);
 
@@ -132,7 +148,7 @@ class CreateStoryTest extends BaseTestCase
                 /** @var ErrorPayload $responsePayload */
                 $responsePayload = $response->payload;
                 $this->assertInstanceOf(ErrorPayload::class, $responsePayload);
-                $this->assertEquals('Story number 123 already exists', $responsePayload->message);
+                $this->assertEquals("Story id 'UUIDSuperUnique' already exists", $responsePayload->message);
 
                 return true;
             }), $this->equalTo(432))
