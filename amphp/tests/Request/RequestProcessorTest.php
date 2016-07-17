@@ -4,8 +4,9 @@ namespace Tests\Fedot\Backlog\Request;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Request\RequestProcessorManager;
+use Tests\Fedot\Backlog\BaseTestCase;
 
-class RequestProcessorTest extends \PHPUnit_Framework_TestCase
+class RequestProcessorTest extends BaseTestCase
 {
     public function testProcess()
     {

@@ -9,13 +9,10 @@ use Fedot\Backlog\Response\Payload\StoriesPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\StoriesRepository;
+use Tests\Fedot\Backlog\BaseTestCase;
 
-class GetStoriesTest extends \PHPUnit_Framework_TestCase
+class GetStoriesTest extends BaseTestCase
 {
-    protected function setUp() {
-        \Amp\reactor($assign = new \Amp\NativeReactor);
-    }
-
     /**
      * @dataProvider providerSupportsRequest
      *

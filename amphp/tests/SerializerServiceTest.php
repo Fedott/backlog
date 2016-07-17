@@ -7,7 +7,7 @@ use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-class SerializerServiceTest extends \PHPUnit_Framework_TestCase
+class SerializerServiceTest extends BaseTestCase
 {
     public function testParseRequest()
     {

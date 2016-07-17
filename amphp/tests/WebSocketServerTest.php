@@ -7,9 +7,8 @@ use Fedot\Backlog\Request\RequestProcessorManager;
 use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\SerializerService;
 use Fedot\Backlog\WebSocketServer;
-use PHPUnit_Framework_TestCase;
 
-class WebSocketServerTest extends PHPUnit_Framework_TestCase
+class WebSocketServerTest extends BaseTestCase
 {
     public function testProcessMessage()
     {

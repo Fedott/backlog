@@ -5,7 +5,7 @@ use Aerys\Websocket\Endpoint;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 
-class ResponseSenderTest extends \PHPUnit_Framework_TestCase
+class ResponseSenderTest extends BaseTestCase
 {
     public function testSendResponse()
     {

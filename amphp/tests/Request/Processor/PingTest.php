@@ -7,13 +7,10 @@ use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Payload\PongPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
+use Tests\Fedot\Backlog\BaseTestCase;
 
-class PingTest extends \PHPUnit_Framework_TestCase
+class PingTest extends BaseTestCase
 {
-    protected function setUp() {
-        \Amp\reactor($assign = new \Amp\NativeReactor);
-    }
-
     /**
      * @dataProvider providerSupportsRequest
      *

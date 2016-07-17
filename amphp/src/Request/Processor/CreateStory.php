@@ -4,7 +4,6 @@ namespace Fedot\Backlog\Request\Processor;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Payload\ErrorPayload;
-use Fedot\Backlog\Response\Payload\StoryPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\StoriesRepository;
 
@@ -44,8 +43,6 @@ class CreateStory implements ProcessorInterface
             /** @var Story $story */
             $story = $request->payload;
             $result = yield $this->storiesRepository->save($story);
-
-            var_dump($result);
 
             $response            = new Response();
             $response->requestId = $request->id;
