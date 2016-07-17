@@ -92,9 +92,7 @@ class CreateStoryTest extends BaseTestCase
 
         $processor->process($request);
 
-        \Amp\tick();
-        \Amp\tick();
-        \Amp\tick();
+        $this->waitAsyncCode();
     }
 
     public function testProcessWithError()
@@ -142,8 +140,6 @@ class CreateStoryTest extends BaseTestCase
 
         $processor->process($request);
 
-        \Amp\tick();
-        \Amp\tick();
-        \Amp\tick();
+        $this->waitAsyncCode();
     }
 }

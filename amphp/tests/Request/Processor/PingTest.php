@@ -65,6 +65,6 @@ class PingTest extends BaseTestCase
         $processor = new Ping();
         $processor->process($request);
 
-        \Amp\tick();
+        $this->waitAsyncCode();
     }
 }

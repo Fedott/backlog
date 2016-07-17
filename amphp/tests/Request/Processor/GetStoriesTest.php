@@ -83,6 +83,6 @@ class GetStoriesTest extends BaseTestCase
 
         $processor->process($request);
 
-        \Amp\tick();
+        $this->waitAsyncCode();
     }
 }
