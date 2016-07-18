@@ -93,6 +93,7 @@ class StoryEditFrom extends React.Component {
                         value={this.state.story.text}
                         placeholder="Text"
                         onChange={this.onChangeText.bind(this)}
+                        disabled={editIsLocked}
                     />
                 </ReactMDL.CardText>
                 {progressBar}
