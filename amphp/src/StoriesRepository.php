@@ -5,7 +5,7 @@ use Amp\Promise;
 use Amp\Deferred;
 use Amp\Redis\Client;
 use Fedot\Backlog\Model\Story;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class StoriesRepository
 {
@@ -15,17 +15,17 @@ class StoriesRepository
     protected $redisClient;
 
     /**
-     * @var Serializer
+     * @var SerializerInterface
      */
     protected $serializer;
 
     /**
      * StoriesRepository constructor.
      *
-     * @param Client     $redisClient
-     * @param Serializer $serializer
+     * @param Client              $redisClient
+     * @param SerializerInterface $serializer
      */
-    public function __construct(Client $redisClient, Serializer $serializer)
+    public function __construct(Client $redisClient, SerializerInterface $serializer)
     {
         $this->redisClient = $redisClient;
         $this->serializer  = $serializer;

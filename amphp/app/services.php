@@ -10,6 +10,7 @@ use Fedot\Backlog\SerializerService;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 return [
     'serializer.normalazers' => add([
@@ -23,6 +24,7 @@ return [
             get('serializer.normalazers'),
             get('serializer.encoders')
         ),
+    SerializerInterface::class => get(Serializer::class),
 
     'serializer-service.payloads' => add([
         'ping' => Payload\EmptyPayload::class,
