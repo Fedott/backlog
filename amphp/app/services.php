@@ -28,6 +28,7 @@ return [
         'ping' => Payload\EmptyPayload::class,
         'get-stories' => Payload\EmptyPayload::class,
         'create-story' => Story::class,
+        'delete-story' => Payload\DeleteStoryPayload::class,
     ]),
     SerializerService::class => object()
         ->method('addPayloadTypes', get('serializer-service.payloads')),
@@ -36,6 +37,7 @@ return [
         get(Processor\Ping::class),
         get(Processor\GetStories::class),
         get(Processor\CreateStory::class),
+        get(Processor\DeleteStory::class),
     ]),
     RequestProcessorManager::class => object()
         ->method('addProcessors', get('request.processors')),

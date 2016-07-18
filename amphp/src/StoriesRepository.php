@@ -64,4 +64,14 @@ class StoriesRepository
 
         return $this->redisClient->setNx("story:{$story->id}", $storyJson);
     }
+
+    /**
+     * @param string $storyId
+     *
+     * @return Promise|bool
+     */
+    public function delete(string $storyId)
+    {
+        return $this->redisClient->del("story:{$storyId}");
+    }
 }
