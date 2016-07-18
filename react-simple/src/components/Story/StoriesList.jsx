@@ -48,11 +48,12 @@ class StoriesList extends React.Component {
     render() {
 
         var stories = this.state.storiesCollection.map((story) => {
-            return <StoryItem story={story} key={story.number} />
+            return <StoryItem story={story} key={story.id} />
         });
 
         return (
             <div className="backlog-list mdl-grid">
+                <StoryItem edit={true} isCreateForm={true} />
                 {stories}
             </div>
         );

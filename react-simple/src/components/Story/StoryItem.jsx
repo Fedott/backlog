@@ -1,40 +1,52 @@
 import * as React from "react";
-import * as ReactMDL from 'react-mdl';
-import nl2br from 'react-nl2br';
+import StoryView from "./StoryView.jsx";
+import StoryEditForm from "./StoryEditFrom.jsx";
 
 class StoryItem extends React.Component {
+    static propTypes = {
+        story: React.PropTypes.object,
+        edit: React.PropTypes.bool,
+        isCreateForm: React.PropTypes.bool,
+    };
+
     constructor(props, context:any) {
         super(props, context);
 
         this.state = {
             story: props.story,
+            edit: props.edit || false,
+            isCreateForm: props.isCreateForm || false,
         };
     }
 
+    onChangeEdit() {
+        this.setState({
+            edit: !this.state.edit,
+        })
+    }
+
+    onSaved(story) {
+        this.setState({
+            story: story,
+            edit: false,
+            isCreateForm: false,
+        })
+    }
+
     render() {
-        return (
-            <ReactMDL.Card shadow={2} className="backlog-story mdl-cell mdl-cell--12-col">
-                <ReactMDL.CardTitle expand className="backlog-story-title">
-                    {this.state.story.title}
-                </ReactMDL.CardTitle>
-                <ReactMDL.CardText>
-                    {nl2br(this.state.story.text)}
-                </ReactMDL.CardText>
-
-                <ReactMDL.CardActions border>
-                    <ReactMDL.Button>
-                        Редактировать
-                    </ReactMDL.Button>
-                    <ReactMDL.Button>
-                        Требования
-                    </ReactMDL.Button>
-                </ReactMDL.CardActions>
-
-                <ReactMDL.CardMenu>
-                    <ReactMDL.IconButton name='check_box_outline_blank' />
-                </ReactMDL.CardMenu>
-            </ReactMDL.Card>
-        );
+        if (this.state.edit) {
+            return <StoryEditForm
+                story={this.state.story}
+                onCancel={this.onChangeEdit.bind(this)}
+                onSaved={this.onSaved.bind(this)}
+                isCreateForm={this.state.isCreateForm}
+            />;
+        } else {
+            return <StoryView
+                story={this.state.story}
+                onChangeEdit={this.onChangeEdit.bind(this)}
+            />;
+        }
     }
 }
 

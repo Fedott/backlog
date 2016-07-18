@@ -34,11 +34,26 @@ backlog-story {
 }
 
 .backlog-story textarea {
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 32px;
+    font-family: "Helvetica","Arial",sans-serif;
+    color: rgba(0,0,0,.54);
+    font-size: 1rem;
+    line-height: 18px;
     overflow: hidden;
+    width: 100%;
+}
+
+.backlog-story input[type="text"] {
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    align-self: flex-end;
+    color: inherit;
+    display: flex;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: normal;
+    overflow: hidden;
+    transform-origin: 149px 48px;
+    margin: 0;
+    width: 90%;
 }
 
 #add-story-button {

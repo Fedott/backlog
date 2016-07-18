@@ -62,6 +62,6 @@ class StoriesRepository
     {
         $storyJson = $this->serializer->serialize($story, 'json');
 
-        return $this->redisClient->setNx("story:{$story->number}", $storyJson);
+        return $this->redisClient->setNx("story:{$story->id}", $storyJson);
     }
 }
