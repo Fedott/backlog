@@ -10,6 +10,7 @@ use Fedot\Backlog\Response\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\StoriesRepository;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;
 use Tests\Fedot\Backlog\BaseTestCase;
 
@@ -54,6 +55,7 @@ class CreateStoryTest extends BaseTestCase
         $responseSenderMock = $this->createMock(ResponseSender::class);
         $storiesRepositoryMock = $this->createMock(StoriesRepository::class);
         $uuidFactoryMock = $this->createMock(UuidFactory::class);
+        $uuidMock = $this->createMock(Uuid::class);
 
         $request = new Request();
         $request->id = 33;
@@ -69,6 +71,11 @@ class CreateStoryTest extends BaseTestCase
         $uuidFactoryMock
             ->expects($this->once())
             ->method('uuid4')
+            ->willReturn($uuidMock)
+        ;
+
+        $uuidMock->expects($this->once())
+            ->method('toString')
             ->willReturn('UUIDSuperUnique')
         ;
 
@@ -110,6 +117,7 @@ class CreateStoryTest extends BaseTestCase
         $responseSenderMock = $this->createMock(ResponseSender::class);
         $storiesRepositoryMock = $this->createMock(StoriesRepository::class);
         $uuidFactoryMock = $this->createMock(UuidFactory::class);
+        $uuidMock = $this->createMock(Uuid::class);
 
         $request = new Request();
         $request->id = 33;
@@ -125,6 +133,11 @@ class CreateStoryTest extends BaseTestCase
         $uuidFactoryMock
             ->expects($this->once())
             ->method('uuid4')
+            ->willReturn($uuidMock)
+        ;
+
+        $uuidMock->expects($this->once())
+            ->method('toString')
             ->willReturn('UUIDSuperUnique')
         ;
 

@@ -5,6 +5,8 @@ use Aerys\Request;
 use Aerys\Response;
 use Aerys\Websocket;
 use Fedot\Backlog\Request\RequestProcessorManager;
+use Fedot\Backlog\Response\Payload\ErrorPayload;
+use Fedot\Backlog\Response\Response as BacklogResponse;
 use Fedot\Backlog\Response\ResponseSender;
 
 class WebSocketServer implements Websocket
@@ -86,7 +88,19 @@ class WebSocketServer implements Websocket
         $request->setClientId($clientId);
         $request->setResponseSender($this->responseSender);
 
-        $this->requestProcessorManager->process($request);
+        try {
+            $request->payload = $this->serializerService->parsePayload($request);
+
+            $this->requestProcessorManager->process($request);
+        } catch (\RuntimeException $exception) {
+            $response = new BacklogResponse();
+            $response->requestId = $request->id;
+            $response->type = 'error';
+            $response->payload = new ErrorPayload();
+            $response->payload->message = $exception->getMessage();
+
+            $request->getResponseSender()->sendResponse($response, $request->getClientId());
+        }
     }
 
     /**

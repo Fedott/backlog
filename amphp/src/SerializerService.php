@@ -56,13 +56,15 @@ class SerializerService
     }
 
     /**
-     * @param $request
+     * @param Request $request
      * @param string $type
      *
      * @return PayloadInterface
      */
-    public function parsePayload($request, string $type): PayloadInterface
+    public function parsePayload(Request $request): PayloadInterface
     {
+        $type = $request->type;
+
         if (!array_key_exists($type, $this->payloadTypes)) {
             throw new \RuntimeException("Not found payload type: {$type}");
         }
