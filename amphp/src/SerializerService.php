@@ -86,8 +86,6 @@ class SerializerService
         /** @var Request $request */
         $request = $this->serializer->deserialize($requestJson, Request::class, 'json');
 
-        $request->payload = $this->parsePayload($request, $request->type);
-
         return $request;
     }
 }
