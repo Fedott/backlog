@@ -1,12 +1,14 @@
 import * as React from "react";
 import * as ReactMDL from 'react-mdl';
 import nl2br from 'react-nl2br';
+import webSocketClient from '../../libraries/WebSocket/WebSocketClient.js';
 
 class StoryView extends React.Component {
     static propTypes = {
         story: React.PropTypes.object,
         onChangeEdit: React.PropTypes.func,
         onChangeRequirements: React.PropTypes.func,
+        onDeleted: React.PropTypes.func,
     };
 
     constructor(props, context:any) {
@@ -18,6 +20,16 @@ class StoryView extends React.Component {
 
         this.onChangeEdit = props.onChangeEdit || null;
         this.onChangeRequirements = props.onChangeRequirements || null;
+        this.onDeleted = props.onDeleted || null;
+    }
+
+    async onDelete() {
+        var response = await webSocketClient.sendRequest({
+            type: "delete-story",
+            payload: {storyId: this.state.story.id},
+        });
+
+        this.onDeleted();
     }
 
     render() {
@@ -40,7 +52,16 @@ class StoryView extends React.Component {
                 </ReactMDL.CardActions>
 
                 <ReactMDL.CardMenu>
-                    <ReactMDL.IconButton name='check_box_outline_blank' />
+                    <ReactMDL.IconButton name='more_vert' id={"card-story-menu" + this.state.story.id} />
+                    <ReactMDL.Menu
+                        target={"card-story-menu" + this.state.story.id}
+                        align="right"
+                        ripple
+                    >
+                        <ReactMDL.MenuItem
+                            onClick={this.onDelete.bind(this)}
+                        >Delete</ReactMDL.MenuItem>
+                    </ReactMDL.Menu>
                 </ReactMDL.CardMenu>
             </ReactMDL.Card>
         );

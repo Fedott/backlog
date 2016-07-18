@@ -111,10 +111,6 @@ class StoryEditFrom extends React.Component {
                         Отмена
                     </ReactMDL.Button>
                 </ReactMDL.CardActions>
-
-                <ReactMDL.CardMenu>
-                    <ReactMDL.IconButton name='check_box_outline_blank' />
-                </ReactMDL.CardMenu>
             </ReactMDL.Card>
         );
     }
