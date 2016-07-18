@@ -20,6 +20,11 @@ class StoriesRepository
     protected $serializer;
 
     /**
+     * @var string
+     */
+    protected $storyKeyPrefix = "story:";
+
+    /**
      * StoriesRepository constructor.
      *
      * @param Client              $redisClient
@@ -32,6 +37,16 @@ class StoriesRepository
     }
 
     /**
+     * @param string $storyId
+     *
+     * @return string
+     */
+    protected function getKeyForStory(string $storyId)
+    {
+        return "{$this->storyKeyPrefix}{$storyId}";
+    }
+
+    /**
      * @return Promise|Story[]
      */
     public function getAll()
@@ -39,7 +54,7 @@ class StoriesRepository
         $deferred = new Deferred;
 
         \Amp\immediately(function () use ($deferred) {
-            $storiesKeys = yield $this->redisClient->keys("story:*");
+            $storiesKeys = yield $this->redisClient->keys("{$this->storyKeyPrefix}*");
 
             $storiesRaw = yield $this->redisClient->mGet($storiesKeys);
 
@@ -62,7 +77,7 @@ class StoriesRepository
     {
         $storyJson = $this->serializer->serialize($story, 'json');
 
-        return $this->redisClient->setNx("story:{$story->id}", $storyJson);
+        return $this->redisClient->setNx($this->getKeyForStory($story->id), $storyJson);
     }
 
     /**
@@ -72,6 +87,6 @@ class StoriesRepository
      */
     public function delete(string $storyId)
     {
-        return $this->redisClient->del("story:{$storyId}");
+        return $this->redisClient->del($this->getKeyForStory($storyId));
     }
 }
