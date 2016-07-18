@@ -1,6 +1,7 @@
 <?php
 namespace Fedot\Backlog\Request\Processor;
 
+use Amp\Deferred;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Payload\ErrorPayload;
@@ -52,7 +53,7 @@ class CreateStory implements ProcessorInterface
         \Amp\immediately(function () use ($request) {
             /** @var Story $story */
             $story = $request->payload;
-            $story->id = $this->uuidFactory->uuid4();
+            $story->id = $this->uuidFactory->uuid4()->toString();
 
             $result = yield $this->storiesRepository->save($story);
 

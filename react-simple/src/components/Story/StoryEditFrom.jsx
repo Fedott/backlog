@@ -68,20 +68,46 @@ class StoryEditFrom extends React.Component {
     }
 
     render() {
+        var editIsLocked = false;
+        var progressBar = null;
+
+        if (this.state.status == 'saving') {
+            progressBar = <ReactMDL.ProgressBar indeterminate style={{width: "100%"}}/>;
+            editIsLocked = true;
+        }
+
         return (
             <ReactMDL.Card shadow={2} className="backlog-story mdl-cell mdl-cell--12-col">
                 <ReactMDL.CardTitle expand className="backlog-story-title">
-                    <input type="text" value={this.state.story.title} placeholder="Title" onChange={this.onChangeTitle.bind(this)}/>
+                    <input
+                        type="text"
+                        value={this.state.story.title}
+                        placeholder="Title"
+                        onChange={this.onChangeTitle.bind(this)}
+                        disabled={editIsLocked}
+                    />
                 </ReactMDL.CardTitle>
                 <ReactMDL.CardText>
-                    <TextareaAutosize rows="3" value={this.state.story.text} placeholder="Text" onChange={this.onChangeText.bind(this)}/>
+                    <TextareaAutosize
+                        rows="3"
+                        value={this.state.story.text}
+                        placeholder="Text"
+                        onChange={this.onChangeText.bind(this)}
+                    />
                 </ReactMDL.CardText>
+                {progressBar}
 
                 <ReactMDL.CardActions border>
-                    <ReactMDL.Button onClick={this.onSave.bind(this)}>
+                    <ReactMDL.Button
+                        onClick={this.onSave.bind(this)}
+                        disabled={editIsLocked}
+                    >
                         Сохранить
                     </ReactMDL.Button>
-                    <ReactMDL.Button onClick={this.onCancel}>
+                    <ReactMDL.Button
+                        onClick={this.onCancel}
+                        disabled={editIsLocked}
+                    >
                         Отмена
                     </ReactMDL.Button>
                 </ReactMDL.CardActions>
