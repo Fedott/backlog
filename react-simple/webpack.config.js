@@ -1,7 +1,7 @@
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 module.exports = {
-    entry: ["babel-polyfill", "./src/main.js"],
+    entry: ["babel-polyfill", "./src/main.js", "./src/style.css"],
     output: {
         filename: "web/assets/bundle.js"
     },
@@ -17,6 +17,10 @@ module.exports = {
                 test: /\.jsx?$/,
                 exclude: /(node_modules|bower_components)/,
                 loaders: ['babel-loader']
+            },
+            {
+                test: /\.css$/,
+                loader: "style-loader!css-loader"
             }
         ]
     },

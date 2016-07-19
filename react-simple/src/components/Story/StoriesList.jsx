@@ -17,24 +17,6 @@ class StoriesList extends React.Component {
         }.bind(this));
     }
 
-    componentDidMount():void {
-        // this.state.storiesCollection.setStatusFilter(this.state.filter);
-        // this.state.storiesCollection.on('add remove change', this.forceUpdate.bind(this, null));
-        // this.state.storiesCollection.fetch();
-    }
-
-
-    componentWillUpdate(nextProps, nextState, nextContext):void {
-        // if (this.state.storiesCollection.statusFilter != nextProps.statusFilter) {
-        //     this.state.storiesCollection.setStatusFilter(nextProps.statusFilter);
-        //     this.state.storiesCollection.fetch();
-        // }
-    }
-
-    componentWillUnmount():void {
-        // this.state.storiesCollection.off(null, null, this);
-    }
-
     toggleCreateForm() {
         this.setState({
             createForm: !this.state.createForm

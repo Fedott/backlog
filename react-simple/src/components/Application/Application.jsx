@@ -43,7 +43,7 @@ class Application extends React.Component {
                             <a href="" onClick={this.changeFilter.bind(this)} data="completed">Completed stories</a>
                         </Navigation>
                     </Drawer>
-                    <Content>
+                    <Content style={{width: "900px", margin: "0px auto", display: "block"}}>
                         <StoriesList />
                         <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
                             <Icon name="add" />
