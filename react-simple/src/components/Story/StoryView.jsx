@@ -18,9 +18,9 @@ class StoryView extends React.Component {
             story: props.story,
         };
 
-        this.onChangeEdit = props.onChangeEdit || null;
-        this.onChangeRequirements = props.onChangeRequirements || null;
-        this.onDeleted = props.onDeleted || null;
+        this.onChangeEdit = props.onChangeEdit || (() => {});
+        this.onChangeRequirements = props.onChangeRequirements || (() => {});
+        this.onDeleted = props.onDeleted || (() => {});
     }
 
     async onDelete() {

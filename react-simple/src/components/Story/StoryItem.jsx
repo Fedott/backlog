@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 import StoryView from "./StoryView.jsx";
 import StoryEditForm from "./StoryEditFrom.jsx";
 
@@ -16,6 +17,7 @@ class StoryItem extends React.Component {
             story: props.story,
             edit: props.edit || false,
             isCreateForm: props.isCreateForm || false,
+            isDeleted: false,
         };
     }
 
@@ -33,7 +35,17 @@ class StoryItem extends React.Component {
         })
     }
 
+    onDeleted() {
+        this.setState({
+            isDeleted: true,
+        });
+    }
+
     render() {
+        if (this.state.isDeleted) {
+            return null;
+        }
+
         if (this.state.edit) {
             return <StoryEditForm
                 story={this.state.story}
@@ -45,6 +57,7 @@ class StoryItem extends React.Component {
             return <StoryView
                 story={this.state.story}
                 onChangeEdit={this.onChangeEdit.bind(this)}
+                onDeleted={this.onDeleted.bind(this)}
             />;
         }
     }
