@@ -1,6 +1,7 @@
 <?php
 namespace Fedot\Backlog;
 
+use Fedot\Backlog\Request\Processor\ProcessorInterface;
 use Fedot\Backlog\Request\Request;
 use Symfony\Component\Serializer\Serializer;
 
@@ -30,34 +31,31 @@ class SerializerService
      * @param string $type
      * @param string $class
      */
-    public function addPayloadType(string $type, string $class)
+    protected function addPayloadType(string $type, string $class)
     {
         $this->payloadTypes[$type] = $class;
     }
 
     /**
-     * @param array $types
+     * @param ProcessorInterface $processor
      */
-    public function addPayloadTypes(array $types)
+    public function addPayloadTypeFromProcessor(ProcessorInterface $processor)
     {
-        foreach ($types as $type => $class) {
-            $this->addPayloadType($type, $class);
+        $this->addPayloadType($processor->getSupportedType(), $processor->getExpectedRequestPayload());
+    }
+
+    /**
+     * @param ProcessorInterface[] $processors
+     */
+    public function addAllPayloadTypesFromProcessors(array $processors)
+    {
+        foreach ($processors as $processor) {
+            $this->addPayloadTypeFromProcessor($processor);
         }
     }
 
     /**
      * @param Request $request
-     *
-     * @return string
-     */
-    public function serializeRequest(Request $request): string
-    {
-        return '';
-    }
-
-    /**
-     * @param Request $request
-     * @param string $type
      *
      * @return PayloadInterface
      */

@@ -13,6 +13,16 @@ interface ProcessorInterface
     public function supportsRequest(Request $request): bool;
 
     /**
+     * @return string
+     */
+    public function getSupportedType(): string;
+
+    /**
+     * @return string - FQN class name implemented \Fedot\Backlog\PayloadInterface
+     */
+    public function getExpectedRequestPayload(): string;
+
+    /**
      * @param Request $request
      */
     public function process(Request $request);

@@ -2,6 +2,7 @@
 namespace Fedot\Backlog\Request\Processor;
 
 use Fedot\Backlog\Request\Request;
+use Fedot\Backlog\Response\Payload\EmptyPayload;
 use Fedot\Backlog\Response\Payload\StoriesPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\StoriesRepository;
@@ -30,7 +31,23 @@ class GetStories implements ProcessorInterface
      */
     public function supportsRequest(Request $request): bool
     {
-        return $request->type === 'get-stories';
+        return $request->type === $this->getSupportedType();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSupportedType(): string
+    {
+        return 'get-stories';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExpectedRequestPayload(): string
+    {
+        return EmptyPayload::class;
     }
 
     /**

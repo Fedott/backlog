@@ -31,7 +31,23 @@ class DeleteStory implements ProcessorInterface
      */
     public function supportsRequest(Request $request): bool
     {
-        return $request->type == 'delete-story';
+        return $request->type === $this->getSupportedType();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSupportedType(): string
+    {
+        return 'delete-story';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExpectedRequestPayload(): string
+    {
+        return DeleteStoryPayload::class;
     }
 
     /**

@@ -6,6 +6,8 @@ use Fedot\Backlog\SerializerService;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Tests\Fedot\Backlog\Stubs\TestPayload;
+use Tests\Fedot\Backlog\Stubs\TestProcessor;
 
 class SerializerServiceTest extends BaseTestCase
 {
@@ -29,7 +31,9 @@ JSON;
         );
 
         $serializerService = new SerializerService($serializer);
-        $serializerService->addPayloadType('test', TestPayload::class);
+        $serializerService->addAllPayloadTypesFromProcessors([
+            new TestProcessor(),
+        ]);
 
         $actualRequest = $serializerService->parseRequest($requestJsonString);
         $actualPayload = $serializerService->parsePayload($actualRequest);

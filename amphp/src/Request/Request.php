@@ -1,7 +1,6 @@
 <?php
 namespace Fedot\Backlog\Request;
 
-use Aerys\Websocket\Endpoint;
 use Fedot\Backlog\PayloadInterface;
 use Fedot\Backlog\Response\ResponseSender;
 

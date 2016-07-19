@@ -26,15 +26,6 @@ return [
         ),
     SerializerInterface::class => get(Serializer::class),
 
-    'serializer-service.payloads' => add([
-        'ping' => Payload\EmptyPayload::class,
-        'get-stories' => Payload\EmptyPayload::class,
-        'create-story' => Story::class,
-        'delete-story' => Payload\DeleteStoryPayload::class,
-    ]),
-    SerializerService::class => object()
-        ->method('addPayloadTypes', get('serializer-service.payloads')),
-
     'request.processors' => add([
         get(Processor\Ping::class),
         get(Processor\GetStories::class),
@@ -43,6 +34,9 @@ return [
     ]),
     RequestProcessorManager::class => object()
         ->method('addProcessors', get('request.processors')),
+    SerializerService::class => object()
+        ->method('addAllPayloadTypesFromProcessors', get('request.processors')),
+
     Amp\Redis\Client::class => object()
         ->constructor('tcp://localhost:6379?database=11', null),
 ];

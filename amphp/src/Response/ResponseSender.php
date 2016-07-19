@@ -2,7 +2,6 @@
 namespace Fedot\Backlog\Response;
 
 use Aerys\Websocket\Endpoint;
-use Fedot\Backlog\Response\Response;
 
 class ResponseSender
 {

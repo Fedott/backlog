@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Fedot\Backlog;
+namespace Tests\Fedot\Backlog\Stubs;
 
 use Fedot\Backlog\PayloadInterface;
 

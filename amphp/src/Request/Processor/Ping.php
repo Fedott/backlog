@@ -2,6 +2,7 @@
 namespace Fedot\Backlog\Request\Processor;
 
 use Fedot\Backlog\Request\Request;
+use Fedot\Backlog\Response\Payload\EmptyPayload;
 use Fedot\Backlog\Response\Payload\PongPayload;
 use Fedot\Backlog\Response\Response;
 
@@ -14,7 +15,23 @@ class Ping implements ProcessorInterface
      */
     public function supportsRequest(Request $request): bool
     {
-        return $request->type === 'ping';
+        return $request->type === $this->getSupportedType();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSupportedType(): string
+    {
+        return 'ping';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExpectedRequestPayload(): string
+    {
+        return EmptyPayload::class;
     }
 
     /**

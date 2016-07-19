@@ -1,7 +1,9 @@
 <?php
 namespace Fedot\Backlog\Response\Payload;
 
-class DeleteStoryPayload
+use Fedot\Backlog\PayloadInterface;
+
+class DeleteStoryPayload implements PayloadInterface
 {
     /**
      * @var string

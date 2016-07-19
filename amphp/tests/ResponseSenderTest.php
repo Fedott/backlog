@@ -4,6 +4,7 @@ namespace Tests\Fedot\Backlog;
 use Aerys\Websocket\Endpoint;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
+use Tests\Fedot\Backlog\Stubs\TestPayload;
 
 class ResponseSenderTest extends BaseTestCase
 {

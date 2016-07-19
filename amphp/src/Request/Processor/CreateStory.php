@@ -1,7 +1,6 @@
 <?php
 namespace Fedot\Backlog\Request\Processor;
 
-use Amp\Deferred;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Payload\ErrorPayload;
@@ -42,7 +41,23 @@ class CreateStory implements ProcessorInterface
      */
     public function supportsRequest(Request $request): bool
     {
-        return $request->type === 'create-story';
+        return $request->type === $this->getSupportedType();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSupportedType(): string
+    {
+        return 'create-story';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExpectedRequestPayload(): string
+    {
+        return Story::class;
     }
 
     /**
