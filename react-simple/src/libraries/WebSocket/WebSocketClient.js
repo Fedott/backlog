@@ -37,7 +37,8 @@ export class WebSocketClient {
             this.webSocketConnection = new WebSocket(this.uri);
             this.webSocketConnection.onmessage = this.onMessage.bind(this);
             this.webSocketConnection.onopen = this.connectResolve.bind(this);
-            this.webSocketConnection.onerror = this.connectReject.bind(this);
+            this.webSocketConnection.onerror = this.connectRejectOrClose.bind(this);
+            this.webSocketConnection.onclose = this.connectRejectOrClose.bind(this);
             this.status = 'connecting';
         }
 
@@ -57,7 +58,7 @@ export class WebSocketClient {
         })
     }
 
-    connectReject() {
+    connectRejectOrClose() {
         this.status = 'disconnected';
 
         this.connectPromisors.map((promiser) => {
