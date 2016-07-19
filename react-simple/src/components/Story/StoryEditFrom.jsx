@@ -50,7 +50,7 @@ class StoryEditFrom extends React.Component {
             payload: this.state.story,
         });
 
-        if (response.type == 'story-created') {
+        if (response.type != 'error') {
             this.setState({
                 status: 'editing',
                 isCreateForm: false,
