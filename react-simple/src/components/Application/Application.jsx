@@ -16,7 +16,10 @@ class Application extends React.Component {
     }
 
     toggleCreateForm() {
-        this.setState({createForm: !this.state.createForm});
+        console.log("change status create form");
+        this.setState({
+            createForm: !this.state.createForm
+        });
     }
 
     changeFilter(event) {
@@ -44,7 +47,7 @@ class Application extends React.Component {
                         </Navigation>
                     </Drawer>
                     <Content style={{width: "900px", margin: "0px auto", display: "block"}}>
-                        <StoriesList />
+                        <StoriesList createForm={this.state.createForm}/>
                         <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
                             <Icon name="add" />
                         </FABButton>

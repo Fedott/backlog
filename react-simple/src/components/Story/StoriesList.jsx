@@ -11,23 +11,27 @@ class StoriesList extends React.Component {
             createForm: props.createForm || false,
             filter: props.statusFilter || 'all'
         };
+        console.log(props);
+
 
         webSocketClient.sendRequest({type: "get-stories"}).then(function (response) {
             this.setState({storiesCollection: response.payload.stories});
         }.bind(this));
     }
 
-    toggleCreateForm() {
-        this.setState({
-            createForm: !this.state.createForm
-        });
-
-        if (this.props.onChangeCreateForm) {
-            this.props.onChangeCreateForm(this.state.createForm);
+    componentWillReceiveProps(nextProps) {
+        if (undefined != nextProps.createForm) {
+            this.setState({
+                createForm: nextProps.createForm
+            });
         }
     }
 
     render() {
+        var createForm = null;
+        if (this.state.createForm) {
+            createForm = <StoryItem edit={true} isCreateForm={true} />;
+        }
 
         var stories = this.state.storiesCollection.map((story) => {
             return <StoryItem story={story} key={story.id} />
@@ -35,7 +39,7 @@ class StoriesList extends React.Component {
 
         return (
             <div className="backlog-list mdl-grid">
-                <StoryItem edit={true} isCreateForm={true} />
+                {createForm}
                 {stories}
             </div>
         );
