@@ -1,4 +1,5 @@
 <?php
+
 namespace Fedot\Backlog\Request\Processor;
 
 use Fedot\Backlog\Model\Story;
@@ -6,9 +7,8 @@ use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\StoriesRepository;
-use Ramsey\Uuid\UuidFactory;
 
-class CreateStory implements ProcessorInterface
+class EditStory implements ProcessorInterface
 {
     /**
      * @var StoriesRepository
@@ -16,22 +16,13 @@ class CreateStory implements ProcessorInterface
     protected $storiesRepository;
 
     /**
-     * @var UuidFactory
-     */
-    protected $uuidFactory;
-
-    /**
-     * CreateStory constructor.
+     * EditStory constructor.
      *
      * @param StoriesRepository $storiesRepository
-     * @param UuidFactory       $uuidFactory
      */
-    public function __construct(
-        StoriesRepository $storiesRepository,
-        UuidFactory $uuidFactory
-    ) {
+    public function __construct(StoriesRepository $storiesRepository)
+    {
         $this->storiesRepository = $storiesRepository;
-        $this->uuidFactory = $uuidFactory;
     }
 
     /**
@@ -45,15 +36,15 @@ class CreateStory implements ProcessorInterface
     }
 
     /**
-     * @inheritDoc
+     * @return string
      */
     public function getSupportedType(): string
     {
-        return 'create-story';
+        return 'edit-story';
     }
 
     /**
-     * @inheritDoc
+     * @return string - FQN class name implemented \Fedot\Backlog\PayloadInterface
      */
     public function getExpectedRequestPayload(): string
     {
@@ -68,20 +59,19 @@ class CreateStory implements ProcessorInterface
         \Amp\immediately(function () use ($request) {
             /** @var Story $story */
             $story = $request->payload;
-            $story->id = $this->uuidFactory->uuid4()->toString();
 
-            $result = yield $this->storiesRepository->create($story);
+            $result = yield $this->storiesRepository->save($story);
 
             $response            = new Response();
             $response->requestId = $request->id;
 
             if ($result === true) {
-                $response->type    = 'story-created';
+                $response->type    = 'story-edited';
                 $response->payload = $story;
             } else {
                 $response->type             = 'error';
                 $response->payload          = new ErrorPayload();
-                $response->payload->message = "Story id '{$story->id}' already exists";
+                $response->payload->message = "Story id '{$story->id}' do not saved";
             }
 
             $request->getResponseSender()->sendResponse($response, $request->getClientId());

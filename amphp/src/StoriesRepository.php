@@ -47,9 +47,19 @@ class StoriesRepository
     }
 
     /**
+     * @param Story $story
+     *
+     * @return string
+     */
+    protected function serializeStoryToJson(Story $story): string
+    {
+        return $this->serializer->serialize($story, 'json');
+    }
+
+    /**
      * @return Promise|Story[]
      */
-    public function getAll()
+    public function getAll(): Promise
     {
         $deferred = new Deferred;
 
@@ -73,11 +83,23 @@ class StoriesRepository
      *
      * @return Promise|bool
      */
-    public function save(Story $story)
+    public function create(Story $story): Promise
     {
-        $storyJson = $this->serializer->serialize($story, 'json');
+        $storyJson = $this->serializeStoryToJson($story);
 
         return $this->redisClient->setNx($this->getKeyForStory($story->id), $storyJson);
+    }
+
+    /**
+     * @param Story $story
+     *
+     * @return Promise|bool
+     */
+    public function save(Story $story): Promise
+    {
+        $storyJson = $this->serializeStoryToJson($story);
+
+        return $this->redisClient->set($this->getKeyForStory($story->id), $storyJson);
     }
 
     /**
@@ -85,7 +107,7 @@ class StoriesRepository
      *
      * @return Promise|bool
      */
-    public function delete(string $storyId)
+    public function delete(string $storyId): Promise
     {
         return $this->redisClient->del($this->getKeyForStory($storyId));
     }

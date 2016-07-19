@@ -57,7 +57,7 @@ class StoriesRepositoryTest extends BaseTestCase
         }, $result);
     }
 
-    public function testSave()
+    public function testCreate()
     {
         $redisClientMock = $this->createMock(Client::class);
         $serializerMock = $this->createMock(SerializerInterface::class);
@@ -80,7 +80,7 @@ class StoriesRepositoryTest extends BaseTestCase
             ->willReturn("{json-mock}")
         ;
 
-        $resultPromise = $repository->save($story);
+        $resultPromise = $repository->create($story);
         $this->assertEquals($redisPromise, $resultPromise);
     }
 
@@ -99,5 +99,32 @@ class StoriesRepositoryTest extends BaseTestCase
 
         $resultPromise = $repository->delete('storyId333');
         $this->assertEquals($redisDelPromise, $resultPromise);
+    }
+
+    public function testSave()
+    {
+        $redisClientMock = $this->createMock(Client::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
+
+        $repository = new StoriesRepository($redisClientMock, $serializerMock);
+
+        $story = new Story();
+        $story->id = 'gjfhjdjfh';
+
+        $redisPromise = new Success(true);
+        $redisClientMock->expects($this->once())
+            ->method('set')
+            ->with("story:gjfhjdjfh", "{json-mock}")
+            ->willReturn($redisPromise)
+        ;
+
+        $serializerMock->expects($this->once())
+            ->method('serialize')
+            ->with($story, 'json')
+            ->willReturn("{json-mock}")
+        ;
+
+        $resultPromise = $repository->save($story);
+        $this->assertEquals($redisPromise, $resultPromise);
     }
 }

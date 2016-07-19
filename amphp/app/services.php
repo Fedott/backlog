@@ -31,6 +31,7 @@ return [
         get(Processor\GetStories::class),
         get(Processor\CreateStory::class),
         get(Processor\DeleteStory::class),
+        get(Processor\EditStory::class),
     ]),
     RequestProcessorManager::class => object()
         ->method('addProcessors', get('request.processors')),
