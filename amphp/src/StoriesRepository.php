@@ -64,7 +64,13 @@ class StoriesRepository
         $deferred = new Deferred;
 
         \Amp\immediately(function () use ($deferred) {
-            $storiesKeys = yield $this->redisClient->keys("{$this->storyKeyPrefix}*");
+            $storiesKeys = yield $this->redisClient->lRange("stories:sort:default", 0, -1);
+
+            if (empty($storiesKeys)) {
+                $deferred->succeed([]);
+
+                return;
+            }
 
             $storiesRaw = yield $this->redisClient->mGet($storiesKeys);
 
@@ -85,9 +91,23 @@ class StoriesRepository
      */
     public function create(Story $story): Promise
     {
-        $storyJson = $this->serializeStoryToJson($story);
+        $deferred = new Deferred();
 
-        return $this->redisClient->setNx($this->getKeyForStory($story->id), $storyJson);
+        \Amp\immediately(function () use ($deferred, $story) {
+            $storyJson = $this->serializeStoryToJson($story);
+
+            $created = yield $this->redisClient->setNx($this->getKeyForStory($story->id), $storyJson);
+
+            if ($created) {
+                yield $this->redisClient->lPush("stories:sort:default", $this->getKeyForStory($story->id));
+
+                $deferred->succeed(true);
+            } else {
+                $deferred->succeed(false);
+            }
+        });
+
+        return $deferred->promise();
     }
 
     /**
@@ -109,6 +129,16 @@ class StoriesRepository
      */
     public function delete(string $storyId): Promise
     {
-        return $this->redisClient->del($this->getKeyForStory($storyId));
+        $deferred = new Deferred();
+
+        \Amp\immediately(function() use ($deferred, $storyId) {
+            yield $this->redisClient->lRem("stories:sort:default", $this->getKeyForStory($storyId), 1);
+
+            yield $this->redisClient->del($this->getKeyForStory($storyId));
+
+            $deferred->succeed(true);
+        });
+
+        return $deferred->promise();
     }
 }

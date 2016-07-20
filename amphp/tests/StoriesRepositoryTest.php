@@ -19,8 +19,8 @@ class StoriesRepositoryTest extends BaseTestCase
 
         $keys = ["story:543", "story:123", "story:765"];
         $redisClientMock->expects($this->once())
-            ->method('keys')
-            ->with($this->equalTo("story:*"))
+            ->method('lRange')
+            ->with($this->equalTo("stories:sort:default"), $this->equalTo(0), $this->equalTo(-1))
             ->willReturn(new Success($keys))
         ;
         $redisClientMock->expects($this->once())
@@ -57,6 +57,35 @@ class StoriesRepositoryTest extends BaseTestCase
         }, $result);
     }
 
+    public function testGetAllEmpty()
+    {
+        $redisClientMock = $this->createMock(Client::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
+
+        $repository = new StoriesRepository($redisClientMock, $serializerMock);
+
+        $keys = [];
+        $redisClientMock->expects($this->once())
+            ->method('lRange')
+            ->with($this->equalTo("stories:sort:default"), $this->equalTo(0), $this->equalTo(-1))
+            ->willReturn(new Success($keys))
+        ;
+        $redisClientMock->expects($this->never())
+            ->method('mGet')
+        ;
+        $serializerMock->expects($this->never())
+            ->method('deserialize')
+        ;
+
+        $resultPromise = $repository->getAll();
+        $this->assertInstanceOf(Promise::class, $resultPromise);
+
+        $result = \Amp\wait($resultPromise);
+
+        $this->assertCount(0, $result);
+        $this->assertEquals([], $result);
+    }
+
     public function testCreate()
     {
         $redisClientMock = $this->createMock(Client::class);
@@ -67,11 +96,12 @@ class StoriesRepositoryTest extends BaseTestCase
         $story = new Story();
         $story->id = 'gjfhjdjfh';
 
-        $redisPromise = new Success(true);
+        $redisSetNXPromise = new Success(true);
+        $redisLPushPromise = new Success(true);
         $redisClientMock->expects($this->once())
             ->method('setNx')
             ->with("story:gjfhjdjfh", "{json-mock}")
-            ->willReturn($redisPromise)
+            ->willReturn($redisSetNXPromise)
         ;
 
         $serializerMock->expects($this->once())
@@ -80,8 +110,47 @@ class StoriesRepositoryTest extends BaseTestCase
             ->willReturn("{json-mock}")
         ;
 
+        $redisClientMock->expects($this->once())
+            ->method('lPush')
+            ->with("stories:sort:default", "story:gjfhjdjfh")
+            ->willReturn($redisLPushPromise)
+        ;
+
         $resultPromise = $repository->create($story);
-        $this->assertEquals($redisPromise, $resultPromise);
+        $result = \Amp\wait($resultPromise);
+        $this->assertEquals(true, $result);
+    }
+
+    public function testCreateErrorAlreadyExist()
+    {
+        $redisClientMock = $this->createMock(Client::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
+
+        $repository = new StoriesRepository($redisClientMock, $serializerMock);
+
+        $story = new Story();
+        $story->id = 'gjfhjdjfh';
+
+        $redisSetNXPromise = new Success(false);
+        $redisClientMock->expects($this->once())
+            ->method('setNx')
+            ->with("story:gjfhjdjfh", "{json-mock}")
+            ->willReturn($redisSetNXPromise)
+        ;
+
+        $serializerMock->expects($this->once())
+            ->method('serialize')
+            ->with($story, 'json')
+            ->willReturn("{json-mock}")
+        ;
+
+        $redisClientMock->expects($this->never())
+            ->method('lPush')
+        ;
+
+        $resultPromise = $repository->create($story);
+        $result = \Amp\wait($resultPromise);
+        $this->assertEquals(false, $result);
     }
 
     public function testDelete()
@@ -91,14 +160,22 @@ class StoriesRepositoryTest extends BaseTestCase
 
         $repository = new StoriesRepository($redisClientMock, $serializerMock);
         $redisDelPromise = new Success(true);
+        $redisLRemPromise = new Success(true);
         $redisClientMock->expects($this->once())
             ->method('del')
             ->with('story:storyId333')
             ->willReturn($redisDelPromise)
         ;
 
+        $redisClientMock->expects($this->once())
+            ->method('lRem')
+            ->with("stories:sort:default", "story:storyId333", 1)
+            ->willReturn($redisLRemPromise)
+        ;
+
         $resultPromise = $repository->delete('storyId333');
-        $this->assertEquals($redisDelPromise, $resultPromise);
+        $result = \Amp\wait($resultPromise);
+        $this->assertEquals(true, $result);
     }
 
     public function testSave()
