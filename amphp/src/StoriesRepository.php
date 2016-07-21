@@ -141,4 +141,37 @@ class StoriesRepository
 
         return $deferred->promise();
     }
+
+    /**
+     * @param string $storyId
+     * @param string $afterStoryId
+     *
+     * @return Promise|bool
+     */
+    public function move(string $storyId, string $afterStoryId)
+    {
+        $deferred = new Deferred();
+
+        \Amp\immediately(function () use ($deferred, $storyId, $afterStoryId) {
+            $storyKey = $this->getKeyForStory($storyId);
+
+            yield $this->redisClient->lRem("stories:sort:default", $storyKey, 1);
+            $insertResult = yield $this->redisClient->lInsert(
+                "stories:sort:default",
+                "before",
+                $this->getKeyForStory($afterStoryId),
+                $storyKey
+            );
+
+            if ($insertResult !== -1) {
+                $deferred->succeed(true);
+            } else {
+                yield $this->redisClient->lPush("stories:sort:default", $storyKey);
+
+                $deferred->succeed(false);
+            }
+        });
+
+        return $deferred->promise();
+    }
 }
