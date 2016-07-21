@@ -35,7 +35,7 @@ class StoriesList extends React.Component {
         const hoverStory = stories[hoverIndex];
 
         webSocketClient.sendRequest({
-            type: "move-story-after",
+            type: "move-story",
             "payload": {
                 "storyId": dragStory.id,
                 "beforeStoryId": hoverStory.id,
