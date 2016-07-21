@@ -5,6 +5,7 @@ backlog-story {
 .backlog-story {
     max-width: 860px;
     width: 100%;
+    min-height: 50px;
 }
 .backlog-list {
     max-width: 860px;
