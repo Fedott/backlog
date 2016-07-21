@@ -9,6 +9,7 @@ class StoryView extends React.Component {
         onChangeEdit: React.PropTypes.func,
         onChangeRequirements: React.PropTypes.func,
         onDeleted: React.PropTypes.func,
+        isDragging: React.PropTypes.bool,
     };
 
     constructor(props, context:any) {
@@ -16,6 +17,7 @@ class StoryView extends React.Component {
 
         this.state = {
             story: props.story,
+            isDragging: props.isDragging,
         };
 
         this.onChangeEdit = props.onChangeEdit || (() => {});
@@ -32,9 +34,21 @@ class StoryView extends React.Component {
         this.onDeleted();
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (undefined != nextProps.isDragging || undefined != nextProps.isOver ) {
+            this.setState({
+                isDragging: nextProps.isDragging,
+            });
+        }
+    }
+
     render() {
+        var style = {};
+        if (this.state.isDragging) {
+            style = {opacity: 0.1}
+        }
         return (
-            <ReactMDL.Card shadow={2} className="backlog-story mdl-cell mdl-cell--12-col">
+            <ReactMDL.Card shadow={this.state.isDragging ? 7 : 2} className="backlog-story" style={style}>
                 <ReactMDL.CardTitle expand className="backlog-story-title">
                     {this.state.story.title}
                 </ReactMDL.CardTitle>
