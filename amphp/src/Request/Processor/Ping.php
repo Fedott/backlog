@@ -2,8 +2,8 @@
 namespace Fedot\Backlog\Request\Processor;
 
 use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Payload\EmptyPayload;
-use Fedot\Backlog\Response\Payload\PongPayload;
+use Fedot\Backlog\Payload\EmptyPayload;
+use Fedot\Backlog\Payload\PongPayload;
 use Fedot\Backlog\Response\Response;
 
 class Ping implements ProcessorInterface

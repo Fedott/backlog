@@ -6,7 +6,7 @@ use Amp\Success;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Request\Processor\EditStory;
 use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Payload\ErrorPayload;
+use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\StoriesRepository;
@@ -136,7 +136,7 @@ class EditStoryTest extends BaseTestCase
                 $this->assertEquals(33, $response->requestId);
                 $this->assertEquals('error', $response->type);
 
-                /** @var ErrorPayload $responsePayload */
+                /** @var \Fedot\Backlog\Payload\ErrorPayload $responsePayload */
                 $responsePayload = $response->payload;
                 $this->assertInstanceOf(ErrorPayload::class, $responsePayload);
                 $this->assertEquals("Story id 'jgfjhfgj-erwer-dsfsd' do not saved", $responsePayload->message);

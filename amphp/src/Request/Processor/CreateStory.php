@@ -3,7 +3,7 @@ namespace Fedot\Backlog\Request\Processor;
 
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Payload\ErrorPayload;
+use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\StoriesRepository;
 use Ramsey\Uuid\UuidFactory;

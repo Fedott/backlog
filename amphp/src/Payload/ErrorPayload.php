@@ -1,5 +1,5 @@
 <?php
-namespace Fedot\Backlog\Response\Payload;
+namespace Fedot\Backlog\Payload;
 
 class ErrorPayload
 {

@@ -2,8 +2,8 @@
 namespace Fedot\Backlog\Request\Processor;
 
 use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Payload\EmptyPayload;
-use Fedot\Backlog\Response\Payload\StoriesPayload;
+use Fedot\Backlog\Payload\EmptyPayload;
+use Fedot\Backlog\Payload\StoriesPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\StoriesRepository;
 

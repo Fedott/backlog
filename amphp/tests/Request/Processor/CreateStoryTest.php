@@ -6,7 +6,7 @@ use Amp\Success;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Request\Processor\CreateStory;
 use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Payload\ErrorPayload;
+use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\StoriesRepository;

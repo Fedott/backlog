@@ -4,7 +4,7 @@ namespace Tests\Fedot\Backlog\Request\Processor;
 use Aerys\Websocket\Endpoint;
 use Fedot\Backlog\Request\Processor\Ping;
 use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Payload\PongPayload;
+use Fedot\Backlog\Payload\PongPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 use Tests\Fedot\Backlog\BaseTestCase;

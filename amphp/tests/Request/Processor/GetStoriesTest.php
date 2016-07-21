@@ -5,7 +5,7 @@ use Amp\Success;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Request\Processor\GetStories;
 use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Payload\StoriesPayload;
+use Fedot\Backlog\Payload\StoriesPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\StoriesRepository;
@@ -75,7 +75,7 @@ class GetStoriesTest extends BaseTestCase
                 $this->assertEquals(34, $response->requestId);
                 $this->assertEquals('stories', $response->type);
 
-                /** @var StoriesPayload $response->payload */
+                /** @var \Fedot\Backlog\Payload\StoriesPayload $response->payload */
                 $this->assertInstanceOf(StoriesPayload::class, $response->payload);
                 $this->assertEquals($stories, $response->payload->stories);
             })
