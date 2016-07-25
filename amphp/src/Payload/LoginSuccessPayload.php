@@ -10,4 +10,8 @@ class LoginSuccessPayload implements PayloadInterface
      * @var string
      */
     public $token;
+    /**
+     * @var
+     */
+    public $username;
 }

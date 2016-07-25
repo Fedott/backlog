@@ -24,7 +24,7 @@ class RequestProcessorManager
     public function addProcessors(array $processors)
     {
         array_map(function (ProcessorInterface $processor) {
-            $this->processors[] = $processor;
+            $this->addProcessor($processor);
         }, $processors);
     }
 

@@ -1,6 +1,9 @@
 <?php
 namespace Tests\Fedot\Backlog\Request\Processor;
 
+use Fedot\Backlog\AuthenticationService;
+use Fedot\Backlog\Exception\AuthenticationException;
+use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Payload\LoginFailedPayload;
 use Fedot\Backlog\Payload\LoginSuccessPayload;
 use Fedot\Backlog\Payload\UsernamePasswordPayload;
@@ -20,7 +23,7 @@ class LoginUsernamePasswordTest extends BaseTestCase
      */
     public function testSupportsRequest(Request $request, bool $expectedResult)
     {
-        $processor = new LoginUsernamePassword();
+        $processor = new LoginUsernamePassword($this->createMock(AuthenticationService::class));
         $actualResult = $processor->supportsRequest($request);
 
         $this->assertEquals($expectedResult, $actualResult);
@@ -45,16 +48,17 @@ class LoginUsernamePasswordTest extends BaseTestCase
 
     public function testGetExpectedRequestPayload()
     {
-        $processor = new LoginUsernamePassword();
+        $processor = new LoginUsernamePassword($this->createMock(AuthenticationService::class));
 
         $this->assertEquals(UsernamePasswordPayload::class, $processor->getExpectedRequestPayload());
     }
 
     public function testProcessSuccess()
     {
+        $authMock = $this->createMock(AuthenticationService::class);
         $responseSenderMock = $this->createMock(ResponseSender::class);
 
-        $processor = new LoginUsernamePassword();
+        $processor = new LoginUsernamePassword($authMock);
 
         $request = new Request();
         $request->id = 34;
@@ -65,6 +69,15 @@ class LoginUsernamePasswordTest extends BaseTestCase
         $request->payload->username = 'testUser';
         $request->payload->password = 'testPassword';
 
+        $user = new User();
+        $user->username = 'testUser';
+        $user->password = '$2y$10$kEYXDhRhNmS1mk226hurv.i23tmnFXuqa1LCMG7UoyhZ3nF/PK7a2';
+        $authMock->expects($this->once())
+            ->method('authByUsernamePassword')
+            ->with('testUser', 'testPassword')
+            ->willReturn([$user, 'authenticated-token'])
+        ;
+
         $responseSenderMock->expects($this->once())
             ->method('sendResponse')
             ->with($this->callback(function (Response $response) {
@@ -74,6 +87,9 @@ class LoginUsernamePasswordTest extends BaseTestCase
                 /** @var LoginSuccessPayload $response->payload */
                 $this->assertInstanceOf(LoginSuccessPayload::class, $response->payload);
                 $this->assertEquals('authenticated-token', $response->payload->token);
+                $this->assertEquals('testUser', $response->payload->username);
+
+                return true;
             }), $this->equalTo(777))
         ;
 
@@ -85,8 +101,9 @@ class LoginUsernamePasswordTest extends BaseTestCase
     public function testProcessFailed()
     {
         $responseSenderMock = $this->createMock(ResponseSender::class);
+        $authMock = $this->createMock(AuthenticationService::class);
 
-        $processor = new LoginUsernamePassword();
+        $processor = new LoginUsernamePassword($authMock);
 
         $request = new Request();
         $request->id = 34;
@@ -97,6 +114,12 @@ class LoginUsernamePasswordTest extends BaseTestCase
         $request->payload->username = 'testUser';
         $request->payload->password = 'testPassword';
 
+        $authMock->expects($this->once())
+            ->method('authByUsernamePassword')
+            ->with('testUser', 'testPassword')
+            ->willThrowException(new AuthenticationException("Invalid username or password"))
+        ;
+
         $responseSenderMock->expects($this->once())
             ->method('sendResponse')
             ->with($this->callback(function (Response $response) {
@@ -106,6 +129,8 @@ class LoginUsernamePasswordTest extends BaseTestCase
                 /** @var LoginFailedPayload $response->payload */
                 $this->assertInstanceOf(LoginFailedPayload::class, $response->payload);
                 $this->assertEquals('Invalid username or password', $response->payload->error);
+
+                return true;
             }), $this->equalTo(777))
         ;
 
