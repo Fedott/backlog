@@ -12,14 +12,9 @@ use Fedot\Backlog\Response\ResponseSender;
 class WebSocketServer implements Websocket
 {
     /**
-     * @var SerializerService
+     * @var MessageProcessor
      */
-    protected $serializerService;
-
-    /**
-     * @var RequestProcessorManager
-     */
-    protected $requestProcessorManager;
+    protected $messageProcessor;
 
     /**
      * @var Websocket\Endpoint
@@ -34,13 +29,11 @@ class WebSocketServer implements Websocket
     /**
      * WebSocketServer constructor.
      *
-     * @param SerializerService       $serializerService
-     * @param RequestProcessorManager $requestProcessorManager
+     * @param MessageProcessor $messageProcessor
      */
-    public function __construct(SerializerService $serializerService, RequestProcessorManager $requestProcessorManager)
+    public function __construct(MessageProcessor $messageProcessor)
     {
-        $this->serializerService       = $serializerService;
-        $this->requestProcessorManager = $requestProcessorManager;
+        $this->messageProcessor = $messageProcessor;
     }
 
     /**
@@ -84,23 +77,7 @@ class WebSocketServer implements Websocket
      */
     public function processMessage(int $clientId, string $message)
     {
-        $request = $this->serializerService->parseRequest($message);
-        $request->setClientId($clientId);
-        $request->setResponseSender($this->responseSender);
-
-        try {
-            $request->payload = $this->serializerService->parsePayload($request);
-
-            $this->requestProcessorManager->process($request);
-        } catch (\RuntimeException $exception) {
-            $response = new BacklogResponse();
-            $response->requestId = $request->id;
-            $response->type = 'error';
-            $response->payload = new ErrorPayload();
-            $response->payload->message = $exception->getMessage();
-
-            $request->getResponseSender()->sendResponse($response, $request->getClientId());
-        }
+        $this->messageProcessor->processMessage($clientId, $message, $this->responseSender);
     }
 
     /**
