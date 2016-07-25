@@ -93,6 +93,6 @@ export class WebSocketClient {
     }
 }
 
-var webSocketClient = new WebSocketClient("ws://new-backlog.fedot.name/websocket");
+var webSocketClient = new WebSocketClient("ws://" + window.location.hostname + ":" + window.location.port + "/websocket");
 
 export default webSocketClient;
