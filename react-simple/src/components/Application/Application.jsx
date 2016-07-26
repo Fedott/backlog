@@ -1,12 +1,27 @@
 import * as React from "react";
-import {Layout, Header, Navigation, Drawer, Content, FABButton, Icon} from 'react-mdl';
+import {
+    Layout,
+    Header,
+    Navigation,
+    Content,
+    FABButton,
+    Button,
+    Icon,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogActions,
+    Textfield,
+} from 'react-mdl';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 
 import StoriesList from '../Story/StoriesList.jsx';
+import LoginDialog from '../LoginDialog/LoginDialog.jsx';
 
 // Import styles.
 import '../../../node_modules/material-design-lite/material.js';
+import User from "./User";
 
 class Application extends React.Component {
     constructor(props:any, context:any) {
@@ -14,7 +29,14 @@ class Application extends React.Component {
 
         this.state = {
             createForm: false,
-            storyStatusFilter: "notCompleted"
+            storyStatusFilter: "notCompleted",
+            isLogged: false,
+            loggedUser: null,
+            isLoginDialogOpen: false,
+            loginFormFields: {
+                username: null,
+                password: null,
+            },
         };
     }
 
@@ -31,25 +53,46 @@ class Application extends React.Component {
         this.setState({storyStatusFilter: event.target.getAttribute('data')});
     }
 
+    toggleLoginDialog() {
+        this.setState({
+            isLoginDialogOpen: !this.state.isLoginDialogOpen,
+        });
+    }
+
+    onUsernameChange(event) {
+        this.state.loginFormFields.username = event.target.value;
+    }
+
+    onPasswordChange(event) {
+        this.state.loginFormFields.password = event.target.value;
+    }
+
+    onLoginSuccess(user: User) {
+        console.log(user);
+        this.setState({
+            isLoginDialogOpen: false,
+            isLogged: true,
+            loggedUser: user,
+        });
+    }
+
     render() {
         return (
             <div>
                 <Layout fixedHeader>
                     <Header title="Backlog">
+                        <Button onClick={this.toggleLoginDialog.bind(this)}>Login</Button>
                         <Navigation>
                             <a href="" onClick={this.changeFilter.bind(this)} data="all">All stories</a>
                             <a href="" onClick={this.changeFilter.bind(this)} data="notCompleted">Not completed stories</a>
                             <a href="" onClick={this.changeFilter.bind(this)} data="completed">Completed stories</a>
                         </Navigation>
                     </Header>
-                    <Drawer>
-                        <Navigation>
-                            <a href="" onClick={this.changeFilter.bind(this)} data="all">All stories</a>
-                            <a href="" onClick={this.changeFilter.bind(this)} data="notCompleted">Not completed stories</a>
-                            <a href="" onClick={this.changeFilter.bind(this)} data="completed">Completed stories</a>
-                        </Navigation>
-                    </Drawer>
                     <Content style={{width: "900px", margin: "0px auto", display: "block"}}>
+                        <LoginDialog isOpen={this.state.isLoginDialogOpen}
+                                     onCancel={this.toggleLoginDialog.bind(this)}
+                                     onLoginSuccess={this.onLoginSuccess.bind(this)}
+                        />
                         <StoriesList createForm={this.state.createForm}/>
                         <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
                             <Icon name="add" />
