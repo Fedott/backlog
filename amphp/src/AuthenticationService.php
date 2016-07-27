@@ -1,6 +1,9 @@
 <?php
 namespace Fedot\Backlog;
 
+use Amp\Deferred;
+use Amp\Promise;
+use Amp\Redis\Client;
 use Exception;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Exception\UserNotFoundException;
@@ -8,6 +11,11 @@ use Fedot\Backlog\Model\User;
 
 class AuthenticationService
 {
+    /**
+     * @var Client
+     */
+    protected $redisClient;
+
     /**
      * @var array
      */
@@ -17,27 +25,48 @@ class AuthenticationService
     ];
 
     /**
+     * AuthenticationService constructor.
+     *
+     * @param Client $redisClient
+     */
+    public function __construct(Client $redisClient)
+    {
+        $this->redisClient = $redisClient;
+    }
+
+    /**
      * @param string $username
      * @param string $password
      *
-     * @return array - [User, string]
+     * @return Promise
+     * @yield array - [User, string]
      * @throws AuthenticationException
      */
-    public function authByUsernamePassword(string $username, string $password): array
+    public function authByUsernamePassword(string $username, string $password): Promise
     {
-        try {
-            $user = $this->findUserByUsername($username);
-        } catch (UserNotFoundException $exception) {
-            throw new AuthenticationException("Invalid username or password");
-        }
+        $deferred = new Deferred();
 
-        if (!$this->passwordVerify($password, $user->password)) {
-            throw new AuthenticationException("Invalid username or password");
-        }
+        \Amp\immediately(function () use ($username, $password, $deferred) {
+            try {
+                $user = $this->findUserByUsername($username);
+            } catch (UserNotFoundException $exception) {
+                $deferred->fail(new AuthenticationException("Invalid username or password"));
 
-        $token = $this->getNewTokenForUser($user, 10*24*60*60);
+                return;
+            }
 
-        return [$user, $token];
+            if (!$this->passwordVerify($password, $user->password)) {
+                $deferred->fail(new AuthenticationException("Invalid username or password"));
+
+                return;
+            }
+
+            $token = yield $this->getNewTokenForUser($user, 10*24*60*60);
+
+            $deferred->succeed([$user, $token]);
+        });
+
+        return $deferred->promise();
     }
 
     /**
@@ -84,10 +113,25 @@ class AuthenticationService
      * @param User $user
      * @param int  $ttl
      *
-     * @return string
+     * @return Promise
+     * @yield string
      */
-    private function getNewTokenForUser(User $user, int $ttl): string
+    private function getNewTokenForUser(User $user, int $ttl): Promise
     {
-        return bin2hex(random_bytes(32));
+        $deferred = new Deferred();
+
+        \Amp\immediately(function () use ($user, $ttl, $deferred) {
+            do {
+                $token = bin2hex(random_bytes(32));
+
+                $uniqueTokenGenerated = yield $this->redisClient
+                    ->set("auth:token:{$token}", $user->username, $ttl, false, 'NX')
+                ;
+            } while (!$uniqueTokenGenerated);
+
+            $deferred->succeed($token);
+        });
+
+        return $deferred->promise();
     }
 }

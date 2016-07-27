@@ -1,6 +1,8 @@
 <?php
 namespace Tests\Fedot\Backlog\Request\Processor;
 
+use Amp\Failure;
+use Amp\Success;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Model\User;
@@ -75,7 +77,7 @@ class LoginUsernamePasswordTest extends BaseTestCase
         $authMock->expects($this->once())
             ->method('authByUsernamePassword')
             ->with('testUser', 'testPassword')
-            ->willReturn([$user, 'authenticated-token'])
+            ->willReturn(new Success([$user, 'authenticated-token']))
         ;
 
         $responseSenderMock->expects($this->once())
@@ -117,7 +119,7 @@ class LoginUsernamePasswordTest extends BaseTestCase
         $authMock->expects($this->once())
             ->method('authByUsernamePassword')
             ->with('testUser', 'testPassword')
-            ->willThrowException(new AuthenticationException("Invalid username or password"))
+            ->willReturn(new Failure(new AuthenticationException("Invalid username or password")))
         ;
 
         $responseSenderMock->expects($this->once())
