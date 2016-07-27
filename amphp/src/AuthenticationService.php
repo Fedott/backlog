@@ -72,10 +72,26 @@ class AuthenticationService
     /**
      * @param string $token
      *
-     * @return User
+     * @return Promise
+     * @yield string - username
      */
-    public function authByToken(string $token): User
+    public function authByToken(string $token): Promise
     {
+        $deferred = new Deferred();
+
+        \Amp\immediately(function () use ($token, $deferred) {
+            $username = yield $this->redisClient->get("auth:token:{$token}");
+
+            if (null === $username) {
+                $deferred->fail(new AuthenticationException("Invalid or expired token"));
+
+                return;
+            }
+
+            $deferred->succeed($username);
+        });
+
+        return $deferred->promise();
     }
 
     /**

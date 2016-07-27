@@ -111,4 +111,41 @@ class AuthenticationServiceTest extends BaseTestCase
         $this->assertNotEmpty($actualToken);
         $this->assertInternalType('string', $actualToken);
     }
+
+    public function testAuthByToken()
+    {
+        $service = $this->getServiceInstance();
+
+        $this->redisClientMock->expects($this->once())
+            ->method('get')
+            ->with(
+                $this->matchesRegularExpression('/auth:token:auth-token/')
+            )
+            ->willReturn(new Success("testUser"))
+        ;
+
+        $actualUsername = \Amp\wait(
+            $service->authByToken("auth-token")
+        );
+
+        $this->assertEquals($actualUsername, 'testUser');
+    }
+
+    public function testAuthByTokenTokenNotExists()
+    {
+        $service = $this->getServiceInstance();
+
+        $this->redisClientMock->expects($this->once())
+            ->method('get')
+            ->with(
+                $this->matchesRegularExpression('/auth:token:auth-token/')
+            )
+            ->willReturn(new Success(null))
+        ;
+
+        $this->expectException(AuthenticationException::class);
+        $this->expectExceptionMessage('Invalid or expired token');
+
+        \Amp\wait($service->authByToken("auth-token"));
+    }
 }

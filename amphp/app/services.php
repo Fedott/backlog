@@ -34,6 +34,7 @@ return [
         get(Processor\EditStory::class),
         get(Processor\MoveStory::class),
         get(Processor\LoginUsernamePassword::class),
+        get(Processor\LoginToken::class),
     ]),
     RequestProcessorManager::class => object()
         ->method('addProcessors', get('request.processors')),
