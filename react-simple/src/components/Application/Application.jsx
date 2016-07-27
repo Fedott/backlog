@@ -17,7 +17,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 
 import StoriesList from '../Story/StoriesList.jsx';
-import LoginDialog from '../LoginDialog/LoginDialog.jsx';
+import UserLoginPanel from '../UserLoginPanel/UserLoginPanel.jsx';
 
 // Import styles.
 import '../../../node_modules/material-design-lite/material.js';
@@ -53,12 +53,6 @@ class Application extends React.Component {
         this.setState({storyStatusFilter: event.target.getAttribute('data')});
     }
 
-    toggleLoginDialog() {
-        this.setState({
-            isLoginDialogOpen: !this.state.isLoginDialogOpen,
-        });
-    }
-
     onUsernameChange(event) {
         this.state.loginFormFields.username = event.target.value;
     }
@@ -67,12 +61,17 @@ class Application extends React.Component {
         this.state.loginFormFields.password = event.target.value;
     }
 
-    onLoginSuccess(user: User) {
-        console.log(user);
+    onLogin(user: User) {
         this.setState({
-            isLoginDialogOpen: false,
             isLogged: true,
             loggedUser: user,
+        });
+    }
+
+    onLogout() {
+        this.setState({
+            isLogged: false,
+            loggedUser: null,
         });
     }
 
@@ -81,7 +80,10 @@ class Application extends React.Component {
             <div>
                 <Layout fixedHeader>
                     <Header title="Backlog">
-                        <Button onClick={this.toggleLoginDialog.bind(this)}>Login</Button>
+                        <UserLoginPanel
+                            onLogin={this.onLogin.bind(this)}
+                            onLogout={this.onLogout.bind(this)}
+                        />
                         <Navigation>
                             <a href="" onClick={this.changeFilter.bind(this)} data="all">All stories</a>
                             <a href="" onClick={this.changeFilter.bind(this)} data="notCompleted">Not completed stories</a>
@@ -89,10 +91,6 @@ class Application extends React.Component {
                         </Navigation>
                     </Header>
                     <Content style={{width: "900px", margin: "0px auto", display: "block"}}>
-                        <LoginDialog isOpen={this.state.isLoginDialogOpen}
-                                     onCancel={this.toggleLoginDialog.bind(this)}
-                                     onLoginSuccess={this.onLoginSuccess.bind(this)}
-                        />
                         <StoriesList createForm={this.state.createForm}/>
                         <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
                             <Icon name="add" />

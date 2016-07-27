@@ -62,7 +62,6 @@ export default class LoginDialog extends React.Component {
 
         let response = await webSocketClient.sendRequest(request);
 
-        console.log(response);
         this.setState({
             isWaiting: false,
         });
