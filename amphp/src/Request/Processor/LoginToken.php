@@ -4,11 +4,13 @@ namespace Fedot\Backlog\Request\Processor;
 
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
+use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Payload\LoginFailedPayload;
 use Fedot\Backlog\Payload\LoginSuccessPayload;
 use Fedot\Backlog\Payload\TokenPayload;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Response;
+use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 
 class LoginToken implements ProcessorInterface
 {
@@ -18,13 +20,22 @@ class LoginToken implements ProcessorInterface
     protected $authenticationService;
 
     /**
+     * @var WebSocketConnectionAuthenticationService
+     */
+    protected $webSocketAuthService;
+
+    /**
      * LoginToken constructor.
      *
-     * @param AuthenticationService $authenticationService
+     * @param AuthenticationService                    $authenticationService
+     * @param WebSocketConnectionAuthenticationService $webSocketAuthService
      */
-    public function __construct(AuthenticationService $authenticationService)
-    {
+    public function __construct(
+        AuthenticationService $authenticationService,
+        WebSocketConnectionAuthenticationService $webSocketAuthService
+    ) {
         $this->authenticationService = $authenticationService;
+        $this->webSocketAuthService = $webSocketAuthService;
     }
 
     /**
@@ -74,6 +85,11 @@ class LoginToken implements ProcessorInterface
                 $response->payload = new LoginSuccessPayload();
                 $response->payload->username = $username;
                 $response->payload->token = $payload->token;
+
+                $user = new User();
+                $user->username = $username;
+
+                $this->webSocketAuthService->authorizeClient($request->getClientId(), $user);
             } catch (AuthenticationException $exception) {
                 $response->type = 'login-failed';
                 $response->payload = new LoginFailedPayload();

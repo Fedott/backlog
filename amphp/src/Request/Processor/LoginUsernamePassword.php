@@ -8,6 +8,7 @@ use Fedot\Backlog\Payload\LoginSuccessPayload;
 use Fedot\Backlog\Payload\UsernamePasswordPayload;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Response;
+use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 
 class LoginUsernamePassword implements ProcessorInterface
 {
@@ -17,13 +18,22 @@ class LoginUsernamePassword implements ProcessorInterface
     protected $authenticationService;
 
     /**
-     * LoginUsernamePassword constructor.
-     *
-     * @param AuthenticationService $authenticationService
+     * @var WebSocketConnectionAuthenticationService
      */
-    public function __construct(AuthenticationService $authenticationService)
-    {
+    protected $webSocketAuthService;
+
+    /**
+     * LoginToken constructor.
+     *
+     * @param AuthenticationService                    $authenticationService
+     * @param WebSocketConnectionAuthenticationService $webSocketAuthService
+     */
+    public function __construct(
+        AuthenticationService $authenticationService,
+        WebSocketConnectionAuthenticationService $webSocketAuthService
+    ) {
         $this->authenticationService = $authenticationService;
+        $this->webSocketAuthService = $webSocketAuthService;
     }
 
     /**
@@ -74,6 +84,8 @@ class LoginUsernamePassword implements ProcessorInterface
                 $response->payload = new LoginSuccessPayload();
                 $response->payload->username = $user->username;
                 $response->payload->token = $token;
+
+                $this->webSocketAuthService->authorizeClient($request->getClientId(), $user);
             } catch (AuthenticationException $exception) {
                 $response->type = 'login-failed';
                 $response->payload = new LoginFailedPayload();

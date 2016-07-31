@@ -13,6 +13,7 @@ use Fedot\Backlog\Request\Processor\LoginUsernamePassword;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
+use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Tests\Fedot\Backlog\BaseTestCase;
 
 class LoginUsernamePasswordTest extends BaseTestCase
@@ -25,7 +26,10 @@ class LoginUsernamePasswordTest extends BaseTestCase
      */
     public function testSupportsRequest(Request $request, bool $expectedResult)
     {
-        $processor = new LoginUsernamePassword($this->createMock(AuthenticationService::class));
+        $processor = new LoginUsernamePassword(
+            $this->createMock(AuthenticationService::class),
+            $this->createMock(WebSocketConnectionAuthenticationService::class)
+        );
         $actualResult = $processor->supportsRequest($request);
 
         $this->assertEquals($expectedResult, $actualResult);
@@ -50,7 +54,10 @@ class LoginUsernamePasswordTest extends BaseTestCase
 
     public function testGetExpectedRequestPayload()
     {
-        $processor = new LoginUsernamePassword($this->createMock(AuthenticationService::class));
+        $processor = new LoginUsernamePassword(
+            $this->createMock(AuthenticationService::class),
+            $this->createMock(WebSocketConnectionAuthenticationService::class)
+        );
 
         $this->assertEquals(UsernamePasswordPayload::class, $processor->getExpectedRequestPayload());
     }
@@ -58,9 +65,10 @@ class LoginUsernamePasswordTest extends BaseTestCase
     public function testProcessSuccess()
     {
         $authMock = $this->createMock(AuthenticationService::class);
+        $webSocketAuthMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
         $responseSenderMock = $this->createMock(ResponseSender::class);
 
-        $processor = new LoginUsernamePassword($authMock);
+        $processor = new LoginUsernamePassword($authMock, $webSocketAuthMock);
 
         $request = new Request();
         $request->id = 34;
@@ -78,6 +86,11 @@ class LoginUsernamePasswordTest extends BaseTestCase
             ->method('authByUsernamePassword')
             ->with('testUser', 'testPassword')
             ->willReturn(new Success([$user, 'authenticated-token']))
+        ;
+
+        $webSocketAuthMock->expects($this->once())
+            ->method('authorizeClient')
+            ->with($this->equalTo(777), $this->equalTo($user))
         ;
 
         $responseSenderMock->expects($this->once())
@@ -104,8 +117,9 @@ class LoginUsernamePasswordTest extends BaseTestCase
     {
         $responseSenderMock = $this->createMock(ResponseSender::class);
         $authMock = $this->createMock(AuthenticationService::class);
+        $webSocketAuthMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
 
-        $processor = new LoginUsernamePassword($authMock);
+        $processor = new LoginUsernamePassword($authMock, $webSocketAuthMock);
 
         $request = new Request();
         $request->id = 34;
@@ -120,6 +134,10 @@ class LoginUsernamePasswordTest extends BaseTestCase
             ->method('authByUsernamePassword')
             ->with('testUser', 'testPassword')
             ->willReturn(new Failure(new AuthenticationException("Invalid username or password")))
+        ;
+
+        $webSocketAuthMock->expects($this->never())
+            ->method('authorizeClient')
         ;
 
         $responseSenderMock->expects($this->once())

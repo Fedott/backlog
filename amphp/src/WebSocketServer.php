@@ -17,6 +17,11 @@ class WebSocketServer implements Websocket
     protected $messageProcessor;
 
     /**
+     * @var WebSocketConnectionAuthenticationService
+     */
+    protected $webSocketAuthService;
+
+    /**
      * @var Websocket\Endpoint
      */
     protected $endpoint;
@@ -29,11 +34,15 @@ class WebSocketServer implements Websocket
     /**
      * WebSocketServer constructor.
      *
-     * @param MessageProcessor $messageProcessor
+     * @param MessageProcessor                         $messageProcessor
+     * @param WebSocketConnectionAuthenticationService $webSocketAuthService
      */
-    public function __construct(MessageProcessor $messageProcessor)
-    {
+    public function __construct(
+        MessageProcessor $messageProcessor,
+        WebSocketConnectionAuthenticationService $webSocketAuthService
+    ) {
         $this->messageProcessor = $messageProcessor;
+        $this->webSocketAuthService = $webSocketAuthService;
     }
 
     /**
@@ -85,6 +94,7 @@ class WebSocketServer implements Websocket
      */
     public function onClose(int $clientId, int $code, string $reason)
     {
+        $this->webSocketAuthService->unauthorizeClient($clientId);
     }
 
     /**
