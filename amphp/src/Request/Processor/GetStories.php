@@ -6,6 +6,7 @@ use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\StoriesPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\StoriesRepository;
+use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 
 class GetStories implements ProcessorInterface
 {
@@ -15,13 +16,22 @@ class GetStories implements ProcessorInterface
     protected $storiesRepository;
 
     /**
+     * @var WebSocketConnectionAuthenticationService
+     */
+    protected $webSocketAuthService;
+
+    /**
      * GetStories constructor.
      *
-     * @param StoriesRepository $storiesRepository
+     * @param StoriesRepository                        $storiesRepository
+     * @param WebSocketConnectionAuthenticationService $webSocketConnectionAuthentication
      */
-    public function __construct(StoriesRepository $storiesRepository)
-    {
+    public function __construct(
+        StoriesRepository $storiesRepository,
+        WebSocketConnectionAuthenticationService $webSocketConnectionAuthentication
+    ){
         $this->storiesRepository = $storiesRepository;
+        $this->webSocketAuthService = $webSocketConnectionAuthentication;
     }
 
     /**
@@ -58,7 +68,8 @@ class GetStories implements ProcessorInterface
     public function process(Request $request)
     {
         \Amp\immediately(function () use ($request) {
-            $stories = yield $this->storiesRepository->getAll();
+            $authUser = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
+            $stories = yield $this->storiesRepository->getAll($authUser);
 
             $response = new Response();
             $response->requestId = $request->id;

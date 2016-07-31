@@ -7,6 +7,7 @@ use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\StoriesRepository;
+use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 
 class EditStory implements ProcessorInterface
 {
@@ -16,13 +17,22 @@ class EditStory implements ProcessorInterface
     protected $storiesRepository;
 
     /**
+     * @var WebSocketConnectionAuthenticationService
+     */
+    protected $webSocketAuthService;
+
+    /**
      * EditStory constructor.
      *
-     * @param StoriesRepository $storiesRepository
+     * @param StoriesRepository                        $storiesRepository
+     * @param WebSocketConnectionAuthenticationService $webSocketConnectionAuthentication
      */
-    public function __construct(StoriesRepository $storiesRepository)
-    {
+    public function __construct(
+        StoriesRepository $storiesRepository,
+        WebSocketConnectionAuthenticationService $webSocketConnectionAuthentication
+    ){
         $this->storiesRepository = $storiesRepository;
+        $this->webSocketAuthService = $webSocketConnectionAuthentication;
     }
 
     /**
@@ -60,7 +70,9 @@ class EditStory implements ProcessorInterface
             /** @var Story $story */
             $story = $request->payload;
 
-            $result = yield $this->storiesRepository->save($story);
+            $user = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
+
+            $result = yield $this->storiesRepository->save($user, $story);
 
             $response            = new Response();
             $response->requestId = $request->id;

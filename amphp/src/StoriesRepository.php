@@ -5,6 +5,7 @@ use Amp\Promise;
 use Amp\Deferred;
 use Amp\Redis\Client;
 use Fedot\Backlog\Model\Story;
+use Fedot\Backlog\Model\User;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class StoriesRepository
@@ -111,11 +112,12 @@ class StoriesRepository
     }
 
     /**
+     * @param User  $user
      * @param Story $story
      *
      * @return Promise|bool
      */
-    public function save(Story $story): Promise
+    public function save(User $user, Story $story): Promise
     {
         $storyJson = $this->serializeStoryToJson($story);
 

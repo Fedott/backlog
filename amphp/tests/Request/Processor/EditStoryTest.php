@@ -4,16 +4,40 @@ namespace Tests\Fedot\Backlog\Request\Processor;
 
 use Amp\Success;
 use Fedot\Backlog\Model\Story;
+use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Request\Processor\EditStory;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\StoriesRepository;
+use Fedot\Backlog\WebSocketConnectionAuthenticationService;
+use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Fedot\Backlog\BaseTestCase;
 
 class EditStoryTest extends BaseTestCase
 {
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|StoriesRepository
+     */
+    protected $storiesRepositoryMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|WebSocketConnectionAuthenticationService
+     */
+    protected $webSocketAuthServiceMock;
+
+    /**
+     * @return EditStory
+     */
+    protected function getProcessorInstance()
+    {
+        $this->storiesRepositoryMock = $this->createMock(StoriesRepository::class);
+        $this->webSocketAuthServiceMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
+
+        return new EditStory($this->storiesRepositoryMock, $this->webSocketAuthServiceMock);
+    }
+
     /**
      * @dataProvider providerSupportsRequest
      *
@@ -22,7 +46,7 @@ class EditStoryTest extends BaseTestCase
      */
     public function testSupportsRequest(Request $request, bool $expectedResult)
     {
-        $processor = new EditStory($this->createMock(StoriesRepository::class));
+        $processor = $this->getProcessorInstance();
         $actualResult = $processor->supportsRequest($request);
 
         $this->assertEquals($expectedResult, $actualResult);
@@ -47,15 +71,17 @@ class EditStoryTest extends BaseTestCase
 
     public function testGetExpectedRequestPayload()
     {
-        $processor = new EditStory($this->createMock(StoriesRepository::class));
+        $processor = $this->getProcessorInstance();
 
         $this->assertEquals(Story::class, $processor->getExpectedRequestPayload());
     }
 
     public function testProcess()
     {
+        $processor = $this->getProcessorInstance();
+
         $responseSenderMock = $this->createMock(ResponseSender::class);
-        $storiesRepositoryMock = $this->createMock(StoriesRepository::class);
+        $storiesRepositoryMock = $this->storiesRepositoryMock;
 
         $request = new Request();
         $request->id = 33;
@@ -67,17 +93,23 @@ class EditStoryTest extends BaseTestCase
         $request->setClientId(432);
         $request->setResponseSender($responseSenderMock);
 
-        $processor = new EditStory($storiesRepositoryMock);
+        $user = new User();
+        $this->webSocketAuthServiceMock->expects($this->once())
+            ->method('getAuthorizedUserForClient')
+            ->with($this->equalTo(432))
+            ->willReturn($user)
+        ;
 
         $storiesRepositoryMock->expects($this->once())
             ->method('save')
-            ->willReturnCallback(function (Story $story) {
+            ->with($this->equalTo($user), $this->callback(function (Story $story) {
                 $this->assertEquals('jgfjhfgj-erwer-dsfsd', $story->id);
                 $this->assertEquals('story title', $story->title);
                 $this->assertEquals('story text', $story->text);
 
-                return new Success(true);
-            })
+                return true;
+            }))
+            ->willReturn(new Success(true))
         ;
 
         $responseSenderMock->expects($this->once())
@@ -104,8 +136,10 @@ class EditStoryTest extends BaseTestCase
 
     public function testProcessWithError()
     {
+        $processor = $this->getProcessorInstance();
+
         $responseSenderMock = $this->createMock(ResponseSender::class);
-        $storiesRepositoryMock = $this->createMock(StoriesRepository::class);
+        $storiesRepositoryMock = $this->storiesRepositoryMock;
 
         $request = new Request();
         $request->id = 33;
@@ -117,17 +151,23 @@ class EditStoryTest extends BaseTestCase
         $request->setClientId(432);
         $request->setResponseSender($responseSenderMock);
 
-        $processor = new EditStory($storiesRepositoryMock);
+        $user = new User();
+        $this->webSocketAuthServiceMock->expects($this->once())
+            ->method('getAuthorizedUserForClient')
+            ->with($this->equalTo(432))
+            ->willReturn($user)
+        ;
 
         $storiesRepositoryMock->expects($this->once())
             ->method('save')
-            ->willReturnCallback(function (Story $story) {
+            ->with($this->equalTo($user), $this->callback(function (Story $story) {
                 $this->assertEquals('jgfjhfgj-erwer-dsfsd', $story->id);
                 $this->assertEquals('story title', $story->title);
                 $this->assertEquals('story text', $story->text);
 
-                return new Success(false);
-            })
+                return true;
+            }))
+            ->willReturn(new Success(false))
         ;
 
         $responseSenderMock->expects($this->once())

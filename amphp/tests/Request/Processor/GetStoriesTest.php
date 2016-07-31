@@ -3,16 +3,40 @@ namespace Tests\Fedot\Backlog\Request\Processor;
 
 use Amp\Success;
 use Fedot\Backlog\Model\Story;
+use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Request\Processor\GetStories;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\StoriesPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\StoriesRepository;
+use Fedot\Backlog\WebSocketConnectionAuthenticationService;
+use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Fedot\Backlog\BaseTestCase;
 
 class GetStoriesTest extends BaseTestCase
 {
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|StoriesRepository
+     */
+    protected $storiesRepositoryMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|WebSocketConnectionAuthenticationService
+     */
+    protected $webSocketAuthServiceMock;
+
+    /**
+     * @return GetStories
+     */
+    protected function getProcessorInstance()
+    {
+        $this->storiesRepositoryMock = $this->createMock(StoriesRepository::class);
+        $this->webSocketAuthServiceMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
+
+        return new GetStories($this->storiesRepositoryMock, $this->webSocketAuthServiceMock);
+    }
+
     /**
      * @dataProvider providerSupportsRequest
      *
@@ -21,7 +45,7 @@ class GetStoriesTest extends BaseTestCase
      */
     public function testSupportsRequest(Request $request, bool $expectedResult)
     {
-        $processor = new GetStories($this->createMock(StoriesRepository::class));
+        $processor = $this->getProcessorInstance();
         $actualResult = $processor->supportsRequest($request);
 
         $this->assertEquals($expectedResult, $actualResult);
@@ -47,7 +71,6 @@ class GetStoriesTest extends BaseTestCase
     public function testProcess()
     {
         $responseSenderMock = $this->createMock(ResponseSender::class);
-        $storiesRepositoryMock = $this->createMock(StoriesRepository::class);
 
         $stories = [
             new Story(),
@@ -55,7 +78,7 @@ class GetStoriesTest extends BaseTestCase
             new Story(),
         ];
 
-        $processor = new GetStories($storiesRepositoryMock);
+        $processor = $this->getProcessorInstance();
 
         $request = new Request();
         $request->id = 34;
@@ -63,8 +86,16 @@ class GetStoriesTest extends BaseTestCase
         $request->setClientId(777);
         $request->setResponseSender($responseSenderMock);
 
-        $storiesRepositoryMock->expects($this->once())
+        $user = new User();
+        $this->webSocketAuthServiceMock->expects($this->once())
+            ->method('getAuthorizedUserForClient')
+            ->with($this->equalTo(777))
+            ->willReturn($user)
+        ;
+
+        $this->storiesRepositoryMock->expects($this->once())
             ->method('getAll')
+            ->with($this->equalTo($user))
             ->willReturn(new Success($stories))
         ;
 

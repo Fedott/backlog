@@ -5,6 +5,7 @@ use Amp\Promise;
 use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\Backlog\Model\Story;
+use Fedot\Backlog\Model\User;
 use Fedot\Backlog\StoriesRepository;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -201,7 +202,10 @@ class StoriesRepositoryTest extends BaseTestCase
             ->willReturn("{json-mock}")
         ;
 
-        $resultPromise = $repository->save($story);
+        $user = new User();
+        $user->username = 'testUser';
+
+        $resultPromise = $repository->save($user, $story);
         $this->assertEquals($redisPromise, $resultPromise);
     }
 
