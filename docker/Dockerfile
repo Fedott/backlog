@@ -7,6 +7,7 @@ RUN apk upgrade -U && \
     libevent libevent-dev \
     build-base \
     autoconf \ 
+    nodejs \
     php7 \
     php7-xml \
     php7-dom \
@@ -33,7 +34,10 @@ RUN php /usr/share/php7/peclcmd.php install -f ev && echo "extension=ev.so" > /e
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN git clone -b dev-react-amphp https://05f4fcdedc6fd1dab8bd7268a627d0bd667ca2d0:x-oauth-basic@github.com/fedott/backlog.git /application/
 
-RUN apk del build-base libevent-dev php7-dev autoconf
+
+RUN cd /application/react-simple && npm install && node_modules/.bin/webpack
+
+RUN apk del build-base libevent-dev php7-dev autoconf nodejs
 
 WORKDIR /application/amphp/
 
