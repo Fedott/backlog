@@ -91,10 +91,13 @@ class Application extends React.Component {
                         </Navigation>
                     </Header>
                     <Content style={{width: "900px", margin: "0px auto", display: "block"}}>
-                        <StoriesList createForm={this.state.createForm}/>
-                        <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
-                            <Icon name="add" />
-                        </FABButton>
+                        {this.state.isLogged
+                            && <StoriesList createForm={this.state.createForm}/>}
+                        {this.state.isLogged
+                            && <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
+                                    <Icon name="add" />
+                                </FABButton>
+                        }
                     </Content>
                 </Layout>
             </div>
