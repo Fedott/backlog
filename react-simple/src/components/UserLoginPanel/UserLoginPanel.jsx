@@ -23,6 +23,8 @@ export default class UserLoginPanel extends React.Component {
         onLogout: React.PropTypes.func.isRequired,
     };
 
+    storageAuthTokenKey = 'auth-token';
+
     constructor(props, context:any) {
         super(props, context);
 
@@ -34,6 +36,25 @@ export default class UserLoginPanel extends React.Component {
 
         this.onLoginExt = props.onLogin;
         this.onLogoutExt = props.onLogout;
+
+        this.tryAutoLogin();
+    }
+
+    async tryAutoLogin() {
+        let savedToken = window.localStorage.getItem(this.storageAuthTokenKey);
+
+        if (savedToken) {
+            let response = await webSocketClient.sendRequest({
+                type: 'login-token',
+                payload: {
+                    token: savedToken,
+                }
+            });
+
+            if (response.type == 'login-success') {
+                this.onLogin(response.payload);
+            }
+        }
     }
 
     toggleLoginDialog() {
@@ -48,6 +69,8 @@ export default class UserLoginPanel extends React.Component {
             isLogged: true,
             loggedUser: user,
         });
+
+        window.localStorage.setItem(this.storageAuthTokenKey, user.token);
 
         this.onLoginExt(user);
     }
