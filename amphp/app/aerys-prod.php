@@ -13,8 +13,8 @@ $router = \Aerys\router()
 ;
 
 (new Aerys\Host)
-    ->expose('0.0.0.0', 80)
-    ->name("new-backlog.fedot.name")
+    ->expose('*', 80)
+    ->name("")
     ->use($router)
     ->use($root)
 ;
