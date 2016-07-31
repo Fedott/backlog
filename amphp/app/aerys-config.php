@@ -13,6 +13,7 @@ $router = \Aerys\router()
 ;
 
 (new Aerys\Host)
+    ->name('')
     ->expose('0.0.0.0', 8080)
     ->use($router)
     ->use($root)
