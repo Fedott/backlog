@@ -10,12 +10,41 @@ use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\StoriesRepository;
+use Fedot\Backlog\WebSocketConnectionAuthenticationService;
+use PHPUnit_Framework_MockObject_MockObject;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;
 use Tests\Fedot\Backlog\BaseTestCase;
 
 class CreateStoryTest extends BaseTestCase
 {
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|StoriesRepository
+     */
+    protected $storiesRepositoryMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|WebSocketConnectionAuthenticationService
+     */
+    protected $webSocketAuthServiceMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|UuidFactory
+     */
+    protected $uuidFactoryMock;
+
+    /**
+     * @return CreateStory
+     */
+    protected function getProcessorInstance()
+    {
+        $this->storiesRepositoryMock = $this->createMock(StoriesRepository::class);
+        $this->uuidFactoryMock = $this->createMock(UuidFactory::class);
+        $this->webSocketAuthServiceMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
+
+        return new CreateStory($this->storiesRepositoryMock, $this->uuidFactoryMock, $this->webSocketAuthServiceMock);
+    }
+
     /**
      * @dataProvider providerSupportsRequest
      *
@@ -24,10 +53,7 @@ class CreateStoryTest extends BaseTestCase
      */
     public function testSupportsRequest(Request $request, bool $expectedResult)
     {
-        $processor = new CreateStory(
-            $this->createMock(StoriesRepository::class),
-            $this->createMock(UuidFactory::class)
-        );
+        $processor = $this->getProcessorInstance();
         $actualResult = $processor->supportsRequest($request);
 
         $this->assertEquals($expectedResult, $actualResult);
@@ -53,9 +79,9 @@ class CreateStoryTest extends BaseTestCase
     public function testProcess()
     {
         $responseSenderMock = $this->createMock(ResponseSender::class);
-        $storiesRepositoryMock = $this->createMock(StoriesRepository::class);
-        $uuidFactoryMock = $this->createMock(UuidFactory::class);
         $uuidMock = $this->createMock(Uuid::class);
+
+        $processor = $this->getProcessorInstance();
 
         $request = new Request();
         $request->id = 33;
@@ -66,9 +92,7 @@ class CreateStoryTest extends BaseTestCase
         $request->setClientId(432);
         $request->setResponseSender($responseSenderMock);
 
-        $processor = new CreateStory($storiesRepositoryMock, $uuidFactoryMock);
-
-        $uuidFactoryMock
+        $this->uuidFactoryMock
             ->expects($this->once())
             ->method('uuid4')
             ->willReturn($uuidMock)
@@ -79,7 +103,7 @@ class CreateStoryTest extends BaseTestCase
             ->willReturn('UUIDSuperUnique')
         ;
 
-        $storiesRepositoryMock->expects($this->once())
+        $this->storiesRepositoryMock->expects($this->once())
             ->method('create')
             ->willReturnCallback(function (Story $story) {
                 $this->assertEquals('UUIDSuperUnique', $story->id);
@@ -115,9 +139,9 @@ class CreateStoryTest extends BaseTestCase
     public function testProcessWithError()
     {
         $responseSenderMock = $this->createMock(ResponseSender::class);
-        $storiesRepositoryMock = $this->createMock(StoriesRepository::class);
-        $uuidFactoryMock = $this->createMock(UuidFactory::class);
         $uuidMock = $this->createMock(Uuid::class);
+
+        $processor = $this->getProcessorInstance();
 
         $request = new Request();
         $request->id = 33;
@@ -128,9 +152,7 @@ class CreateStoryTest extends BaseTestCase
         $request->setClientId(432);
         $request->setResponseSender($responseSenderMock);
 
-        $processor = new CreateStory($storiesRepositoryMock, $uuidFactoryMock);
-
-        $uuidFactoryMock
+        $this->uuidFactoryMock
             ->expects($this->once())
             ->method('uuid4')
             ->willReturn($uuidMock)
@@ -141,7 +163,7 @@ class CreateStoryTest extends BaseTestCase
             ->willReturn('UUIDSuperUnique')
         ;
 
-        $storiesRepositoryMock->expects($this->once())
+        $this->storiesRepositoryMock->expects($this->once())
             ->method('create')
             ->willReturnCallback(function (Story $story) {
                 $this->assertEquals('UUIDSuperUnique', $story->id);
