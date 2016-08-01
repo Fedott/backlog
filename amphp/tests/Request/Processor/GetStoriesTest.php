@@ -9,30 +9,16 @@ use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\StoriesPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
-use Fedot\Backlog\StoriesRepository;
-use Fedot\Backlog\WebSocketConnectionAuthenticationService;
-use PHPUnit_Framework_MockObject_MockObject;
-use Tests\Fedot\Backlog\BaseTestCase;
+use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
-class GetStoriesTest extends BaseTestCase
+class GetStoriesTest extends RequestProcessorTestCase
 {
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|StoriesRepository
-     */
-    protected $storiesRepositoryMock;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|WebSocketConnectionAuthenticationService
-     */
-    protected $webSocketAuthServiceMock;
-
     /**
      * @return GetStories
      */
     protected function getProcessorInstance()
     {
-        $this->storiesRepositoryMock = $this->createMock(StoriesRepository::class);
-        $this->webSocketAuthServiceMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
+        $this->initProcessorMocks();
 
         return new GetStories($this->storiesRepositoryMock, $this->webSocketAuthServiceMock);
     }
@@ -70,7 +56,7 @@ class GetStoriesTest extends BaseTestCase
 
     public function testProcess()
     {
-        $responseSenderMock = $this->createMock(ResponseSender::class);
+        $this->responseSenderMock = $this->createMock(ResponseSender::class);
 
         $stories = [
             new Story(),
@@ -84,7 +70,7 @@ class GetStoriesTest extends BaseTestCase
         $request->id = 34;
         $request->type = 'get-stories';
         $request->setClientId(777);
-        $request->setResponseSender($responseSenderMock);
+        $request->setResponseSender($this->responseSenderMock);
 
         $user = new User();
         $this->webSocketAuthServiceMock->expects($this->once())
@@ -99,7 +85,7 @@ class GetStoriesTest extends BaseTestCase
             ->willReturn(new Success($stories))
         ;
 
-        $responseSenderMock->expects($this->once())
+        $this->responseSenderMock->expects($this->once())
             ->method('sendResponse')
             ->willReturnCallback(function (Response $response, $clientId = null) use ($stories) {
                 $this->assertEquals(777, $clientId);

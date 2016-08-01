@@ -8,12 +8,22 @@ use Fedot\Backlog\Payload\MoveStoryPayload;
 use Fedot\Backlog\Request\Processor\MoveStory;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Response;
-use Fedot\Backlog\Response\ResponseSender;
-use Fedot\Backlog\StoriesRepository;
-use Tests\Fedot\Backlog\BaseTestCase;
+use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
-class MoveStoryTest extends BaseTestCase
+class MoveStoryTest extends RequestProcessorTestCase
 {
+    /**
+     * @return MoveStory
+     */
+    protected function getProcessorInstance()
+    {
+        $this->initProcessorMocks();
+
+        $processor = new MoveStory($this->storiesRepositoryMock);
+
+        return $processor;
+    }
+
     /**
      * @dataProvider providerSupportsRequest
      *
@@ -22,9 +32,7 @@ class MoveStoryTest extends BaseTestCase
      */
     public function testSupportsRequest(Request $request, bool $expectedResult)
     {
-        $processor = new MoveStory(
-            $this->createMock(StoriesRepository::class)
-        );
+        $processor = $this->getProcessorInstance();
         $actualResult = $processor->supportsRequest($request);
 
         $this->assertEquals($expectedResult, $actualResult);
@@ -49,8 +57,7 @@ class MoveStoryTest extends BaseTestCase
 
     public function testProcess()
     {
-        $responseSenderMock = $this->createMock(ResponseSender::class);
-        $storiesRepositoryMock = $this->createMock(StoriesRepository::class);
+        $processor = $this->getProcessorInstance();
 
         $request = new Request();
         $request->id = 33;
@@ -59,17 +66,15 @@ class MoveStoryTest extends BaseTestCase
         $request->payload->storyId = 'target-story-id';
         $request->payload->beforeStoryId = 'before-story-id';
         $request->setClientId(432);
-        $request->setResponseSender($responseSenderMock);
+        $request->setResponseSender($this->responseSenderMock);
 
-        $processor = new MoveStory($storiesRepositoryMock);
-
-        $storiesRepositoryMock->expects($this->once())
+        $this->storiesRepositoryMock->expects($this->once())
             ->method('move')
             ->with('target-story-id', 'before-story-id')
             ->willReturn(new Success(true))
         ;
 
-        $responseSenderMock->expects($this->once())
+        $this->responseSenderMock->expects($this->once())
             ->method('sendResponse')
             ->with($this->callback(function (Response $response){
                 $this->assertEquals(33, $response->requestId);

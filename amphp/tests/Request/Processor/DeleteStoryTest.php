@@ -7,12 +7,22 @@ use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\DeleteStoryPayload;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Response\Response;
-use Fedot\Backlog\Response\ResponseSender;
-use Fedot\Backlog\StoriesRepository;
-use Tests\Fedot\Backlog\BaseTestCase;
+use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
-class DeleteStoryTest extends BaseTestCase
+class DeleteStoryTest extends RequestProcessorTestCase
 {
+    /**
+     * @return DeleteStory
+     */
+    protected function getProcessorInstance()
+    {
+        $this->initProcessorMocks();
+
+        $processor = new DeleteStory($this->storiesRepositoryMock);
+
+        return $processor;
+    }
+
     /**
      * @dataProvider providerSupportsRequest
      *
@@ -21,7 +31,7 @@ class DeleteStoryTest extends BaseTestCase
      */
     public function testSupportsRequest(Request $request, bool $expectedResult)
     {
-        $processor = new DeleteStory($this->createMock(StoriesRepository::class));
+        $processor = $this->getProcessorInstance();
         $actualResult = $processor->supportsRequest($request);
 
         $this->assertEquals($expectedResult, $actualResult);
@@ -46,26 +56,23 @@ class DeleteStoryTest extends BaseTestCase
 
     public function testProcess()
     {
-        $responseSenderMock = $this->createMock(ResponseSender::class);
-        $storiesRepositoryMock = $this->createMock(StoriesRepository::class);
-
-        $processor = new DeleteStory($storiesRepositoryMock);
+        $processor = $this->getProcessorInstance();
 
         $request = new Request();
         $request->id = 34;
         $request->type = 'delete-story';
         $request->setClientId(777);
-        $request->setResponseSender($responseSenderMock);
+        $request->setResponseSender($this->responseSenderMock);
         $request->payload = new DeleteStoryPayload();
         $request->payload->storyId = 'storyId4534';
 
-        $storiesRepositoryMock->expects($this->once())
+        $this->storiesRepositoryMock->expects($this->once())
             ->method('delete')
             ->with($this->equalTo('storyId4534'))
             ->willReturn(new Success(true))
         ;
 
-        $responseSenderMock->expects($this->once())
+        $this->responseSenderMock->expects($this->once())
             ->method('sendResponse')
             ->willReturnCallback(function (Response $response, $clientId = null) {
                 $this->assertEquals(777, $clientId);

@@ -15,19 +15,10 @@ use PHPUnit_Framework_MockObject_MockObject;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;
 use Tests\Fedot\Backlog\BaseTestCase;
+use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
-class CreateStoryTest extends BaseTestCase
+class CreateStoryTest extends RequestProcessorTestCase
 {
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|StoriesRepository
-     */
-    protected $storiesRepositoryMock;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|WebSocketConnectionAuthenticationService
-     */
-    protected $webSocketAuthServiceMock;
-
     /**
      * @var PHPUnit_Framework_MockObject_MockObject|UuidFactory
      */
@@ -38,9 +29,9 @@ class CreateStoryTest extends BaseTestCase
      */
     protected function getProcessorInstance()
     {
-        $this->storiesRepositoryMock = $this->createMock(StoriesRepository::class);
+        $this->initProcessorMocks();
+
         $this->uuidFactoryMock = $this->createMock(UuidFactory::class);
-        $this->webSocketAuthServiceMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
 
         return new CreateStory($this->storiesRepositoryMock, $this->uuidFactoryMock, $this->webSocketAuthServiceMock);
     }
@@ -78,7 +69,7 @@ class CreateStoryTest extends BaseTestCase
 
     public function testProcess()
     {
-        $responseSenderMock = $this->createMock(ResponseSender::class);
+        $this->responseSenderMock = $this->createMock(ResponseSender::class);
         $uuidMock = $this->createMock(Uuid::class);
 
         $processor = $this->getProcessorInstance();
@@ -90,7 +81,7 @@ class CreateStoryTest extends BaseTestCase
         $request->payload->title = 'story title';
         $request->payload->text = 'story text';
         $request->setClientId(432);
-        $request->setResponseSender($responseSenderMock);
+        $request->setResponseSender($this->responseSenderMock);
 
         $this->uuidFactoryMock
             ->expects($this->once())
@@ -114,7 +105,7 @@ class CreateStoryTest extends BaseTestCase
             })
         ;
 
-        $responseSenderMock->expects($this->once())
+        $this->responseSenderMock->expects($this->once())
             ->method('sendResponse')
             ->with($this->callback(function (Response $response){
                 $this->assertEquals(33, $response->requestId);
@@ -138,7 +129,7 @@ class CreateStoryTest extends BaseTestCase
 
     public function testProcessWithError()
     {
-        $responseSenderMock = $this->createMock(ResponseSender::class);
+        $this->responseSenderMock = $this->createMock(ResponseSender::class);
         $uuidMock = $this->createMock(Uuid::class);
 
         $processor = $this->getProcessorInstance();
@@ -150,7 +141,7 @@ class CreateStoryTest extends BaseTestCase
         $request->payload->title = 'story title';
         $request->payload->text = 'story text';
         $request->setClientId(432);
-        $request->setResponseSender($responseSenderMock);
+        $request->setResponseSender($this->responseSenderMock);
 
         $this->uuidFactoryMock
             ->expects($this->once())
@@ -174,7 +165,7 @@ class CreateStoryTest extends BaseTestCase
             })
         ;
 
-        $responseSenderMock->expects($this->once())
+        $this->responseSenderMock->expects($this->once())
             ->method('sendResponse')
             ->with($this->callback(function (Response $response){
                 $this->assertEquals(33, $response->requestId);

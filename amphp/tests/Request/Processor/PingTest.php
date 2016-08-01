@@ -44,15 +44,15 @@ class PingTest extends BaseTestCase
 
     public function testProcess()
     {
-        $responseSenderMock = $this->createMock(ResponseSender::class);
+        $this->responseSenderMock = $this->createMock(ResponseSender::class);
 
         $request = new Request();
         $request->id = 321;
         $request->type = 'ping';
-        $request->setResponseSender($responseSenderMock);
+        $request->setResponseSender($this->responseSenderMock);
         $request->setClientId(777);
 
-        $responseSenderMock->expects($this->once())
+        $this->responseSenderMock->expects($this->once())
             ->method('sendResponse')
             ->willReturnCallback(function (Response $response, $clientId = null) {
                 $this->assertEquals(777, $clientId);

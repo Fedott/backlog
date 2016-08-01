@@ -10,30 +10,16 @@ use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
-use Fedot\Backlog\StoriesRepository;
-use Fedot\Backlog\WebSocketConnectionAuthenticationService;
-use PHPUnit_Framework_MockObject_MockObject;
-use Tests\Fedot\Backlog\BaseTestCase;
+use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
-class EditStoryTest extends BaseTestCase
+class EditStoryTest extends RequestProcessorTestCase
 {
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|StoriesRepository
-     */
-    protected $storiesRepositoryMock;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|WebSocketConnectionAuthenticationService
-     */
-    protected $webSocketAuthServiceMock;
-
     /**
      * @return EditStory
      */
     protected function getProcessorInstance()
     {
-        $this->storiesRepositoryMock = $this->createMock(StoriesRepository::class);
-        $this->webSocketAuthServiceMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
+        $this->initProcessorMocks();
 
         return new EditStory($this->storiesRepositoryMock, $this->webSocketAuthServiceMock);
     }
@@ -80,7 +66,7 @@ class EditStoryTest extends BaseTestCase
     {
         $processor = $this->getProcessorInstance();
 
-        $responseSenderMock = $this->createMock(ResponseSender::class);
+        $this->responseSenderMock = $this->createMock(ResponseSender::class);
         $storiesRepositoryMock = $this->storiesRepositoryMock;
 
         $request = new Request();
@@ -91,7 +77,7 @@ class EditStoryTest extends BaseTestCase
         $request->payload->title = 'story title';
         $request->payload->text = 'story text';
         $request->setClientId(432);
-        $request->setResponseSender($responseSenderMock);
+        $request->setResponseSender($this->responseSenderMock);
 
         $user = new User();
         $this->webSocketAuthServiceMock->expects($this->once())
@@ -112,7 +98,7 @@ class EditStoryTest extends BaseTestCase
             ->willReturn(new Success(true))
         ;
 
-        $responseSenderMock->expects($this->once())
+        $this->responseSenderMock->expects($this->once())
             ->method('sendResponse')
             ->with($this->callback(function (Response $response){
                 $this->assertEquals(33, $response->requestId);
@@ -138,7 +124,7 @@ class EditStoryTest extends BaseTestCase
     {
         $processor = $this->getProcessorInstance();
 
-        $responseSenderMock = $this->createMock(ResponseSender::class);
+        $this->responseSenderMock = $this->createMock(ResponseSender::class);
         $storiesRepositoryMock = $this->storiesRepositoryMock;
 
         $request = new Request();
@@ -149,7 +135,7 @@ class EditStoryTest extends BaseTestCase
         $request->payload->title = 'story title';
         $request->payload->text = 'story text';
         $request->setClientId(432);
-        $request->setResponseSender($responseSenderMock);
+        $request->setResponseSender($this->responseSenderMock);
 
         $user = new User();
         $this->webSocketAuthServiceMock->expects($this->once())
@@ -170,7 +156,7 @@ class EditStoryTest extends BaseTestCase
             ->willReturn(new Success(false))
         ;
 
-        $responseSenderMock->expects($this->once())
+        $this->responseSenderMock->expects($this->once())
             ->method('sendResponse')
             ->with($this->callback(function (Response $response){
                 $this->assertEquals(33, $response->requestId);

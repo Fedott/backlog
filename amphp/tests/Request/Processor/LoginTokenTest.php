@@ -17,10 +17,10 @@ use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Tests\Fedot\Backlog\BaseTestCase;
+use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
-class LoginTokenTest extends BaseTestCase
+class LoginTokenTest extends RequestProcessorTestCase
 {
-
     /**
      * @dataProvider providerSupportsRequest
      *
@@ -69,7 +69,7 @@ class LoginTokenTest extends BaseTestCase
     {
         $authMock = $this->createMock(AuthenticationService::class);
         $webSocketAuthMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
-        $responseSenderMock = $this->createMock(ResponseSender::class);
+        $this->responseSenderMock = $this->createMock(ResponseSender::class);
 
         $processor = new LoginToken($authMock, $webSocketAuthMock);
 
@@ -77,7 +77,7 @@ class LoginTokenTest extends BaseTestCase
         $request->id = 34;
         $request->type = 'login-token';
         $request->setClientId(777);
-        $request->setResponseSender($responseSenderMock);
+        $request->setResponseSender($this->responseSenderMock);
         $request->payload = new TokenPayload();
         $request->payload->token = 'auth-token';
 
@@ -96,7 +96,7 @@ class LoginTokenTest extends BaseTestCase
             }))
         ;
 
-        $responseSenderMock->expects($this->once())
+        $this->responseSenderMock->expects($this->once())
             ->method('sendResponse')
             ->with($this->callback(function (Response $response) {
                 $this->assertEquals(34, $response->requestId);
@@ -118,7 +118,7 @@ class LoginTokenTest extends BaseTestCase
 
     public function testProcessFailed()
     {
-        $responseSenderMock = $this->createMock(ResponseSender::class);
+        $this->responseSenderMock = $this->createMock(ResponseSender::class);
         $authMock = $this->createMock(AuthenticationService::class);
         $webSocketAuthMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
 
@@ -128,7 +128,7 @@ class LoginTokenTest extends BaseTestCase
         $request->id = 34;
         $request->type = 'login-token';
         $request->setClientId(777);
-        $request->setResponseSender($responseSenderMock);
+        $request->setResponseSender($this->responseSenderMock);
         $request->payload = new TokenPayload();
         $request->payload->token = 'auth-token';
 
@@ -142,7 +142,7 @@ class LoginTokenTest extends BaseTestCase
             ->method('authorizeClient')
         ;
 
-        $responseSenderMock->expects($this->once())
+        $this->responseSenderMock->expects($this->once())
             ->method('sendResponse')
             ->with($this->callback(function (Response $response) {
                 $this->assertEquals(34, $response->requestId);
