@@ -48,6 +48,16 @@ class StoriesRepository
     }
 
     /**
+     * @param User $user
+     *
+     * @return string
+     */
+    protected function getKeyForStoriesSortDefault(User $user)
+    {
+        return "user:{$user->username}:stories:sorted:default";
+    }
+
+    /**
      * @param Story $story
      *
      * @return string
@@ -86,21 +96,25 @@ class StoriesRepository
     }
 
     /**
+     * @param User $user
      * @param Story $story
      *
      * @return Promise|bool
      */
-    public function create(Story $story): Promise
+    public function create(User $user, Story $story): Promise
     {
         $deferred = new Deferred();
 
-        \Amp\immediately(function () use ($deferred, $story) {
+        \Amp\immediately(function () use ($deferred, $story, $user) {
             $storyJson = $this->serializeStoryToJson($story);
 
             $created = yield $this->redisClient->setNx($this->getKeyForStory($story->id), $storyJson);
 
             if ($created) {
-                yield $this->redisClient->lPush("stories:sort:default", $this->getKeyForStory($story->id));
+                yield $this->redisClient->lPush(
+                    $this->getKeyForStoriesSortDefault($user),
+                    $this->getKeyForStory($story->id)
+                );
 
                 $deferred->succeed(true);
             } else {

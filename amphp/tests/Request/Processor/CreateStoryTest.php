@@ -4,6 +4,7 @@ namespace Tests\Fedot\Backlog\Request\Processor;
 
 use Amp\Success;
 use Fedot\Backlog\Model\Story;
+use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Request\Processor\CreateStory;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\ErrorPayload;
@@ -83,6 +84,15 @@ class CreateStoryTest extends RequestProcessorTestCase
         $request->setClientId(432);
         $request->setResponseSender($this->responseSenderMock);
 
+        $user = new User();
+
+        $this->webSocketAuthServiceMock
+            ->expects($this->once())
+            ->method('getAuthorizedUserForClient')
+            ->with($this->equalTo(432))
+            ->willReturn($user)
+        ;
+
         $this->uuidFactoryMock
             ->expects($this->once())
             ->method('uuid4')
@@ -96,13 +106,14 @@ class CreateStoryTest extends RequestProcessorTestCase
 
         $this->storiesRepositoryMock->expects($this->once())
             ->method('create')
-            ->willReturnCallback(function (Story $story) {
+            ->with($this->equalTo($user), $this->callback(function (Story $story) {
                 $this->assertEquals('UUIDSuperUnique', $story->id);
                 $this->assertEquals('story title', $story->title);
                 $this->assertEquals('story text', $story->text);
 
-                return new Success(true);
-            })
+                return true;
+            }))
+            ->willReturn(new Success(true))
         ;
 
         $this->responseSenderMock->expects($this->once())
@@ -143,6 +154,15 @@ class CreateStoryTest extends RequestProcessorTestCase
         $request->setClientId(432);
         $request->setResponseSender($this->responseSenderMock);
 
+        $user = new User();
+
+        $this->webSocketAuthServiceMock
+            ->expects($this->once())
+            ->method('getAuthorizedUserForClient')
+            ->with($this->equalTo(432))
+            ->willReturn($user)
+        ;
+
         $this->uuidFactoryMock
             ->expects($this->once())
             ->method('uuid4')
@@ -156,13 +176,14 @@ class CreateStoryTest extends RequestProcessorTestCase
 
         $this->storiesRepositoryMock->expects($this->once())
             ->method('create')
-            ->willReturnCallback(function (Story $story) {
+            ->with($this->equalTo($user), $this->callback(function (Story $story) {
                 $this->assertEquals('UUIDSuperUnique', $story->id);
                 $this->assertEquals('story title', $story->title);
                 $this->assertEquals('story text', $story->text);
 
-                return new Success(false);
-            })
+                return true;
+            }))
+            ->willReturn(new Success(false))
         ;
 
         $this->responseSenderMock->expects($this->once())

@@ -6,6 +6,7 @@ use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\StoriesRepository;
+use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Ramsey\Uuid\UuidFactory;
 
 class CreateStory implements ProcessorInterface
@@ -21,17 +22,25 @@ class CreateStory implements ProcessorInterface
     protected $uuidFactory;
 
     /**
+     * @var WebSocketConnectionAuthenticationService
+     */
+    protected $webSocketAuthService;
+
+    /**
      * CreateStory constructor.
      *
      * @param StoriesRepository $storiesRepository
-     * @param UuidFactory       $uuidFactory
+     * @param UuidFactory $uuidFactory
+     * @param WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService
      */
     public function __construct(
         StoriesRepository $storiesRepository,
-        UuidFactory $uuidFactory
+        UuidFactory $uuidFactory,
+        WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService
     ) {
         $this->storiesRepository = $storiesRepository;
         $this->uuidFactory = $uuidFactory;
+        $this->webSocketAuthService = $webSocketConnectionAuthenticationService;
     }
 
     /**
@@ -70,7 +79,9 @@ class CreateStory implements ProcessorInterface
             $story = $request->payload;
             $story->id = $this->uuidFactory->uuid4()->toString();
 
-            $result = yield $this->storiesRepository->create($story);
+            $user = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
+
+            $result = yield $this->storiesRepository->create($user, $story);
 
             $response            = new Response();
             $response->requestId = $request->id;

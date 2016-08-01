@@ -7,10 +7,34 @@ use Amp\Success;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\StoriesRepository;
+use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class StoriesRepositoryTest extends BaseTestCase
 {
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|Client
+     */
+    protected $redisClientMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|SerializerInterface
+     */
+    protected $serializerMock;
+
+    /**
+     * @return StoriesRepository
+     */
+    protected function getRepositoryInstance()
+    {
+        $this->redisClientMock = $this->createMock(Client::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
+
+        $repository = new StoriesRepository($this->redisClientMock, $this->serializerMock);
+
+        return $repository;
+    }
+
     public function testGetAll()
     {
         $redisClientMock = $this->createMock(Client::class);
@@ -89,67 +113,67 @@ class StoriesRepositoryTest extends BaseTestCase
 
     public function testCreate()
     {
-        $redisClientMock = $this->createMock(Client::class);
-        $serializerMock = $this->createMock(SerializerInterface::class);
-
-        $repository = new StoriesRepository($redisClientMock, $serializerMock);
+        $repository = $this->getRepositoryInstance();
 
         $story = new Story();
         $story->id = 'gjfhjdjfh';
 
+        $user = new User();
+        $user->username = 'testUser';
+
         $redisSetNXPromise = new Success(true);
         $redisLPushPromise = new Success(true);
-        $redisClientMock->expects($this->once())
+        $this->redisClientMock->expects($this->once())
             ->method('setNx')
             ->with("story:gjfhjdjfh", "{json-mock}")
             ->willReturn($redisSetNXPromise)
         ;
 
-        $serializerMock->expects($this->once())
+        $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->with($story, 'json')
             ->willReturn("{json-mock}")
         ;
 
-        $redisClientMock->expects($this->once())
+        $this->redisClientMock->expects($this->once())
             ->method('lPush')
-            ->with("stories:sort:default", "story:gjfhjdjfh")
+            ->with("user:testUser:stories:sorted:default", "story:gjfhjdjfh")
             ->willReturn($redisLPushPromise)
         ;
 
-        $resultPromise = $repository->create($story);
+        $resultPromise = $repository->create($user, $story);
         $result = \Amp\wait($resultPromise);
         $this->assertEquals(true, $result);
     }
 
     public function testCreateErrorAlreadyExist()
     {
-        $redisClientMock = $this->createMock(Client::class);
-        $serializerMock = $this->createMock(SerializerInterface::class);
-
-        $repository = new StoriesRepository($redisClientMock, $serializerMock);
+        $repository = $this->getRepositoryInstance();
 
         $story = new Story();
         $story->id = 'gjfhjdjfh';
 
+        $user = new User();
+        $user->username = 'testUser';
+
         $redisSetNXPromise = new Success(false);
-        $redisClientMock->expects($this->once())
+        $this->redisClientMock->expects($this->once())
             ->method('setNx')
             ->with("story:gjfhjdjfh", "{json-mock}")
             ->willReturn($redisSetNXPromise)
         ;
 
-        $serializerMock->expects($this->once())
+        $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->with($story, 'json')
             ->willReturn("{json-mock}")
         ;
 
-        $redisClientMock->expects($this->never())
+        $this->redisClientMock->expects($this->never())
             ->method('lPush')
         ;
 
-        $resultPromise = $repository->create($story);
+        $resultPromise = $repository->create($user, $story);
         $result = \Amp\wait($resultPromise);
         $this->assertEquals(false, $result);
     }
