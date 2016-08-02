@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Fedot\Backlog;
 
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
