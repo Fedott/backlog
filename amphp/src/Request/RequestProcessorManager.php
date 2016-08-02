@@ -35,7 +35,9 @@ class RequestProcessorManager
     {
         foreach ($this->processors as $processor) {
             if ($processor->supportsRequest($request)) {
-                $processor->process($request);
+                \Amp\immediately(function () use ($processor, $request) {
+                    yield from $processor->process($request);
+                });
 
                 return;
             }

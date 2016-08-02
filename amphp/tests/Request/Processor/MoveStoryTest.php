@@ -87,8 +87,6 @@ class MoveStoryTest extends RequestProcessorTestCase
             }), $this->equalTo(432))
         ;
 
-        $processor->process($request);
-
-        $this->waitAsyncCode();
+        $this->startProcessMethod($processor, $request);
     }
 }

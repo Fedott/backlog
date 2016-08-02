@@ -109,9 +109,7 @@ class LoginUsernamePasswordTest extends RequestProcessorTestCase
             }), $this->equalTo(777))
         ;
 
-        $processor->process($request);
-
-        $this->waitAsyncCode();
+        $this->startProcessMethod($processor, $request);
     }
 
     public function testProcessFailed()
@@ -155,8 +153,6 @@ class LoginUsernamePasswordTest extends RequestProcessorTestCase
             }), $this->equalTo(777))
         ;
 
-        $processor->process($request);
-
-        $this->waitAsyncCode();
+        $this->startProcessMethod($processor, $request);
     }
 }

@@ -1,7 +1,9 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Fedot\Backlog\Request\Processor;
 
+use Amp\Promise;
+use Amp\Success;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Payload\MoveStoryPayload;
@@ -57,26 +59,24 @@ class MoveStory implements ProcessorInterface
      */
     public function process(Request $request)
     {
-        \Amp\immediately(function () use ($request) {
-            /** @var MoveStoryPayload $payload */
-            $payload = $request->payload;
+        /** @var MoveStoryPayload $payload */
+        $payload = $request->payload;
 
-            $result = yield $this->storiesRepository->move($payload->storyId, $payload->beforeStoryId);
+        $result = yield $this->storiesRepository->move($payload->storyId, $payload->beforeStoryId);
 
-            $response            = new Response();
-            $response->requestId = $request->id;
+        $response = new Response();
+        $response->requestId = $request->id;
 
-            if ($result === true) {
-                $response->type    = 'story-moved';
-                $response->payload = new EmptyPayload();
-            } else {
-                $response->type             = 'error';
-                $response->payload          = new ErrorPayload();
-                $response->payload->message
-                    = "Story id '{$payload->storyId}' do not moved after story id {$payload->beforeStoryId}";
-            }
+        if ($result === true) {
+            $response->type = 'story-moved';
+            $response->payload = new EmptyPayload();
+        } else {
+            $response->type = 'error';
+            $response->payload = new ErrorPayload();
+            $response->payload->message
+                = "Story id '{$payload->storyId}' do not moved after story id {$payload->beforeStoryId}";
+        }
 
-            $request->getResponseSender()->sendResponse($response, $request->getClientId());
-        });
+        $request->getResponseSender()->sendResponse($response, $request->getClientId());
     }
 }

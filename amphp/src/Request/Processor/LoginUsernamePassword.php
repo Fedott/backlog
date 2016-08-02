@@ -1,6 +1,8 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 namespace Fedot\Backlog\Request\Processor;
 
+use Amp\Promise;
+use Amp\Success;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Payload\LoginFailedPayload;
@@ -25,7 +27,7 @@ class LoginUsernamePassword implements ProcessorInterface
     /**
      * LoginToken constructor.
      *
-     * @param AuthenticationService                    $authenticationService
+     * @param AuthenticationService $authenticationService
      * @param WebSocketConnectionAuthenticationService $webSocketAuthService
      */
     public function __construct(
@@ -67,32 +69,30 @@ class LoginUsernamePassword implements ProcessorInterface
      */
     public function process(Request $request)
     {
-        \Amp\immediately(function () use ($request){
-            /** @var UsernamePasswordPayload $payload */
-            $payload = $request->payload;
+        /** @var UsernamePasswordPayload $payload */
+        $payload = $request->payload;
 
-            $response = new Response();
-            $response->requestId = $request->id;
+        $response = new Response();
+        $response->requestId = $request->id;
 
-            try {
-                list($user, $token) = yield $this->authenticationService->authByUsernamePassword(
-                    $payload->username,
-                    $payload->password
-                );
+        try {
+            list($user, $token) = yield $this->authenticationService->authByUsernamePassword(
+                $payload->username,
+                $payload->password
+            );
 
-                $response->type = 'login-success';
-                $response->payload = new LoginSuccessPayload();
-                $response->payload->username = $user->username;
-                $response->payload->token = $token;
+            $response->type = 'login-success';
+            $response->payload = new LoginSuccessPayload();
+            $response->payload->username = $user->username;
+            $response->payload->token = $token;
 
-                $this->webSocketAuthService->authorizeClient($request->getClientId(), $user);
-            } catch (AuthenticationException $exception) {
-                $response->type = 'login-failed';
-                $response->payload = new LoginFailedPayload();
-                $response->payload->error = $exception->getMessage();
-            }
+            $this->webSocketAuthService->authorizeClient($request->getClientId(), $user);
+        } catch (AuthenticationException $exception) {
+            $response->type = 'login-failed';
+            $response->payload = new LoginFailedPayload();
+            $response->payload->error = $exception->getMessage();
+        }
 
-            $request->getResponseSender()->sendResponse($response, $request->getClientId());
-        });
+        $request->getResponseSender()->sendResponse($response, $request->getClientId());
     }
 }

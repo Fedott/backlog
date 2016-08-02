@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Request\Processor;
 
+use Amp\Promise;
+use Amp\Success;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\ErrorPayload;
@@ -74,28 +76,26 @@ class CreateStory implements ProcessorInterface
      */
     public function process(Request $request)
     {
-        \Amp\immediately(function () use ($request) {
-            /** @var Story $story */
-            $story = $request->payload;
-            $story->id = $this->uuidFactory->uuid4()->toString();
+        /** @var Story $story */
+        $story = $request->payload;
+        $story->id = $this->uuidFactory->uuid4()->toString();
 
-            $user = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
+        $user = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
 
-            $result = yield $this->storiesRepository->create($user, $story);
+        $result = yield $this->storiesRepository->create($user, $story);
 
-            $response            = new Response();
-            $response->requestId = $request->id;
+        $response            = new Response();
+        $response->requestId = $request->id;
 
-            if ($result === true) {
-                $response->type    = 'story-created';
-                $response->payload = $story;
-            } else {
-                $response->type             = 'error';
-                $response->payload          = new ErrorPayload();
-                $response->payload->message = "Story id '{$story->id}' already exists";
-            }
+        if ($result === true) {
+            $response->type    = 'story-created';
+            $response->payload = $story;
+        } else {
+            $response->type             = 'error';
+            $response->payload          = new ErrorPayload();
+            $response->payload->message = "Story id '{$story->id}' already exists";
+        }
 
-            $request->getResponseSender()->sendResponse($response, $request->getClientId());
-        });
+        $request->getResponseSender()->sendResponse($response, $request->getClientId());
     }
 }

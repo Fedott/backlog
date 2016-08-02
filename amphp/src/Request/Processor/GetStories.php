@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Request\Processor;
 
+use Amp\Promise;
+use Amp\Success;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\StoriesPayload;
@@ -62,22 +64,18 @@ class GetStories implements ProcessorInterface
 
     /**
      * @param Request $request
-     *
-     * @return bool
      */
     public function process(Request $request)
     {
-        \Amp\immediately(function () use ($request) {
-            $authUser = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
-            $stories = yield $this->storiesRepository->getAll($authUser);
+        $authUser = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
+        $stories = yield $this->storiesRepository->getAll($authUser);
 
-            $response = new Response();
-            $response->requestId = $request->id;
-            $response->type = 'stories';
-            $response->payload = new StoriesPayload();
-            $response->payload->stories = $stories;
+        $response = new Response();
+        $response->requestId = $request->id;
+        $response->type = 'stories';
+        $response->payload = new StoriesPayload();
+        $response->payload->stories = $stories;
 
-            $request->getResponseSender()->sendResponse($response, $request->getClientId());
-        });
+        $request->getResponseSender()->sendResponse($response, $request->getClientId());
     }
 }

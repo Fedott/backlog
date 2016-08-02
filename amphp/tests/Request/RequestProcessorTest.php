@@ -52,5 +52,7 @@ class RequestProcessorTest extends BaseTestCase
         ]);
 
         $manager->process($request);
+
+        $this->waitAsyncCode();
     }
 }

@@ -30,4 +30,17 @@ abstract class RequestProcessorTestCase extends BaseTestCase
         $this->storiesRepositoryMock = $this->createMock(StoriesRepository::class);
         $this->webSocketAuthServiceMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
     }
+
+    /**
+     * @param $processor
+     * @param $request
+     */
+    protected function startProcessMethod($processor, $request)
+    {
+        \Amp\immediately(function () use ($processor, $request) {
+            yield from $processor->process($request);
+        });
+
+        $this->waitAsyncCode();
+    }
 }

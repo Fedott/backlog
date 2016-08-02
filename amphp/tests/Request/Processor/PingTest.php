@@ -8,8 +8,9 @@ use Fedot\Backlog\Payload\PongPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 use Tests\Fedot\Backlog\BaseTestCase;
+use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
-class PingTest extends BaseTestCase
+class PingTest extends RequestProcessorTestCase
 {
     /**
      * @dataProvider providerSupportsRequest
@@ -63,8 +64,7 @@ class PingTest extends BaseTestCase
         ;
 
         $processor = new Ping();
-        $processor->process($request);
 
-        $this->waitAsyncCode();
+        $this->startProcessMethod($processor, $request);
     }
 }

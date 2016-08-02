@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Request\Processor;
 
+use Amp\Promise;
+use Amp\Success;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\PongPayload;
@@ -36,6 +38,8 @@ class Ping implements ProcessorInterface
 
     /**
      * @param Request $request
+     *
+     * @return \Generator
      */
     public function process(Request $request)
     {
@@ -45,5 +49,7 @@ class Ping implements ProcessorInterface
         $response->payload = new PongPayload();
 
         $request->getResponseSender()->sendResponse($response, $request->getClientId());
+
+        yield;
     }
 }

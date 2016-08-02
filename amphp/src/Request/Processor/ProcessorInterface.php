@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Request\Processor;
 
+use Amp\Promise;
 use Fedot\Backlog\Request\Request;
 
 interface ProcessorInterface

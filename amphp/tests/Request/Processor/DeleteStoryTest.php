@@ -84,8 +84,6 @@ class DeleteStoryTest extends RequestProcessorTestCase
             })
         ;
 
-        $processor->process($request);
-
-        $this->waitAsyncCode();
+        $this->startProcessMethod($processor, $request);
     }
 }

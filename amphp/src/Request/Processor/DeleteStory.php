@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Request\Processor;
 
+use Amp\Promise;
+use Amp\Success;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\DeleteStoryPayload;
 use Fedot\Backlog\Payload\EmptyPayload;
@@ -56,18 +58,15 @@ class DeleteStory implements ProcessorInterface
     public function process(Request $request)
     {
         /** @var DeleteStoryPayload $request->payload */
+        $result = yield $this->storiesRepository->delete($request->payload->storyId);
 
-        \Amp\immediately(function () use ($request) {
-            $result = yield $this->storiesRepository->delete($request->payload->storyId);
+        if ($result) {
+            $response = new Response();
+            $response->type = 'story-deleted';
+            $response->requestId = $request->id;
+            $response->payload = new EmptyPayload();
 
-            if ($result) {
-                $response = new Response();
-                $response->type = 'story-deleted';
-                $response->requestId = $request->id;
-                $response->payload = new EmptyPayload();
-
-                $request->getResponseSender()->sendResponse($response, $request->getClientId());
-            }
-        });
+            $request->getResponseSender()->sendResponse($response, $request->getClientId());
+        }
     }
 }
