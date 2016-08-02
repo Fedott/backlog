@@ -7,6 +7,7 @@ use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\PongPayload;
 use Fedot\Backlog\Response\Response;
+use Generator;
 
 class Ping implements ProcessorInterface
 {
@@ -39,9 +40,9 @@ class Ping implements ProcessorInterface
     /**
      * @param Request $request
      *
-     * @return \Generator
+     * @return Generator
      */
-    public function process(Request $request)
+    public function process(Request $request): Generator
     {
         $response = new Response();
         $response->requestId = $request->id;

@@ -4,6 +4,7 @@ namespace Tests\Fedot\Backlog\Stubs;
 
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
 use Fedot\Backlog\Request\Request;
+use Generator;
 
 class TestProcessor implements ProcessorInterface
 {
@@ -35,8 +36,10 @@ class TestProcessor implements ProcessorInterface
 
     /**
      * @param Request $request
+     *
+     * @return Generator
      */
-    public function process(Request $request)
+    public function process(Request $request): Generator
     {
     }
 }

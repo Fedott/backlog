@@ -9,6 +9,7 @@ use Fedot\Backlog\Payload\StoriesPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\StoriesRepository;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
+use Generator;
 
 class GetStories implements ProcessorInterface
 {
@@ -64,8 +65,10 @@ class GetStories implements ProcessorInterface
 
     /**
      * @param Request $request
+     *
+     * @return Generator
      */
-    public function process(Request $request)
+    public function process(Request $request): Generator
     {
         $authUser = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
         $stories = yield $this->storiesRepository->getAll($authUser);

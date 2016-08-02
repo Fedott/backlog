@@ -8,6 +8,7 @@ use Fedot\Backlog\Payload\DeleteStoryPayload;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\StoriesRepository;
+use Generator;
 
 class DeleteStory implements ProcessorInterface
 {
@@ -54,8 +55,10 @@ class DeleteStory implements ProcessorInterface
 
     /**
      * @param Request $request
+     *
+     * @return Generator
      */
-    public function process(Request $request)
+    public function process(Request $request): Generator
     {
         /** @var DeleteStoryPayload $request->payload */
         $result = yield $this->storiesRepository->delete($request->payload->storyId);

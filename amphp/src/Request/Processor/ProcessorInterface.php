@@ -3,6 +3,7 @@ namespace Fedot\Backlog\Request\Processor;
 
 use Amp\Promise;
 use Fedot\Backlog\Request\Request;
+use Generator;
 
 interface ProcessorInterface
 {
@@ -25,6 +26,8 @@ interface ProcessorInterface
 
     /**
      * @param Request $request
+     *
+     * @return Generator
      */
-    public function process(Request $request);
+    public function process(Request $request): Generator;
 }

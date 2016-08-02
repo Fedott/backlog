@@ -10,6 +10,7 @@ use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\StoriesRepository;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
+use Generator;
 
 class EditStory implements ProcessorInterface
 {
@@ -65,8 +66,10 @@ class EditStory implements ProcessorInterface
 
     /**
      * @param Request $request
+     *
+     * @return Generator
      */
-    public function process(Request $request)
+    public function process(Request $request): Generator
     {
         /** @var Story $story */
         $story = $request->payload;

@@ -33,7 +33,9 @@ class RequestProcessorTest extends BaseTestCase
         $testProcessor2->expects($this->once())
             ->method('process')
             ->with($request)
-            ->willReturn(true)
+            ->willReturnCallback(function() {
+                yield;
+            })
         ;
         $testProcessor3->expects($this->never())
             ->method('supportsRequest')

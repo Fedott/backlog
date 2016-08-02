@@ -11,6 +11,7 @@ use Fedot\Backlog\Payload\UsernamePasswordPayload;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
+use Generator;
 
 class LoginUsernamePassword implements ProcessorInterface
 {
@@ -66,8 +67,10 @@ class LoginUsernamePassword implements ProcessorInterface
 
     /**
      * @param Request $request
+     *
+     * @return Generator
      */
-    public function process(Request $request)
+    public function process(Request $request): Generator
     {
         /** @var UsernamePasswordPayload $payload */
         $payload = $request->payload;

@@ -13,6 +13,7 @@ use Fedot\Backlog\Payload\TokenPayload;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
+use Generator;
 
 class LoginToken implements ProcessorInterface
 {
@@ -68,8 +69,10 @@ class LoginToken implements ProcessorInterface
 
     /**
      * @param Request $request
+     *
+     * @return Generator
      */
-    public function process(Request $request)
+    public function process(Request $request): Generator
     {
         /** @var TokenPayload $payload */
         $payload = $request->payload;

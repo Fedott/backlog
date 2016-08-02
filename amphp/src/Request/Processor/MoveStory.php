@@ -10,6 +10,7 @@ use Fedot\Backlog\Payload\MoveStoryPayload;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\StoriesRepository;
+use Generator;
 
 class MoveStory implements ProcessorInterface
 {
@@ -56,8 +57,10 @@ class MoveStory implements ProcessorInterface
 
     /**
      * @param Request $request
+     *
+     * @return Generator
      */
-    public function process(Request $request)
+    public function process(Request $request): Generator
     {
         /** @var MoveStoryPayload $payload */
         $payload = $request->payload;
