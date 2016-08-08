@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Tests\Fedot\Backlog;
+namespace Tests\Fedot\Backlog\Repository;
 
 use Amp\Promise;
 use Amp\Redis\Client;
@@ -9,6 +9,7 @@ use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\StoriesRepository;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Serializer\SerializerInterface;
+use Tests\Fedot\Backlog\BaseTestCase;
 
 class StoriesRepositoryTest extends BaseTestCase
 {
