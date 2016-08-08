@@ -7,7 +7,7 @@ use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
-use Fedot\Backlog\StoriesRepository;
+use Fedot\Backlog\Repository\StoriesRepository;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Generator;
 use Ramsey\Uuid\UuidFactory;

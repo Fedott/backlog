@@ -6,7 +6,7 @@ use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Model\User;
-use Fedot\Backlog\StoriesRepository;
+use Fedot\Backlog\Repository\StoriesRepository;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Serializer\SerializerInterface;
 

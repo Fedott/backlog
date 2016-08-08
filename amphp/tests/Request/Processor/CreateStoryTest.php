@@ -10,7 +10,7 @@ use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
-use Fedot\Backlog\StoriesRepository;
+use Fedot\Backlog\Repository\StoriesRepository;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use PHPUnit_Framework_MockObject_MockObject;
 use Ramsey\Uuid\Uuid;

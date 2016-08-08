@@ -2,8 +2,10 @@
 
 namespace Tests\Fedot\Backlog;
 
+use Fedot\Backlog\Request\Processor\ProcessorInterface;
+use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\ResponseSender;
-use Fedot\Backlog\StoriesRepository;
+use Fedot\Backlog\Repository\StoriesRepository;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -32,10 +34,10 @@ abstract class RequestProcessorTestCase extends BaseTestCase
     }
 
     /**
-     * @param $processor
-     * @param $request
+     * @param ProcessorInterface $processor
+     * @param Request $request
      */
-    protected function startProcessMethod($processor, $request)
+    protected function startProcessMethod(ProcessorInterface $processor, Request $request)
     {
         \Amp\immediately(function () use ($processor, $request) {
             yield from $processor->process($request);

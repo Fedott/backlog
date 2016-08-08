@@ -9,7 +9,7 @@ use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Payload\MoveStoryPayload;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Response;
-use Fedot\Backlog\StoriesRepository;
+use Fedot\Backlog\Repository\StoriesRepository;
 use Generator;
 
 class MoveStory implements ProcessorInterface

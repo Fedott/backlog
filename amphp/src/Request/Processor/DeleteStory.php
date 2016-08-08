@@ -7,7 +7,7 @@ use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\DeleteStoryPayload;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Response\Response;
-use Fedot\Backlog\StoriesRepository;
+use Fedot\Backlog\Repository\StoriesRepository;
 use Generator;
 
 class DeleteStory implements ProcessorInterface

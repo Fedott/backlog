@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Fedot\Backlog;
+namespace Fedot\Backlog\Repository;
 
 use Amp\Promise;
 use Amp\Deferred;
