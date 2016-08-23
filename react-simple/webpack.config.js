@@ -1,9 +1,10 @@
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: ["babel-polyfill", "./src/main.js", "./src/style.css"],
     output: {
-        filename: "web/assets/bundle.js"
+        filename: "../amphp/web/assets/bundle.js"
     },
     devtool: 'source-map',
     module: {
@@ -25,10 +26,14 @@ module.exports = {
         ]
     },
     plugins: [
+        new CopyWebpackPlugin([
+            {from: 'web/index.html', to: '../amphp/web'},
+            {from: 'web/fonts', to: '../amphp/web/fonts'}
+        ]),
         new BrowserSyncPlugin({
-            host: 'localhost',
+            host: 'backlog.local',
             port: 3000,
-            proxy: 'localhost:8080',
+            proxy: 'backlog.local:8080',
         })
     ]
 };

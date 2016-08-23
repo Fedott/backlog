@@ -3,7 +3,7 @@ use Fedot\Backlog\WebSocketServer;
 
 require_once __DIR__ . "/bootstrap.php";
 
-$root = Aerys\root(__DIR__."/../../react-simple/web");
+$root = Aerys\root(__DIR__."/../web");
 
 $webSocketServer = $container->get(WebSocketServer::class);
 $websocket       = \Aerys\websocket($webSocketServer);

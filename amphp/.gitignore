@@ -1,5 +1,6 @@
 vendor/
 app/keys/
+web/
 
 # User-specific stuff:
 .idea/workspace.xml
