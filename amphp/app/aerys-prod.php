@@ -13,8 +13,9 @@ $router = \Aerys\router()
 ;
 
 (new Aerys\Host)
-    ->expose('*', 8080)
-    ->name("")
+    ->expose('*', 443)
+    ->name("backlog-new.fedot.name")
+    ->encrypt(__DIR__ . '/keys/crt', __DIR__ . '/keys/key')
     ->use($router)
     ->use($root)
 ;

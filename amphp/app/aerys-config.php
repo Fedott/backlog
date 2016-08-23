@@ -13,8 +13,9 @@ $router = \Aerys\router()
 ;
 
 (new Aerys\Host)
-    ->name('')
+    ->name('backlog.local')
     ->expose('0.0.0.0', 8080)
+    ->encrypt(__DIR__ . '/keys/crt', __DIR__ . '/keys/key')
     ->use($router)
     ->use($root)
 ;
