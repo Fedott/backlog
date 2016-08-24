@@ -20,7 +20,7 @@ import StoriesList from '../Story/StoriesList.jsx';
 import UserLoginPanel from '../UserLoginPanel/UserLoginPanel.jsx';
 
 // Import styles.
-import '../../../node_modules/material-design-lite/material.js';
+import '../../../node_modules/material-design-lite/material.min.js';
 import User from "./User";
 
 class Application extends React.Component {

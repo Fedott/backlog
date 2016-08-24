@@ -1,5 +1,6 @@
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
     entry: ["babel-polyfill", "./src/main.js", "./src/style.css"],
@@ -34,6 +35,10 @@ module.exports = {
             host: 'backlog.local',
             port: 3000,
             proxy: 'backlog.local:8080',
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            compress: { warnings: false }
         })
     ]
 };
