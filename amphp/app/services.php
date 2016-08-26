@@ -42,5 +42,5 @@ return [
         ->method('addAllPayloadTypesFromProcessors', get('request.processors')),
 
     Amp\Redis\Client::class => object()
-        ->constructor('tcp://localhost:6379?database=11', null),
+        ->constructor(get('redis.uri')),
 ];
