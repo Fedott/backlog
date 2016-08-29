@@ -66,6 +66,30 @@ class ProjectRepository
         return $promisor->promise();
     }
 
+    public function getAllByUser(User $user): Promise
+    {
+        $promisor = new Deferred();
+
+        \Amp\immediately(function () use ($promisor, $user) {
+            $projectKeys = yield $this->redisClient->lRange(
+                $this->getKeyIndexForUser($user),
+                0,
+                -1
+            );
+
+            $rawProjects = yield $this->redisClient->mGet($projectKeys);
+
+            $projects = [];
+            foreach ($rawProjects as $rawProject) {
+                $projects[] = $this->serializer->deserialize($rawProject, Project::class, 'json');
+            }
+
+            $promisor->succeed($projects);
+        });
+
+        return $promisor->promise();
+    }
+
     private function getKeyForId(string $id): string
     {
         return "{$this->keyPrefix}:entities:{$id}";
