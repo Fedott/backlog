@@ -11,6 +11,13 @@ use PHPUnit_Framework_MockObject_MockObject;
 
 abstract class RequestProcessorTestCase extends BaseTestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->initProcessorMocks();
+    }
+
     /**
      * @var PHPUnit_Framework_MockObject_MockObject|ResponseSender
      */

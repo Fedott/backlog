@@ -35,6 +35,7 @@ return [
         get(Processor\MoveStory::class),
         get(Processor\LoginUsernamePassword::class),
         get(Processor\LoginToken::class),
+        get(Processor\ProjectCreate::class),
     ]),
     RequestProcessorManager::class => object()
         ->method('addProcessors', get('request.processors')),

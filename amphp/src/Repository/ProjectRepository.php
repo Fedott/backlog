@@ -66,6 +66,12 @@ class ProjectRepository
         return $promisor->promise();
     }
 
+    /**
+     * @param User $user
+     *
+     * @return Promise
+     * @yield Project[]
+     */
     public function getAllByUser(User $user): Promise
     {
         $promisor = new Deferred();
