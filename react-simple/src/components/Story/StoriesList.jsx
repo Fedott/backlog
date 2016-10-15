@@ -16,7 +16,13 @@ class StoriesList extends React.Component {
             filter: props.statusFilter || 'all'
         };
 
-        webSocketClient.sendRequest({type: "get-stories"}).then(function (response) {
+        var request = {
+            type: "get-stories",
+            payload: {
+                projectId: "1"
+            }
+        };
+        webSocketClient.sendRequest(request).then(function (response) {
             this.setState({storiesCollection: response.payload.stories});
         }.bind(this));
     }

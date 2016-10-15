@@ -8,7 +8,7 @@ use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ProjectRepository
+class ProjectsRepository
 {
     /**
      * @var Client
@@ -104,5 +104,25 @@ class ProjectRepository
     private function getKeyIndexForUser(User $user): string
     {
         return "{$this->keyPrefix}:index:by-user:{$user->username}";
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return Promise
+     * @yield Project
+     */
+    public function get(string $id): Promise
+    {
+        $promisor = new Deferred();
+
+        \Amp\immediately(function () use ($id, $promisor) {
+            $projectData = yield $this->redisClient->get($this->getKeyForId($id));
+            $project = $this->serializer->deserialize($projectData, Project::class, 'json');
+
+            $promisor->succeed($project);
+        });
+
+        return $promisor->promise();
     }
 }

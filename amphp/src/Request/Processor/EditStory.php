@@ -74,9 +74,7 @@ class EditStory implements ProcessorInterface
         /** @var Story $story */
         $story = $request->payload;
 
-        $user = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
-
-        $result = yield $this->storiesRepository->save($user, $story);
+        $result = yield $this->storiesRepository->save($story);
 
         $response            = new Response();
         $response->requestId = $request->id;
@@ -91,5 +89,7 @@ class EditStory implements ProcessorInterface
         }
 
         $request->getResponseSender()->sendResponse($response, $request->getClientId());
+
+        yield;
     }
 }

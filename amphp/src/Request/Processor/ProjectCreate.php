@@ -2,7 +2,7 @@
 namespace Fedot\Backlog\Request\Processor;
 
 use Fedot\Backlog\Model\Project;
-use Fedot\Backlog\Repository\ProjectRepository;
+use Fedot\Backlog\Repository\ProjectsRepository;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
@@ -12,7 +12,7 @@ use Ramsey\Uuid\UuidFactory;
 class ProjectCreate implements ProcessorInterface
 {
     /**
-     * @var ProjectRepository
+     * @var ProjectsRepository
      */
     protected $projectRepository;
 
@@ -29,12 +29,12 @@ class ProjectCreate implements ProcessorInterface
     /**
      * CreateStory constructor.
      *
-     * @param ProjectRepository $projectRepository
+     * @param ProjectsRepository $projectRepository
      * @param UuidFactory $uuidFactory
      * @param WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService
      */
     public function __construct(
-        ProjectRepository $projectRepository,
+        ProjectsRepository $projectRepository,
         UuidFactory $uuidFactory,
         WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService
     ) {

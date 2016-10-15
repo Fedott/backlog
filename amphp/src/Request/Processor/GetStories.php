@@ -3,6 +3,7 @@ namespace Fedot\Backlog\Request\Processor;
 
 use Amp\Promise;
 use Amp\Success;
+use Fedot\Backlog\Payload\ProjectIdPayload;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\StoriesPayload;
@@ -60,7 +61,7 @@ class GetStories implements ProcessorInterface
      */
     public function getExpectedRequestPayload(): string
     {
-        return EmptyPayload::class;
+        return ProjectIdPayload::class;
     }
 
     /**
@@ -70,8 +71,10 @@ class GetStories implements ProcessorInterface
      */
     public function process(Request $request): Generator
     {
-        $authUser = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
-        $stories = yield $this->storiesRepository->getAll($authUser);
+        /** @var ProjectIdPayload $payload */
+        $payload = $request->payload;
+        $projectId = $payload->projectId;
+        $stories = yield $this->storiesRepository->getAll($projectId);
 
         $response = new Response();
         $response->requestId = $request->id;

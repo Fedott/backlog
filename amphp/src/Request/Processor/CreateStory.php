@@ -4,6 +4,8 @@ namespace Fedot\Backlog\Request\Processor;
 use Amp\Promise;
 use Amp\Success;
 use Fedot\Backlog\Model\Story;
+use Fedot\Backlog\Payload\StoryPayload;
+use Fedot\Backlog\Repository\ProjectsRepository;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
@@ -11,6 +13,8 @@ use Fedot\Backlog\Repository\StoriesRepository;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Generator;
 use Ramsey\Uuid\UuidFactory;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class CreateStory implements ProcessorInterface
 {
@@ -20,9 +24,19 @@ class CreateStory implements ProcessorInterface
     protected $storiesRepository;
 
     /**
+     * @var ProjectsRepository
+     */
+    protected $projectsRepository;
+
+    /**
      * @var UuidFactory
      */
     protected $uuidFactory;
+
+    /**
+     * @var Serializer
+     */
+    protected $serializer;
 
     /**
      * @var WebSocketConnectionAuthenticationService
@@ -33,16 +47,22 @@ class CreateStory implements ProcessorInterface
      * CreateStory constructor.
      *
      * @param StoriesRepository $storiesRepository
+     * @param ProjectsRepository $projectsRepository
      * @param UuidFactory $uuidFactory
+     * @param Serializer $serializer
      * @param WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService
      */
     public function __construct(
         StoriesRepository $storiesRepository,
+        ProjectsRepository $projectsRepository,
         UuidFactory $uuidFactory,
+        Serializer $serializer,
         WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService
     ) {
         $this->storiesRepository = $storiesRepository;
+        $this->projectsRepository = $projectsRepository;
         $this->uuidFactory = $uuidFactory;
+        $this->serializer = $serializer;
         $this->webSocketAuthService = $webSocketConnectionAuthenticationService;
     }
 
@@ -69,7 +89,7 @@ class CreateStory implements ProcessorInterface
      */
     public function getExpectedRequestPayload(): string
     {
-        return Story::class;
+        return StoryPayload::class;
     }
 
     /**
@@ -79,13 +99,14 @@ class CreateStory implements ProcessorInterface
      */
     public function process(Request $request): Generator
     {
-        /** @var Story $story */
-        $story = $request->payload;
+        /** @var StoryPayload $payload */
+        $payload = $request->payload;
+        $projectId = $payload->projectId;
+        $project = yield $this->projectsRepository->get($projectId);
+        $story = $this->serializer->denormalize($payload->story, Story::class);
         $story->id = $this->uuidFactory->uuid4()->toString();
 
-        $user = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
-
-        $result = yield $this->storiesRepository->create($user, $story);
+        $result = yield $this->storiesRepository->create($project, $story);
 
         $response            = new Response();
         $response->requestId = $request->id;
@@ -100,5 +121,7 @@ class CreateStory implements ProcessorInterface
         }
 
         $request->getResponseSender()->sendResponse($response, $request->getClientId());
+
+        yield;
     }
 }

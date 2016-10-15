@@ -4,7 +4,7 @@ namespace Tests\Fedot\Backlog\Request\Processor;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Repository\ProjectRepository;
+use Fedot\Backlog\Repository\ProjectsRepository;
 use Fedot\Backlog\Request\Processor\ProjectCreate;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Response\Response;
@@ -16,7 +16,7 @@ use Tests\Fedot\Backlog\RequestProcessorTestCase;
 class ProjectCreateTest extends RequestProcessorTestCase
 {
     /**
-     * @var ProjectRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProjectsRepository|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $projectRepositoryMock;
 
@@ -35,7 +35,7 @@ class ProjectCreateTest extends RequestProcessorTestCase
         parent::initProcessorMocks();
 
         $this->uuidFactoryMock = $this->createMock(UuidFactory::class);
-        $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
+        $this->projectRepositoryMock = $this->createMock(ProjectsRepository::class);
 
         $this->processor = new ProjectCreate($this->projectRepositoryMock,
             $this->uuidFactoryMock,

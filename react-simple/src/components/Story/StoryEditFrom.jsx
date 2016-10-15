@@ -47,7 +47,10 @@ class StoryEditFrom extends React.Component {
 
         var response = await webSocketClient.sendRequest({
             type: this.state.isCreateForm ? "create-story" : "edit-story",
-            payload: this.state.story,
+            payload: this.state.isCreateForm ? {
+                story: this.state.story,
+                projectId: "1",
+            } : this.state.story,
         });
 
         if (response.type != 'error') {

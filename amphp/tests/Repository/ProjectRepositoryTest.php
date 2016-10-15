@@ -5,14 +5,14 @@ use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Repository\ProjectRepository;
+use Fedot\Backlog\Repository\ProjectsRepository;
 use Symfony\Component\Serializer\SerializerInterface;
 use Tests\Fedot\Backlog\BaseTestCase;
 
 class ProjectRepositoryTest extends BaseTestCase
 {
     /**
-     * @var ProjectRepository
+     * @var ProjectsRepository
      */
     protected $repository;
 
@@ -37,7 +37,7 @@ class ProjectRepositoryTest extends BaseTestCase
     {
         $this->redisClientMock = $this->createMock(Client::class);
         $this->serializerMock = $this->createMock(SerializerInterface::class);
-        $this->repository = new ProjectRepository($this->redisClientMock, $this->serializerMock);
+        $this->repository = new ProjectsRepository($this->redisClientMock, $this->serializerMock);
     }
 
     public function testCreate()

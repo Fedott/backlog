@@ -4,8 +4,8 @@ namespace Fedot\Backlog\Repository;
 use Amp\Promise;
 use Amp\Deferred;
 use Amp\Redis\Client;
+use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
-use Fedot\Backlog\Model\User;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class StoriesRepository
@@ -48,13 +48,13 @@ class StoriesRepository
     }
 
     /**
-     * @param User $user
+     * @param string $projectId
      *
      * @return string
      */
-    protected function getKeyForStoriesSortDefault(User $user)
+    protected function getKeyForStoriesSortDefault(string $projectId): string
     {
-        return "user:{$user->username}:stories:sorted:default";
+        return "project:{$projectId}:stories:sorted:default";
     }
 
     /**
@@ -68,14 +68,17 @@ class StoriesRepository
     }
 
     /**
-     * @return Promise|Story[]
+     * @param string $projectId
+     *
+     * @return Promise
+     * @yield Story[]
      */
-    public function getAll(): Promise
+    public function getAll(string $projectId): Promise
     {
         $deferred = new Deferred;
 
-        \Amp\immediately(function () use ($deferred) {
-            $storiesKeys = yield $this->redisClient->lRange("stories:sort:default", 0, -1);
+        \Amp\immediately(function () use ($deferred, $projectId) {
+            $storiesKeys = yield $this->redisClient->lRange($this->getKeyForStoriesSortDefault($projectId), 0, -1);
 
             if (empty($storiesKeys)) {
                 $deferred->succeed([]);
@@ -96,23 +99,23 @@ class StoriesRepository
     }
 
     /**
-     * @param User $user
+     * @param Project $project
      * @param Story $story
      *
      * @return Promise|bool
      */
-    public function create(User $user, Story $story): Promise
+    public function create(Project $project, Story $story): Promise
     {
         $deferred = new Deferred();
 
-        \Amp\immediately(function () use ($deferred, $story, $user) {
+        \Amp\immediately(function () use ($deferred, $story, $project) {
             $storyJson = $this->serializeStoryToJson($story);
 
             $created = yield $this->redisClient->setNx($this->getKeyForStory($story->id), $storyJson);
 
             if ($created) {
                 yield $this->redisClient->lPush(
-                    $this->getKeyForStoriesSortDefault($user),
+                    $this->getKeyForStoriesSortDefault($project->id),
                     $this->getKeyForStory($story->id)
                 );
 
@@ -126,12 +129,11 @@ class StoriesRepository
     }
 
     /**
-     * @param User  $user
      * @param Story $story
      *
      * @return Promise|bool
      */
-    public function save(User $user, Story $story): Promise
+    public function save(Story $story): Promise
     {
         $storyJson = $this->serializeStoryToJson($story);
 
