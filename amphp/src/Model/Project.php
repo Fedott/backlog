@@ -1,7 +1,9 @@
 <?php declare(strict_types = 1);
 namespace Fedot\Backlog\Model;
 
-class Project
+use Fedot\Backlog\Redis\Identifiable;
+
+class Project implements Identifiable
 {
     /**
      * @var string
@@ -12,4 +14,9 @@ class Project
      * @var string
      */
     public $name;
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
 }

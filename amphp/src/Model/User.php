@@ -2,7 +2,9 @@
 
 namespace Fedot\Backlog\Model;
 
-class User
+use Fedot\Backlog\Redis\Identifiable;
+
+class User implements Identifiable
 {
     /**
      * @var string
@@ -13,4 +15,9 @@ class User
      * @var string
      */
     public $password;
+
+    public function getId(): string
+    {
+        return $this->username;
+    }
 }

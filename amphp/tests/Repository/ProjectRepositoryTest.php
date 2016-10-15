@@ -5,6 +5,10 @@ use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
+use Fedot\Backlog\Redis\FetchManager;
+use Fedot\Backlog\Redis\IndexManager;
+use Fedot\Backlog\Redis\KeyGenerator;
+use Fedot\Backlog\Redis\PersistManager;
 use Fedot\Backlog\Repository\ProjectsRepository;
 use Symfony\Component\Serializer\SerializerInterface;
 use Tests\Fedot\Backlog\BaseTestCase;
@@ -37,7 +41,13 @@ class ProjectRepositoryTest extends BaseTestCase
     {
         $this->redisClientMock = $this->createMock(Client::class);
         $this->serializerMock = $this->createMock(SerializerInterface::class);
-        $this->repository = new ProjectsRepository($this->redisClientMock, $this->serializerMock);
+
+        $keyGenerator = new KeyGenerator();
+        $indexManager = new IndexManager($keyGenerator, $this->redisClientMock);
+        $persistManager = new PersistManager($keyGenerator, $this->redisClientMock, $this->serializerMock);
+        $fetchManager = new FetchManager($keyGenerator, $this->redisClientMock, $this->serializerMock);
+
+        $this->repository = new ProjectsRepository($indexManager, $persistManager, $fetchManager);
     }
 
     public function testCreate()
@@ -57,13 +67,13 @@ class ProjectRepositoryTest extends BaseTestCase
 
         $this->redisClientMock->expects($this->once())
             ->method('set')
-            ->with($this->equalTo('projects:entities:random-uuid'), $this->equalTo('json-string'))
+            ->with($this->equalTo('entity:fedot_backlog_model_project:random-uuid'), $this->equalTo('json-string'))
             ->willReturn(new Success(true))
         ;
 
         $this->redisClientMock->expects($this->once())
             ->method('lPush')
-            ->with($this->equalTo('projects:index:by-user:testUser'), $this->equalTo('projects:entities:random-uuid'))
+            ->with($this->equalTo('index:fedot_backlog_model_user:testUser:fedot_backlog_model_project'), $this->equalTo('random-uuid'))
             ->willReturn(new Success(true))
         ;
 
@@ -78,17 +88,23 @@ class ProjectRepositoryTest extends BaseTestCase
         $user = new User();
         $user->username = 'testUser';
 
+        $projectIds = [
+            'id1',
+            'id2',
+            'id3',
+        ];
+
         $projectKeys = [
-            'key1',
-            'key2',
-            'key3',
+            'entity:fedot_backlog_model_project:id1',
+            'entity:fedot_backlog_model_project:id2',
+            'entity:fedot_backlog_model_project:id3',
         ];
 
         $this->redisClientMock
             ->expects($this->once())
             ->method('lRange')
-            ->with($this->equalTo("projects:index:by-user:testUser"), $this->equalTo(0), $this->equalTo(-1))
-            ->willReturn(new Success($projectKeys))
+            ->with($this->equalTo("index:fedot_backlog_model_user:testUser:fedot_backlog_model_project"), $this->equalTo(0), $this->equalTo(-1))
+            ->willReturn(new Success($projectIds))
         ;
 
         $this->redisClientMock->expects($this->once())

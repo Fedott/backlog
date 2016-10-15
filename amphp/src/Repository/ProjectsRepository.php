@@ -3,38 +3,41 @@ namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
 use Amp\Promise;
-use Amp\Redis\Client;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
-use Symfony\Component\Serializer\SerializerInterface;
+use Fedot\Backlog\Redis\FetchManager;
+use Fedot\Backlog\Redis\IndexManager;
+use Fedot\Backlog\Redis\PersistManager;
 
 class ProjectsRepository
 {
     /**
-     * @var Client
+     * @var IndexManager
      */
-    protected $redisClient;
+    protected $indexManager;
 
     /**
-     * @var SerializerInterface
+     * @var PersistManager
      */
-    protected $serializer;
+    protected $persistManager;
 
     /**
-     * @var string
+     * @var FetchManager
      */
-    protected $keyPrefix = "projects";
+    protected $fetchManager;
 
     /**
-     * StoriesRepository constructor.
+     * ProjectsRepository constructor.
      *
-     * @param Client              $redisClient
-     * @param SerializerInterface $serializer
+     * @param IndexManager $indexManager
+     * @param PersistManager $persistManager
+     * @param FetchManager $fetchManager
      */
-    public function __construct(Client $redisClient, SerializerInterface $serializer)
+    public function __construct(IndexManager $indexManager, PersistManager $persistManager, FetchManager $fetchManager)
     {
-        $this->redisClient = $redisClient;
-        $this->serializer  = $serializer;
+        $this->indexManager = $indexManager;
+        $this->persistManager = $persistManager;
+        $this->fetchManager = $fetchManager;
     }
 
     /**
@@ -49,16 +52,9 @@ class ProjectsRepository
         $promisor = new Deferred();
 
         \Amp\immediately(function () use ($promisor, $user, $project) {
-            $json = $this->serializer->serialize($project, 'json');
+            yield $this->persistManager->persist($project);
 
-            $projectKey = $this->getKeyForId($project->id);
-
-            yield $this->redisClient->set($projectKey, $json);
-
-            yield $this->redisClient->lPush(
-                $this->getKeyIndexForUser($user),
-                $projectKey
-            );
+            yield $this->indexManager->addOneToMany($user, $project);
 
             $promisor->succeed(true);
         });
@@ -77,33 +73,14 @@ class ProjectsRepository
         $promisor = new Deferred();
 
         \Amp\immediately(function () use ($promisor, $user) {
-            $projectKeys = yield $this->redisClient->lRange(
-                $this->getKeyIndexForUser($user),
-                0,
-                -1
-            );
+            $projectIds = yield $this->indexManager->getIdsOneToMany($user, Project::class);
 
-            $rawProjects = yield $this->redisClient->mGet($projectKeys);
-
-            $projects = [];
-            foreach ($rawProjects as $rawProject) {
-                $projects[] = $this->serializer->deserialize($rawProject, Project::class, 'json');
-            }
+            $projects = yield $this->fetchManager->fetchCollectionByIds(Project::class, $projectIds);
 
             $promisor->succeed($projects);
         });
 
         return $promisor->promise();
-    }
-
-    private function getKeyForId(string $id): string
-    {
-        return "{$this->keyPrefix}:entities:{$id}";
-    }
-
-    private function getKeyIndexForUser(User $user): string
-    {
-        return "{$this->keyPrefix}:index:by-user:{$user->username}";
     }
 
     /**
@@ -114,15 +91,6 @@ class ProjectsRepository
      */
     public function get(string $id): Promise
     {
-        $promisor = new Deferred();
-
-        \Amp\immediately(function () use ($id, $promisor) {
-            $projectData = yield $this->redisClient->get($this->getKeyForId($id));
-            $project = $this->serializer->deserialize($projectData, Project::class, 'json');
-
-            $promisor->succeed($project);
-        });
-
-        return $promisor->promise();
+        return $this->fetchManager->fetchById(Project::class, $id);
     }
 }
