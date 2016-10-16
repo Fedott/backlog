@@ -3,17 +3,32 @@
 namespace Tests\Fedot\Backlog\Request\Processor;
 
 use Amp\Success;
+use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Model\User;
+use Fedot\Backlog\Payload\StoryPayload;
+use Fedot\Backlog\Repository\ProjectsRepository;
 use Fedot\Backlog\Request\Processor\EditStory;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
+use PHPUnit_Framework_MockObject_MockObject;
+use Symfony\Component\Serializer\Serializer;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class EditStoryTest extends RequestProcessorTestCase
 {
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|ProjectsRepository
+     */
+    protected $projectRepositoryMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|Serializer
+     */
+    protected $serializerMock;
+
     /**
      * @return EditStory
      */
@@ -21,7 +36,14 @@ class EditStoryTest extends RequestProcessorTestCase
     {
         $this->initProcessorMocks();
 
-        return new EditStory($this->storiesRepositoryMock, $this->webSocketAuthServiceMock);
+        $this->projectRepositoryMock = $this->createMock(ProjectsRepository::class);
+        $this->serializerMock = $this->createMock(Serializer::class);
+
+        return new EditStory($this->storiesRepositoryMock,
+            $this->webSocketAuthServiceMock,
+            $this->projectRepositoryMock,
+            $this->serializerMock
+        );
     }
 
     /**
@@ -73,23 +95,16 @@ class EditStoryTest extends RequestProcessorTestCase
         $request->id = 33;
         $request->type = 'edit-story';
         $request->payload = new Story();
-        $request->payload->id = 'jgfjhfgj-erwer-dsfsd';
+        $request->payload->id = 'story-id';
         $request->payload->title = 'story title';
         $request->payload->text = 'story text';
         $request->setClientId(432);
         $request->setResponseSender($this->responseSenderMock);
 
-        $user = new User();
-        $this->webSocketAuthServiceMock->expects($this->once())
-            ->method('getAuthorizedUserForClient')
-            ->with($this->equalTo(432))
-            ->willReturn($user)
-        ;
-
         $storiesRepositoryMock->expects($this->once())
             ->method('save')
-            ->with($this->equalTo($user), $this->callback(function (Story $story) {
-                $this->assertEquals('jgfjhfgj-erwer-dsfsd', $story->id);
+            ->with($this->callback(function (Story $story) {
+                $this->assertEquals('story-id', $story->id);
                 $this->assertEquals('story title', $story->title);
                 $this->assertEquals('story text', $story->text);
 
@@ -107,7 +122,7 @@ class EditStoryTest extends RequestProcessorTestCase
                 /** @var Story $responsePayload */
                 $responsePayload = $response->payload;
                 $this->assertInstanceOf(Story::class, $responsePayload);
-                $this->assertEquals('jgfjhfgj-erwer-dsfsd', $responsePayload->id);
+                $this->assertEquals('story-id', $responsePayload->id);
                 $this->assertEquals('story title', $responsePayload->title);
                 $this->assertEquals('story text', $responsePayload->text);
 
@@ -135,16 +150,9 @@ class EditStoryTest extends RequestProcessorTestCase
         $request->setClientId(432);
         $request->setResponseSender($this->responseSenderMock);
 
-        $user = new User();
-        $this->webSocketAuthServiceMock->expects($this->once())
-            ->method('getAuthorizedUserForClient')
-            ->with($this->equalTo(432))
-            ->willReturn($user)
-        ;
-
         $storiesRepositoryMock->expects($this->once())
             ->method('save')
-            ->with($this->equalTo($user), $this->callback(function (Story $story) {
+            ->with($this->callback(function (Story $story) {
                 $this->assertEquals('jgfjhfgj-erwer-dsfsd', $story->id);
                 $this->assertEquals('story title', $story->title);
                 $this->assertEquals('story text', $story->text);

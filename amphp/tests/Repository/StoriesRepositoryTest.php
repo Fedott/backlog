@@ -11,6 +11,7 @@ use Fedot\Backlog\Redis\FetchManager;
 use Fedot\Backlog\Redis\IndexManager;
 use Fedot\Backlog\Redis\KeyGenerator;
 use Fedot\Backlog\Redis\PersistManager;
+use Fedot\Backlog\Repository\ProjectsRepository;
 use Fedot\Backlog\Repository\StoriesRepository;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -18,6 +19,11 @@ use Tests\Fedot\Backlog\BaseTestCase;
 
 class StoriesRepositoryTest extends BaseTestCase
 {
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|ProjectsRepository
+     */
+    protected $projectRepositoryMock;
+
     /**
      * @var PHPUnit_Framework_MockObject_MockObject|Client
      */
@@ -40,8 +46,9 @@ class StoriesRepositoryTest extends BaseTestCase
         $indexManager = new IndexManager($keyGenerator, $this->redisClientMock);
         $persistManager = new PersistManager($keyGenerator, $this->redisClientMock, $this->serializerMock);
         $fetchManager = new FetchManager($keyGenerator, $this->redisClientMock, $this->serializerMock);
+        $this->projectRepositoryMock = $this->createMock(ProjectsRepository::class);
 
-        $repository = new StoriesRepository($fetchManager, $persistManager, $indexManager);
+        $repository = new StoriesRepository($fetchManager, $persistManager, $indexManager, $this->projectRepositoryMock);
 
         return $repository;
     }
@@ -227,6 +234,59 @@ class StoriesRepositoryTest extends BaseTestCase
         ;
 
         $resultPromise = $repository->delete($project, $story);
+        $result = \Amp\wait($resultPromise);
+        $this->assertEquals(true, $result);
+    }
+
+    public function testDeleteByIds()
+    {
+        $project = new Project();
+        $project->id = 'project-id';
+
+        $story = new Story();
+        $story->id = 'story-id';
+
+        $repository = $this->getRepositoryInstance();
+
+        $this->projectRepositoryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('project-id')
+            ->willReturn(new Success($project))
+        ;
+
+        $this->redisClientMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('entity:fedot_backlog_model_story:story-id')
+            ->willReturn(new Success('{story-json}'))
+        ;
+
+        $this->serializerMock->expects($this->once())
+            ->method('deserialize')
+            ->with('{story-json}', Story::class, "json")
+            ->willReturn($story)
+        ;
+
+        $redisDelPromise = new Success(1);
+        $redisLRemPromise = new Success(true);
+        $this->redisClientMock->expects($this->once())
+            ->method('del')
+            ->with('entity:fedot_backlog_model_story:story-id')
+            ->willReturn($redisDelPromise)
+        ;
+
+        $this->redisClientMock->expects($this->once())
+            ->method('lRem')
+            ->with(
+                "index:fedot_backlog_model_project:project-id:fedot_backlog_model_story",
+                "entity:fedot_backlog_model_story:story-id",
+                0
+            )
+            ->willReturn($redisLRemPromise)
+        ;
+
+        $resultPromise = $repository->deleteByProjectIdStoryId($project->id, $story->id);
         $result = \Amp\wait($resultPromise);
         $this->assertEquals(true, $result);
     }

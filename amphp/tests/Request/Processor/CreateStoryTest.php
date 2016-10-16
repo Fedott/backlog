@@ -3,19 +3,20 @@
 namespace Tests\Fedot\Backlog\Request\Processor;
 
 use Amp\Success;
+use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Model\User;
+use Fedot\Backlog\Payload\StoryPayload;
+use Fedot\Backlog\Repository\ProjectsRepository;
 use Fedot\Backlog\Request\Processor\CreateStory;
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
-use Fedot\Backlog\Repository\StoriesRepository;
-use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use PHPUnit_Framework_MockObject_MockObject;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;
-use Tests\Fedot\Backlog\BaseTestCase;
+use Symfony\Component\Serializer\Serializer;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class CreateStoryTest extends RequestProcessorTestCase
@@ -26,6 +27,16 @@ class CreateStoryTest extends RequestProcessorTestCase
     protected $uuidFactoryMock;
 
     /**
+     * @var PHPUnit_Framework_MockObject_MockObject|ProjectsRepository
+     */
+    protected $projectRepositoryMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|Serializer
+     */
+    protected $serializerMock;
+
+    /**
      * @return CreateStory
      */
     protected function getProcessorInstance()
@@ -33,8 +44,15 @@ class CreateStoryTest extends RequestProcessorTestCase
         $this->initProcessorMocks();
 
         $this->uuidFactoryMock = $this->createMock(UuidFactory::class);
+        $this->projectRepositoryMock = $this->createMock(ProjectsRepository::class);
+        $this->serializerMock = $this->createMock(Serializer::class);
 
-        return new CreateStory($this->storiesRepositoryMock, $this->uuidFactoryMock, $this->webSocketAuthServiceMock);
+        return new CreateStory($this->storiesRepositoryMock,
+            $this->projectRepositoryMock,
+            $this->uuidFactoryMock,
+            $this->serializerMock,
+            $this->webSocketAuthServiceMock
+        );
     }
 
     /**
@@ -70,27 +88,35 @@ class CreateStoryTest extends RequestProcessorTestCase
 
     public function testProcess()
     {
+        $processor = $this->getProcessorInstance();
+
+        $project = new Project();
+        $project->id = 'project-id';
+
+
+        $this->projectRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with('project-id')
+            ->willReturn(new Success($project))
+        ;
+
         $this->responseSenderMock = $this->createMock(ResponseSender::class);
         $uuidMock = $this->createMock(Uuid::class);
-
-        $processor = $this->getProcessorInstance();
 
         $request = new Request();
         $request->id = 33;
         $request->type = 'create-story';
-        $request->payload = new Story();
-        $request->payload->title = 'story title';
-        $request->payload->text = 'story text';
+        $request->payload = new StoryPayload();
+        $request->payload->story = new Story();
+        $request->payload->story->title = 'story title';
+        $request->payload->story->text = 'story text';
+        $request->payload->projectId = 'project-id';
         $request->setClientId(432);
         $request->setResponseSender($this->responseSenderMock);
 
-        $user = new User();
-
-        $this->webSocketAuthServiceMock
-            ->expects($this->once())
-            ->method('getAuthorizedUserForClient')
-            ->with($this->equalTo(432))
-            ->willReturn($user)
+        $this->serializerMock
+            ->method('denormalize')
+            ->willReturn($request->payload->story)
         ;
 
         $this->uuidFactoryMock
@@ -106,7 +132,7 @@ class CreateStoryTest extends RequestProcessorTestCase
 
         $this->storiesRepositoryMock->expects($this->once())
             ->method('create')
-            ->with($this->equalTo($user), $this->callback(function (Story $story) {
+            ->with($this->equalTo($project), $this->callback(function (Story $story) {
                 $this->assertEquals('UUIDSuperUnique', $story->id);
                 $this->assertEquals('story title', $story->title);
                 $this->assertEquals('story text', $story->text);
@@ -143,22 +169,29 @@ class CreateStoryTest extends RequestProcessorTestCase
 
         $processor = $this->getProcessorInstance();
 
+        $project = new Project();
+        $project->id = 'project-id';
+
+        $this->projectRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with('project-id')
+            ->willReturn(new Success($project))
+        ;
+
         $request = new Request();
         $request->id = 33;
         $request->type = 'create-story';
-        $request->payload = new Story();
-        $request->payload->title = 'story title';
-        $request->payload->text = 'story text';
+        $request->payload = new StoryPayload();
+        $request->payload->story = new Story();
+        $request->payload->story->title = 'story title';
+        $request->payload->story->text = 'story text';
+        $request->payload->projectId = 'project-id';
         $request->setClientId(432);
         $request->setResponseSender($this->responseSenderMock);
 
-        $user = new User();
-
-        $this->webSocketAuthServiceMock
-            ->expects($this->once())
-            ->method('getAuthorizedUserForClient')
-            ->with($this->equalTo(432))
-            ->willReturn($user)
+        $this->serializerMock
+            ->method('denormalize')
+            ->willReturn($request->payload->story)
         ;
 
         $this->uuidFactoryMock
@@ -174,7 +207,7 @@ class CreateStoryTest extends RequestProcessorTestCase
 
         $this->storiesRepositoryMock->expects($this->once())
             ->method('create')
-            ->with($this->equalTo($user), $this->callback(function (Story $story) {
+            ->with($this->equalTo($project), $this->callback(function (Story $story) {
                 $this->assertEquals('UUIDSuperUnique', $story->id);
                 $this->assertEquals('story title', $story->title);
                 $this->assertEquals('story text', $story->text);

@@ -3,10 +3,10 @@ namespace Tests\Fedot\Backlog\Request\Processor;
 
 use Amp\Success;
 use Fedot\Backlog\Model\Story;
-use Fedot\Backlog\Model\User;
+use Fedot\Backlog\Payload\ProjectIdPayload;
+use Fedot\Backlog\Payload\StoriesPayload;
 use Fedot\Backlog\Request\Processor\GetStories;
 use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Payload\StoriesPayload;
 use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
@@ -69,19 +69,14 @@ class GetStoriesTest extends RequestProcessorTestCase
         $request = new Request();
         $request->id = 34;
         $request->type = 'get-stories';
+        $request->payload = new ProjectIdPayload();
+        $request->payload->projectId = 'project-id';
         $request->setClientId(777);
         $request->setResponseSender($this->responseSenderMock);
 
-        $user = new User();
-        $this->webSocketAuthServiceMock->expects($this->once())
-            ->method('getAuthorizedUserForClient')
-            ->with($this->equalTo(777))
-            ->willReturn($user)
-        ;
-
         $this->storiesRepositoryMock->expects($this->once())
-            ->method('getAll')
-            ->with($this->equalTo($user))
+            ->method('getAllByProjectId')
+            ->with($this->equalTo('project-id'))
             ->willReturn(new Success($stories))
         ;
 

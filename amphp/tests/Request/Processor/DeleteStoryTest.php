@@ -64,11 +64,15 @@ class DeleteStoryTest extends RequestProcessorTestCase
         $request->setClientId(777);
         $request->setResponseSender($this->responseSenderMock);
         $request->payload = new DeleteStoryPayload();
-        $request->payload->storyId = 'storyId4534';
+        $request->payload->storyId = 'story-id';
+        $request->payload->projectId = 'project-id';
 
         $this->storiesRepositoryMock->expects($this->once())
-            ->method('delete')
-            ->with($this->equalTo('storyId4534'))
+            ->method('deleteByProjectIdStoryId')
+            ->with(
+                $this->equalTo('project-id'),
+                $this->equalTo('story-id')
+            )
             ->willReturn(new Success(true))
         ;
 

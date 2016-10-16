@@ -74,7 +74,7 @@ class GetStories implements ProcessorInterface
         /** @var ProjectIdPayload $payload */
         $payload = $request->payload;
         $projectId = $payload->projectId;
-        $stories = yield $this->storiesRepository->getAll($projectId);
+        $stories = yield $this->storiesRepository->getAllByProjectId($projectId);
 
         $response = new Response();
         $response->requestId = $request->id;

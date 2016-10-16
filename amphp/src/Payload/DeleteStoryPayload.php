@@ -9,4 +9,9 @@ class DeleteStoryPayload implements PayloadInterface
      * @var string
      */
     public $storyId;
+
+    /**
+     * @var string
+     */
+    public $projectId;
 }

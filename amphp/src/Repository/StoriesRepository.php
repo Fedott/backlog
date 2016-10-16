@@ -13,7 +13,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class StoriesRepository
 {
-
     /**
      * @var FetchManager
      */
@@ -30,47 +29,41 @@ class StoriesRepository
     protected $indexManager;
 
     /**
-     * StoriesRepository constructor.
-     *
+     * @var ProjectsRepository
+     */
+    protected $projectRepository;
+
+    /**
      * @param FetchManager $fetchManager
      * @param PersistManager $persistManager
      * @param IndexManager $indexManager
+     * @param ProjectsRepository $projectRepository
      */
-    public function __construct(FetchManager $fetchManager, PersistManager $persistManager, IndexManager $indexManager)
-    {
+    public function __construct(
+        FetchManager $fetchManager,
+        PersistManager $persistManager,
+        IndexManager $indexManager,
+        ProjectsRepository $projectRepository
+    ) {
         $this->fetchManager = $fetchManager;
         $this->persistManager = $persistManager;
         $this->indexManager = $indexManager;
+        $this->projectRepository = $projectRepository;
     }
 
-    /**
-     * @param string $storyId
-     *
-     * @return string
-     */
-    protected function getKeyForStory(string $storyId)
+    public function getAllByProjectId($projectId): Promise
     {
-        return "{$this->storyKeyPrefix}{$storyId}";
-    }
+        $deferred = new Deferred;
 
-    /**
-     * @param string $projectId
-     *
-     * @return string
-     */
-    protected function getKeyForStoriesSortDefault(string $projectId): string
-    {
-        return "project:{$projectId}:stories:sorted:default";
-    }
+        \Amp\immediately(function () use ($deferred, $projectId) {
+            $project = yield $this->projectRepository->get($projectId);
 
-    /**
-     * @param Story $story
-     *
-     * @return string
-     */
-    protected function serializeStoryToJson(Story $story): string
-    {
-        return $this->serializer->serialize($story, 'json');
+            $stories = yield $this->getAllByProject($project);
+
+            $deferred->succeed($stories);
+        });
+
+        return $deferred->promise();
     }
 
     /**
@@ -150,6 +143,22 @@ class StoriesRepository
         return $promisor->promise();
     }
 
+    public function deleteByProjectIdStoryId(string $projectId, string $storyId): Promise
+    {
+        $promisor = new Deferred();
+
+        \Amp\immediately(function() use ($promisor, $projectId, $storyId) {
+            $project = yield $this->projectRepository->get($projectId);
+            $story = yield $this->get($storyId);
+
+            $result = yield $this->delete($project, $story);
+
+            $promisor->succeed($result);
+        });
+
+        return $promisor->promise();
+    }
+
     /**
      * @param Project $project
      * @param Story $story
@@ -160,5 +169,10 @@ class StoriesRepository
     public function move(Project $project, Story $story, Story $positionStory)
     {
         return $this->indexManager->moveValueOnOneToManyIndex($project, $story, $positionStory);
+    }
+
+    public function get(string $storyId): Promise
+    {
+        return $this->fetchManager->fetchById(Story::class, $storyId);
     }
 }
