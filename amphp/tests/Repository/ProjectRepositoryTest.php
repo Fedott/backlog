@@ -66,7 +66,7 @@ class ProjectRepositoryTest extends BaseTestCase
         ;
 
         $this->redisClientMock->expects($this->once())
-            ->method('set')
+            ->method('setNx')
             ->with($this->equalTo('entity:fedot_backlog_model_project:random-uuid'), $this->equalTo('json-string'))
             ->willReturn(new Success(true))
         ;

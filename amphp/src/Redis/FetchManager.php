@@ -4,6 +4,7 @@ namespace Fedot\Backlog\Redis;
 use Amp\Deferred;
 use Amp\Promise;
 use Amp\Redis\Client;
+use Amp\Success;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class FetchManager
@@ -49,9 +50,14 @@ class FetchManager
 
     public function fetchCollectionByIds(string $className, array $ids): Promise
     {
+        if (empty($ids)) {
+            return new Success([]);
+        }
+
         $promisor = new Deferred();
 
         \Amp\immediately(function () use ($promisor, $className, $ids) {
+
             $keys = array_map(function ($id) use ($className) {
                 return $this->keyGenerator->getKeyForClassNameId($className, $id);
             }, $ids);

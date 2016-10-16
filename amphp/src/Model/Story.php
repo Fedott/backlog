@@ -2,8 +2,9 @@
 namespace Fedot\Backlog\Model;
 
 use Fedot\Backlog\PayloadInterface;
+use Fedot\Backlog\Redis\Identifiable;
 
-class Story implements PayloadInterface
+class Story implements PayloadInterface, Identifiable
 {
     /**
      * @var string
@@ -19,4 +20,14 @@ class Story implements PayloadInterface
      * @var string
      */
     public $text;
+
+    /**
+     * @var string
+     */
+    public $projectId;
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
 }

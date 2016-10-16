@@ -29,12 +29,21 @@ class PersistManager
         $this->serializer = $serializer;
     }
 
-    public function persist(Identifiable $identifiable): Promise
+    public function persist(Identifiable $identifiable, bool $update = false): Promise
     {
         $json = $this->serializer->serialize($identifiable, 'json');
 
         $modelKey = $this->keyGenerator->getKeyForIdentifiable($identifiable);
 
-        return $this->redisClient->set($modelKey, $json);
+        if ($update) {
+            return $this->redisClient->set($modelKey, $json);
+        } else {
+            return $this->redisClient->setNx($modelKey, $json);
+        }
+    }
+
+    public function remove(Identifiable $identifiable): Promise
+    {
+        return $this->redisClient->del($this->keyGenerator->getKeyForIdentifiable($identifiable));
     }
 }

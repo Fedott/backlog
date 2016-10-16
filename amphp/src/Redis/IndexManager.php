@@ -51,9 +51,9 @@ class IndexManager
         return $this->getIdsFromIndex($indexName);
     }
 
-    public function removeFromIndex(string $indexName, string $id): Promise
+    public function removeFromIndex(string $indexName, string $key): Promise
     {
-        return $this->redisClient->lRem($indexName, $id);
+        return $this->redisClient->lRem($indexName, $key);
     }
 
     public function moveValueOnIndex(string $indexName, string $targetId, string $positionId): Promise
@@ -61,7 +61,7 @@ class IndexManager
         $promisor = new Deferred();
 
         \Amp\immediately(function () use ($promisor, $targetId, $positionId, $indexName) {
-            yield $this->redisClient->lRem($indexName, $targetId, 1);
+            yield $this->redisClient->lRem($indexName, $targetId, 0);
             $insertResult = yield $this->redisClient->lInsert(
                 $indexName,
                 "before",
@@ -79,5 +79,27 @@ class IndexManager
         });
 
         return $promisor->promise();
+    }
+
+    public function moveValueOnOneToManyIndex(
+        Identifiable $forModel,
+        Identifiable $model,
+        Identifiable $positionModel
+    ): Promise
+    {
+        $indexName = $this->keyGenerator->getOneToManeIndexName($forModel, $model);
+
+        return $this->moveValueOnIndex($indexName,
+            $this->keyGenerator->getKeyForIdentifiable($model),
+            $this->keyGenerator->getKeyForIdentifiable($positionModel)
+        );
+    }
+
+    public function removeOneToMany(Identifiable $forModel, Identifiable $model): Promise
+    {
+        $indexName = $this->keyGenerator->getOneToManeIndexName($forModel, $model);
+        $modelKey = $this->keyGenerator->getKeyForIdentifiable($model);
+
+        return $this->removeFromIndex($indexName, $modelKey);
     }
 }

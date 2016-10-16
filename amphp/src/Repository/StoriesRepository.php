@@ -6,35 +6,41 @@ use Amp\Deferred;
 use Amp\Redis\Client;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
+use Fedot\Backlog\Redis\FetchManager;
+use Fedot\Backlog\Redis\IndexManager;
+use Fedot\Backlog\Redis\PersistManager;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class StoriesRepository
 {
-    /**
-     * @var Client
-     */
-    protected $redisClient;
 
     /**
-     * @var SerializerInterface
+     * @var FetchManager
      */
-    protected $serializer;
+    protected $fetchManager;
 
     /**
-     * @var string
+     * @var PersistManager
      */
-    protected $storyKeyPrefix = "story:";
+    protected $persistManager;
+
+    /**
+     * @var IndexManager
+     */
+    protected $indexManager;
 
     /**
      * StoriesRepository constructor.
      *
-     * @param Client              $redisClient
-     * @param SerializerInterface $serializer
+     * @param FetchManager $fetchManager
+     * @param PersistManager $persistManager
+     * @param IndexManager $indexManager
      */
-    public function __construct(Client $redisClient, SerializerInterface $serializer)
+    public function __construct(FetchManager $fetchManager, PersistManager $persistManager, IndexManager $indexManager)
     {
-        $this->redisClient = $redisClient;
-        $this->serializer  = $serializer;
+        $this->fetchManager = $fetchManager;
+        $this->persistManager = $persistManager;
+        $this->indexManager = $indexManager;
     }
 
     /**
@@ -68,29 +74,19 @@ class StoriesRepository
     }
 
     /**
-     * @param string $projectId
+     * @param Project $project
      *
      * @return Promise
      * @yield Story[]
      */
-    public function getAll(string $projectId): Promise
+    public function getAllByProject(Project $project): Promise
     {
         $deferred = new Deferred;
 
-        \Amp\immediately(function () use ($deferred, $projectId) {
-            $storiesKeys = yield $this->redisClient->lRange($this->getKeyForStoriesSortDefault($projectId), 0, -1);
+        \Amp\immediately(function () use ($deferred, $project) {
+            $storiesIds = yield $this->indexManager->getIdsOneToMany($project, Story::class);
 
-            if (empty($storiesKeys)) {
-                $deferred->succeed([]);
-
-                return;
-            }
-
-            $storiesRaw = yield $this->redisClient->mGet($storiesKeys);
-
-            $stories = array_map(function ($storyRaw) {
-                return $this->serializer->deserialize($storyRaw, Story::class, 'json');
-            }, $storiesRaw);
+            $stories = $this->fetchManager->fetchCollectionByIds(Story::class, $storiesIds);
 
             $deferred->succeed($stories);
         });
@@ -106,26 +102,21 @@ class StoriesRepository
      */
     public function create(Project $project, Story $story): Promise
     {
-        $deferred = new Deferred();
+        $promisor = new Deferred();
 
-        \Amp\immediately(function () use ($deferred, $story, $project) {
-            $storyJson = $this->serializeStoryToJson($story);
-
-            $created = yield $this->redisClient->setNx($this->getKeyForStory($story->id), $storyJson);
+        \Amp\immediately(function () use ($promisor, $story, $project) {
+            $created = yield $this->persistManager->persist($story);
 
             if ($created) {
-                yield $this->redisClient->lPush(
-                    $this->getKeyForStoriesSortDefault($project->id),
-                    $this->getKeyForStory($story->id)
-                );
+                yield $this->indexManager->addOneToMany($project, $story);
 
-                $deferred->succeed(true);
+                $promisor->succeed(true);
             } else {
-                $deferred->succeed(false);
+                $promisor->succeed(false);
             }
         });
 
-        return $deferred->promise();
+        return $promisor->promise();
     }
 
     /**
@@ -135,61 +126,39 @@ class StoriesRepository
      */
     public function save(Story $story): Promise
     {
-        $storyJson = $this->serializeStoryToJson($story);
-
-        return $this->redisClient->set($this->getKeyForStory($story->id), $storyJson);
+        return $this->persistManager->persist($story, true);
     }
 
     /**
-     * @param string $storyId
+     * @param Project $project
+     * @param Story $story
      *
      * @return Promise|bool
      */
-    public function delete(string $storyId): Promise
+    public function delete(Project $project, Story $story): Promise
     {
-        $deferred = new Deferred();
+        $promisor = new Deferred();
 
-        \Amp\immediately(function() use ($deferred, $storyId) {
-            yield $this->redisClient->lRem("stories:sort:default", $this->getKeyForStory($storyId), 1);
+        \Amp\immediately(function() use ($promisor, $story, $project) {
+            yield $this->indexManager->removeOneToMany($project, $story);
 
-            yield $this->redisClient->del($this->getKeyForStory($storyId));
+            yield $this->persistManager->remove($story);
 
-            $deferred->succeed(true);
+            $promisor->succeed(true);
         });
 
-        return $deferred->promise();
+        return $promisor->promise();
     }
 
     /**
-     * @param string $storyId
-     * @param string $afterStoryId
+     * @param Project $project
+     * @param Story $story
+     * @param Story $positionStory
      *
      * @return Promise|bool
      */
-    public function move(string $storyId, string $afterStoryId)
+    public function move(Project $project, Story $story, Story $positionStory)
     {
-        $deferred = new Deferred();
-
-        \Amp\immediately(function () use ($deferred, $storyId, $afterStoryId) {
-            $storyKey = $this->getKeyForStory($storyId);
-
-            yield $this->redisClient->lRem("stories:sort:default", $storyKey, 1);
-            $insertResult = yield $this->redisClient->lInsert(
-                "stories:sort:default",
-                "before",
-                $this->getKeyForStory($afterStoryId),
-                $storyKey
-            );
-
-            if ($insertResult !== -1) {
-                $deferred->succeed(true);
-            } else {
-                yield $this->redisClient->lPush("stories:sort:default", $storyKey);
-
-                $deferred->succeed(false);
-            }
-        });
-
-        return $deferred->promise();
+        return $this->indexManager->moveValueOnOneToManyIndex($project, $story, $positionStory);
     }
 }
