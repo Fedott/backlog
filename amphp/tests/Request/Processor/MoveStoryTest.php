@@ -65,12 +65,13 @@ class MoveStoryTest extends RequestProcessorTestCase
         $request->payload = new MoveStoryPayload();
         $request->payload->storyId = 'target-story-id';
         $request->payload->beforeStoryId = 'before-story-id';
+        $request->payload->projectId = 'project-id';
         $request->setClientId(432);
         $request->setResponseSender($this->responseSenderMock);
 
         $this->storiesRepositoryMock->expects($this->once())
-            ->method('move')
-            ->with('target-story-id', 'before-story-id')
+            ->method('moveByIds')
+            ->with('project-id', 'target-story-id', 'before-story-id')
             ->willReturn(new Success(true))
         ;
 

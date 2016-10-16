@@ -61,7 +61,7 @@ class DeleteStory implements ProcessorInterface
     public function process(Request $request): Generator
     {
         /** @var DeleteStoryPayload $request->payload */
-        $result = yield $this->storiesRepository->deleteByProjectIdStoryId(
+        $result = yield $this->storiesRepository->deleteByIds(
             $request->payload->projectId,
             $request->payload->storyId
         );

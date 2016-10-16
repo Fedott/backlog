@@ -65,7 +65,11 @@ class MoveStory implements ProcessorInterface
         /** @var MoveStoryPayload $payload */
         $payload = $request->payload;
 
-        $result = yield $this->storiesRepository->move($payload->storyId, $payload->beforeStoryId);
+        $result = yield $this->storiesRepository->moveByIds(
+            $payload->projectId,
+            $payload->storyId,
+            $payload->beforeStoryId
+        );
 
         $response = new Response();
         $response->requestId = $request->id;

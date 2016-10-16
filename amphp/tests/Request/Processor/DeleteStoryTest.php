@@ -68,7 +68,7 @@ class DeleteStoryTest extends RequestProcessorTestCase
         $request->payload->projectId = 'project-id';
 
         $this->storiesRepositoryMock->expects($this->once())
-            ->method('deleteByProjectIdStoryId')
+            ->method('deleteByIds')
             ->with(
                 $this->equalTo('project-id'),
                 $this->equalTo('story-id')

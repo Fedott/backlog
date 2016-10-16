@@ -143,7 +143,7 @@ class StoriesRepository
         return $promisor->promise();
     }
 
-    public function deleteByProjectIdStoryId(string $projectId, string $storyId): Promise
+    public function deleteByIds(string $projectId, string $storyId): Promise
     {
         $promisor = new Deferred();
 
@@ -166,9 +166,26 @@ class StoriesRepository
      *
      * @return Promise|bool
      */
-    public function move(Project $project, Story $story, Story $positionStory)
+    public function move(Project $project, Story $story, Story $positionStory): Promise
     {
         return $this->indexManager->moveValueOnOneToManyIndex($project, $story, $positionStory);
+    }
+
+    public function moveByIds(string $projectId, string $storyId, string $positionStoryId): Promise
+    {
+        $promisor = new Deferred();
+
+        \Amp\immediately(function() use ($promisor, $projectId, $storyId, $positionStoryId) {
+            $project = yield $this->projectRepository->get($projectId);
+            $story = yield $this->get($storyId);
+            $positionStory = yield $this->get($positionStoryId);
+
+            $result = yield $this->move($project, $story, $positionStory);
+
+            $promisor->succeed($result);
+        });
+
+        return $promisor->promise();
     }
 
     public function get(string $storyId): Promise

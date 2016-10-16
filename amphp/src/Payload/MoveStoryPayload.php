@@ -12,7 +12,12 @@ class MoveStoryPayload implements PayloadInterface
     public $storyId;
 
     /**
-     * @var
+     * @var string
      */
     public $beforeStoryId;
+
+    /**
+     * @var string
+     */
+    public $projectId;
 }

@@ -347,7 +347,7 @@ class StoriesRepositoryTest extends BaseTestCase
             ->willReturn($redisLRemPromise)
         ;
 
-        $resultPromise = $repository->deleteByProjectIdStoryId($project->id, $story->id);
+        $resultPromise = $repository->deleteByIds($project->id, $story->id);
         $result = \Amp\wait($resultPromise);
         $this->assertEquals(true, $result);
     }
@@ -404,61 +404,5 @@ class StoriesRepositoryTest extends BaseTestCase
         $resultPromise = $repository->move($project, $story, $positionStory);
         $result = \Amp\wait($resultPromise);
         $this->assertEquals(true, $result);
-    }
-
-    public function testMoveNegativeRemove()
-    {
-        $this->markTestSkipped("Temporary");
-        $redisClientMock = $this->createMock(Client::class);
-        $serializerMock = $this->createMock(SerializerInterface::class);
-
-        $repository = new StoriesRepository($redisClientMock, $serializerMock);
-
-        $redisClientMock->expects($this->once())
-            ->method('lRem')
-            ->with("stories:sort:default", 'story:storyId333', 1)
-            ->willReturn(new Success(0))
-        ;
-
-        $redisClientMock->expects($this->once())
-            ->method('lInsert')
-            ->with("stories:sort:default", 'before', "story:storyId888", "story:storyId333")
-            ->willReturn(new Success(3))
-        ;
-
-        $resultPromise = $repository->move('storyId333', 'storyId888');
-        $result = \Amp\wait($resultPromise);
-        $this->assertEquals(true, $result);
-    }
-
-    public function testMoveNegativeInsert()
-    {
-        $this->markTestSkipped("Temporary");
-        $redisClientMock = $this->createMock(Client::class);
-        $serializerMock = $this->createMock(SerializerInterface::class);
-
-        $repository = new StoriesRepository($redisClientMock, $serializerMock);
-
-        $redisClientMock->expects($this->once())
-            ->method('lRem')
-            ->with("stories:sort:default", 'story:storyId333', 1)
-            ->willReturn(new Success(1))
-        ;
-
-        $redisClientMock->expects($this->once())
-            ->method('lInsert')
-            ->with("stories:sort:default", 'before', "story:storyId888", "story:storyId333")
-            ->willReturn(new Success(-1))
-        ;
-
-        $redisClientMock->expects($this->once())
-            ->method('lPush')
-            ->with('stories:sort:default', 'story:storyId333')
-            ->willReturn(new Success(1))
-        ;
-
-        $resultPromise = $repository->move('storyId333', 'storyId888');
-        $result = \Amp\wait($resultPromise);
-        $this->assertEquals(false, $result);
     }
 }
