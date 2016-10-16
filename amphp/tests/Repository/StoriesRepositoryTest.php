@@ -109,6 +109,67 @@ class StoriesRepositoryTest extends BaseTestCase
         }, $result);
     }
 
+    public function testGetAllByProjectId()
+    {
+        $repository = $this->getRepositoryInstance();
+
+        $project = new Project();
+        $project->id = 'project-id';
+
+        $ids = [
+            "story-id1",
+            "story-id2",
+            "story-id3",
+        ];
+        $keys = [
+            "entity:fedot_backlog_model_story:story-id1",
+            "entity:fedot_backlog_model_story:story-id2",
+            "entity:fedot_backlog_model_story:story-id3",
+        ];
+        $this->projectRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with('project-id')
+            ->willReturn(new Success($project))
+        ;
+        $this->redisClientMock->expects($this->once())
+            ->method('lRange')
+            ->with($this->equalTo("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story"), $this->equalTo(0), $this->equalTo(-1))
+            ->willReturn(new Success($ids))
+        ;
+        $this->redisClientMock->expects($this->once())
+            ->method('mGet')
+            ->with($this->equalTo($keys))
+            ->willReturn(new Success([
+                "first",
+                "second",
+                "story 3",
+            ]))
+        ;
+        $this->serializerMock->expects($this->exactly(3))
+            ->method('deserialize')
+            ->withConsecutive(
+                ["first", Story::class, "json"],
+                ["second", Story::class, "json"],
+                ["story 3", Story::class, "json"]
+            )
+            ->willReturnOnConsecutiveCalls(
+                new Story(),
+                new Story(),
+                new Story()
+            )
+        ;
+
+        $resultPromise = $repository->getAllByProjectId($project->id);
+        $this->assertInstanceOf(Promise::class, $resultPromise);
+
+        $result = \Amp\wait($resultPromise);
+
+        $this->assertCount(3, $result);
+        array_map(function($story) {
+            $this->assertInstanceOf(Story::class, $story);
+        }, $result);
+    }
+
     public function testGetAllEmpty()
     {
         $repository = $this->getRepositoryInstance();
