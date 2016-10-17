@@ -22,7 +22,6 @@ module.exports = {
             'react-nl2br',
             'react-router',
             'core-js',
-            'regenerator-runtime',
             'babel-polyfill',
             './node_modules/core-js/fn/regexp/escape.js',
             './node_modules/react/lib/update.js',
