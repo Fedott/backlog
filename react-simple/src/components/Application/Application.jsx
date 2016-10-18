@@ -1,4 +1,5 @@
 import * as React from "react";
+import ReactDOM from 'react-dom';
 import {
     Layout,
     Header,
@@ -15,12 +16,12 @@ import {
 } from 'react-mdl';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
+import { Router, Route, IndexRoute, Link, hashHistory } from 'react-router'
 
 import StoriesList from '../Story/StoriesList.jsx';
 import UserLoginPanel from '../UserLoginPanel/UserLoginPanel.jsx';
 
 // Import styles.
-import '../../../node_modules/material-design-lite/material.min.js';
 import User from "./User";
 
 class Application extends React.Component {
@@ -76,6 +77,7 @@ class Application extends React.Component {
     }
 
     render() {
+
         return (
             <div>
                 <Layout fixedHeader>
@@ -85,19 +87,13 @@ class Application extends React.Component {
                             onLogout={this.onLogout.bind(this)}
                         />
                         <Navigation>
-                            <a href="" onClick={this.changeFilter.bind(this)} data="all">All stories</a>
-                            <a href="" onClick={this.changeFilter.bind(this)} data="notCompleted">Not completed stories</a>
-                            <a href="" onClick={this.changeFilter.bind(this)} data="completed">Completed stories</a>
+                            <Link to="/stories/all">All stories</Link>
+                            <Link to="/stories/notCompleted">Not completed stories</Link>
+                            <Link to="/stories/completed">Completed stories</Link>
                         </Navigation>
                     </Header>
                     <Content style={{width: "900px", margin: "0px auto", display: "block"}}>
-                        {this.state.isLogged
-                            && <StoriesList createForm={this.state.createForm}/>}
-                        {this.state.isLogged
-                            && <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
-                                    <Icon name="add" />
-                                </FABButton>
-                        }
+                        {this.props.children}
                     </Content>
                 </Layout>
             </div>
