@@ -7,19 +7,20 @@ import webSocketClient from '../../libraries/WebSocket/WebSocketClient.js';
 class StoriesList extends React.Component {
     constructor(props, context:any) {
         super(props, context);
-
+        console.log(props);
         this.moveCard = this.moveCard.bind(this);
 
         this.state = {
             storiesCollection: [],
             createForm: props.createForm || false,
+            projectId: props.projectId,
             filter: props.statusFilter || 'all'
         };
 
         var request = {
             type: "get-stories",
             payload: {
-                projectId: "1"
+                projectId: this.state.projectId,
             }
         };
         webSocketClient.sendRequest(request).then(function (response) {
@@ -61,12 +62,13 @@ class StoriesList extends React.Component {
     render() {
         var createForm = null;
         if (this.state.createForm) {
-            createForm = <StoryItem edit={true} isCreateForm={true} index={-1}/>;
+            createForm = <StoryItem edit={true} isCreateForm={true} projectId={this.state.projectId} index={-1}/>;
         }
 
         var stories = this.state.storiesCollection.map((story, i) => {
             return <StoryItem
                 story={story}
+                projectId={this.state.projectId}
                 key={story.id}
                 index={i}
                 moveCard={this.moveCard}

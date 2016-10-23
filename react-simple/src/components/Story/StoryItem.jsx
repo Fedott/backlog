@@ -45,6 +45,7 @@ class StoryItem extends React.Component {
         story: React.PropTypes.object,
         edit: React.PropTypes.bool,
         isCreateForm: React.PropTypes.bool,
+        projectId: React.PropTypes.string.isRequired,
 
         index: React.PropTypes.number.isRequired,
 
@@ -60,6 +61,7 @@ class StoryItem extends React.Component {
 
         this.state = {
             story: props.story,
+            projectId: props.projectId,
             edit: props.edit || false,
             isCreateForm: props.isCreateForm || false,
             isDeleted: false,
@@ -97,6 +99,7 @@ class StoryItem extends React.Component {
         if (this.state.edit) {
             return <StoryEditForm
                 story={this.state.story}
+                projectId={this.state.projectId}
                 onCancel={this.onChangeEdit.bind(this)}
                 onSaved={this.onSaved.bind(this)}
                 isCreateForm={this.state.isCreateForm}
@@ -107,6 +110,7 @@ class StoryItem extends React.Component {
                     {isOver && <hr className="storyDropTarget"/>}
                     <StoryView
                         story={this.state.story}
+                        projectId={this.state.projectId}
                         onChangeEdit={this.onChangeEdit.bind(this)}
                         onDeleted={this.onDeleted.bind(this)}
                         isDragging={isDragging}

@@ -12,19 +12,30 @@ class StoriesPage extends React.Component {
 
         this.state = {
             createForm: false,
+            isLogged: props.isLogged,
+            projectId: props.params.projectId,
         }
     }
 
-    toggleCreateForm() {
-        console.log("change status create form");
+    componentWillReceiveProps(nextProps) {
         this.setState({
-            createForm: !this.state.createForm
+            isLogged: nextProps.isLogged,
+        })
+    }
+
+    toggleCreateForm() {
+        this.setState({
+            createForm: !this.state.createForm,
         });
     }
 
     render() {
+        if (!this.state.isLogged) {
+            return <div></div>;
+        }
+
         return (<div>
-            <StoriesList createForm={this.state.createForm}/>
+            <StoriesList createForm={this.state.createForm} projectId={this.state.projectId}/>
             <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
                 <Icon name="add" />
             </FABButton>

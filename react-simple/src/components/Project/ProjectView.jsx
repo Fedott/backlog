@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as ReactMDL from 'react-mdl';
+import {browserHistory} from "react-router";
 import webSocketClient from '../../libraries/WebSocket/WebSocketClient.js';
 
 class ProjectView extends React.Component {
@@ -29,6 +30,10 @@ class ProjectView extends React.Component {
         this.onDeleted();
     }
 
+    goToStoryList() {
+        browserHistory.push(`/project/${this.state.project.id}/stories`);
+    }
+
     render() {
         return (
             <ReactMDL.Card shadow={2} className="backlog-project">
@@ -39,6 +44,9 @@ class ProjectView extends React.Component {
                 <ReactMDL.CardActions border>
                     <ReactMDL.Button onClick={this.onChangeEdit}>
                         Редактировать
+                    </ReactMDL.Button>
+                    <ReactMDL.Button onClick={this.goToStoryList.bind(this)}>
+                        Список историй
                     </ReactMDL.Button>
                 </ReactMDL.CardActions>
 

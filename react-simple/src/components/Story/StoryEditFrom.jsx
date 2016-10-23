@@ -6,6 +6,7 @@ import webSocketClient from './../../libraries/WebSocket/WebSocketClient';
 class StoryEditFrom extends React.Component {
     static propTypes = {
         story: React.PropTypes.object,
+        projectId: React.PropTypes.string.isRequired,
         isCreateForm: React.PropTypes.bool,
         onSaved: React.PropTypes.func,
         onCancel: React.PropTypes.func,
@@ -17,6 +18,7 @@ class StoryEditFrom extends React.Component {
         var story = props.story || {title:"", text: "", id: null};
         this.state = {
             story: story,
+            projectId: props.projectId,
             originalStory: story,
             status: 'editing',
             isCreateForm: props.isCreateForm || false,
@@ -49,7 +51,7 @@ class StoryEditFrom extends React.Component {
             type: this.state.isCreateForm ? "create-story" : "edit-story",
             payload: this.state.isCreateForm ? {
                 story: this.state.story,
-                projectId: "1",
+                projectId: this.state.projectId,
             } : this.state.story,
         });
 
