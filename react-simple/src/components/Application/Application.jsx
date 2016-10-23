@@ -1,27 +1,9 @@
 import * as React from "react";
-import ReactDOM from 'react-dom';
-import {
-    Layout,
-    Header,
-    Navigation,
-    Content,
-    FABButton,
-    Button,
-    Icon,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    DialogActions,
-    Textfield,
-} from 'react-mdl';
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContext } from 'react-dnd';
-import { Router, Route, IndexRoute, Link, hashHistory } from 'react-router'
-
-import StoriesList from '../Story/StoriesList.jsx';
-import UserLoginPanel from '../UserLoginPanel/UserLoginPanel.jsx';
-
-// Import styles.
+import {Layout, Header, Navigation, Content} from "react-mdl";
+import HTML5Backend from "react-dnd-html5-backend";
+import {DragDropContext} from "react-dnd";
+import {Link} from "react-router";
+import UserLoginPanel from "../UserLoginPanel/UserLoginPanel.jsx";
 import User from "./User";
 
 class Application extends React.Component {
@@ -39,27 +21,6 @@ class Application extends React.Component {
                 password: null,
             },
         };
-    }
-
-    toggleCreateForm() {
-        console.log("change status create form");
-        this.setState({
-            createForm: !this.state.createForm
-        });
-    }
-
-    changeFilter(event) {
-        event.preventDefault();
-
-        this.setState({storyStatusFilter: event.target.getAttribute('data')});
-    }
-
-    onUsernameChange(event) {
-        this.state.loginFormFields.username = event.target.value;
-    }
-
-    onPasswordChange(event) {
-        this.state.loginFormFields.password = event.target.value;
     }
 
     onLogin(user: User) {
@@ -87,13 +48,13 @@ class Application extends React.Component {
                             onLogout={this.onLogout.bind(this)}
                         />
                         <Navigation>
-                            <Link to="/stories/all">All stories</Link>
-                            <Link to="/stories/notCompleted">Not completed stories</Link>
-                            <Link to="/stories/completed">Completed stories</Link>
+                            <Link to="/projects">Projects</Link>
                         </Navigation>
                     </Header>
                     <Content style={{width: "900px", margin: "0px auto", display: "block"}}>
-                        {this.props.children}
+                        {this.props.children && React.cloneElement(this.props.children, {
+                            isLogged: this.state.isLogged,
+                        })}
                     </Content>
                 </Layout>
             </div>

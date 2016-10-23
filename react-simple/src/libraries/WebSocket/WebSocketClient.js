@@ -53,16 +53,16 @@ export class WebSocketClient {
     connectResolve() {
         this.status = 'connected';
 
-        this.connectPromisors.map((promiser) => {
-            promiser['resolve']();
+        this.connectPromisors.map((promisor) => {
+            promisor['resolve']();
         })
     }
 
     connectRejectOrClose() {
         this.status = 'disconnected';
 
-        this.connectPromisors.map((promiser) => {
-            promiser['reject']();
+        this.connectPromisors.map((promisor) => {
+            promisor['reject']();
         })
     }
 

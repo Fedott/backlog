@@ -36,6 +36,7 @@ return [
         get(Processor\LoginUsernamePassword::class),
         get(Processor\LoginToken::class),
         get(Processor\ProjectCreate::class),
+        get(Processor\GetProjects::class),
     ]),
     RequestProcessorManager::class => object()
         ->method('addProcessors', get('request.processors')),
