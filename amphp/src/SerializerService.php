@@ -64,7 +64,7 @@ class SerializerService
         $type = $request->type;
 
         if (!array_key_exists($type, $this->payloadTypes)) {
-            throw new \RuntimeException("Not found payload type: {$type}");
+            throw new \RuntimeException("Not found payload for request type: {$type}");
         }
 
         $payloadTypeClass = $this->payloadTypes[$type];
