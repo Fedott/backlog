@@ -23,12 +23,12 @@ class IndexManager
         $this->keyGenerator = $keyGenerator;
     }
 
-    public function addToIndex($indexName, $id): Promise
+    public function addToIndex(string $indexName, string $id): Promise
     {
         return $this->redisClient->lPush($indexName, $id);
     }
 
-    public function getIdsFromIndex($indexName): Promise
+    public function getIdsFromIndex(string $indexName): Promise
     {
         return $this->redisClient->lRange(
             $indexName,
