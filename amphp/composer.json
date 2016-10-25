@@ -14,7 +14,7 @@
     },
     "require": {
         "php": "^7",
-        "amphp/aerys": "^0.4",
+        "amphp/aerys": "dev-master",
         "symfony/serializer": "^3.1",
         "doctrine/annotations": "^1.2",
         "doctrine/cache": "^1.6",
