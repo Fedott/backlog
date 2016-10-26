@@ -1,4 +1,5 @@
 <?php
+use Aerys\Host;
 use Aerys\Request;
 use Aerys\Response;
 use Fedot\Backlog\WebSocketServer;
@@ -27,10 +28,19 @@ $reWriter = new class implements \Aerys\Bootable
     }
 };
 
-(new Aerys\Host)
-    ->expose('*', 80)
+$http = (new Host())
+    ->expose('*', 443)
     ->name("new-backlog.fedot.name")
-//    ->encrypt(__DIR__ . '/keys/crt', __DIR__ . '/keys/key')
+    ->encrypt(
+        '/etc/letsencrypt/live/new-backlog.fedot.name/cert.pem',
+        '/etc/letsencrypt/live/new-backlog.fedot.name/privkey.pem'
+    )
+    ->redirect("https://new-backlog.fedot.name")
+;
+
+(new Host)
+    ->expose("*", 80)
+    ->name("new-backlog.fedot.name")
     ->use($router)
     ->use($root)
     ->use($reWriter)
