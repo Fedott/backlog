@@ -94,6 +94,7 @@ export class WebSocketClient {
 }
 
 let port = window.location.port == 3000 ? 8080 : window.location.port;
-var webSocketClient = new WebSocketClient("ws://" + window.location.hostname + ":" +  port + "/websocket");
+let protocol = window.location.protocol == 'https:' ? 'wss' : 'ws';
+var webSocketClient = new WebSocketClient(protocol + "://" + window.location.hostname + ":" +  port + "/websocket");
 
 export default webSocketClient;

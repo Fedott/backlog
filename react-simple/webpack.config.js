@@ -62,13 +62,15 @@ module.exports = {
             port: 3000,
             proxy: 'backlog.local:8080',
         }),
-        // new webpack.optimize.UglifyJsPlugin({
-        //     minimize: true,
-        //     compress: { warnings: false }
-        // }),
+//        new webpack.optimize.UglifyJsPlugin({
+//            minimize: true,
+//            compress: { warnings: false }
+//        }),
         new webpack.optimize.CommonsChunkPlugin('vendors', '../amphp/web/assets/vendors.js'),
         new webpack.DefinePlugin({
-            NODE_ENV: "production"
+            'process.env': {
+//                'NODE_ENV': JSON.stringify('production')
+            }
         })
     ]
 };
