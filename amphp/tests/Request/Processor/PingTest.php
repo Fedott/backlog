@@ -1,13 +1,10 @@
 <?php declare(strict_types=1);
 namespace Tests\Fedot\Backlog\Request\Processor;
 
-use Aerys\Websocket\Endpoint;
 use Fedot\Backlog\Request\Processor\Ping;
-use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Payload\PongPayload;
-use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Response\ResponseSender;
-use Tests\Fedot\Backlog\BaseTestCase;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class PingTest extends RequestProcessorTestCase
@@ -28,13 +25,11 @@ class PingTest extends RequestProcessorTestCase
 
     public function providerSupportsRequest()
     {
-        $request1 = new Request();
-        $request1->type = 'ping';
+        $request1 = new Request(1, 1, 'ping');
 
-        $request2 = new Request();
-        $request2->type = 'other';
+        $request2 = new Request(1, 1, 'other');
 
-        $request3 = new Request();
+        $request3 = new Request(1, 1, '');
 
         return [
             'ping type' => [$request1, true],
@@ -47,24 +42,17 @@ class PingTest extends RequestProcessorTestCase
     {
         $this->responseSenderMock = $this->createMock(ResponseSender::class);
 
-        $request = new Request();
-        $request->id = 321;
-        $request->type = 'ping';
-        $request->setResponseSender($this->responseSenderMock);
-        $request->setClientId(777);
-
-        $this->responseSenderMock->expects($this->once())
-            ->method('sendResponse')
-            ->willReturnCallback(function (Response $response, $clientId = null) {
-                $this->assertEquals(777, $clientId);
-                $this->assertEquals(321, $response->requestId);
-                $this->assertEquals('pong', $response->type);
-                $this->assertInstanceOf(PongPayload::class, $response->payload);
-            })
-        ;
+        $request = new Request(321, 777, 'ping');
+        $response = new Response(321, 777);
 
         $processor = new Ping();
 
-        $this->startProcessMethod($processor, $request);
+        /** @var Response $response */
+        $response = \Amp\wait($processor->process($request, $response));
+
+        $this->assertEquals(321, $response->getRequestId());
+        $this->assertEquals(777, $response->getClientId());
+        $this->assertEquals('pong', $response->getType());
+        $this->assertEquals(true, $response->getPayload()['pong']);
     }
 }

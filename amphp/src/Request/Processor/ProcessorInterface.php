@@ -2,8 +2,8 @@
 namespace Fedot\Backlog\Request\Processor;
 
 use Amp\Promise;
-use Fedot\Backlog\Request\Request;
-use Generator;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 
 interface ProcessorInterface
 {
@@ -26,8 +26,9 @@ interface ProcessorInterface
 
     /**
      * @param Request $request
+     * @param Response $response
      *
-     * @return Generator
+     * @return Promise
      */
-    public function process(Request $request): Generator;
+    public function process(Request $request, Response $response): Promise;
 }

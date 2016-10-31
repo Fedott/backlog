@@ -3,11 +3,10 @@ namespace Fedot\Backlog\Request\Processor;
 
 use Amp\Promise;
 use Amp\Success;
-use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\PongPayload;
-use Fedot\Backlog\Response\Response;
-use Generator;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 
 class Ping implements ProcessorInterface
 {
@@ -18,7 +17,7 @@ class Ping implements ProcessorInterface
      */
     public function supportsRequest(Request $request): bool
     {
-        return $request->type === $this->getSupportedType();
+        return $request->getType() === $this->getSupportedType();
     }
 
     /**
@@ -38,19 +37,13 @@ class Ping implements ProcessorInterface
     }
 
     /**
-     * @param Request $request
-     *
-     * @return Generator
+     * @inheritdoc
      */
-    public function process(Request $request): Generator
+    public function process(Request $request, Response $response): Promise
     {
-        $response = new Response();
-        $response->requestId = $request->id;
-        $response->type = 'pong';
-        $response->payload = new PongPayload();
+        $response = $response->withType('pong');
+        $response = $response->withPayload((array) (new PongPayload()));
 
-        $request->getResponseSender()->sendResponse($response, $request->getClientId());
-
-        yield;
+        return new Success($response);
     }
 }

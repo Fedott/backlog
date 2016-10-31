@@ -3,10 +3,9 @@ namespace Tests\Fedot\Backlog\Request\Processor;
 
 use Amp\Success;
 use Fedot\Backlog\Request\Processor\DeleteStory;
-use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\DeleteStoryPayload;
-use Fedot\Backlog\Payload\EmptyPayload;
-use Fedot\Backlog\Response\Response;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class DeleteStoryTest extends RequestProcessorTestCase
@@ -39,13 +38,9 @@ class DeleteStoryTest extends RequestProcessorTestCase
 
     public function providerSupportsRequest()
     {
-        $request1 = new Request();
-        $request1->type = 'delete-story';
-
-        $request2 = new Request();
-        $request2->type = 'other';
-
-        $request3 = new Request();
+        $request1 = new Request(1, 1, 'delete-story');
+        $request2 = new Request(1, 1, 'other');
+        $request3 = new Request(1, 1, '');
 
         return [
             'delete-story type' => [$request1, true],
@@ -58,14 +53,9 @@ class DeleteStoryTest extends RequestProcessorTestCase
     {
         $processor = $this->getProcessorInstance();
 
-        $request = new Request();
-        $request->id = 34;
-        $request->type = 'delete-story';
-        $request->setClientId(777);
-        $request->setResponseSender($this->responseSenderMock);
-        $request->payload = new DeleteStoryPayload();
-        $request->payload->storyId = 'story-id';
-        $request->payload->projectId = 'project-id';
+        $deleteStoryPayload = new DeleteStoryPayload();
+        $deleteStoryPayload->storyId = 'story-id';
+        $deleteStoryPayload->projectId = 'project-id';
 
         $this->storiesRepositoryMock->expects($this->once())
             ->method('deleteByIds')
@@ -76,18 +66,16 @@ class DeleteStoryTest extends RequestProcessorTestCase
             ->willReturn(new Success(true))
         ;
 
-        $this->responseSenderMock->expects($this->once())
-            ->method('sendResponse')
-            ->willReturnCallback(function (Response $response, $clientId = null) {
-                $this->assertEquals(777, $clientId);
-                $this->assertEquals(34, $response->requestId);
-                $this->assertEquals('story-deleted', $response->type);
+        $request = new Request(34, 777, 'delete-story', [
+            'storyId' => 'story-id',
+            'projectId' => 'project-id',
+        ]);
+        $request = $request->withAttribute('payloadObject', $deleteStoryPayload);
+        $response = new Response($request->getId(), $request->getClientId());
 
-                /** @var EmptyPayload $response->payload */
-                $this->assertInstanceOf(EmptyPayload::class, $response->payload);
-            })
-        ;
+        $response = \Amp\wait($processor->process($request, $response));
 
-        $this->startProcessMethod($processor, $request);
+        $this->assertEquals('story-deleted', $response->getType());
+        $this->assertEquals([], $response->getPayload());
     }
 }

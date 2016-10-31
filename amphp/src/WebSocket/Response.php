@@ -29,16 +29,7 @@ class Response implements ResponseInterface
      */
     private $payload;
 
-    /**
-     * Response constructor.
-     *
-     * @param int $requestId
-     * @param int $clientId
-     * @param string $type
-     * @param array $payload
-     * @param bool $isDirect
-     */
-    public function __construct($requestId, $clientId, $type, array $payload = [], $isDirect = true)
+    public function __construct(int $requestId, int $clientId, string $type = null, array $payload = [], $isDirect = true)
     {
         $this->requestId = $requestId;
         $this->clientId = $clientId;
