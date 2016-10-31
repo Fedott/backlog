@@ -3,9 +3,12 @@ namespace Tests\Fedot\Backlog;
 
 use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\SerializerService;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Tests\Fedot\Backlog\Stubs\NestedObject;
 use Tests\Fedot\Backlog\Stubs\TestPayload;
 use Tests\Fedot\Backlog\Stubs\TestProcessor;
 
@@ -20,13 +23,17 @@ class SerializerServiceTest extends BaseTestCase
     "payload": {
         "field1": 564,
         "field3": "dfsdf",
-        "extraField": "55trt"
+        "extraField": "55trt",
+        "nestedObject": {
+            "field1": "testValue"
+        }
     }
 }
 JSON;
 
+        $extractor = new PropertyInfoExtractor(array(), array(new PhpDocExtractor()));
         $serializer = new Serializer(
-            [new ObjectNormalizer()],
+            [new ObjectNormalizer(null, null, null, $extractor)],
             [new JsonDecode()]
         );
 
@@ -45,5 +52,8 @@ JSON;
         $this->assertInstanceOf(TestPayload::class, $actualPayload);
         $this->assertEquals(564, $actualPayload->field1);
         $this->assertEquals("dfsdf", $actualPayload->field3);
+
+        $this->assertInstanceOf(NestedObject::class, $actualPayload->nestedObject);
+        $this->assertEquals('testValue', $actualPayload->nestedObject->field1);
     }
 }

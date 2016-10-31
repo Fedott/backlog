@@ -7,12 +7,21 @@ use Fedot\Backlog\Request\Processor;
 use Fedot\Backlog\Request\RequestProcessorManager;
 use Fedot\Backlog\Response\Payload;
 use Fedot\Backlog\SerializerService;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 return [
+    'serializer.typeExtractors' => [
+        \DI\get(PhpDocExtractor::class),
+    ],
+    PropertyInfoExtractor::class => \DI\object()
+        ->constructorParameter('typeExtractors', \DI\get('serializer.typeExtractors')),
+    ObjectNormalizer::class => \DI\object()
+        ->constructorParameter('propertyTypeExtractor', \DI\get(PropertyInfoExtractor::class)),
     'serializer.normalazers' => add([
         get(ObjectNormalizer::class)
     ]),

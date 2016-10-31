@@ -2,9 +2,11 @@
 
 namespace Tests\Fedot\Backlog\Stubs;
 
+use Amp\Promise;
+use Amp\Success;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
-use Fedot\Backlog\Request\Request;
-use Generator;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 
 class TestProcessor implements ProcessorInterface
 {
@@ -15,7 +17,7 @@ class TestProcessor implements ProcessorInterface
      */
     public function supportsRequest(Request $request): bool
     {
-        return $request->type == $this->getSupportedType();
+        return $request->getType() == $this->getSupportedType();
     }
 
     /**
@@ -36,10 +38,12 @@ class TestProcessor implements ProcessorInterface
 
     /**
      * @param Request $request
+     * @param Response $response
      *
-     * @return Generator
+     * @return Promise
      */
-    public function process(Request $request): Generator
+    public function process(Request $request, Response $response): Promise
     {
+        return new Success();
     }
 }

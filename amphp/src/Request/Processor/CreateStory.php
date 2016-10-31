@@ -1,20 +1,18 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Request\Processor;
 
+use Amp\Deferred;
 use Amp\Promise;
-use Amp\Success;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Payload\StoryPayload;
 use Fedot\Backlog\Repository\ProjectsRepository;
-use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\ErrorPayload;
-use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Repository\StoriesRepository;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
-use Generator;
 use Ramsey\Uuid\UuidFactory;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class CreateStory implements ProcessorInterface
 {
@@ -34,11 +32,6 @@ class CreateStory implements ProcessorInterface
     protected $uuidFactory;
 
     /**
-     * @var Serializer
-     */
-    protected $serializer;
-
-    /**
      * @var WebSocketConnectionAuthenticationService
      */
     protected $webSocketAuthService;
@@ -49,20 +42,17 @@ class CreateStory implements ProcessorInterface
      * @param StoriesRepository $storiesRepository
      * @param ProjectsRepository $projectsRepository
      * @param UuidFactory $uuidFactory
-     * @param Serializer $serializer
      * @param WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService
      */
     public function __construct(
         StoriesRepository $storiesRepository,
         ProjectsRepository $projectsRepository,
         UuidFactory $uuidFactory,
-        Serializer $serializer,
         WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService
     ) {
         $this->storiesRepository = $storiesRepository;
         $this->projectsRepository = $projectsRepository;
         $this->uuidFactory = $uuidFactory;
-        $this->serializer = $serializer;
         $this->webSocketAuthService = $webSocketConnectionAuthenticationService;
     }
 
@@ -73,7 +63,7 @@ class CreateStory implements ProcessorInterface
      */
     public function supportsRequest(Request $request): bool
     {
-        return $request->type === $this->getSupportedType();
+        return $request->getType() === $this->getSupportedType();
     }
 
     /**
@@ -93,35 +83,33 @@ class CreateStory implements ProcessorInterface
     }
 
     /**
-     * @param Request $request
-     *
-     * @return Generator
+     * @inheritdoc
      */
-    public function process(Request $request): Generator
+    public function process(Request $request, Response $response): Promise
     {
-        /** @var StoryPayload $payload */
-        $payload = $request->payload;
-        $projectId = $payload->projectId;
-        $project = yield $this->projectsRepository->get($projectId);
-        $story = $this->serializer->denormalize($payload->story, Story::class);
-        $story->id = $this->uuidFactory->uuid4()->toString();
+        $promisor = new Deferred();
 
-        $result = yield $this->storiesRepository->create($project, $story);
+        \Amp\immediately(function () use ($promisor, $request, $response) {
+            /** @var StoryPayload $payload */
+            $payload = $request->getAttribute('payloadObject');
+            $projectId = $payload->projectId;
+            $project = yield $this->projectsRepository->get($projectId);
+            $story = $payload->story;
+            $story->id = $this->uuidFactory->uuid4()->toString();
 
-        $response            = new Response();
-        $response->requestId = $request->id;
+            $result = yield $this->storiesRepository->create($project, $story);
 
-        if ($result === true) {
-            $response->type    = 'story-created';
-            $response->payload = $story;
-        } else {
-            $response->type             = 'error';
-            $response->payload          = new ErrorPayload();
-            $response->payload->message = "Story id '{$story->id}' already exists";
-        }
+            if ($result === true) {
+                $response = $response->withType('story-created');
+                $response = $response->withPayload((array) $story);
+            } else {
+                $response = $response->withType('error');
+                $response->withPayload((array) new ErrorPayload("Story id '{$story->id}' already exists"));
+            }
 
-        $request->getResponseSender()->sendResponse($response, $request->getClientId());
+            $promisor->succeed($response);
+        });
 
-        yield;
+        return $promisor->promise();
     }
 }

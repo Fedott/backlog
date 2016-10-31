@@ -14,4 +14,9 @@ class TestPayload implements PayloadInterface
      * @var string
      */
     public $field3;
+
+    /**
+     * @var NestedObject
+     */
+    public $nestedObject;
 }
