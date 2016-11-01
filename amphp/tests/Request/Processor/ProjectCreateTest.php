@@ -5,9 +5,9 @@ use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\ProjectsRepository;
+use Fedot\Backlog\Request\Processor\ProcessorInterface;
 use Fedot\Backlog\Request\Processor\ProjectCreate;
-use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Response;
+use Fedot\Backlog\WebSocket\Response;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;
 use Tests\Fedot\Backlog\BaseTestCase;
@@ -25,65 +25,34 @@ class ProjectCreateTest extends RequestProcessorTestCase
      */
     protected $uuidFactoryMock;
 
-    /**
-     * @var ProjectCreate
-     */
-    protected $processor;
-
     protected function initProcessorMocks()
     {
         parent::initProcessorMocks();
 
         $this->uuidFactoryMock = $this->createMock(UuidFactory::class);
         $this->projectRepositoryMock = $this->createMock(ProjectsRepository::class);
+    }
 
-        $this->processor = new ProjectCreate($this->projectRepositoryMock,
+    protected function getProcessorInstance(): ProcessorInterface
+    {
+        return new ProjectCreate($this->projectRepositoryMock,
             $this->uuidFactoryMock,
             $this->webSocketAuthServiceMock
         );
     }
 
-
-
-    /**
-     * @dataProvider providerSupportsRequest
-     *
-     * @param Request $request
-     * @param bool    $expectedResult
-     */
-    public function testSupportsRequest(Request $request, bool $expectedResult)
+    protected function getExpectedValidRequestType(): string
     {
-        $actualResult = $this->processor->supportsRequest($request);
-
-        $this->assertEquals($expectedResult, $actualResult);
-    }
-
-    public function providerSupportsRequest()
-    {
-        $request1 = new Request();
-        $request1->type = 'create-project';
-
-        $request2 = new Request();
-        $request2->type = 'get-stories';
-
-        $request3 = new Request();
-
-        return [
-            'ping type' => [$request1, true],
-            'other type' => [$request2, false],
-            'null type' => [$request3, false],
-        ];
+        return 'create-project';
     }
 
     public function testProcess()
     {
-        $request = new Request();
-        $request->id = 33;
-        $request->type = 'create-project';
-        $request->payload = new Project();
-        $request->payload->name = 'first project';
-        $request->setClientId(432);
-        $request->setResponseSender($this->responseSenderMock);
+        $payload = new Project();
+        $payload->name = 'first project';
+
+        $request = $this->makeRequest(33, 432, 'create-project', $payload);
+        $response = $this->makeResponse($request);
 
         $user = new User();
 
@@ -117,22 +86,14 @@ class ProjectCreateTest extends RequestProcessorTestCase
             ->willReturn(new Success(true))
         ;
 
-        $this->responseSenderMock->expects($this->once())
-            ->method('sendResponse')
-            ->with($this->callback(function (Response $response){
-                $this->assertEquals(33, $response->requestId);
-                $this->assertEquals('project-created', $response->type);
+        $processor = $this->getProcessorInstance();
 
-                /** @var Project $responsePayload */
-                $responsePayload = $response->payload;
-                $this->assertInstanceOf(Project::class, $responsePayload);
-                $this->assertEquals('UUIDSuperUnique', $responsePayload->id);
-                $this->assertEquals('first project', $responsePayload->name);
+        /** @var Response $response */
+        $response = \Amp\wait($processor->process($request, $response));
 
-                return true;
-            }), $this->equalTo(432))
-        ;
+        $this->assertResponseBasic($response, 33, 432, 'project-created');
 
-        $this->startProcessMethod($this->processor, $request);
+        $this->assertEquals('UUIDSuperUnique', $response->getPayload()['id']);
+        $this->assertEquals('first project', $response->getPayload()['name']);
     }
 }

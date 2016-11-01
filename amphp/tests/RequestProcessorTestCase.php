@@ -21,11 +21,6 @@ abstract class RequestProcessorTestCase extends BaseTestCase
     }
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|ResponseSender
-     */
-    protected $responseSenderMock;
-
-    /**
      * @var PHPUnit_Framework_MockObject_MockObject|StoriesRepository
      */
     protected $storiesRepositoryMock;
@@ -64,7 +59,6 @@ abstract class RequestProcessorTestCase extends BaseTestCase
 
     protected function initProcessorMocks()
     {
-        $this->responseSenderMock = $this->createMock(ResponseSender::class);
         $this->storiesRepositoryMock = $this->createMock(StoriesRepository::class);
         $this->webSocketAuthServiceMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
     }

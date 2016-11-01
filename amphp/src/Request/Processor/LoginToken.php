@@ -2,20 +2,19 @@
 
 namespace Fedot\Backlog\Request\Processor;
 
-use Amp\Promise;
-use Amp\Success;
+use Amp\Promisor;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Payload\LoginFailedPayload;
 use Fedot\Backlog\Payload\LoginSuccessPayload;
 use Fedot\Backlog\Payload\TokenPayload;
-use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Response;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Generator;
 
-class LoginToken implements ProcessorInterface
+class LoginToken extends AbstractProcessor
 {
     /**
      * @var AuthenticationService
@@ -42,16 +41,6 @@ class LoginToken implements ProcessorInterface
     }
 
     /**
-     * @param Request $request
-     *
-     * @return bool
-     */
-    public function supportsRequest(Request $request): bool
-    {
-        return $request->type === $this->getSupportedType();
-    }
-
-    /**
      * @return string
      */
     public function getSupportedType(): string
@@ -67,39 +56,34 @@ class LoginToken implements ProcessorInterface
         return TokenPayload::class;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Generator
-     */
-    public function process(Request $request): Generator
+    protected function execute(Promisor $promisor, Request $request, Response $response)
     {
         /** @var TokenPayload $payload */
-        $payload = $request->payload;
-
-        $response = new Response();
-        $response->requestId = $request->id;
+        $payload = $request->getAttribute('payloadObject');
 
         try {
             $username = yield $this->authenticationService->authByToken(
                 $payload->token
             );
 
-            $response->type = 'login-success';
-            $response->payload = new LoginSuccessPayload();
-            $response->payload->username = $username;
-            $response->payload->token = $payload->token;
+            $newPayload = new LoginSuccessPayload();
+            $newPayload->username = $username;
+            $newPayload->token = $payload->token;
+
+            $response = $response->withType('login-success');
+            $response = $response->withPayload((array) $newPayload);
 
             $user = new User();
             $user->username = $username;
 
             $this->webSocketAuthService->authorizeClient($request->getClientId(), $user);
         } catch (AuthenticationException $exception) {
-            $response->type = 'login-failed';
-            $response->payload = new LoginFailedPayload();
-            $response->payload->error = $exception->getMessage();
+            $response = $response->withType('login-failed');
+            $loginFailedPayload = new LoginFailedPayload();
+            $loginFailedPayload->error = $exception->getMessage();
+            $response = $response->withPayload((array) $loginFailedPayload);
         }
 
-        $request->getResponseSender()->sendResponse($response, $request->getClientId());
+        $promisor->succeed($response);
     }
 }

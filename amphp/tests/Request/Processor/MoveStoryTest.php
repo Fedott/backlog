@@ -3,19 +3,15 @@
 namespace Tests\Fedot\Backlog\Request\Processor;
 
 use Amp\Success;
-use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\MoveStoryPayload;
 use Fedot\Backlog\Request\Processor\MoveStory;
-use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Response;
+use Fedot\Backlog\Request\Processor\ProcessorInterface;
+use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class MoveStoryTest extends RequestProcessorTestCase
 {
-    /**
-     * @return MoveStory
-     */
-    protected function getProcessorInstance()
+    protected function getProcessorInstance(): ProcessorInterface
     {
         $this->initProcessorMocks();
 
@@ -24,50 +20,22 @@ class MoveStoryTest extends RequestProcessorTestCase
         return $processor;
     }
 
-    /**
-     * @dataProvider providerSupportsRequest
-     *
-     * @param Request $request
-     * @param bool    $expectedResult
-     */
-    public function testSupportsRequest(Request $request, bool $expectedResult)
+    protected function getExpectedValidRequestType(): string
     {
-        $processor = $this->getProcessorInstance();
-        $actualResult = $processor->supportsRequest($request);
-
-        $this->assertEquals($expectedResult, $actualResult);
-    }
-
-    public function providerSupportsRequest()
-    {
-        $request1 = new Request();
-        $request1->type = 'move-story';
-
-        $request2 = new Request();
-        $request2->type = 'get-stories';
-
-        $request3 = new Request();
-
-        return [
-            'ping type' => [$request1, true],
-            'other type' => [$request2, false],
-            'null type' => [$request3, false],
-        ];
+        return 'move-story';
     }
 
     public function testProcess()
     {
         $processor = $this->getProcessorInstance();
 
-        $request = new Request();
-        $request->id = 33;
-        $request->type = 'move-story';
-        $request->payload = new MoveStoryPayload();
-        $request->payload->storyId = 'target-story-id';
-        $request->payload->beforeStoryId = 'before-story-id';
-        $request->payload->projectId = 'project-id';
-        $request->setClientId(432);
-        $request->setResponseSender($this->responseSenderMock);
+        $payload = new MoveStoryPayload();
+        $payload->storyId = 'target-story-id';
+        $payload->beforeStoryId = 'before-story-id';
+        $payload->projectId = 'project-id';
+
+        $request = $this->makeRequest(33, 432, 'move-story', $payload);
+        $response = $this->makeResponse($request);
 
         $this->storiesRepositoryMock->expects($this->once())
             ->method('moveByIds')
@@ -75,19 +43,9 @@ class MoveStoryTest extends RequestProcessorTestCase
             ->willReturn(new Success(true))
         ;
 
-        $this->responseSenderMock->expects($this->once())
-            ->method('sendResponse')
-            ->with($this->callback(function (Response $response){
-                $this->assertEquals(33, $response->requestId);
-                $this->assertEquals('story-moved', $response->type);
+        /** @var Response $response */
+        $response = \Amp\wait($processor->process($request, $response));
 
-                $responsePayload = $response->payload;
-                $this->assertInstanceOf(EmptyPayload::class, $responsePayload);
-
-                return true;
-            }), $this->equalTo(432))
-        ;
-
-        $this->startProcessMethod($processor, $request);
+        $this->assertResponseBasic($response, 33, 432, 'story-moved');
     }
 }

@@ -2,17 +2,16 @@
 
 namespace Fedot\Backlog\Request\Processor;
 
-use Amp\Promise;
-use Amp\Success;
+use Amp\Promisor;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Payload\MoveStoryPayload;
-use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Repository\StoriesRepository;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 use Generator;
 
-class MoveStory implements ProcessorInterface
+class MoveStory extends AbstractProcessor
 {
     /**
      * @var StoriesRepository
@@ -30,16 +29,6 @@ class MoveStory implements ProcessorInterface
     }
 
     /**
-     * @param Request $request
-     *
-     * @return bool
-     */
-    public function supportsRequest(Request $request): bool
-    {
-        return $request->type === $this->getSupportedType();
-    }
-
-    /**
      * @return string
      */
     public function getSupportedType(): string
@@ -47,23 +36,15 @@ class MoveStory implements ProcessorInterface
         return 'move-story';
     }
 
-    /**
-     * @return string - FQN class name implemented \Fedot\Backlog\PayloadInterface
-     */
     public function getExpectedRequestPayload(): string
     {
         return MoveStoryPayload::class;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Generator
-     */
-    public function process(Request $request): Generator
+    protected function execute(Promisor $promisor, Request $request, Response $response)
     {
         /** @var MoveStoryPayload $payload */
-        $payload = $request->payload;
+        $payload = $request->getAttribute('payloadObject');
 
         $result = yield $this->storiesRepository->moveByIds(
             $payload->projectId,
@@ -71,19 +52,17 @@ class MoveStory implements ProcessorInterface
             $payload->beforeStoryId
         );
 
-        $response = new Response();
-        $response->requestId = $request->id;
-
         if ($result === true) {
-            $response->type = 'story-moved';
-            $response->payload = new EmptyPayload();
+            $response = $response->withType('story-moved');
+            $response = $response->withPayload((array) new EmptyPayload());
         } else {
-            $response->type = 'error';
-            $response->payload = new ErrorPayload();
-            $response->payload->message
-                = "Story id '{$payload->storyId}' do not moved after story id {$payload->beforeStoryId}";
+            $errorPayload = new ErrorPayload(
+                "Story id '{$payload->storyId}' do not moved after story id {$payload->beforeStoryId}"
+            );
+            $response = $response->withType('error');
+            $response = $response->withPayload((array)$errorPayload);
         }
 
-        $request->getResponseSender()->sendResponse($response, $request->getClientId());
+        $promisor->succeed($response);
     }
 }
