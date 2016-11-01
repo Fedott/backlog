@@ -6,9 +6,8 @@ use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Payload\ProjectIdPayload;
 use Fedot\Backlog\Payload\StoriesPayload;
 use Fedot\Backlog\Request\Processor\GetStories;
-use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Response;
-use Fedot\Backlog\Response\ResponseSender;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class GetStoriesTest extends RequestProcessorTestCase
@@ -39,13 +38,11 @@ class GetStoriesTest extends RequestProcessorTestCase
 
     public function providerSupportsRequest()
     {
-        $request1 = new Request();
-        $request1->type = 'get-stories';
+        $request1 = new Request(1, 1, 'get-stories');
 
-        $request2 = new Request();
-        $request2->type = 'other';
+        $request2 = new Request(1, 1, 'other');
 
-        $request3 = new Request();
+        $request3 = new Request(1, 1, '');
 
         return [
             'ping type' => [$request1, true],
@@ -56,8 +53,6 @@ class GetStoriesTest extends RequestProcessorTestCase
 
     public function testProcess()
     {
-        $this->responseSenderMock = $this->createMock(ResponseSender::class);
-
         $stories = [
             new Story(),
             new Story(),
@@ -66,13 +61,13 @@ class GetStoriesTest extends RequestProcessorTestCase
 
         $processor = $this->getProcessorInstance();
 
-        $request = new Request();
-        $request->id = 34;
-        $request->type = 'get-stories';
-        $request->payload = new ProjectIdPayload();
-        $request->payload->projectId = 'project-id';
-        $request->setClientId(777);
-        $request->setResponseSender($this->responseSenderMock);
+        $payload = new ProjectIdPayload();
+        $payload->projectId = 'project-id';
+
+        $request = new Request(34, 777, 'get-stories', (array) $payload);
+        $request = $request->withAttribute('payloadObject', $payload);
+
+        $response = new Response($request->getId(), $request->getClientId());
 
         $this->storiesRepositoryMock->expects($this->once())
             ->method('getAllByProjectId')
@@ -80,19 +75,13 @@ class GetStoriesTest extends RequestProcessorTestCase
             ->willReturn(new Success($stories))
         ;
 
-        $this->responseSenderMock->expects($this->once())
-            ->method('sendResponse')
-            ->willReturnCallback(function (Response $response, $clientId = null) use ($stories) {
-                $this->assertEquals(777, $clientId);
-                $this->assertEquals(34, $response->requestId);
-                $this->assertEquals('stories', $response->type);
+        /** @var Response $response */
+        $response = \Amp\wait($processor->process($request, $response));
 
-                /** @var \Fedot\Backlog\Payload\StoriesPayload $response->payload */
-                $this->assertInstanceOf(StoriesPayload::class, $response->payload);
-                $this->assertEquals($stories, $response->payload->stories);
-            })
-        ;
+        $this->assertEquals(34, $response->getRequestId());
+        $this->assertEquals(777, $response->getClientId());
+        $this->assertEquals('stories', $response->getType());
 
-        $this->startProcessMethod($processor, $request);
+        $this->assertEquals((array) $stories, $response->getPayload()['stories']);
     }
 }

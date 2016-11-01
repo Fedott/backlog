@@ -1,18 +1,16 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Request\Processor;
 
-use Amp\Promise;
-use Amp\Success;
+use Amp\Promisor;
 use Fedot\Backlog\Payload\ProjectIdPayload;
-use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\StoriesPayload;
-use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Repository\StoriesRepository;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Generator;
 
-class GetStories implements ProcessorInterface
+class GetStories extends AbstractProcessor
 {
     /**
      * @var StoriesRepository
@@ -20,32 +18,14 @@ class GetStories implements ProcessorInterface
     protected $storiesRepository;
 
     /**
-     * @var WebSocketConnectionAuthenticationService
-     */
-    protected $webSocketAuthService;
-
-    /**
      * GetStories constructor.
      *
      * @param StoriesRepository                        $storiesRepository
-     * @param WebSocketConnectionAuthenticationService $webSocketConnectionAuthentication
      */
     public function __construct(
-        StoriesRepository $storiesRepository,
-        WebSocketConnectionAuthenticationService $webSocketConnectionAuthentication
+        StoriesRepository $storiesRepository
     ){
         $this->storiesRepository = $storiesRepository;
-        $this->webSocketAuthService = $webSocketConnectionAuthentication;
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return bool
-     */
-    public function supportsRequest(Request $request): bool
-    {
-        return $request->type === $this->getSupportedType();
     }
 
     /**
@@ -64,24 +44,18 @@ class GetStories implements ProcessorInterface
         return ProjectIdPayload::class;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Generator
-     */
-    public function process(Request $request): Generator
+    protected function execute(Promisor $promisor, Request $request, Response $response)
     {
         /** @var ProjectIdPayload $payload */
-        $payload = $request->payload;
+        $payload = $request->getAttribute('payloadObject');
         $projectId = $payload->projectId;
         $stories = yield $this->storiesRepository->getAllByProjectId($projectId);
 
-        $response = new Response();
-        $response->requestId = $request->id;
-        $response->type = 'stories';
-        $response->payload = new StoriesPayload();
-        $response->payload->stories = $stories;
+        $response = $response->withType('stories');
+        $storiesPayload = new StoriesPayload();
+        $storiesPayload->stories = $stories;
+        $response = $response->withPayload((array)$storiesPayload);
 
-        $request->getResponseSender()->sendResponse($response, $request->getClientId());
+        $promisor->succeed($response);
     }
 }
