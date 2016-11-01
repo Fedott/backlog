@@ -81,7 +81,6 @@ class CreateStoryTest extends RequestProcessorTestCase
         $project = new Project();
         $project->id = 'project-id';
 
-
         $this->projectRepositoryMock->expects($this->once())
             ->method('get')
             ->with('project-id')
@@ -136,7 +135,6 @@ class CreateStoryTest extends RequestProcessorTestCase
 
     public function testProcessWithError()
     {
-        $this->markTestIncomplete('Need fix');
         $this->responseSenderMock = $this->createMock(ResponseSender::class);
         $uuidMock = $this->createMock(Uuid::class);
 
@@ -151,21 +149,13 @@ class CreateStoryTest extends RequestProcessorTestCase
             ->willReturn(new Success($project))
         ;
 
-        $request = new Request();
-        $request->id = 33;
-        $request->type = 'create-story';
-        $request->payload = new StoryPayload();
-        $request->payload->story = new Story();
-        $request->payload->story->title = 'story title';
-        $request->payload->story->text = 'story text';
-        $request->payload->projectId = 'project-id';
-        $request->setClientId(432);
-        $request->setResponseSender($this->responseSenderMock);
-
-        $this->serializerMock
-            ->method('denormalize')
-            ->willReturn($request->payload->story)
-        ;
+        $payload = new StoryPayload();
+        $payload->story = new Story();
+        $payload->story->title = 'story title';
+        $payload->story->text = 'story text';
+        $payload->projectId = 'project-id';
+        $request = new Request(33, 432, 'create-story', (array) $payload);
+        $request = $request->withAttribute('payloadObject', $payload);
 
         $this->uuidFactoryMock
             ->expects($this->once())
@@ -190,21 +180,14 @@ class CreateStoryTest extends RequestProcessorTestCase
             ->willReturn(new Success(false))
         ;
 
-        $this->responseSenderMock->expects($this->once())
-            ->method('sendResponse')
-            ->with($this->callback(function (Response $response){
-                $this->assertEquals(33, $response->requestId);
-                $this->assertEquals('error', $response->type);
+        $response = new Response($request->getId(), $request->getClientId());
 
-                /** @var ErrorPayload $responsePayload */
-                $responsePayload = $response->payload;
-                $this->assertInstanceOf(ErrorPayload::class, $responsePayload);
-                $this->assertEquals("Story id 'UUIDSuperUnique' already exists", $responsePayload->message);
+        /** @var Response $response */
+        $response = \Amp\wait($processor->process($request, $response));
 
-                return true;
-            }), $this->equalTo(432))
-        ;
-
-        $this->startProcessMethod($processor, $request);
+        $this->assertEquals(33, $response->getRequestId());
+        $this->assertEquals(432, $response->getClientId());
+        $this->assertEquals('error', $response->getType());
+        $this->assertEquals("Story id 'UUIDSuperUnique' already exists", $response->getPayload()['message']);
     }
 }

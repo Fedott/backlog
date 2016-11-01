@@ -3,32 +3,14 @@
 namespace Tests\Fedot\Backlog\Request\Processor;
 
 use Amp\Success;
-use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
-use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Payload\StoryPayload;
-use Fedot\Backlog\Repository\ProjectsRepository;
 use Fedot\Backlog\Request\Processor\EditStory;
-use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Payload\ErrorPayload;
-use Fedot\Backlog\Response\Response;
-use Fedot\Backlog\Response\ResponseSender;
-use PHPUnit_Framework_MockObject_MockObject;
-use Symfony\Component\Serializer\Serializer;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class EditStoryTest extends RequestProcessorTestCase
 {
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|ProjectsRepository
-     */
-    protected $projectRepositoryMock;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|Serializer
-     */
-    protected $serializerMock;
-
     /**
      * @return EditStory
      */
@@ -36,13 +18,8 @@ class EditStoryTest extends RequestProcessorTestCase
     {
         $this->initProcessorMocks();
 
-        $this->projectRepositoryMock = $this->createMock(ProjectsRepository::class);
-        $this->serializerMock = $this->createMock(Serializer::class);
-
-        return new EditStory($this->storiesRepositoryMock,
-            $this->webSocketAuthServiceMock,
-            $this->projectRepositoryMock,
-            $this->serializerMock
+        return new EditStory(
+            $this->storiesRepositoryMock
         );
     }
 
@@ -62,13 +39,9 @@ class EditStoryTest extends RequestProcessorTestCase
 
     public function providerSupportsRequest()
     {
-        $request1 = new Request();
-        $request1->type = 'edit-story';
-
-        $request2 = new Request();
-        $request2->type = 'other';
-
-        $request3 = new Request();
+        $request1 = new Request(1, 1, 'edit-story');
+        $request2 = new Request(1, 1, 'other');
+        $request3 = new Request(1, 1, '');
 
         return [
             'edit-story type' => [$request1, true],
@@ -87,19 +60,16 @@ class EditStoryTest extends RequestProcessorTestCase
     public function testProcess()
     {
         $processor = $this->getProcessorInstance();
-
-        $this->responseSenderMock = $this->createMock(ResponseSender::class);
         $storiesRepositoryMock = $this->storiesRepositoryMock;
 
-        $request = new Request();
-        $request->id = 33;
-        $request->type = 'edit-story';
-        $request->payload = new Story();
-        $request->payload->id = 'story-id';
-        $request->payload->title = 'story title';
-        $request->payload->text = 'story text';
-        $request->setClientId(432);
-        $request->setResponseSender($this->responseSenderMock);
+        $payload = new Story();
+        $payload->id = 'story-id';
+        $payload->title = 'story title';
+        $payload->text = 'story text';
+        $request = new Request(33, 432, 'edit-story', (array) $payload);
+        $request = $request->withAttribute('payloadObject', $payload);
+
+        $response = new Response($request->getId(), $request->getClientId());
 
         $storiesRepositoryMock->expects($this->once())
             ->method('save')
@@ -113,42 +83,32 @@ class EditStoryTest extends RequestProcessorTestCase
             ->willReturn(new Success(true))
         ;
 
-        $this->responseSenderMock->expects($this->once())
-            ->method('sendResponse')
-            ->with($this->callback(function (Response $response){
-                $this->assertEquals(33, $response->requestId);
-                $this->assertEquals('story-edited', $response->type);
+        /** @var Response $response */
+        $response = \Amp\wait($processor->process($request, $response));
 
-                /** @var Story $responsePayload */
-                $responsePayload = $response->payload;
-                $this->assertInstanceOf(Story::class, $responsePayload);
-                $this->assertEquals('story-id', $responsePayload->id);
-                $this->assertEquals('story title', $responsePayload->title);
-                $this->assertEquals('story text', $responsePayload->text);
+        $this->assertEquals(33, $response->getRequestId());
+        $this->assertEquals(432, $response->getClientId());
+        $this->assertEquals('story-edited', $response->getType());
 
-                return true;
-            }), $this->equalTo(432))
-        ;
-
-        $this->startProcessMethod($processor, $request);
+        $responsePayload = $response->getPayload();
+        $this->assertEquals('story-id', $responsePayload['id']);
+        $this->assertEquals('story title', $responsePayload['title']);
+        $this->assertEquals('story text', $responsePayload['text']);
     }
 
     public function testProcessWithError()
     {
         $processor = $this->getProcessorInstance();
-
-        $this->responseSenderMock = $this->createMock(ResponseSender::class);
         $storiesRepositoryMock = $this->storiesRepositoryMock;
 
-        $request = new Request();
-        $request->id = 33;
-        $request->type = 'edit-story';
-        $request->payload = new Story();
-        $request->payload->id = 'jgfjhfgj-erwer-dsfsd';
-        $request->payload->title = 'story title';
-        $request->payload->text = 'story text';
-        $request->setClientId(432);
-        $request->setResponseSender($this->responseSenderMock);
+        $payload = new Story();
+        $payload->id = 'jgfjhfgj-erwer-dsfsd';
+        $payload->title = 'story title';
+        $payload->text = 'story text';
+        $request = new Request(33, 432, 'edit-story', (array) $payload);
+        $request = $request->withAttribute('payloadObject', $payload);
+
+        $response = new Response($request->getId(), $request->getClientId());
 
         $storiesRepositoryMock->expects($this->once())
             ->method('save')
@@ -162,21 +122,12 @@ class EditStoryTest extends RequestProcessorTestCase
             ->willReturn(new Success(false))
         ;
 
-        $this->responseSenderMock->expects($this->once())
-            ->method('sendResponse')
-            ->with($this->callback(function (Response $response){
-                $this->assertEquals(33, $response->requestId);
-                $this->assertEquals('error', $response->type);
+        /** @var Response $response */
+        $response = \Amp\wait($processor->process($request, $response));
 
-                /** @var \Fedot\Backlog\Payload\ErrorPayload $responsePayload */
-                $responsePayload = $response->payload;
-                $this->assertInstanceOf(ErrorPayload::class, $responsePayload);
-                $this->assertEquals("Story id 'jgfjhfgj-erwer-dsfsd' do not saved", $responsePayload->message);
-
-                return true;
-            }), $this->equalTo(432))
-        ;
-
-        $this->startProcessMethod($processor, $request);
+        $this->assertEquals(33, $response->getRequestId());
+        $this->assertEquals(432, $response->getClientId());
+        $this->assertEquals('error', $response->getType());
+        $this->assertEquals("Story id 'jgfjhfgj-erwer-dsfsd' do not saved", $response->getPayload()['message']);
     }
 }

@@ -2,13 +2,14 @@
 
 namespace Fedot\Backlog\Request\Processor;
 
+use Amp\Deferred;
 use Amp\Promise;
 use Amp\Success;
 use Fedot\Backlog\Model\Story;
-use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Payload\ErrorPayload;
-use Fedot\Backlog\Response\Response;
 use Fedot\Backlog\Repository\StoriesRepository;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Generator;
 
@@ -20,22 +21,14 @@ class EditStory implements ProcessorInterface
     protected $storiesRepository;
 
     /**
-     * @var WebSocketConnectionAuthenticationService
-     */
-    protected $webSocketAuthService;
-
-    /**
      * EditStory constructor.
      *
      * @param StoriesRepository                        $storiesRepository
-     * @param WebSocketConnectionAuthenticationService $webSocketConnectionAuthentication
      */
     public function __construct(
-        StoriesRepository $storiesRepository,
-        WebSocketConnectionAuthenticationService $webSocketConnectionAuthentication
+        StoriesRepository $storiesRepository
     ){
         $this->storiesRepository = $storiesRepository;
-        $this->webSocketAuthService = $webSocketConnectionAuthentication;
     }
 
     /**
@@ -45,7 +38,7 @@ class EditStory implements ProcessorInterface
      */
     public function supportsRequest(Request $request): bool
     {
-        return $request->type === $this->getSupportedType();
+        return $request->getType() === $this->getSupportedType();
     }
 
     /**
@@ -57,7 +50,7 @@ class EditStory implements ProcessorInterface
     }
 
     /**
-     * @return string - FQN class name implemented \Fedot\Backlog\PayloadInterface
+     * @inheritdoc
      */
     public function getExpectedRequestPayload(): string
     {
@@ -65,31 +58,29 @@ class EditStory implements ProcessorInterface
     }
 
     /**
-     * @param Request $request
-     *
-     * @return Generator
+     * @inheritdoc
      */
-    public function process(Request $request): Generator
+    public function process(Request $request, Response $response): Promise
     {
-        /** @var Story $story */
-        $story = $request->payload;
+        $promisor = new Deferred();
 
-        $result = yield $this->storiesRepository->save($story);
+        \Amp\immediately(function () use ($promisor, $request, $response) {
+            /** @var Story $story */
+            $story = $request->getAttribute('payloadObject');
 
-        $response            = new Response();
-        $response->requestId = $request->id;
+            $result = yield $this->storiesRepository->save($story);
 
-        if ($result === true) {
-            $response->type    = 'story-edited';
-            $response->payload = $story;
-        } else {
-            $response->type             = 'error';
-            $response->payload          = new ErrorPayload();
-            $response->payload->message = "Story id '{$story->id}' do not saved";
-        }
+            if ($result === true) {
+                $response = $response->withType('story-edited');
+                $response = $response->withPayload((array) $story);
+            } else {
+                $response = $response->withType('error');
+                $response = $response->withPayload((array) new ErrorPayload("Story id '{$story->id}' do not saved"));
+            }
 
-        $request->getResponseSender()->sendResponse($response, $request->getClientId());
+            $promisor->succeed($response);
+        });
 
-        yield;
+        return $promisor->promise();
     }
 }

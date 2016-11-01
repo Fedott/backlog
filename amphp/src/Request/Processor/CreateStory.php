@@ -104,7 +104,7 @@ class CreateStory implements ProcessorInterface
                 $response = $response->withPayload((array) $story);
             } else {
                 $response = $response->withType('error');
-                $response->withPayload((array) new ErrorPayload("Story id '{$story->id}' already exists"));
+                $response = $response->withPayload((array) new ErrorPayload("Story id '{$story->id}' already exists"));
             }
 
             $promisor->succeed($response);
