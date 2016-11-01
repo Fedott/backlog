@@ -3,6 +3,7 @@ namespace Fedot\Backlog\Request\Processor;
 
 use Amp\Deferred;
 use Amp\Promise;
+use Amp\Promisor;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Payload\StoryPayload;
 use Fedot\Backlog\Repository\ProjectsRepository;
@@ -14,7 +15,7 @@ use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Ramsey\Uuid\UuidFactory;
 use Symfony\Component\Serializer\Serializer;
 
-class CreateStory implements ProcessorInterface
+class CreateStory extends AbstractProcessor
 {
     /**
      * @var StoriesRepository
@@ -55,17 +56,6 @@ class CreateStory implements ProcessorInterface
         $this->uuidFactory = $uuidFactory;
         $this->webSocketAuthService = $webSocketConnectionAuthenticationService;
     }
-
-    /**
-     * @param Request $request
-     *
-     * @return bool
-     */
-    public function supportsRequest(Request $request): bool
-    {
-        return $request->getType() === $this->getSupportedType();
-    }
-
     /**
      * @inheritDoc
      */
@@ -82,34 +72,25 @@ class CreateStory implements ProcessorInterface
         return StoryPayload::class;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function process(Request $request, Response $response): Promise
+    protected function execute(Promisor $promisor, Request $request, Response $response)
     {
-        $promisor = new Deferred();
+        /** @var StoryPayload $payload */
+        $payload = $request->getAttribute('payloadObject');
+        $projectId = $payload->projectId;
+        $project = yield $this->projectsRepository->get($projectId);
+        $story = $payload->story;
+        $story->id = $this->uuidFactory->uuid4()->toString();
 
-        \Amp\immediately(function () use ($promisor, $request, $response) {
-            /** @var StoryPayload $payload */
-            $payload = $request->getAttribute('payloadObject');
-            $projectId = $payload->projectId;
-            $project = yield $this->projectsRepository->get($projectId);
-            $story = $payload->story;
-            $story->id = $this->uuidFactory->uuid4()->toString();
+        $result = yield $this->storiesRepository->create($project, $story);
 
-            $result = yield $this->storiesRepository->create($project, $story);
+        if ($result === true) {
+            $response = $response->withType('story-created');
+            $response = $response->withPayload((array) $story);
+        } else {
+            $response = $response->withType('error');
+            $response = $response->withPayload((array) new ErrorPayload("Story id '{$story->id}' already exists"));
+        }
 
-            if ($result === true) {
-                $response = $response->withType('story-created');
-                $response = $response->withPayload((array) $story);
-            } else {
-                $response = $response->withType('error');
-                $response = $response->withPayload((array) new ErrorPayload("Story id '{$story->id}' already exists"));
-            }
-
-            $promisor->succeed($response);
-        });
-
-        return $promisor->promise();
+        $promisor->succeed($response);
     }
 }

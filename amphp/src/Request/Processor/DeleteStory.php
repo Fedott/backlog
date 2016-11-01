@@ -3,12 +3,13 @@ namespace Fedot\Backlog\Request\Processor;
 
 use Amp\Deferred;
 use Amp\Promise;
+use Amp\Promisor;
 use Fedot\Backlog\Payload\DeleteStoryPayload;
 use Fedot\Backlog\Repository\StoriesRepository;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
 
-class DeleteStory implements ProcessorInterface
+class DeleteStory extends AbstractProcessor
 {
     /**
      * @var StoriesRepository
@@ -23,16 +24,6 @@ class DeleteStory implements ProcessorInterface
     public function __construct(StoriesRepository $storiesRepository)
     {
         $this->storiesRepository = $storiesRepository;
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return bool
-     */
-    public function supportsRequest(Request $request): bool
-    {
-        return $request->getType() === $this->getSupportedType();
     }
 
     /**
@@ -51,32 +42,20 @@ class DeleteStory implements ProcessorInterface
         return DeleteStoryPayload::class;
     }
 
-    /**
-     * @param Request $request
-     * @param Response $response
-     *
-     * @return Promise
-     */
-    public function process(Request $request, Response $response): Promise
+    protected function execute(Promisor $promisor, Request $request, Response $response)
     {
-        $promisor = new Deferred();
+        /** @var DeleteStoryPayload $payload */
+        $payload = $request->getAttribute('payloadObject');
 
-        \Amp\immediately(function () use ($promisor, $request, $response) {
-            /** @var DeleteStoryPayload $payload */
-            $payload = $request->getAttribute('payloadObject');
+        $result = yield $this->storiesRepository->deleteByIds(
+            $payload->projectId,
+            $payload->storyId
+        );
 
-            $result = yield $this->storiesRepository->deleteByIds(
-                $payload->projectId,
-                $payload->storyId
-            );
+        if ($result) {
+            $response = $response->withType('story-deleted');
+        }
 
-            if ($result) {
-                $response = $response->withType('story-deleted');
-            }
-
-            $promisor->succeed($response);
-        });
-
-        return $promisor->promise();
+        $promisor->succeed($response);
     }
 }

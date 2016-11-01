@@ -4,6 +4,7 @@ namespace Fedot\Backlog\Request\Processor;
 
 use Amp\Deferred;
 use Amp\Promise;
+use Amp\Promisor;
 use Amp\Success;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Payload\ErrorPayload;
@@ -13,74 +14,44 @@ use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Generator;
 
-class EditStory implements ProcessorInterface
+class EditStory extends AbstractProcessor
 {
     /**
      * @var StoriesRepository
      */
     protected $storiesRepository;
 
-    /**
-     * EditStory constructor.
-     *
-     * @param StoriesRepository                        $storiesRepository
-     */
     public function __construct(
         StoriesRepository $storiesRepository
     ){
         $this->storiesRepository = $storiesRepository;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return bool
-     */
-    public function supportsRequest(Request $request): bool
-    {
-        return $request->getType() === $this->getSupportedType();
-    }
-
-    /**
-     * @return string
-     */
     public function getSupportedType(): string
     {
         return 'edit-story';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getExpectedRequestPayload(): string
     {
         return Story::class;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function process(Request $request, Response $response): Promise
+    protected function execute(Promisor $promisor, Request $request, Response $response)
     {
-        $promisor = new Deferred();
+        /** @var Story $story */
+        $story = $request->getAttribute('payloadObject');
 
-        \Amp\immediately(function () use ($promisor, $request, $response) {
-            /** @var Story $story */
-            $story = $request->getAttribute('payloadObject');
+        $result = yield $this->storiesRepository->save($story);
 
-            $result = yield $this->storiesRepository->save($story);
+        if ($result === true) {
+            $response = $response->withType('story-edited');
+            $response = $response->withPayload((array) $story);
+        } else {
+            $response = $response->withType('error');
+            $response = $response->withPayload((array) new ErrorPayload("Story id '{$story->id}' do not saved"));
+        }
 
-            if ($result === true) {
-                $response = $response->withType('story-edited');
-                $response = $response->withPayload((array) $story);
-            } else {
-                $response = $response->withType('error');
-                $response = $response->withPayload((array) new ErrorPayload("Story id '{$story->id}' do not saved"));
-            }
-
-            $promisor->succeed($response);
-        });
-
-        return $promisor->promise();
+        $promisor->succeed($response);
     }
 }
