@@ -4,16 +4,14 @@ namespace Tests\Fedot\Backlog\Request\Processor;
 use Amp\Success;
 use Fedot\Backlog\Request\Processor\DeleteStory;
 use Fedot\Backlog\Payload\DeleteStoryPayload;
+use Fedot\Backlog\Request\Processor\ProcessorInterface;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class DeleteStoryTest extends RequestProcessorTestCase
 {
-    /**
-     * @return DeleteStory
-     */
-    protected function getProcessorInstance()
+    protected function getProcessorInstance(): ProcessorInterface
     {
         $this->initProcessorMocks();
 
@@ -22,31 +20,9 @@ class DeleteStoryTest extends RequestProcessorTestCase
         return $processor;
     }
 
-    /**
-     * @dataProvider providerSupportsRequest
-     *
-     * @param Request $request
-     * @param bool    $expectedResult
-     */
-    public function testSupportsRequest(Request $request, bool $expectedResult)
+    protected function getExpectedValidRequestType(): string
     {
-        $processor = $this->getProcessorInstance();
-        $actualResult = $processor->supportsRequest($request);
-
-        $this->assertEquals($expectedResult, $actualResult);
-    }
-
-    public function providerSupportsRequest()
-    {
-        $request1 = new Request(1, 1, 'delete-story');
-        $request2 = new Request(1, 1, 'other');
-        $request3 = new Request(1, 1, '');
-
-        return [
-            'delete-story type' => [$request1, true],
-            'other type' => [$request2, false],
-            'null type' => [$request3, false],
-        ];
+        return 'delete-story';
     }
 
     public function testProcess()

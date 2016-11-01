@@ -8,14 +8,13 @@ use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Payload\StoryPayload;
 use Fedot\Backlog\Repository\ProjectsRepository;
 use Fedot\Backlog\Request\Processor\CreateStory;
-use Fedot\Backlog\Payload\ErrorPayload;
+use Fedot\Backlog\Request\Processor\ProcessorInterface;
 use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
 use PHPUnit_Framework_MockObject_MockObject;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;
-use Symfony\Component\Serializer\Serializer;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class CreateStoryTest extends RequestProcessorTestCase
@@ -30,10 +29,7 @@ class CreateStoryTest extends RequestProcessorTestCase
      */
     protected $projectRepositoryMock;
 
-    /**
-     * @return CreateStory
-     */
-    protected function getProcessorInstance()
+    protected function getProcessorInstance(): ProcessorInterface
     {
         $this->initProcessorMocks();
 
@@ -47,31 +43,9 @@ class CreateStoryTest extends RequestProcessorTestCase
         );
     }
 
-    /**
-     * @dataProvider providerSupportsRequest
-     *
-     * @param Request $request
-     * @param bool    $expectedResult
-     */
-    public function testSupportsRequest(Request $request, bool $expectedResult)
+    protected function getExpectedValidRequestType(): string
     {
-        $processor = $this->getProcessorInstance();
-        $actualResult = $processor->supportsRequest($request);
-
-        $this->assertEquals($expectedResult, $actualResult);
-    }
-
-    public function providerSupportsRequest()
-    {
-        $request1 = new Request(1, 1, 'create-story');
-        $request2 = new Request(1, 1, 'get-stories');
-        $request3 = new Request(1, 1, '');
-
-        return [
-            'create-story type' => [$request1, true],
-            'other type' => [$request2, false],
-            'null type' => [$request3, false],
-        ];
+        return 'create-story';
     }
 
     public function testProcess()
