@@ -22,8 +22,6 @@ class PingTest extends RequestProcessorTestCase
 
     public function testProcess()
     {
-        $this->responseSenderMock = $this->createMock(ResponseSender::class);
-
         $request = new Request(321, 777, 'ping');
         $response = new Response(321, 777);
 

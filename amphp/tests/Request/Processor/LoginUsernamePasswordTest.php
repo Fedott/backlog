@@ -10,149 +10,100 @@ use Fedot\Backlog\Payload\LoginFailedPayload;
 use Fedot\Backlog\Payload\LoginSuccessPayload;
 use Fedot\Backlog\Payload\UsernamePasswordPayload;
 use Fedot\Backlog\Request\Processor\LoginUsernamePassword;
-use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Response;
-use Fedot\Backlog\Response\ResponseSender;
+use Fedot\Backlog\Request\Processor\ProcessorInterface;
+use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
-use Tests\Fedot\Backlog\BaseTestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class LoginUsernamePasswordTest extends RequestProcessorTestCase
 {
     /**
-     * @dataProvider providerSupportsRequest
-     *
-     * @param Request $request
-     * @param bool    $expectedResult
+     * @var AuthenticationService|PHPUnit_Framework_MockObject_MockObject
      */
-    public function testSupportsRequest(Request $request, bool $expectedResult)
-    {
-        $processor = new LoginUsernamePassword(
-            $this->createMock(AuthenticationService::class),
-            $this->createMock(WebSocketConnectionAuthenticationService::class)
-        );
-        $actualResult = $processor->supportsRequest($request);
+    protected $authMock;
 
-        $this->assertEquals($expectedResult, $actualResult);
+    /**
+     * @var WebSocketConnectionAuthenticationService|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $webSocketAuthMock;
+
+    protected function getProcessorInstance(): ProcessorInterface
+    {
+        $this->authMock = $this->createMock(AuthenticationService::class);
+        $this->webSocketAuthMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
+
+        return new LoginUsernamePassword(
+            $this->authMock,
+            $this->webSocketAuthMock
+        );
     }
 
-    public function providerSupportsRequest()
+    protected function getExpectedValidRequestType(): string
     {
-        $request1 = new Request();
-        $request1->type = 'login-username-password';
-
-        $request2 = new Request();
-        $request2->type = 'other';
-
-        $request3 = new Request();
-
-        return [
-            'login-username-password type' => [$request1, true],
-            'other type'                   => [$request2, false],
-            'null type'                    => [$request3, false],
-        ];
-    }
-
-    public function testGetExpectedRequestPayload()
-    {
-        $processor = new LoginUsernamePassword(
-            $this->createMock(AuthenticationService::class),
-            $this->createMock(WebSocketConnectionAuthenticationService::class)
-        );
-
-        $this->assertEquals(UsernamePasswordPayload::class, $processor->getExpectedRequestPayload());
+        return 'login-username-password';
     }
 
     public function testProcessSuccess()
     {
-        $authMock = $this->createMock(AuthenticationService::class);
-        $webSocketAuthMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
-        $this->responseSenderMock = $this->createMock(ResponseSender::class);
+        $processor = $this->getProcessorInstance();
 
-        $processor = new LoginUsernamePassword($authMock, $webSocketAuthMock);
+        $payload = new UsernamePasswordPayload();
+        $payload->username = 'testUser';
+        $payload->password = 'testPassword';
 
-        $request = new Request();
-        $request->id = 34;
-        $request->type = 'login-username-password';
-        $request->setClientId(777);
-        $request->setResponseSender($this->responseSenderMock);
-        $request->payload = new UsernamePasswordPayload();
-        $request->payload->username = 'testUser';
-        $request->payload->password = 'testPassword';
+        $request = $this->makeRequest(34, 777, 'login-username-password', $payload);
+        $response = $this->makeResponse($request);
 
         $user = new User();
         $user->username = 'testUser';
         $user->password = '$2y$10$kEYXDhRhNmS1mk226hurv.i23tmnFXuqa1LCMG7UoyhZ3nF/PK7a2';
-        $authMock->expects($this->once())
+        $this->authMock->expects($this->once())
             ->method('authByUsernamePassword')
             ->with('testUser', 'testPassword')
             ->willReturn(new Success([$user, 'authenticated-token']))
         ;
 
-        $webSocketAuthMock->expects($this->once())
+        $this->webSocketAuthMock->expects($this->once())
             ->method('authorizeClient')
             ->with($this->equalTo(777), $this->equalTo($user))
         ;
 
-        $this->responseSenderMock->expects($this->once())
-            ->method('sendResponse')
-            ->with($this->callback(function (Response $response) {
-                $this->assertEquals(34, $response->requestId);
-                $this->assertEquals('login-success', $response->type);
+        /** @var Response $response */
+        $response = \Amp\wait($processor->process($request, $response));
 
-                /** @var LoginSuccessPayload $response->payload */
-                $this->assertInstanceOf(LoginSuccessPayload::class, $response->payload);
-                $this->assertEquals('authenticated-token', $response->payload->token);
-                $this->assertEquals('testUser', $response->payload->username);
+        $this->assertResponseBasic($response, 34, 777, 'login-success');
 
-                return true;
-            }), $this->equalTo(777))
-        ;
-
-        $this->startProcessMethod($processor, $request);
+        $this->assertEquals('authenticated-token', $response->getPayload()['token']);
+        $this->assertEquals('testUser', $response->getPayload()['username']);
     }
 
     public function testProcessFailed()
     {
-        $this->responseSenderMock = $this->createMock(ResponseSender::class);
-        $authMock = $this->createMock(AuthenticationService::class);
-        $webSocketAuthMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
+        $processor = $this->getProcessorInstance();
 
-        $processor = new LoginUsernamePassword($authMock, $webSocketAuthMock);
+        $payload = new UsernamePasswordPayload();
+        $payload->username = 'testUser';
+        $payload->password = 'testPassword';
 
-        $request = new Request();
-        $request->id = 34;
-        $request->type = 'login-username-password';
-        $request->setClientId(777);
-        $request->setResponseSender($this->responseSenderMock);
-        $request->payload = new UsernamePasswordPayload();
-        $request->payload->username = 'testUser';
-        $request->payload->password = 'testPassword';
+        $request = $this->makeRequest(34, 777, 'login-username-password', $payload);
+        $response = $this->makeResponse($request);
 
-        $authMock->expects($this->once())
+        $this->authMock->expects($this->once())
             ->method('authByUsernamePassword')
             ->with('testUser', 'testPassword')
             ->willReturn(new Failure(new AuthenticationException("Invalid username or password")))
         ;
 
-        $webSocketAuthMock->expects($this->never())
+        $this->webSocketAuthMock->expects($this->never())
             ->method('authorizeClient')
         ;
 
-        $this->responseSenderMock->expects($this->once())
-            ->method('sendResponse')
-            ->with($this->callback(function (Response $response) {
-                $this->assertEquals(34, $response->requestId);
-                $this->assertEquals('login-failed', $response->type);
+        /** @var Response $response */
+        $response = \Amp\wait($processor->process($request, $response));
 
-                /** @var LoginFailedPayload $response->payload */
-                $this->assertInstanceOf(LoginFailedPayload::class, $response->payload);
-                $this->assertEquals('Invalid username or password', $response->payload->error);
+        $this->assertResponseBasic($response, 34, 777, 'login-failed');
 
-                return true;
-            }), $this->equalTo(777))
-        ;
-
-        $this->startProcessMethod($processor, $request);
+        $this->assertEquals('Invalid username or password', $response->getPayload()['error']);
     }
 }

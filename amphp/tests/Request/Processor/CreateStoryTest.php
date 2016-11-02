@@ -109,7 +109,6 @@ class CreateStoryTest extends RequestProcessorTestCase
 
     public function testProcessWithError()
     {
-        $this->responseSenderMock = $this->createMock(ResponseSender::class);
         $uuidMock = $this->createMock(Uuid::class);
 
         $processor = $this->getProcessorInstance();
