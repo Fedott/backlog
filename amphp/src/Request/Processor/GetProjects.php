@@ -1,15 +1,15 @@
 <?php declare(strict_types = 1);
 namespace Fedot\Backlog\Request\Processor;
 
+use Amp\Promisor;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\ProjectsPayload;
 use Fedot\Backlog\Repository\ProjectsRepository;
-use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\Response;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
-use Generator;
 
-class GetProjects implements ProcessorInterface
+class GetProjects extends AbstractProcessor
 {
     /**
      * @var ProjectsRepository
@@ -33,48 +33,27 @@ class GetProjects implements ProcessorInterface
         $this->webSocketAuthService = $webSocketAuthService;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return bool
-     */
-    public function supportsRequest(Request $request): bool
-    {
-        return $request->type === $this->getSupportedType();
-    }
-
-    /**
-     * @return string
-     */
     public function getSupportedType(): string
     {
         return 'get-projects';
     }
 
-    /**
-     * @return string - FQN class name implemented \Fedot\Backlog\PayloadInterface
-     */
     public function getExpectedRequestPayload(): string
     {
         return EmptyPayload::class;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Generator
-     */
-    public function process(Request $request): Generator
+    protected function execute(Promisor $promisor, Request $request, Response $response)
     {
         $user = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
         $projects = yield $this->projectRepository->getAllByUser($user);
 
-        $response = new Response();
-        $response->requestId = $request->id;
-        $response->type = 'projects';
-        $response->payload = new ProjectsPayload();
-        $response->payload->projects = $projects;
+        $payload = new ProjectsPayload();
+        $payload->projects = $projects;
 
-        $request->getResponseSender()->sendResponse($response, $request->getClientId());
+        $response = $response->withType('projects');
+        $response = $response->withPayload((array) $payload);
+
+        $promisor->succeed($response);
     }
 }
