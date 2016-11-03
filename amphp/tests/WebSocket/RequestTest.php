@@ -8,7 +8,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 {
     public function testId()
     {
-        $request1 = new Request(7, 5, 'test');
+        $request1 = new Request(7, 'test', 5);
 
         $request2 = $request1->withId(17);
 
@@ -19,7 +19,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testClientId()
     {
-        $request1 = new Request(7, 5, 'test');
+        $request1 = new Request(7, 'test', 5);
 
         $request2 = $request1->withClientId(15);
 
@@ -30,7 +30,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testType()
     {
-        $request1 = new Request(7, 5, 'test');
+        $request1 = new Request(7, 'test', 5);
 
         $request2 = $request1->withType('type1');
         $request3 = $request2->withType('other-type');
@@ -45,7 +45,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testAttributes()
     {
-        $request1 = new Request(7, 5, ' test');
+        $request1 = new Request(7, ' test', 5);
 
         $request2 = $request1->withAttribute('name', 'value');
         $request3 = $request2->withAttribute('other', 'otherValue');
@@ -74,7 +74,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testNullAttribute()
     {
-        $request = (new Request(7, 5, 'test'))->withAttribute('name', null);
+        $request = (new Request(7, 'test', 5))->withAttribute('name', null);
 
         $this->assertSame(['name' => null], $request->getAttributes());
         $this->assertNull($request->getAttribute('name', 'different-default'));

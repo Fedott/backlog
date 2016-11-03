@@ -21,7 +21,7 @@ class MessageProcessorTest extends BaseTestCase
 
         $webSocketServer = new MessageProcessor($serializerServiceMock, $requestProcessorMock);
 
-        $request = new Request(1, 123, 'test');
+        $request = new Request(1, 'test', 123);
 
         $serializerServiceMock->expects($this->once())
             ->method('parseRequest')
@@ -50,7 +50,7 @@ class MessageProcessorTest extends BaseTestCase
 
         $webSocketServer = new MessageProcessor($serializerServiceMock, $requestProcessorMock);
 
-        $request = new Request(434, 675, 'test-error');
+        $request = new Request(434, 'test-error', 675);
 
         $serializerServiceMock->expects($this->once())
             ->method('parseRequest')

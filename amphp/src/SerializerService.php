@@ -2,7 +2,8 @@
 namespace Fedot\Backlog;
 
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
-use Fedot\Backlog\Request\Request;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\RequestInterface;
 use Symfony\Component\Serializer\Serializer;
 
 class SerializerService
@@ -54,14 +55,9 @@ class SerializerService
         }
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return PayloadInterface
-     */
-    public function parsePayload(Request $request): PayloadInterface
+    public function parsePayload(RequestInterface $request): PayloadInterface
     {
-        $type = $request->type;
+        $type = $request->getType();
 
         if (!array_key_exists($type, $this->payloadTypes)) {
             throw new \RuntimeException("Not found payload for request type: {$type}");
@@ -69,16 +65,11 @@ class SerializerService
 
         $payloadTypeClass = $this->payloadTypes[$type];
 
-        $payload = $this->serializer->denormalize($request->payload, $payloadTypeClass);
+        $payload = $this->serializer->denormalize($request->getPayload(), $payloadTypeClass);
 
         return $payload;
     }
 
-    /**
-     * @param string $requestJson
-     *
-     * @return Request
-     */
     public function parseRequest(string $requestJson): Request
     {
         /** @var Request $request */

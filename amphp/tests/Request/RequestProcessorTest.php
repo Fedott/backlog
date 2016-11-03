@@ -12,7 +12,7 @@ class RequestProcessorTest extends BaseTestCase
 {
     public function testProcess()
     {
-        $request = new Request(1, 1, 'test');
+        $request = new Request(1, 'test', 1);
         $response = new Response(1, 1);
         $expectedResponse = $response->withType('expected');
 

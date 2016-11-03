@@ -22,7 +22,7 @@ class PingTest extends RequestProcessorTestCase
 
     public function testProcess()
     {
-        $request = new Request(321, 777, 'ping');
+        $request = new Request(321, 'ping', 777);
         $response = new Response(321, 777);
 
         $processor = new Ping();

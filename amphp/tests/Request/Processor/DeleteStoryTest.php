@@ -42,7 +42,7 @@ class DeleteStoryTest extends RequestProcessorTestCase
             ->willReturn(new Success(true))
         ;
 
-        $request = new Request(34, 777, 'delete-story', [
+        $request = new Request(34, 'delete-story', 777, [
             'storyId' => 'story-id',
             'projectId' => 'project-id',
         ]);

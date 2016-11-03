@@ -29,12 +29,12 @@ class Request implements RequestInterface
      */
     private $attributes = [];
 
-    public function __construct(int $id, int $clientId, string $type, array $payload = [])
+    public function __construct(int $id, string $type, int $clientId = null, $payload = [])
     {
         $this->id = $id;
         $this->clientId = $clientId;
         $this->type = $type;
-        $this->payload = $payload;
+        $this->payload = (array) $payload;
     }
 
     public function getId(): int

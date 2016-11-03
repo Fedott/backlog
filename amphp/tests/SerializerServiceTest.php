@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 namespace Tests\Fedot\Backlog;
 
-use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\SerializerService;
+use Fedot\Backlog\WebSocket\Request;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
@@ -46,8 +46,8 @@ JSON;
         $actualPayload = $serializerService->parsePayload($actualRequest);
 
         $this->assertInstanceOf(Request::class, $actualRequest);
-        $this->assertEquals('test', $actualRequest->type);
-        $this->assertEquals('234', $actualRequest->id);
+        $this->assertEquals('test', $actualRequest->getType());
+        $this->assertEquals('234', $actualRequest->getId());
 
         $this->assertInstanceOf(TestPayload::class, $actualPayload);
         $this->assertEquals(564, $actualPayload->field1);

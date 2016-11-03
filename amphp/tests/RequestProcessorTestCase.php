@@ -46,9 +46,9 @@ abstract class RequestProcessorTestCase extends BaseTestCase
 
     public function providerSupportsRequest()
     {
-        $request1 = new \Fedot\Backlog\WebSocket\Request(1, 1, $this->getExpectedValidRequestType());
-        $request2 = new \Fedot\Backlog\WebSocket\Request(1, 1, 'other');
-        $request3 = new \Fedot\Backlog\WebSocket\Request(1, 1, '');
+        $request1 = new \Fedot\Backlog\WebSocket\Request(1, $this->getExpectedValidRequestType(), 1);
+        $request2 = new \Fedot\Backlog\WebSocket\Request(1, 'other', 1);
+        $request3 = new \Fedot\Backlog\WebSocket\Request(1, '', 1);
 
         return [
             'valid type' => [$request1, true],
@@ -77,7 +77,7 @@ abstract class RequestProcessorTestCase extends BaseTestCase
         PayloadInterface $payload
     ):\Fedot\Backlog\WebSocket\Request
     {
-        $request = new \Fedot\Backlog\WebSocket\Request($requestId, $clientId, $requestType, (array)$payload);
+        $request = new \Fedot\Backlog\WebSocket\Request($requestId, $requestType, $clientId, (array)$payload);
         $request = $request->withAttribute('payloadObject', $payload);
 
         return $request;

@@ -68,7 +68,7 @@ class CreateStoryTest extends RequestProcessorTestCase
         $payload->story->title = 'story title';
         $payload->story->text = 'story text';
         $payload->projectId = 'project-id';
-        $request = new Request(33, 432, 'create-story', (array) $payload);
+        $request = new Request(33, 'create-story', 432, (array)$payload);
         $request = $request->withAttribute('payloadObject', $payload);
 
         $this->uuidFactoryMock
@@ -127,7 +127,7 @@ class CreateStoryTest extends RequestProcessorTestCase
         $payload->story->title = 'story title';
         $payload->story->text = 'story text';
         $payload->projectId = 'project-id';
-        $request = new Request(33, 432, 'create-story', (array) $payload);
+        $request = new Request(33, 'create-story', 432, (array)$payload);
         $request = $request->withAttribute('payloadObject', $payload);
 
         $this->uuidFactoryMock

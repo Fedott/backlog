@@ -42,7 +42,7 @@ class EditStoryTest extends RequestProcessorTestCase
         $payload->id = 'story-id';
         $payload->title = 'story title';
         $payload->text = 'story text';
-        $request = new Request(33, 432, 'edit-story', (array) $payload);
+        $request = new Request(33, 'edit-story', 432, (array)$payload);
         $request = $request->withAttribute('payloadObject', $payload);
 
         $response = new Response($request->getId(), $request->getClientId());
@@ -81,7 +81,7 @@ class EditStoryTest extends RequestProcessorTestCase
         $payload->id = 'jgfjhfgj-erwer-dsfsd';
         $payload->title = 'story title';
         $payload->text = 'story text';
-        $request = new Request(33, 432, 'edit-story', (array) $payload);
+        $request = new Request(33, 'edit-story', 432, (array)$payload);
         $request = $request->withAttribute('payloadObject', $payload);
 
         $response = new Response($request->getId(), $request->getClientId());
