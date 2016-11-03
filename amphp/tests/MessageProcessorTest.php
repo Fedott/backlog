@@ -6,6 +6,7 @@ use Aerys\Websocket\Endpoint;
 use Amp\Success;
 use Fedot\Backlog\MessageProcessor;
 use Fedot\Backlog\Payload\ErrorPayload;
+use Fedot\Backlog\PayloadInterface;
 use Fedot\Backlog\Request\RequestProcessorManager;
 use Fedot\Backlog\SerializerService;
 use Fedot\Backlog\WebSocket\Request;
@@ -18,19 +19,32 @@ class MessageProcessorTest extends BaseTestCase
         $serializerServiceMock = $this->createMock(SerializerService::class);
         $requestProcessorMock = $this->createMock(RequestProcessorManager::class);
         $endpointMock = $this->createMock(Endpoint::class);
+        $payloadMock = $this->createMock(PayloadInterface::class);
 
         $webSocketServer = new MessageProcessor($serializerServiceMock, $requestProcessorMock);
 
-        $request = new Request(1, 'test', 123);
+        $request = new Request(1, 'test', 123, ['test' => 'test']);
 
         $serializerServiceMock->expects($this->once())
             ->method('parseRequest')
             ->with("jj")
             ->willReturn($request)
         ;
+        $serializerServiceMock->expects($this->once())
+            ->method('parsePayload')
+            ->with($request)
+            ->willReturn($payloadMock)
+        ;
         $requestProcessorMock->expects($this->once())
             ->method('process')
-            ->with($request)
+            ->with($this->callback(function (Request $request) use ($payloadMock) {
+                $this->assertEquals(1, $request->getId());
+                $this->assertEquals(123, $request->getClientId());
+                $this->assertEquals('test', $request->getType());
+                $this->assertEquals($payloadMock, $request->getAttribute('payloadObject'));
+
+                return true;
+            }))
             ->willReturn(new Success(new Response($request->getId(), $request->getClientId(), 'test-response')))
         ;
 
@@ -68,7 +82,7 @@ class MessageProcessorTest extends BaseTestCase
 
         $endpointMock->expects($this->once())
             ->method('send')
-            ->with(675, '{"requestId":434,"type":"error","payload":[]}')
+            ->with(675, '{"requestId":434,"type":"error","payload":{"message":"Not found payload type: qwe"}}')
         ;
 
         \Amp\wait($webSocketServer->processMessage($endpointMock, 675, "jj"));

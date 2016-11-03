@@ -40,14 +40,14 @@ class MessageProcessor
         $response = new Response($request->getId(), $request->getClientId());
 
         try {
-            $request->withAttribute('payloadObject', $this->serializerService->parsePayload($request));
+            $request = $request->withAttribute('payloadObject', $this->serializerService->parsePayload($request));
 
             $responsePromise = $this->requestProcessorManager->process($request, $response);
         } catch (\RuntimeException $exception) {
             $payload = new ErrorPayload();
             $payload->message = $exception->getMessage();
             $response = $response->withType('error');
-            $response->withPayload((array) $payload);
+            $response = $response->withPayload((array) $payload);
 
             $responsePromise = new Success($response);
         }
