@@ -25,9 +25,9 @@ class WebSocketServerTest extends BaseTestCase
         $messageProcessorMock->expects($this->once())
             ->method('processMessage')
             ->with(
-                $this->equalTo(123),
-                $this->equalTo('jj'),
-                $this->isInstanceOf(ResponseSender::class)
+                $endpointMock,
+                123,
+                'jj'
             )
         ;
 

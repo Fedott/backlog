@@ -27,11 +27,6 @@ class WebSocketServer implements Websocket
     protected $endpoint;
 
     /**
-     * @var ResponseSender
-     */
-    protected $responseSender;
-
-    /**
      * WebSocketServer constructor.
      *
      * @param MessageProcessor                         $messageProcessor
@@ -51,7 +46,6 @@ class WebSocketServer implements Websocket
     public function onStart(Websocket\Endpoint $endpoint)
     {
         $this->endpoint = $endpoint;
-        $this->responseSender = new ResponseSender($endpoint);
     }
 
     /**
@@ -86,7 +80,7 @@ class WebSocketServer implements Websocket
      */
     public function processMessage(int $clientId, string $message)
     {
-        $this->messageProcessor->processMessage($clientId, $message, $this->responseSender);
+        $this->messageProcessor->processMessage($this->endpoint, $clientId, $message);
     }
 
     /**
