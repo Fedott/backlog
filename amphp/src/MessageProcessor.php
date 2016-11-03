@@ -2,10 +2,13 @@
 
 namespace Fedot\Backlog;
 
+use Aerys\Websocket\Endpoint;
+use Amp\Promise;
+use Amp\Success;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Request\RequestProcessorManager;
-use Fedot\Backlog\Response\Response;
-use Fedot\Backlog\Response\ResponseSender;
+use Fedot\Backlog\WebSocket\Response;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class MessageProcessor
 {
@@ -30,29 +33,34 @@ class MessageProcessor
         $this->requestProcessorManager = $requestProcessorManager;
     }
 
-    /**
-     * @param int            $clientId
-     * @param string         $message
-     * @param ResponseSender $responseSender
-     */
-    public function processMessage(int $clientId, string $message, ResponseSender $responseSender)
+    public function processMessage(Endpoint $endpoint, int $clientId, string $message): Promise
     {
         $request = $this->serializerService->parseRequest($message);
-        $request->setClientId($clientId);
-        $request->setResponseSender($responseSender);
+        $request = $request->withClientId($clientId);
+        $response = new Response($request->getId(), $request->getClientId());
 
         try {
-            $request->payload = $this->serializerService->parsePayload($request);
+            $request->withAttribute('payloadObject', $this->serializerService->parsePayload($request));
 
-            $this->requestProcessorManager->process($request);
+            $responsePromise = $this->requestProcessorManager->process($request, $response);
         } catch (\RuntimeException $exception) {
-            $response = new Response();
-            $response->requestId = $request->id;
-            $response->type = 'error';
-            $response->payload = new ErrorPayload();
-            $response->payload->message = $exception->getMessage();
+            $payload = new ErrorPayload();
+            $payload->message = $exception->getMessage();
+            $response = $response->withType('error');
+            $response->withPayload((array) $payload);
 
-            $request->getResponseSender()->sendResponse($response, $request->getClientId());
+            $responsePromise = new Success($response);
         }
+
+        $responsePromise->when(function ($error, ResponseInterface $response) use ($endpoint) {
+            $responseBody = json_encode($response);
+            if ($response->isDirect()) {
+                $endpoint->send($response->getClientId(), $responseBody);
+            } else {
+                $endpoint->send(null, $responseBody);
+            }
+        });
+
+        return $responsePromise;
     }
 }

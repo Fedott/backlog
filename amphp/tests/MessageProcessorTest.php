@@ -2,13 +2,14 @@
 
 namespace Tests\Fedot\Backlog;
 
+use Aerys\Websocket\Endpoint;
+use Amp\Success;
 use Fedot\Backlog\MessageProcessor;
 use Fedot\Backlog\Payload\ErrorPayload;
-use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Request\RequestProcessorManager;
-use Fedot\Backlog\Response\Response;
-use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\SerializerService;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 
 class MessageProcessorTest extends BaseTestCase
 {
@@ -16,11 +17,11 @@ class MessageProcessorTest extends BaseTestCase
     {
         $serializerServiceMock = $this->createMock(SerializerService::class);
         $requestProcessorMock = $this->createMock(RequestProcessorManager::class);
-        $responseSenderMock = $this->createMock(ResponseSender::class);
+        $endpointMock = $this->createMock(Endpoint::class);
 
         $webSocketServer = new MessageProcessor($serializerServiceMock, $requestProcessorMock);
 
-        $request = new Request();
+        $request = new Request(1, 123, 'test');
 
         $serializerServiceMock->expects($this->once())
             ->method('parseRequest')
@@ -30,30 +31,26 @@ class MessageProcessorTest extends BaseTestCase
         $requestProcessorMock->expects($this->once())
             ->method('process')
             ->with($request)
+            ->willReturn(new Success(new Response($request->getId(), $request->getClientId(), 'test-response')))
         ;
 
-        $webSocketServer->processMessage(123, "jj", $responseSenderMock);
+        $endpointMock->expects($this->once())
+            ->method('send')
+            ->with(123, '{"requestId":1,"type":"test-response","payload":[]}')
+        ;
 
-        $this->assertEquals(123, $request->getClientId());
-
-        $responseSender = $request->getResponseSender();
-        $this->assertInstanceOf(ResponseSender::class, $responseSender);
-        $this->assertEquals($responseSenderMock, $responseSender);
+        \Amp\wait($webSocketServer->processMessage($endpointMock, 123, "jj"));
     }
 
     public function testProcessMessageWithError()
     {
-
         $serializerServiceMock = $this->createMock(SerializerService::class);
         $requestProcessorMock = $this->createMock(RequestProcessorManager::class);
-        $responseSenderMock = $this->createMock(ResponseSender::class);
+        $endpointMock = $this->createMock(Endpoint::class);
 
         $webSocketServer = new MessageProcessor($serializerServiceMock, $requestProcessorMock);
 
-        $request = new Request();
-        $request->id = 434;
-        $request->type = 'test-error';
-        $request->setClientId(675);
+        $request = new Request(434, 675, 'test-error');
 
         $serializerServiceMock->expects($this->once())
             ->method('parseRequest')
@@ -69,23 +66,11 @@ class MessageProcessorTest extends BaseTestCase
             ->method('process')
         ;
 
-        $responseSenderMock->expects($this->once())
-            ->method('sendResponse')
-            ->with(
-                $this->callback(function (Response $response) {
-                    $this->assertEquals('error', $response->type);
-                    $this->assertEquals(434, $response->requestId);
-
-                    /** @var ErrorPayload $response->payload */
-                    $this->assertInstanceOf(ErrorPayload::class, $response->payload);
-                    $this->assertEquals('Not found payload type: qwe', $response->payload->message);
-
-                    return true;
-                }),
-                $this->equalTo(675)
-            )
+        $endpointMock->expects($this->once())
+            ->method('send')
+            ->with(675, '{"requestId":434,"type":"error","payload":[]}')
         ;
 
-        $webSocketServer->processMessage(675, "jj", $responseSenderMock);
+        \Amp\wait($webSocketServer->processMessage($endpointMock, 675, "jj"));
     }
 }
