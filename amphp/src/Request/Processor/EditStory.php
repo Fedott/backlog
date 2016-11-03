@@ -2,17 +2,12 @@
 
 namespace Fedot\Backlog\Request\Processor;
 
-use Amp\Deferred;
-use Amp\Promise;
 use Amp\Promisor;
-use Amp\Success;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Repository\StoriesRepository;
-use Fedot\Backlog\WebSocket\Request;
-use Fedot\Backlog\WebSocket\Response;
-use Fedot\Backlog\WebSocketConnectionAuthenticationService;
-use Generator;
+use Fedot\Backlog\WebSocket\RequestInterface;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class EditStory extends AbstractProcessor
 {
@@ -37,7 +32,7 @@ class EditStory extends AbstractProcessor
         return Story::class;
     }
 
-    protected function execute(Promisor $promisor, Request $request, Response $response)
+    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
     {
         /** @var Story $story */
         $story = $request->getAttribute('payloadObject');

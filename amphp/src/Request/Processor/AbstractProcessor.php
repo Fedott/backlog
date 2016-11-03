@@ -2,19 +2,19 @@
 namespace Fedot\Backlog\Request\Processor;
 
 use Amp\Deferred;
-use Amp\Promisor;
 use Amp\Promise;
-use Fedot\Backlog\WebSocket\Request;
-use Fedot\Backlog\WebSocket\Response;
+use Amp\Promisor;
+use Fedot\Backlog\WebSocket\RequestInterface;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 
 abstract class AbstractProcessor implements ProcessorInterface
 {
-    abstract protected function execute(Promisor $promisor, Request $request, Response $response);
+    abstract protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response);
 
     /**
      * @inheritdoc
      */
-    public function process(Request $request, Response $response): Promise
+    public function process(RequestInterface $request, ResponseInterface $response): Promise
     {
         $promisor = new Deferred();
 
@@ -25,10 +25,7 @@ abstract class AbstractProcessor implements ProcessorInterface
         return $promisor->promise();
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function supportsRequest(Request $request): bool
+    public function supportsRequest(RequestInterface $request): bool
     {
         return $request->getType() === $this->getSupportedType();
     }

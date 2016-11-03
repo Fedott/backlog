@@ -7,9 +7,8 @@ use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Payload\MoveStoryPayload;
 use Fedot\Backlog\Repository\StoriesRepository;
-use Fedot\Backlog\WebSocket\Request;
-use Fedot\Backlog\WebSocket\Response;
-use Generator;
+use Fedot\Backlog\WebSocket\RequestInterface;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class MoveStory extends AbstractProcessor
 {
@@ -41,7 +40,7 @@ class MoveStory extends AbstractProcessor
         return MoveStoryPayload::class;
     }
 
-    protected function execute(Promisor $promisor, Request $request, Response $response)
+    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
     {
         /** @var MoveStoryPayload $payload */
         $payload = $request->getAttribute('payloadObject');

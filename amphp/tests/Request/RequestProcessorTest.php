@@ -1,16 +1,20 @@
 <?php declare(strict_types=1);
 namespace Tests\Fedot\Backlog\Request;
 
+use Amp\Success;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
-use Fedot\Backlog\Request\Request;
 use Fedot\Backlog\Request\RequestProcessorManager;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\BaseTestCase;
 
 class RequestProcessorTest extends BaseTestCase
 {
     public function testProcess()
     {
-        $request = new Request();
+        $request = new Request(1, 1, 'test');
+        $response = new Response(1, 1);
+        $expectedResponse = $response->withType('expected');
 
         $testProcessor1 = $this->createMock(ProcessorInterface::class);
         $testProcessor2 = $this->createMock(ProcessorInterface::class);
@@ -33,9 +37,7 @@ class RequestProcessorTest extends BaseTestCase
         $testProcessor2->expects($this->once())
             ->method('process')
             ->with($request)
-            ->willReturnCallback(function() {
-                yield;
-            })
+            ->willReturn(new Success($expectedResponse))
         ;
         $testProcessor3->expects($this->never())
             ->method('supportsRequest')
@@ -53,8 +55,8 @@ class RequestProcessorTest extends BaseTestCase
             $testProcessor3,
         ]);
 
-        $manager->process($request);
+        $actualResponse = \Amp\wait($manager->process($request, $response));
 
-        $this->waitAsyncCode();
+        $this->assertEquals($expectedResponse, $actualResponse);
     }
 }

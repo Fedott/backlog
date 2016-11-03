@@ -11,11 +11,11 @@ use Fedot\Backlog\WebSocket\Response;
 class TestProcessor implements ProcessorInterface
 {
     /**
-     * @param Request $request
+     * @param Request|RequestInterface $request
      *
      * @return bool
      */
-    public function supportsRequest(Request $request): bool
+    public function supportsRequest(RequestInterface $request): bool
     {
         return $request->getType() == $this->getSupportedType();
     }
@@ -37,12 +37,12 @@ class TestProcessor implements ProcessorInterface
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
+     * @param Request|RequestInterface $request
+     * @param Response|ResponseInterface $response
      *
      * @return Promise
      */
-    public function process(Request $request, Response $response): Promise
+    public function process(RequestInterface $request, ResponseInterface $response): Promise
     {
         return new Success();
     }

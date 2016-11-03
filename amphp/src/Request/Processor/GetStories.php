@@ -5,10 +5,8 @@ use Amp\Promisor;
 use Fedot\Backlog\Payload\ProjectIdPayload;
 use Fedot\Backlog\Payload\StoriesPayload;
 use Fedot\Backlog\Repository\StoriesRepository;
-use Fedot\Backlog\WebSocket\Request;
-use Fedot\Backlog\WebSocket\Response;
-use Fedot\Backlog\WebSocketConnectionAuthenticationService;
-use Generator;
+use Fedot\Backlog\WebSocket\RequestInterface;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class GetStories extends AbstractProcessor
 {
@@ -44,7 +42,7 @@ class GetStories extends AbstractProcessor
         return ProjectIdPayload::class;
     }
 
-    protected function execute(Promisor $promisor, Request $request, Response $response)
+    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
     {
         /** @var ProjectIdPayload $payload */
         $payload = $request->getAttribute('payloadObject');

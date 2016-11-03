@@ -1,19 +1,15 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Request\Processor;
 
-use Amp\Deferred;
-use Amp\Promise;
 use Amp\Promisor;
-use Fedot\Backlog\Model\Story;
+use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Payload\StoryPayload;
 use Fedot\Backlog\Repository\ProjectsRepository;
-use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Repository\StoriesRepository;
-use Fedot\Backlog\WebSocket\Request;
-use Fedot\Backlog\WebSocket\Response;
+use Fedot\Backlog\WebSocket\RequestInterface;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Ramsey\Uuid\UuidFactory;
-use Symfony\Component\Serializer\Serializer;
 
 class CreateStory extends AbstractProcessor
 {
@@ -72,7 +68,7 @@ class CreateStory extends AbstractProcessor
         return StoryPayload::class;
     }
 
-    protected function execute(Promisor $promisor, Request $request, Response $response)
+    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
     {
         /** @var StoryPayload $payload */
         $payload = $request->getAttribute('payloadObject');

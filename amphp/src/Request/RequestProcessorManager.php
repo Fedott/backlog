@@ -1,7 +1,11 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Request;
 
+use Amp\Promise;
+use Amp\Success;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
+use Fedot\Backlog\WebSocket\RequestInterface;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class RequestProcessorManager
 {
@@ -10,9 +14,6 @@ class RequestProcessorManager
      */
     protected $processors = [];
 
-    /**
-     * @param ProcessorInterface $processor
-     */
     public function addProcessor(ProcessorInterface $processor)
     {
         $this->processors[] = $processor;
@@ -28,19 +29,14 @@ class RequestProcessorManager
         }, $processors);
     }
 
-    /**
-     * @param Request $request
-     */
-    public function process(Request $request)
+    public function process(RequestInterface $request, ResponseInterface $response): Promise
     {
         foreach ($this->processors as $processor) {
             if ($processor->supportsRequest($request)) {
-                \Amp\immediately(function () use ($processor, $request) {
-                    yield from $processor->process($request);
-                });
-
-                return;
+                return $processor->process($request, $response);
             }
         }
+
+        return new Success($response);
     }
 }

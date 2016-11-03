@@ -1,17 +1,15 @@
 <?php declare(strict_types = 1);
 namespace Fedot\Backlog\Request\Processor;
 
-use Amp\Promise;
 use Amp\Promisor;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Payload\LoginFailedPayload;
 use Fedot\Backlog\Payload\LoginSuccessPayload;
 use Fedot\Backlog\Payload\UsernamePasswordPayload;
-use Fedot\Backlog\WebSocket\Request;
-use Fedot\Backlog\WebSocket\Response;
+use Fedot\Backlog\WebSocket\RequestInterface;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
-use Generator;
 
 class LoginUsernamePassword extends AbstractProcessor
 {
@@ -55,7 +53,7 @@ class LoginUsernamePassword extends AbstractProcessor
         return UsernamePasswordPayload::class;
     }
 
-    protected function execute(Promisor $promisor, Request $request, Response $response)
+    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
     {
         /** @var UsernamePasswordPayload $payload */
         $payload = $request->getAttribute('payloadObject');

@@ -9,10 +9,9 @@ use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Payload\LoginFailedPayload;
 use Fedot\Backlog\Payload\LoginSuccessPayload;
 use Fedot\Backlog\Payload\TokenPayload;
-use Fedot\Backlog\WebSocket\Request;
-use Fedot\Backlog\WebSocket\Response;
+use Fedot\Backlog\WebSocket\RequestInterface;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
-use Generator;
 
 class LoginToken extends AbstractProcessor
 {
@@ -56,7 +55,7 @@ class LoginToken extends AbstractProcessor
         return TokenPayload::class;
     }
 
-    protected function execute(Promisor $promisor, Request $request, Response $response)
+    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
     {
         /** @var TokenPayload $payload */
         $payload = $request->getAttribute('payloadObject');

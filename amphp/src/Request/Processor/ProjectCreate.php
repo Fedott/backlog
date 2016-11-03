@@ -4,8 +4,8 @@ namespace Fedot\Backlog\Request\Processor;
 use Amp\Promisor;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Repository\ProjectsRepository;
-use Fedot\Backlog\WebSocket\Request;
-use Fedot\Backlog\WebSocket\Response;
+use Fedot\Backlog\WebSocket\RequestInterface;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Ramsey\Uuid\UuidFactory;
 
@@ -56,7 +56,7 @@ class ProjectCreate extends AbstractProcessor
         return Project::class;
     }
 
-    protected function execute(Promisor $promisor, Request $request, Response $response)
+    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
     {
         /** @var Project $project */
         $project = $request->getAttribute('payloadObject');

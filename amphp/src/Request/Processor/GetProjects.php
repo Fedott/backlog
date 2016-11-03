@@ -5,8 +5,8 @@ use Amp\Promisor;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\ProjectsPayload;
 use Fedot\Backlog\Repository\ProjectsRepository;
-use Fedot\Backlog\WebSocket\Request;
-use Fedot\Backlog\WebSocket\Response;
+use Fedot\Backlog\WebSocket\RequestInterface;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 
 class GetProjects extends AbstractProcessor
@@ -43,7 +43,7 @@ class GetProjects extends AbstractProcessor
         return EmptyPayload::class;
     }
 
-    protected function execute(Promisor $promisor, Request $request, Response $response)
+    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
     {
         $user = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
         $projects = yield $this->projectRepository->getAllByUser($user);

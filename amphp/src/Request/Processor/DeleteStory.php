@@ -1,13 +1,11 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Request\Processor;
 
-use Amp\Deferred;
-use Amp\Promise;
 use Amp\Promisor;
 use Fedot\Backlog\Payload\DeleteStoryPayload;
 use Fedot\Backlog\Repository\StoriesRepository;
-use Fedot\Backlog\WebSocket\Request;
-use Fedot\Backlog\WebSocket\Response;
+use Fedot\Backlog\WebSocket\RequestInterface;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class DeleteStory extends AbstractProcessor
 {
@@ -42,7 +40,7 @@ class DeleteStory extends AbstractProcessor
         return DeleteStoryPayload::class;
     }
 
-    protected function execute(Promisor $promisor, Request $request, Response $response)
+    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
     {
         /** @var DeleteStoryPayload $payload */
         $payload = $request->getAttribute('payloadObject');
