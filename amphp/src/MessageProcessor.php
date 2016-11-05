@@ -4,10 +4,7 @@ namespace Fedot\Backlog;
 
 use Aerys\Websocket\Endpoint;
 use Amp\Promise;
-use Amp\Success;
 use Fedot\Backlog\Infrastructure\Middleware\RunnerFactory;
-use Fedot\Backlog\Payload\ErrorPayload;
-use Fedot\Backlog\Request\RequestProcessorManager;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocket\ResponseInterface;

@@ -1,11 +1,13 @@
 <?php
+declare(strict_types = 1);
 use function DI\add;
 use function DI\get;
 use function DI\object;
-use Fedot\Backlog\Model\Story;
+use Fedot\Backlog\Infrastructure\Middleware\RunnerFactory;
+use Fedot\Backlog\Middleware\PayloadParser;
+use Fedot\Backlog\Middleware\RequestProcessor;
 use Fedot\Backlog\Request\Processor;
 use Fedot\Backlog\Request\RequestProcessorManager;
-use Fedot\Backlog\Response\Payload;
 use Fedot\Backlog\SerializerService;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
@@ -34,6 +36,14 @@ return [
             get('serializer.encoders')
         ),
     SerializerInterface::class => get(Serializer::class),
+
+    RunnerFactory::class => object()
+        ->constructor(get('middleware.queue')),
+
+    'middleware.queue' => [
+        get(PayloadParser::class),
+        get(RequestProcessor::class),
+    ],
 
     'request.processors' => add([
         get(Processor\Ping::class),

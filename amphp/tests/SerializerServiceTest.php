@@ -42,7 +42,7 @@ JSON;
             new TestProcessor(),
         ]);
 
-        $actualRequest = $serializerService->parseRequest($requestJsonString);
+        $actualRequest = $serializer->deserialize($requestJsonString, Request::class, 'json');
         $actualPayload = $serializerService->parsePayload($actualRequest);
 
         $this->assertInstanceOf(Request::class, $actualRequest);

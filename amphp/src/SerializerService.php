@@ -2,7 +2,6 @@
 namespace Fedot\Backlog;
 
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
-use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Symfony\Component\Serializer\Serializer;
 
@@ -68,13 +67,5 @@ class SerializerService
         $payload = $this->serializer->denormalize($request->getPayload(), $payloadTypeClass);
 
         return $payload;
-    }
-
-    public function parseRequest(string $requestJson): Request
-    {
-        /** @var Request $request */
-        $request = $this->serializer->deserialize($requestJson, Request::class, 'json');
-
-        return $request;
     }
 }

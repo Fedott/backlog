@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 use Aerys\Host;
 use Aerys\Request;
 use Aerys\Response;
