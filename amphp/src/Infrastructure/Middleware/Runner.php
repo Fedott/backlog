@@ -1,25 +1,25 @@
 <?php declare(strict_types = 1);
 namespace Fedot\Backlog\Infrastructure\Middleware;
 
-use Fedot\Backlog\WebSocket\Request;
-use Fedot\Backlog\WebSocket\Response;
+use Fedot\Backlog\WebSocket\RequestInterface;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class Runner
 {
     /**
-     * @var callable[]
+     * @var callable|MiddlewareInterface[]
      */
     protected $queue = [];
 
     /**
-     * @param callable[] $queue
+     * @param callable|MiddlewareInterface[] $queue
      */
     public function __construct(array $queue)
     {
         $this->queue = $queue;
     }
 
-    public function __invoke(Request $request, Response $response): Response
+    public function __invoke(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $middleware = array_shift($this->queue);
 

@@ -4,10 +4,6 @@ namespace Fedot\Backlog;
 use Aerys\Request;
 use Aerys\Response;
 use Aerys\Websocket;
-use Fedot\Backlog\Request\RequestProcessorManager;
-use Fedot\Backlog\Payload\ErrorPayload;
-use Fedot\Backlog\Response\Response as BacklogResponse;
-use Fedot\Backlog\Response\ResponseSender;
 
 class WebSocketServer implements Websocket
 {

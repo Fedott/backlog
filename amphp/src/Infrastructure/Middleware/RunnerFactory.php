@@ -4,12 +4,12 @@ namespace Fedot\Backlog\Infrastructure\Middleware;
 class RunnerFactory
 {
     /**
-     * @var callable[]
+     * @var callable|MiddlewareInterface[]
      */
     protected $queue = [];
 
     /**
-     * @param callable[] $queue
+     * @param callable|MiddlewareInterface[] $queue
      */
     public function __construct(array $queue)
     {

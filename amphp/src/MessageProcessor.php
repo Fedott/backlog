@@ -52,6 +52,7 @@ class MessageProcessor
             $responsePromise = new Success($response);
         }
 
+        /** @noinspection PhpUnusedParameterInspection */
         $responsePromise->when(function ($error, ResponseInterface $response) use ($endpoint) {
             $responseBody = json_encode($response);
             if ($response->isDirect()) {

@@ -15,10 +15,10 @@ class RunnerFactoryTest extends BaseTestCase
             function() {},
         ];
 
-        $runnerFactory = new \Fedot\Backlog\Infrastructure\Middleware\RunnerFactory($middlewareQueue);
+        $runnerFactory = new RunnerFactory($middlewareQueue);
 
         $runner = $runnerFactory->newInstance();
 
-        $this->assertInstanceOf(\Fedot\Backlog\Infrastructure\Middleware\Runner::class, $runner);
+        $this->assertInstanceOf(Runner::class, $runner);
     }
 }

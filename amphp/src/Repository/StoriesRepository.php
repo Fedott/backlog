@@ -3,13 +3,13 @@ namespace Fedot\Backlog\Repository;
 
 use Amp\Promise;
 use Amp\Deferred;
-use Amp\Redis\Client;
+
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Redis\FetchManager;
 use Fedot\Backlog\Redis\IndexManager;
 use Fedot\Backlog\Redis\PersistManager;
-use Symfony\Component\Serializer\SerializerInterface;
+
 
 class StoriesRepository
 {

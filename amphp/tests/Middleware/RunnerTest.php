@@ -3,7 +3,9 @@ namespace Tests\Fedot\Backlog\Middleware;
 
 use Fedot\Backlog\Infrastructure\Middleware\Runner;
 use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\Response;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 use Tests\Fedot\Backlog\BaseTestCase;
 
 class RunnerTest extends BaseTestCase
@@ -11,7 +13,10 @@ class RunnerTest extends BaseTestCase
     public function testInvoke()
     {
         $runCount = 0;
-        $middleware = function (Request $request, Response $response, callable $next = null) use (&$runCount) {
+        $middleware = function (RequestInterface $request, ResponseInterface $response, callable $next = null) use (
+            &
+            $runCount
+        ) {
             $runCount++;
 
             if (null !== $next) {
@@ -27,7 +32,7 @@ class RunnerTest extends BaseTestCase
             $middleware
         ];
 
-        $runner = new \Fedot\Backlog\Infrastructure\Middleware\Runner($middlewareQueue);
+        $runner = new Runner($middlewareQueue);
         $request = new Request(1, 'test', 31);
         $response = new Response(1, 31);
 

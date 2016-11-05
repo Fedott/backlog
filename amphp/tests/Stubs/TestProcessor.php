@@ -13,7 +13,7 @@ use Fedot\Backlog\WebSocket\ResponseInterface;
 class TestProcessor implements ProcessorInterface
 {
     /**
-     * @param Request|RequestInterface $request
+     * @param RequestInterface $request
      *
      * @return bool
      */
@@ -39,8 +39,8 @@ class TestProcessor implements ProcessorInterface
     }
 
     /**
-     * @param Request|RequestInterface $request
-     * @param Response|ResponseInterface $response
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
      *
      * @return Promise
      */

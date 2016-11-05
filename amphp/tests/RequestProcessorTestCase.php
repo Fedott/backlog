@@ -4,10 +4,11 @@ namespace Tests\Fedot\Backlog;
 
 use Fedot\Backlog\PayloadInterface;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
-use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\Repository\StoriesRepository;
+use Fedot\Backlog\WebSocket\Request;
+use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\Response;
+use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -33,10 +34,10 @@ abstract class RequestProcessorTestCase extends BaseTestCase
     /**
      * @dataProvider providerSupportsRequest
      *
-     * @param \Fedot\Backlog\WebSocket\Request $request
+     * @param RequestInterface $request
      * @param bool    $expectedResult
      */
-    public function testSupportsRequest(\Fedot\Backlog\WebSocket\Request $request, bool $expectedResult)
+    public function testSupportsRequest(RequestInterface $request, bool $expectedResult)
     {
         $processor = $this->getProcessorInstance();
         $actualResult = $processor->supportsRequest($request);
@@ -46,9 +47,9 @@ abstract class RequestProcessorTestCase extends BaseTestCase
 
     public function providerSupportsRequest()
     {
-        $request1 = new \Fedot\Backlog\WebSocket\Request(1, $this->getExpectedValidRequestType(), 1);
-        $request2 = new \Fedot\Backlog\WebSocket\Request(1, 'other', 1);
-        $request3 = new \Fedot\Backlog\WebSocket\Request(1, '', 1);
+        $request1 = new Request(1, $this->getExpectedValidRequestType(), 1);
+        $request2 = new Request(1, 'other', 1);
+        $request3 = new Request(1, '', 1);
 
         return [
             'valid type' => [$request1, true],
@@ -75,15 +76,15 @@ abstract class RequestProcessorTestCase extends BaseTestCase
         int $clientId,
         string $requestType,
         PayloadInterface $payload
-    ):\Fedot\Backlog\WebSocket\Request
+    ):Request
     {
-        $request = new \Fedot\Backlog\WebSocket\Request($requestId, $requestType, $clientId, (array)$payload);
+        $request = new Request($requestId, $requestType, $clientId, (array)$payload);
         $request = $request->withAttribute('payloadObject', $payload);
 
         return $request;
     }
 
-    protected function makeResponse(\Fedot\Backlog\WebSocket\Request $request): Response
+    protected function makeResponse(RequestInterface $request): ResponseInterface
     {
         return new Response($request->getId(), $request->getClientId());
     }
