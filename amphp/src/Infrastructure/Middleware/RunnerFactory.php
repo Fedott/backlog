@@ -16,7 +16,7 @@ class RunnerFactory
         $this->queue = $queue;
     }
 
-    public function newInstance()
+    public function newInstance(): Runner
     {
         return new Runner($this->queue);
     }

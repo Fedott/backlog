@@ -5,52 +5,45 @@ namespace Fedot\Backlog;
 use Aerys\Websocket\Endpoint;
 use Amp\Promise;
 use Amp\Success;
+use Fedot\Backlog\Infrastructure\Middleware\RunnerFactory;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Request\RequestProcessorManager;
+use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocket\ResponseInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class MessageProcessor
 {
     /**
-     * @var SerializerService
+     * @var SerializerInterface
      */
-    protected $serializerService;
-    /**
-     * @var RequestProcessorManager
-     */
-    protected $requestProcessorManager;
+    protected $serializer;
 
     /**
-     * MessageProcessor constructor.
-     *
-     * @param SerializerService       $serializerService
-     * @param RequestProcessorManager $requestProcessorManager
+     * @var RunnerFactory
      */
-    public function __construct(SerializerService $serializerService, RequestProcessorManager $requestProcessorManager)
-    {
-        $this->serializerService = $serializerService;
-        $this->requestProcessorManager = $requestProcessorManager;
+    protected $middlewareRunnerFactory;
+
+    public function __construct(
+        RunnerFactory $middlewareRunnerFactory,
+        SerializerInterface $serializer
+    ) {
+        $this->serializer = $serializer;
+        $this->middlewareRunnerFactory = $middlewareRunnerFactory;
     }
 
     public function processMessage(Endpoint $endpoint, int $clientId, string $message): Promise
     {
-        $request = $this->serializerService->parseRequest($message);
+        /** @var Request $request */
+        $request = $this->serializer->deserialize($message, Request::class, 'json');
         $request = $request->withClientId($clientId);
         $response = new Response($request->getId(), $request->getClientId());
 
-        try {
-            $request = $request->withAttribute('payloadObject', $this->serializerService->parsePayload($request));
+        $runner = $this->middlewareRunnerFactory->newInstance();
 
-            $responsePromise = $this->requestProcessorManager->process($request, $response);
-        } catch (\RuntimeException $exception) {
-            $payload = new ErrorPayload();
-            $payload->message = $exception->getMessage();
-            $response = $response->withType('error');
-            $response = $response->withPayload((array) $payload);
-
-            $responsePromise = new Success($response);
-        }
+        /** @var Promise $responsePromise */
+        $responsePromise = $runner($request, $response);
 
         /** @noinspection PhpUnusedParameterInspection */
         $responsePromise->when(function ($error, ResponseInterface $response) use ($endpoint) {
