@@ -1,6 +1,7 @@
 <?php declare(strict_types = 1);
-namespace Tests\Fedot\Backlog\Middleware;
+namespace Tests\Fedot\Backlog\Infrastructure\Middleware;
 
+use Amp\Success;
 use Fedot\Backlog\Infrastructure\Middleware\Runner;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\RequestInterface;
@@ -20,10 +21,10 @@ class RunnerTest extends BaseTestCase
             $runCount++;
 
             if (null !== $next) {
-                $response = $next($request, $response, $next);
+                return $next($request, $response);
             }
 
-            return $response;
+            return new Success($response);
         };
 
         $middlewareQueue = [
@@ -36,7 +37,8 @@ class RunnerTest extends BaseTestCase
         $request = new Request(1, 'test', 31);
         $response = new Response(1, 31);
 
-        $actualResponse = $runner($request, $response);
+        $responsePromise = $runner($request, $response);
+        $actualResponse = \Amp\wait($responsePromise);
 
         $this->assertEquals($response, $actualResponse);
         $this->assertEquals(3, $runCount);

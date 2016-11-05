@@ -1,5 +1,5 @@
 <?php declare(strict_types = 1);
-namespace Tests\Fedot\Backlog\Middleware;
+namespace Tests\Fedot\Backlog\Infrastructure\Middleware;
 
 use Fedot\Backlog\Infrastructure\Middleware\Runner;
 use Fedot\Backlog\Infrastructure\Middleware\RunnerFactory;
