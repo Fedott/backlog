@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 namespace Tests\Fedot\Backlog\Middleware;
 
-use Fedot\Backlog\Middleware\Runner;
+use Fedot\Backlog\Infrastructure\Middleware\Runner;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\BaseTestCase;
@@ -27,7 +27,7 @@ class RunnerTest extends BaseTestCase
             $middleware
         ];
 
-        $runner = new Runner($middlewareQueue);
+        $runner = new \Fedot\Backlog\Infrastructure\Middleware\Runner($middlewareQueue);
         $request = new Request(1, 'test', 31);
         $response = new Response(1, 31);
 

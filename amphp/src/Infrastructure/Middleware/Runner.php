@@ -1,5 +1,5 @@
 <?php declare(strict_types = 1);
-namespace Fedot\Backlog\Middleware;
+namespace Fedot\Backlog\Infrastructure\Middleware;
 
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
