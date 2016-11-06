@@ -3,6 +3,7 @@ namespace Tests\Fedot\Backlog;
 
 use Fedot\Backlog\SerializerService;
 use Fedot\Backlog\WebSocket\Request;
+use RuntimeException;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
@@ -55,5 +56,39 @@ JSON;
 
         $this->assertInstanceOf(NestedObject::class, $actualPayload->nestedObject);
         $this->assertEquals('testValue', $actualPayload->nestedObject->field1);
+    }
+    public function testParseRequestNotFoundPayload()
+    {
+        $requestJsonString = <<<JSON
+{
+    "id": 234,
+    "type": "test-t",
+    "payload": {
+        "field1": 564,
+        "field3": "dfsdf",
+        "extraField": "55trt",
+        "nestedObject": {
+            "field1": "testValue"
+        }
+    }
+}
+JSON;
+
+        $extractor = new PropertyInfoExtractor(array(), array(new PhpDocExtractor()));
+        $serializer = new Serializer(
+            [new ObjectNormalizer(null, null, null, $extractor)],
+            [new JsonDecode()]
+        );
+
+        $serializerService = new SerializerService($serializer);
+        $serializerService->addAllPayloadTypesFromProcessors([
+            new TestProcessor(),
+        ]);
+
+        $actualRequest = $serializer->deserialize($requestJsonString, Request::class, 'json');
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("Not found payload for request type: test-t");
+        $serializerService->parsePayload($actualRequest);
     }
 }

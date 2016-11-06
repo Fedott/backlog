@@ -48,4 +48,32 @@ class MoveStoryTest extends RequestProcessorTestCase
 
         $this->assertResponseBasic($response, 33, 432, 'story-moved');
     }
+
+    public function testProcessFailed()
+    {
+        $processor = $this->getProcessorInstance();
+
+        $payload = new MoveStoryPayload();
+        $payload->storyId = 'target-story-id';
+        $payload->beforeStoryId = 'before-story-id';
+        $payload->projectId = 'project-id';
+
+        $request = $this->makeRequest(33, 432, 'move-story', $payload);
+        $response = $this->makeResponse($request);
+
+        $this->storiesRepositoryMock->expects($this->once())
+            ->method('moveByIds')
+            ->with('project-id', 'target-story-id', 'before-story-id')
+            ->willReturn(new Success(false))
+        ;
+
+        /** @var Response $response */
+        $response = \Amp\wait($processor->process($request, $response));
+
+        $this->assertResponseBasic($response, 33, 432, 'error');
+        $this->assertEquals(
+            "Story id '{$payload->storyId}' do not moved after story id {$payload->beforeStoryId}",
+            $response->getPayload()['message']
+        );
+    }
 }

@@ -404,4 +404,64 @@ class StoriesRepositoryTest extends BaseTestCase
         $result = \Amp\wait($resultPromise);
         $this->assertEquals(true, $result);
     }
+
+    public function testMoveByIds()
+    {
+        $repository = $this->getRepositoryInstance();
+
+        $project = new Project();
+        $project->id = 'project-id';
+
+        $story = new Story();
+        $story->id = 'story-id';
+
+        $positionStory = new Story();
+        $positionStory->id = 'story-id2';
+
+        $this->redisClientMock->expects($this->once())
+            ->method('lRem')
+            ->with("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story", 'entity:fedot_backlog_model_story:story-id', 0)
+            ->willReturn(new Success(1))
+        ;
+
+        $this->redisClientMock->expects($this->once())
+            ->method('lInsert')
+            ->with("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story", 'before', "entity:fedot_backlog_model_story:story-id2", "entity:fedot_backlog_model_story:story-id")
+            ->willReturn(new Success(3))
+        ;
+
+        $this->projectRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($project->id)
+            ->willReturn(new Success($project))
+        ;
+
+        $this->redisClientMock->expects($this->exactly(2))
+            ->method('get')
+            ->withConsecutive(
+                ['entity:fedot_backlog_model_story:story-id'],
+                ['entity:fedot_backlog_model_story:story-id2']
+            )
+            ->willReturnOnConsecutiveCalls(
+                new Success('story-json-1'),
+                new Success('story-json-2')
+            )
+        ;
+
+        $this->serializerMock->expects($this->exactly(2))
+            ->method('deserialize')
+            ->withConsecutive(
+                ['story-json-1', Story::class, 'json'],
+                ['story-json-2', Story::class, 'json']
+            )
+            ->willReturnOnConsecutiveCalls(
+                $story,
+                $positionStory
+            )
+        ;
+
+        $resultPromise = $repository->moveByIds($project->id, $story->id, $positionStory->id);
+        $result = \Amp\wait($resultPromise);
+        $this->assertEquals(true, $result);
+    }
 }

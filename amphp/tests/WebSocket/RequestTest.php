@@ -44,6 +44,24 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('other-type', $request3->getType());
     }
 
+    public function testPayload()
+    {
+        $initPayload = ['test' => 'sss'];
+        $request1 = new Request(7, 'test', 5, $initPayload);
+
+        $changedPayload = ['asdas' => 'vvvv'];
+        $request2 = $request1->withPayload($changedPayload);
+        $changedPayload2 = [];
+        $request3 = $request2->withPayload($changedPayload2);
+
+        $this->assertNotSame($request1, $request2);
+        $this->assertNotSame($request2, $request3);
+        $this->assertNotSame($request1, $request3);
+        $this->assertSame($initPayload, $request1->getPayload());
+        $this->assertSame($changedPayload, $request2->getPayload());
+        $this->assertSame($changedPayload2, $request3->getPayload());
+    }
+
     public function testAttributes()
     {
         $request1 = new Request(7, ' test', 5);

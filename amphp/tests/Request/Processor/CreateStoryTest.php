@@ -63,7 +63,8 @@ class CreateStoryTest extends RequestProcessorTestCase
 
         $uuidMock = $this->createMock(Uuid::class);
 
-        $payload = new StoryPayload();
+        $expectedPayloadType = $processor->getExpectedRequestPayload();
+        $payload = new $expectedPayloadType();
         $payload->story = new Story();
         $payload->story->title = 'story title';
         $payload->story->text = 'story text';

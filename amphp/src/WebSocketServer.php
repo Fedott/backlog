@@ -64,11 +64,13 @@ class WebSocketServer implements Websocket
 
     /**
      * @inheritDoc
+     * @codeCoverageIgnoreStart
      */
     public function onData(int $clientId, Websocket\Message $msg)
     {
         $this->processMessage($clientId, yield $msg);
     }
+    // @codeCoverageIgnoreEnd
 
     /**
      * @param int    $clientId

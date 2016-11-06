@@ -1,12 +1,11 @@
 <?php declare(strict_types=1);
 namespace Tests\Fedot\Backlog;
 
+use Aerys\Request;
+use Aerys\Response;
 use Aerys\Websocket\Endpoint;
+use Aerys\Websocket\Message;
 use Fedot\Backlog\MessageProcessor;
-use Fedot\Backlog\Request\Request;
-use Fedot\Backlog\Request\RequestProcessorManager;
-use Fedot\Backlog\Response\ResponseSender;
-use Fedot\Backlog\SerializerService;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Fedot\Backlog\WebSocketServer;
 
@@ -48,5 +47,48 @@ class WebSocketServerTest extends BaseTestCase
         ;
 
         $webSocketServer->onClose(77, 200, 'reason');
+    }
+
+    public function testOnHandshake()
+    {
+        $webSocketServer = new WebSocketServer(
+            $this->createMock(MessageProcessor::class),
+            $this->createMock(WebSocketConnectionAuthenticationService::class)
+        );
+
+        $webSocketServer->onHandshake(
+            $this->createMock(Request::class),
+            $this->createMock(Response::class)
+        );
+    }
+
+    public function testOnStop()
+    {
+        $webSocketServer = new WebSocketServer(
+            $this->createMock(MessageProcessor::class),
+            $this->createMock(WebSocketConnectionAuthenticationService::class)
+        );
+
+        $webSocketServer->onStop(
+            $this->createMock(Request::class),
+            $this->createMock(Response::class)
+        );
+    }
+
+    public function testOnOpen()
+    {
+        $messageProcessorMock = $this->createMock(MessageProcessor::class);
+        $endpointMock = $this->createMock(Endpoint::class);
+        $webSocketServer = new WebSocketServer(
+            $messageProcessorMock,
+            $this->createMock(WebSocketConnectionAuthenticationService::class)
+        );
+        $webSocketServer->onStart($endpointMock);
+
+        $endpointMock->expects($this->once())
+            ->method('send')
+        ;
+
+        $webSocketServer->onOpen(22, '');
     }
 }

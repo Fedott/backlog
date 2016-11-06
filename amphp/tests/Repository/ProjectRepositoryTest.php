@@ -137,8 +137,33 @@ class ProjectRepositoryTest extends BaseTestCase
         $result = \Amp\wait($resultPromise);
 
         $this->assertCount(3, $result);
-        array_map(function($story) {
-            $this->assertInstanceOf(Project::class, $story);
+        array_map(function($project) {
+            $this->assertInstanceOf(Project::class, $project);
         }, $result);
+    }
+
+    public function testGet()
+    {
+        $projectKey = 'entity:fedot_backlog_model_project:id1';
+
+        $this->redisClientMock->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo($projectKey))
+            ->willReturn(new Success("project-json-1"))
+        ;
+
+        $project = new Project();
+        $this->serializerMock
+            ->expects($this->once())
+            ->method('deserialize')
+            ->with("project-json-1", Project::class, "json")
+            ->willReturn($project)
+        ;
+
+        $resultPromise = $this->repository->get('id1');
+
+        $actualProject = \Amp\wait($resultPromise);
+
+        $this->assertEquals($project, $actualProject);
     }
 }

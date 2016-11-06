@@ -59,4 +59,15 @@ class RequestProcessorTest extends BaseTestCase
 
         $this->assertEquals($expectedResponse, $actualResponse);
     }
+    public function testProcessWithoutProcessors()
+    {
+        $request = new Request(1, 'test', 1);
+        $response = new Response(1, 1);
+
+        $manager = new RequestProcessorManager();
+
+        $actualResponse = \Amp\wait($manager->process($request, $response));
+
+        $this->assertEquals($response, $actualResponse);
+    }
 }
