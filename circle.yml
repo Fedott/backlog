@@ -5,5 +5,5 @@ test:
     override:
           - mkdir -p $CIRCLE_TEST_REPORTS/phpunit
           - cd amphp && composer install
-          - cd amphp && ./vendor/bin/phpunit --log-junit $CIRCLE_TEST_REPORTS/phpunit/junit.xml -c .
+          - cd amphp && ./bin/phpunit --log-junit $CIRCLE_TEST_REPORTS/phpunit/junit.xml -c .
 
