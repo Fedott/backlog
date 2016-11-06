@@ -1,0 +1,77 @@
+backlog-story {
+    width: 100%;
+}
+
+.backlog-story {
+    max-width: 860px;
+    width: 100%;
+    min-height: 50px;
+}
+.backlog-list {
+    max-width: 860px;
+}
+
+.backlog-story-title-block {
+    width: 100%;
+}
+
+.backlog-story-title {
+    align-items: baseline;
+}
+
+.hide {
+    display: none;
+}
+
+.backlog-story .mdl-textfield,
+.backlog-story h4 {
+    width: 100%;
+    padding: 20px 0;
+    margin: 0;
+}
+
+.backlog-story h4 {
+    padding: 24px 0 25px;
+
+}
+
+.backlog-story textarea {
+    font-family: "Helvetica","Arial",sans-serif;
+    color: rgba(0,0,0,.54);
+    font-size: 1rem;
+    line-height: 18px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.storyDropTarget {
+}
+
+.backlog-story input[type="text"] {
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    align-self: flex-end;
+    color: inherit;
+    display: flex;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: normal;
+    overflow: hidden;
+    transform-origin: 149px 48px;
+    margin: 0;
+    width: 90%;
+}
+
+#add-story-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 100;
+}
+
+.requirements-list {
+    min-width: 40%;
+}
+
+.requirements-list .mdl-list__item {
+    font-size: 16px;
+}
