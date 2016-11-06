@@ -38,4 +38,23 @@ class PayloadParserTest extends BaseTestCase
         $actualResponse = \Amp\wait($responsePromise);
         $this->assertEquals($response, $actualResponse);
     }
+
+    public function testInvokeWithoutNext()
+    {
+        $request = new Request(1, 'test', 3, ['test' => 'test']);
+        $response = new Response(1, 3);
+
+        $serializerMock = $this->createMock(SerializerService::class);
+        $serializerMock
+            ->expects($this->never())
+            ->method('parsePayload')
+        ;
+
+        $payloadParserMiddleware = new PayloadParser($serializerMock);
+
+        $responsePromise = $payloadParserMiddleware($request, $response);
+
+        $actualResponse = \Amp\wait($responsePromise);
+        $this->assertEquals($response, $actualResponse);
+    }
 }
