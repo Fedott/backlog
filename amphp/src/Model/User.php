@@ -2,7 +2,7 @@
 
 namespace Fedot\Backlog\Model;
 
-use Fedot\Backlog\Redis\Identifiable;
+use Fedot\Backlog\Infrastructure\Redis\Identifiable;
 
 class User implements Identifiable
 {

@@ -6,9 +6,9 @@ use Amp\Deferred;
 
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
-use Fedot\Backlog\Redis\FetchManager;
-use Fedot\Backlog\Redis\IndexManager;
-use Fedot\Backlog\Redis\PersistManager;
+use Fedot\Backlog\Infrastructure\Redis\FetchManager;
+use Fedot\Backlog\Infrastructure\Redis\IndexManager;
+use Fedot\Backlog\Infrastructure\Redis\PersistManager;
 
 
 class StoriesRepository

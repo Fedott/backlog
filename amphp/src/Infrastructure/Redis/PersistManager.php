@@ -1,5 +1,5 @@
 <?php declare(strict_types = 1);
-namespace Fedot\Backlog\Redis;
+namespace Fedot\Backlog\Infrastructure\Redis;
 
 use Amp\Promise;
 use Amp\Redis\Client;

@@ -2,7 +2,7 @@
 namespace Fedot\Backlog\Model;
 
 use Fedot\Backlog\PayloadInterface;
-use Fedot\Backlog\Redis\Identifiable;
+use Fedot\Backlog\Infrastructure\Redis\Identifiable;
 
 class Story implements PayloadInterface, Identifiable
 {

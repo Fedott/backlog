@@ -5,9 +5,9 @@ use Amp\Deferred;
 use Amp\Promise;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Redis\FetchManager;
-use Fedot\Backlog\Redis\IndexManager;
-use Fedot\Backlog\Redis\PersistManager;
+use Fedot\Backlog\Infrastructure\Redis\FetchManager;
+use Fedot\Backlog\Infrastructure\Redis\IndexManager;
+use Fedot\Backlog\Infrastructure\Redis\PersistManager;
 
 class ProjectsRepository
 {
