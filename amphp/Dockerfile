@@ -43,7 +43,7 @@ RUN apk del build-base libevent-dev php7-dev autoconf
 
 WORKDIR /application/
 
-EXPOSE 80
-CMD php bin/aerys -c app/aerys-prod.php -d
+EXPOSE 80 443
+CMD php -d zend.assertions=1 bin/aerys -c app/aerys-prod.php -d
 
 COPY . /application/

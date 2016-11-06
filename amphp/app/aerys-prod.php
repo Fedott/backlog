@@ -33,7 +33,7 @@ $http = (new Host())
     ->expose('*', 443)
     ->name("new-backlog.fedot.name")
     ->encrypt(
-        '/etc/letsencrypt/live/new-backlog.fedot.name/cert.pem',
+        '/etc/letsencrypt/live/new-backlog.fedot.name/fullchain.pem',
         '/etc/letsencrypt/live/new-backlog.fedot.name/privkey.pem'
     )
     ->redirect("https://new-backlog.fedot.name")
