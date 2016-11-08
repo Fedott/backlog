@@ -7,7 +7,7 @@ use Fedot\Backlog\Infrastructure\Redis\Identifiable;
 class Project implements Identifiable, PayloadInterface
 {
     /**
-     * @var string
+     * @var string|null
      */
     public $id;
 

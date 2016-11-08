@@ -7,7 +7,7 @@ use Fedot\Backlog\Infrastructure\Redis\Identifiable;
 class Story implements PayloadInterface, Identifiable
 {
     /**
-     * @var string
+     * @var string|null
      */
     public $id;
 
