@@ -5,6 +5,12 @@ import StoryItem from "./StoryItem.jsx";
 import webSocketClient from '../../libraries/WebSocket/WebSocketClient.js';
 
 class StoriesList extends React.Component {
+    static propTypes = {
+        createForm: React.PropTypes.bool,
+        projectId: React.PropTypes.string.isRequired,
+        onStoryCreatedCallback: React.PropTypes.func,
+    };
+
     constructor(props, context:any) {
         super(props, context);
         console.log(props);
@@ -59,10 +65,22 @@ class StoriesList extends React.Component {
         }));
     }
 
+    onStoryCreated(story) {
+        this.state.storiesCollection.unshift(story);
+        this.props.onStoryCreatedCallback();
+    }
+
     render() {
         var createForm = null;
         if (this.state.createForm) {
-            createForm = <StoryItem edit={true} isCreateForm={true} projectId={this.state.projectId} index={-1}/>;
+            createForm = <StoryItem
+                edit={true}
+                isCreateForm={true}
+                projectId={this.state.projectId}
+                onStoryCreatedCallback={this.onStoryCreated.bind(this)}
+                index={-1}
+            />
+            ;
         }
 
         var stories = this.state.storiesCollection.map((story, i) => {

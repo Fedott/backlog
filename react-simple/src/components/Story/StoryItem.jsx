@@ -54,6 +54,8 @@ class StoryItem extends React.Component {
         isDragging: React.PropTypes.bool,
         isOver: React.PropTypes.bool,
         moveCard: React.PropTypes.func,
+
+        onStoryCreatedCallback: React.PropTypes.func,
     };
 
     constructor(props, context:any) {
@@ -75,11 +77,7 @@ class StoryItem extends React.Component {
     }
 
     onSaved(story) {
-        this.setState({
-            story: story,
-            edit: false,
-            isCreateForm: false,
-        })
+        this.props.onStoryCreatedCallback(story);
     }
 
     onDeleted() {

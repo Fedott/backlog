@@ -35,7 +35,11 @@ class StoriesPage extends React.Component {
         }
 
         return (<div>
-            <StoriesList createForm={this.state.createForm} projectId={this.state.projectId}/>
+            <StoriesList
+                createForm={this.state.createForm}
+                projectId={this.state.projectId}
+                onStoryCreatedCallback={this.toggleCreateForm.bind(this)}
+            />
             <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
                 <Icon name="add" />
             </FABButton>
