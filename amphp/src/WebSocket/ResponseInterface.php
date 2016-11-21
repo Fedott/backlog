@@ -17,7 +17,7 @@ interface ResponseInterface extends JsonSerializable
     public function withIsDirect(bool $isDirect): ResponseInterface;
 
     public function getType(): string;
-    public function withType(string $type);
+    public function withType(string $type): ResponseInterface;
 
     public function getPayload(): array;
     public function withPayload(array $payload): ResponseInterface;

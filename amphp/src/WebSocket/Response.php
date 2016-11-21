@@ -83,7 +83,7 @@ class Response implements ResponseInterface
         return $this->type;
     }
 
-    public function withType(string $type)
+    public function withType(string $type): ResponseInterface
     {
         $new = clone $this;
         $new->type = $type;

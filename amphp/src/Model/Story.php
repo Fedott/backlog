@@ -22,6 +22,11 @@ class Story implements PayloadInterface, Identifiable
     public $text;
 
     /**
+     * @var bool
+     */
+    public $isCompleted = false;
+
+    /**
      * @var string|null
      */
     public $projectId;
