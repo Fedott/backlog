@@ -58,7 +58,7 @@ class StoryItem extends React.Component {
         onStoryCreatedCallback: React.PropTypes.func,
     };
 
-    constructor(props, context:any) {
+    constructor(props, context) {
         super(props, context);
 
         this.state = {
@@ -93,7 +93,6 @@ class StoryItem extends React.Component {
 
         const { isOver, isDragging, connectDragSource, connectDropTarget } = this.props;
 
-        var style = null;
         if (this.state.edit) {
             return <StoryEditForm
                 story={this.state.story}

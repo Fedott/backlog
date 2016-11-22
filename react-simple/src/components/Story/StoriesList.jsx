@@ -11,7 +11,7 @@ class StoriesList extends React.Component {
         onStoryCreatedCallback: React.PropTypes.func,
     };
 
-    constructor(props, context:any) {
+    constructor(props, context) {
         super(props, context);
         console.log(props);
         this.moveCard = this.moveCard.bind(this);
@@ -50,6 +50,7 @@ class StoriesList extends React.Component {
         webSocketClient.sendRequest({
             type: "move-story",
             "payload": {
+                "projectId": this.props.projectId,
                 "storyId": dragStory.id,
                 "beforeStoryId": hoverStory.id,
             }

@@ -90,8 +90,8 @@ class IndexManager
         $indexName = $this->keyGenerator->getOneToManeIndexName($forModel, $model);
 
         return $this->moveValueOnIndex($indexName,
-            $this->keyGenerator->getKeyForIdentifiable($model),
-            $this->keyGenerator->getKeyForIdentifiable($positionModel)
+            $model->getId(),
+            $positionModel->getId()
         );
     }
 

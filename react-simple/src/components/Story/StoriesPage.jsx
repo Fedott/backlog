@@ -7,7 +7,7 @@ import {
 import StoriesList from '../Story/StoriesList.jsx';
 
 class StoriesPage extends React.Component {
-    constructor(props, context:any) {
+    constructor(props, context) {
         super(props, context);
 
         this.state = {

@@ -390,13 +390,13 @@ class StoriesRepositoryTest extends BaseTestCase
 
         $this->redisClientMock->expects($this->once())
             ->method('lRem')
-            ->with("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story", 'entity:fedot_backlog_model_story:story-id', 0)
+            ->with("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story", 'story-id', 0)
             ->willReturn(new Success(1))
         ;
 
         $this->redisClientMock->expects($this->once())
             ->method('lInsert')
-            ->with("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story", 'before', "entity:fedot_backlog_model_story:story-id2", "entity:fedot_backlog_model_story:story-id")
+            ->with("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story", 'before', "story-id2", "story-id")
             ->willReturn(new Success(3))
         ;
 
@@ -420,13 +420,13 @@ class StoriesRepositoryTest extends BaseTestCase
 
         $this->redisClientMock->expects($this->once())
             ->method('lRem')
-            ->with("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story", 'entity:fedot_backlog_model_story:story-id', 0)
+            ->with("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story", 'story-id', 0)
             ->willReturn(new Success(1))
         ;
 
         $this->redisClientMock->expects($this->once())
             ->method('lInsert')
-            ->with("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story", 'before', "entity:fedot_backlog_model_story:story-id2", "entity:fedot_backlog_model_story:story-id")
+            ->with("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story", 'before', "story-id2", "story-id")
             ->willReturn(new Success(3))
         ;
 
