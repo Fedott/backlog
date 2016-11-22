@@ -12,7 +12,7 @@ class StoryView extends React.Component {
         isDragging: React.PropTypes.bool,
     };
 
-    constructor(props, context:any) {
+    constructor(props, context) {
         super(props, context);
 
         this.state = {
@@ -28,10 +28,21 @@ class StoryView extends React.Component {
     async onDelete() {
         var response = await webSocketClient.sendRequest({
             type: "delete-story",
-            payload: {storyId: this.state.story.id},
+            payload: {
+                storyId: this.state.story.id,
+            },
         });
 
         this.onDeleted();
+    }
+
+    async onMarkAsCompleted() {
+        var response = await webSocketClient.sendRequest({
+            type: 'story-mark-as-completed',
+            payload: {
+                storyId: this.state.story.id,
+            }
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -62,6 +73,9 @@ class StoryView extends React.Component {
                     </ReactMDL.Button>
                     <ReactMDL.Button>
                         Требования
+                    </ReactMDL.Button>
+                    <ReactMDL.Button onClick={this.onMarkAsCompleted.bind(this)}>
+                        Пометить готовой
                     </ReactMDL.Button>
                 </ReactMDL.CardActions>
 

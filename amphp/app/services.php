@@ -18,12 +18,12 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 return [
     'serializer.typeExtractors' => [
-        \DI\get(PhpDocExtractor::class),
+        get(PhpDocExtractor::class),
     ],
     PropertyInfoExtractor::class => \DI\object()
-        ->constructorParameter('typeExtractors', \DI\get('serializer.typeExtractors')),
+        ->constructorParameter('typeExtractors', get('serializer.typeExtractors')),
     ObjectNormalizer::class => \DI\object()
-        ->constructorParameter('propertyTypeExtractor', \DI\get(PropertyInfoExtractor::class)),
+        ->constructorParameter('propertyTypeExtractor', get(PropertyInfoExtractor::class)),
     'serializer.normalazers' => add([
         get(ObjectNormalizer::class)
     ]),
@@ -56,6 +56,7 @@ return [
         get(Processor\LoginToken::class),
         get(Processor\ProjectCreate::class),
         get(Processor\GetProjects::class),
+        get(Processor\MarkStoryAsCompleted::class),
     ]),
     RequestProcessorManager::class => object()
         ->method('addProcessors', get('request.processors')),
