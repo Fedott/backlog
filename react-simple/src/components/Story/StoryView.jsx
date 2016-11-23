@@ -9,6 +9,7 @@ class StoryView extends React.Component {
         onChangeEdit: React.PropTypes.func,
         onChangeRequirements: React.PropTypes.func,
         onDeleted: React.PropTypes.func,
+        onCompleted: React.PropTypes.func.required,
         isDragging: React.PropTypes.bool,
     };
 
@@ -43,6 +44,11 @@ class StoryView extends React.Component {
                 storyId: this.state.story.id,
             }
         });
+
+        if (response.type != 'error') {
+            this.state.story.isCompleted = true;
+            this.props.onCompleted(this.state.story);
+        }
     }
 
     componentWillReceiveProps(nextProps) {

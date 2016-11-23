@@ -71,6 +71,11 @@ class StoriesList extends React.Component {
         this.props.onStoryCreatedCallback();
     }
 
+    onStoryCompleted(story) {
+        this.state.storiesCollection.unshift(story);
+        this.forceUpdate();
+    }
+
     render() {
         var createForm = null;
         if (this.state.createForm) {
@@ -84,13 +89,16 @@ class StoriesList extends React.Component {
             ;
         }
 
-        var stories = this.state.storiesCollection.map((story, i) => {
+        var stories = this.state.storiesCollection.filter((story) => {
+            return !story.isCompleted;
+        }).map((story, i) => {
             return <StoryItem
                 story={story}
                 projectId={this.state.projectId}
                 key={story.id}
                 index={i}
                 moveCard={this.moveCard}
+                onStoryCompleted={this.onStoryCompleted.bind(this)}
             />
         });
 

@@ -56,6 +56,7 @@ class StoryItem extends React.Component {
         moveCard: React.PropTypes.func,
 
         onStoryCreatedCallback: React.PropTypes.func,
+        onStoryCompleted: React.PropTypes.func.required,
     };
 
     constructor(props, context) {
@@ -111,6 +112,7 @@ class StoryItem extends React.Component {
                         onChangeEdit={this.onChangeEdit.bind(this)}
                         onDeleted={this.onDeleted.bind(this)}
                         isDragging={isDragging}
+                        onCompleted={this.props.onStoryCompleted}
                     />
                 </div>
             ));
