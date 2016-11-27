@@ -11,7 +11,7 @@ class ProjectsPage extends React.Component {
         isLogged: React.PropTypes.bool,
     };
 
-    constructor(props, context:any) {
+    constructor(props, context) {
         super(props, context);
 
         this.state = {

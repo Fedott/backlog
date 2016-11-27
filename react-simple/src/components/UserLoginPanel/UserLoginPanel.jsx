@@ -25,7 +25,7 @@ export default class UserLoginPanel extends React.Component {
 
     storageAuthTokenKey = 'auth-token';
 
-    constructor(props, context:any) {
+    constructor(props, context) {
         super(props, context);
 
         this.state = {
@@ -63,7 +63,7 @@ export default class UserLoginPanel extends React.Component {
         });
     }
 
-    onLogin(user: User) {
+    onLogin(user) {
         this.setState({
             isLoginDialogOpen: false,
             isLogged: true,

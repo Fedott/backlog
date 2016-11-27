@@ -23,7 +23,7 @@ export default class LoginDialog extends React.Component {
         onCancel: React.PropTypes.func.isRequired,
     };
 
-    constructor(props, context:any) {
+    constructor(props, context) {
         super(props, context);
 
         this.state = {
@@ -45,6 +45,12 @@ export default class LoginDialog extends React.Component {
 
     onPasswordChange(event) {
         this.state.loginFormFields.password = event.target.value;
+    }
+
+    onKeyPress(event) {
+        if (event.key === 'Enter') {
+            this.onSignInClick();
+        }
     }
 
     async onSignInClick() {
@@ -91,12 +97,14 @@ export default class LoginDialog extends React.Component {
                                floatingLabel
                                onChange={this.onUsernameChange.bind(this)}
                                disabled={this.state.isWaiting}
+                               onKeyPress={this.onKeyPress.bind(this)}
                     />
                     <Textfield label="Password"
                                floatingLabel
                                type="password"
                                onChange={this.onPasswordChange.bind(this)}
                                disabled={this.state.isWaiting}
+                               onKeyPress={this.onKeyPress.bind(this)}
                     />
                 </DialogContent>
                 <DialogActions>
