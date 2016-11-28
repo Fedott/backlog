@@ -56,7 +56,7 @@ class StoryItem extends React.Component {
         moveCard: React.PropTypes.func,
 
         onStoryCreatedCallback: React.PropTypes.func,
-        onStoryCompleted: React.PropTypes.func.required,
+        onStoryCompleted: React.PropTypes.func.isRequired,
     };
 
     constructor(props, context) {

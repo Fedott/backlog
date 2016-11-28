@@ -9,7 +9,7 @@ class StoryView extends React.Component {
         onChangeEdit: React.PropTypes.func,
         onChangeRequirements: React.PropTypes.func,
         onDeleted: React.PropTypes.func,
-        onCompleted: React.PropTypes.func.required,
+        onCompleted: React.PropTypes.func.isRequired,
         isDragging: React.PropTypes.bool,
     };
 

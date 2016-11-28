@@ -12,7 +12,7 @@ class StoryEditFrom extends React.Component {
         onCancel: React.PropTypes.func,
     };
 
-    constructor(props, context:any) {
+    constructor(props, context) {
         super(props, context);
 
         var story = props.story || {title:"", text: "", id: null};

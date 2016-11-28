@@ -2,12 +2,12 @@ import * as React from "react";
 import {Layout, Header, Navigation, Content} from "react-mdl";
 import HTML5Backend from "react-dnd-html5-backend";
 import {DragDropContext} from "react-dnd";
-import {Link} from "react-router";
+import {Link, routerShape} from "react-router";
 import UserLoginPanel from "../UserLoginPanel/UserLoginPanel.jsx";
 import User from "./User";
 
 class Application extends React.Component {
-    constructor(props:any, context:any) {
+    constructor(props, context) {
         super(props, context);
 
         this.state = {
@@ -23,7 +23,7 @@ class Application extends React.Component {
         };
     }
 
-    onLogin(user: User) {
+    onLogin(user) {
         this.setState({
             isLogged: true,
             loggedUser: user,
@@ -37,12 +37,16 @@ class Application extends React.Component {
         });
     }
 
+    onHeaderClick() {
+        this.context.router.push({ pathname: '/' });
+    }
+
     render() {
 
         return (
             <div>
                 <Layout fixedHeader>
-                    <Header title="Backlog">
+                    <Header title={<span onClick={this.onHeaderClick.bind(this)} style={{cursor: 'pointer'}}>Backlog</span>}>
                         <UserLoginPanel
                             onLogin={this.onLogin.bind(this)}
                             onLogout={this.onLogout.bind(this)}
@@ -61,5 +65,9 @@ class Application extends React.Component {
         )
     }
 }
+
+Application.contextTypes = {
+    router: routerShape
+};
 
 export default DragDropContext(HTML5Backend)(Application);
