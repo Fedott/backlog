@@ -75,7 +75,13 @@ class StoryItem extends React.Component {
     }
 
     onSaved(story) {
-        this.props.onStoryCreatedCallback(story);
+        if (this.state.isCreateForm) {
+            this.props.onStoryCreatedCallback(story);
+        } else {
+            this.setState({
+                edit: false,
+            });
+        }
     }
 
     onDeleted() {

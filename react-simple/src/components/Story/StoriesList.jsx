@@ -3,6 +3,7 @@ import update from 'react/lib/update';
 
 import StoryItem from "./StoryItem.jsx";
 import webSocketClient from '../../libraries/WebSocket/WebSocketClient.js';
+import Story from "./Story";
 
 class StoriesList extends React.Component {
     static propTypes = {
@@ -13,7 +14,6 @@ class StoriesList extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.moveCard = this.moveCard.bind(this);
 
         this.state = {
             storiesCollection: [],
@@ -30,6 +30,10 @@ class StoriesList extends React.Component {
         webSocketClient.sendRequest(request).then(function (response) {
             this.setState({storiesCollection: response.payload.stories});
         }.bind(this));
+
+        this.moveCard = this.moveCard.bind(this);
+        this.onStoryCompleted = this.onStoryCompleted.bind(this);
+        this.onStoryCreated = this.onStoryCreated.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -64,12 +68,12 @@ class StoriesList extends React.Component {
         }));
     }
 
-    onStoryCreated(story) {
+    onStoryCreated(story: Story) {
         this.state.storiesCollection.unshift(story);
         this.props.onStoryCreatedCallback();
     }
 
-    onStoryCompleted(story) {
+    onStoryCompleted(story: Story) {
         this.state.storiesCollection.unshift(story);
         this.forceUpdate();
     }
@@ -81,14 +85,14 @@ class StoriesList extends React.Component {
                 edit={true}
                 isCreateForm={true}
                 projectId={this.state.projectId}
-                onStoryCreatedCallback={this.onStoryCreated.bind(this)}
+                onStoryCreatedCallback={this.onStoryCreated}
                 index={-1}
                 onStoryCompleted={this.onStoryCompleted}
             />
             ;
         }
 
-        const stories = this.state.storiesCollection.filter((story) => {
+        const stories = this.state.storiesCollection.filter((story: Story) => {
             return !story.isCompleted;
         }).map((story, i) => {
             return <StoryItem
@@ -97,7 +101,7 @@ class StoriesList extends React.Component {
                 key={story.id}
                 index={i}
                 moveCard={this.moveCard}
-                onStoryCompleted={this.onStoryCompleted.bind(this)}
+                onStoryCompleted={this.onStoryCompleted}
             />
         });
 
