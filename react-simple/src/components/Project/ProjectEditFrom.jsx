@@ -23,6 +23,9 @@ class ProjectEditFrom extends React.Component {
 
         this.onSaved = props.onSaved;
         this.onCancel = props.onCancel;
+
+        this.onChangeName = this.onChangeName.bind(this);
+        this.onSave = this.onSave.bind(this);
     }
 
     onChangeName(event) {
@@ -77,7 +80,7 @@ class ProjectEditFrom extends React.Component {
                         type="text"
                         value={this.state.project.name}
                         placeholder="Name"
-                        onChange={this.onChangeName.bind(this)}
+                        onChange={this.onChangeName}
                         disabled={editIsLocked}
                     />
                 </ReactMDL.CardTitle>
@@ -85,7 +88,7 @@ class ProjectEditFrom extends React.Component {
 
                 <ReactMDL.CardActions border>
                     <ReactMDL.Button
-                        onClick={this.onSave.bind(this)}
+                        onClick={this.onSave}
                         disabled={editIsLocked}
                     >
                         Сохранить

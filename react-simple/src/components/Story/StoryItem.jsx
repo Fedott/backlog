@@ -66,6 +66,10 @@ class StoryItem extends React.Component {
             isCreateForm: props.isCreateForm || false,
             isDeleted: false,
         };
+
+        this.onChangeEdit = this.onChangeEdit.bind(this);
+        this.onSaved = this.onSaved.bind(this);
+        this.onDeleted = this.onDeleted.bind(this);
     }
 
     onChangeEdit() {
@@ -101,8 +105,8 @@ class StoryItem extends React.Component {
             return <StoryEditForm
                 story={this.state.story}
                 projectId={this.state.projectId}
-                onCancel={this.onChangeEdit.bind(this)}
-                onSaved={this.onSaved.bind(this)}
+                onCancel={this.onChangeEdit}
+                onSaved={this.onSaved}
                 isCreateForm={this.state.isCreateForm}
             />;
         } else {
@@ -112,8 +116,8 @@ class StoryItem extends React.Component {
                     <StoryView
                         story={this.state.story}
                         projectId={this.state.projectId}
-                        onChangeEdit={this.onChangeEdit.bind(this)}
-                        onDeleted={this.onDeleted.bind(this)}
+                        onChangeEdit={this.onChangeEdit}
+                        onDeleted={this.onDeleted}
                         isDragging={isDragging}
                         onCompleted={this.props.onStoryCompleted}
                     />

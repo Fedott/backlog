@@ -14,7 +14,9 @@ class StoriesPage extends React.Component {
             createForm: false,
             isLogged: props.isLogged,
             projectId: props.params.projectId,
-        }
+        };
+
+        this.toggleCreateForm = this.toggleCreateForm.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -38,9 +40,9 @@ class StoriesPage extends React.Component {
             <StoriesList
                 createForm={this.state.createForm}
                 projectId={this.state.projectId}
-                onStoryCreatedCallback={this.toggleCreateForm.bind(this)}
+                onStoryCreatedCallback={this.toggleCreateForm}
             />
-            <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
+            <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm}>
                 <Icon name="add" />
             </FABButton>
         </div>);

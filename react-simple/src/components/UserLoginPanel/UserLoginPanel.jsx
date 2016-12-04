@@ -26,6 +26,9 @@ export default class UserLoginPanel extends React.Component {
         this.onLogoutExt = props.onLogout;
 
         this.tryAutoLogin();
+
+        this.toggleLoginDialog = this.toggleLoginDialog.bind(this);
+        this.onLogin = this.onLogin.bind(this);
     }
 
     async tryAutoLogin() {
@@ -67,7 +70,7 @@ export default class UserLoginPanel extends React.Component {
         if (this.state.isLogged) {
             return (
                 <div>
-                    Hello, {this.state.loggedUser.username}
+                    Привет, {this.state.loggedUser.username}
                 </div>
             );
         }
@@ -75,10 +78,10 @@ export default class UserLoginPanel extends React.Component {
         return (
             <div>
                 <LoginDialog isOpen={this.state.isLoginDialogOpen}
-                             onCancel={this.toggleLoginDialog.bind(this)}
-                             onLoginSuccess={this.onLogin.bind(this)}
+                             onCancel={this.toggleLoginDialog}
+                             onLoginSuccess={this.onLogin}
                 />
-                <Button onClick={this.toggleLoginDialog.bind(this)}>Login</Button>
+                <Button onClick={this.toggleLoginDialog}>Войти</Button>
             </div>
         );
     }

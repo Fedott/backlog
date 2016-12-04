@@ -19,6 +19,10 @@ export default class ProjectListItem extends React.Component {
             isCreateForm: props.isCreateForm || false,
             isDeleted: false,
         };
+
+        this.onChangeEdit = this.onChangeEdit.bind(this);
+        this.onSaved = this.onSaved.bind(this);
+        this.onDeleted = this.onDeleted.bind(this);
     }
 
     onChangeEdit() {
@@ -49,8 +53,8 @@ export default class ProjectListItem extends React.Component {
         if (this.state.edit) {
             return <ProjectEditForm
                 project={this.state.project}
-                onCancel={this.onChangeEdit.bind(this)}
-                onSaved={this.onSaved.bind(this)}
+                onCancel={this.onChangeEdit}
+                onSaved={this.onSaved}
                 isCreateForm={this.state.isCreateForm}
             />;
         } else {
@@ -58,8 +62,8 @@ export default class ProjectListItem extends React.Component {
                 <div className="mdl-cell mdl-cell--12-col">
                     <ProjectView
                         project={this.state.project}
-                        onChangeEdit={this.onChangeEdit.bind(this)}
-                        onDeleted={this.onDeleted.bind(this)}
+                        onChangeEdit={this.onChangeEdit}
+                        onDeleted={this.onDeleted}
                     />
                 </div>
             );

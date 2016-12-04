@@ -90,15 +90,15 @@ export default class LoginDialog extends React.Component {
     render() {
         return (
             <Dialog open={this.state.isOpen}>
-                <DialogTitle>Login form</DialogTitle>
+                <DialogTitle>Авторизация</DialogTitle>
                 <DialogContent>
-                    <Textfield label="Username"
+                    <Textfield label="Имя пользовтаеля"
                                floatingLabel
                                onChange={this.onUsernameChange}
                                disabled={this.state.isWaiting}
                                onKeyPress={this.onKeyPress}
                     />
-                    <Textfield label="Password"
+                    <Textfield label="Пароль"
                                floatingLabel
                                type="password"
                                onChange={this.onPasswordChange}
@@ -107,12 +107,12 @@ export default class LoginDialog extends React.Component {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.onCancel} disabled={this.state.isWaiting}>Cancel</Button>
+                    <Button onClick={this.onCancel} disabled={this.state.isWaiting}>Отмена</Button>
                     <Button
                         colored
                         raised
                         onClick={this.onSignInClick}
-                        disabled={this.state.isWaiting} >Sign in</Button>
+                        disabled={this.state.isWaiting} >Войти</Button>
                 </DialogActions>
             </Dialog>
         );

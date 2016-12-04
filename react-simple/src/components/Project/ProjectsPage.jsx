@@ -17,7 +17,9 @@ class ProjectsPage extends React.Component {
         this.state = {
             createForm: false,
             isLogged: props.isLogged,
-        }
+        };
+
+        this.toggleCreateForm = this.toggleCreateForm.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -38,7 +40,7 @@ class ProjectsPage extends React.Component {
         }
         return (<div>
             <ProjectList createForm={this.state.createForm} />
-            <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm.bind(this)}>
+            <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm}>
                 <Icon name="add" />
             </FABButton>
         </div>);

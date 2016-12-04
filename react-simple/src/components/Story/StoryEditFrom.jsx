@@ -26,6 +26,10 @@ class StoryEditFrom extends React.Component {
 
         this.onSaved = props.onSaved;
         this.onCancel = props.onCancel;
+
+        this.onChangeTitle = this.onChangeTitle.bind(this);
+        this.onChangeText = this.onChangeText.bind(this);
+        this.onSave = this.onSave.bind(this);
     }
 
     onChangeText(event) {
@@ -88,7 +92,7 @@ class StoryEditFrom extends React.Component {
                         type="text"
                         value={this.state.story.title}
                         placeholder="Title"
-                        onChange={this.onChangeTitle.bind(this)}
+                        onChange={this.onChangeTitle}
                         disabled={editIsLocked}
                     />
                 </ReactMDL.CardTitle>
@@ -97,7 +101,7 @@ class StoryEditFrom extends React.Component {
                         rows="3"
                         value={this.state.story.text}
                         placeholder="Text"
-                        onChange={this.onChangeText.bind(this)}
+                        onChange={this.onChangeText}
                         disabled={editIsLocked}
                     />
                 </ReactMDL.CardText>
@@ -105,7 +109,7 @@ class StoryEditFrom extends React.Component {
 
                 <ReactMDL.CardActions border>
                     <ReactMDL.Button
-                        onClick={this.onSave.bind(this)}
+                        onClick={this.onSave}
                         disabled={editIsLocked}
                     >
                         Сохранить
