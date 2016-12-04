@@ -13,7 +13,7 @@ class ProjectEditFrom extends React.Component {
     constructor(props, context:any) {
         super(props, context);
 
-        var project = props.project || {name: "", id: null};
+        const project = props.project || {name: "", id: null};
         this.state = {
             project: project,
             originalProject: project,
@@ -39,7 +39,7 @@ class ProjectEditFrom extends React.Component {
             status: 'saving',
         });
 
-        var response = await webSocketClient.sendRequest({
+        const response = await webSocketClient.sendRequest({
             type: this.state.isCreateForm ? "create-project" : "edit-project",
             payload: this.state.project,
         });
@@ -62,8 +62,8 @@ class ProjectEditFrom extends React.Component {
     }
 
     render() {
-        var editIsLocked = false;
-        var progressBar = null;
+        let editIsLocked = false;
+        let progressBar = null;
 
         if (this.state.status == 'saving') {
             progressBar = <ReactMDL.ProgressBar indeterminate style={{width: "100%"}}/>;

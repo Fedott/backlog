@@ -27,7 +27,7 @@ class StoryView extends React.Component {
     }
 
     async onDelete() {
-        var response = await webSocketClient.sendRequest({
+        await webSocketClient.sendRequest({
             type: "delete-story",
             payload: {
                 storyId: this.state.story.id,
@@ -38,7 +38,7 @@ class StoryView extends React.Component {
     }
 
     async onMarkAsCompleted() {
-        var response = await webSocketClient.sendRequest({
+        const response = await webSocketClient.sendRequest({
             type: 'story-mark-as-completed',
             payload: {
                 storyId: this.state.story.id,
@@ -60,7 +60,7 @@ class StoryView extends React.Component {
     }
 
     render() {
-        var style = {};
+        let style = {};
         if (this.state.isDragging) {
             style = {opacity: 0.1}
         }

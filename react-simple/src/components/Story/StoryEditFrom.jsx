@@ -15,7 +15,7 @@ class StoryEditFrom extends React.Component {
     constructor(props, context) {
         super(props, context);
 
-        var story = props.story || {title:"", text: "", id: null};
+        const story = props.story || {title: "", text: "", id: null};
         this.state = {
             story: story,
             projectId: props.projectId,
@@ -47,7 +47,7 @@ class StoryEditFrom extends React.Component {
             status: 'saving',
         });
 
-        var response = await webSocketClient.sendRequest({
+        const response = await webSocketClient.sendRequest({
             type: this.state.isCreateForm ? "create-story" : "edit-story",
             payload: this.state.isCreateForm ? {
                 story: this.state.story,
@@ -73,8 +73,8 @@ class StoryEditFrom extends React.Component {
     }
 
     render() {
-        var editIsLocked = false;
-        var progressBar = null;
+        let editIsLocked = false;
+        let progressBar = null;
 
         if (this.state.status == 'saving') {
             progressBar = <ReactMDL.ProgressBar indeterminate style={{width: "100%"}}/>;

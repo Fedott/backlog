@@ -13,17 +13,15 @@ class StoriesList extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        console.log(props);
         this.moveCard = this.moveCard.bind(this);
 
         this.state = {
             storiesCollection: [],
             createForm: props.createForm || false,
             projectId: props.projectId,
-            filter: props.statusFilter || 'all'
         };
 
-        var request = {
+        const request = {
             type: "get-stories",
             payload: {
                 projectId: this.state.projectId,
@@ -77,7 +75,7 @@ class StoriesList extends React.Component {
     }
 
     render() {
-        var createForm = null;
+        let createForm = null;
         if (this.state.createForm) {
             createForm = <StoryItem
                 edit={true}
@@ -85,11 +83,12 @@ class StoriesList extends React.Component {
                 projectId={this.state.projectId}
                 onStoryCreatedCallback={this.onStoryCreated.bind(this)}
                 index={-1}
+                onStoryCompleted={this.onStoryCompleted}
             />
             ;
         }
 
-        var stories = this.state.storiesCollection.filter((story) => {
+        const stories = this.state.storiesCollection.filter((story) => {
             return !story.isCompleted;
         }).map((story, i) => {
             return <StoryItem

@@ -67,9 +67,9 @@ export class WebSocketClient {
     }
 
     onMessage(event) {
-        var response = JSON.parse(event.data);
+        const response = JSON.parse(event.data);
         if (response.requestId) {
-            var requestExecutor = this.requests[response.requestId];
+            const requestExecutor = this.requests[response.requestId];
             requestExecutor.resolveFunction(response);
         }
     }
@@ -82,7 +82,7 @@ export class WebSocketClient {
         await this.connect();
 
         request.id = this.getNextRequestId();
-        var requestExecutor = new WebSocketRequestExecutor(request);
+        const requestExecutor = new WebSocketRequestExecutor(request);
         this.requests[request.id] = requestExecutor;
 
         this.webSocketConnection.send(JSON.stringify(request));
@@ -95,6 +95,6 @@ export class WebSocketClient {
 
 let port = window.location.port == 3000 ? 8080 : window.location.port;
 let protocol = window.location.protocol == 'https:' ? 'wss' : 'ws';
-var webSocketClient = new WebSocketClient(protocol + "://" + window.location.hostname + ":" +  port + "/websocket");
+const webSocketClient = new WebSocketClient(protocol + "://" + window.location.hostname + ":" + port + "/websocket");
 
 export default webSocketClient;

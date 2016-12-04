@@ -1,12 +1,6 @@
 import * as React from "react";
 import {
-    Layout,
-    Header,
-    Navigation,
-    Content,
-    FABButton,
     Button,
-    Icon,
     Dialog,
     DialogContent,
     DialogTitle,
@@ -27,7 +21,7 @@ export default class LoginDialog extends React.Component {
         super(props, context);
 
         this.state = {
-            isOpen: this.props.isOpen,
+            isOpen: props.isOpen,
             isWaiting: false,
             loginFormFields: {
                 username: null,
@@ -37,6 +31,11 @@ export default class LoginDialog extends React.Component {
 
         this.onLoginSuccess = props.onLoginSuccess;
         this.onCancel = props.onCancel;
+
+        this.onUsernameChange = this.onUsernameChange.bind(this);
+        this.onKeyPress = this.onKeyPress.bind(this);
+        this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.onSignInClick = this.onSignInClick.bind(this);
     }
 
     onUsernameChange(event) {
@@ -95,16 +94,16 @@ export default class LoginDialog extends React.Component {
                 <DialogContent>
                     <Textfield label="Username"
                                floatingLabel
-                               onChange={this.onUsernameChange.bind(this)}
+                               onChange={this.onUsernameChange}
                                disabled={this.state.isWaiting}
-                               onKeyPress={this.onKeyPress.bind(this)}
+                               onKeyPress={this.onKeyPress}
                     />
                     <Textfield label="Password"
                                floatingLabel
                                type="password"
-                               onChange={this.onPasswordChange.bind(this)}
+                               onChange={this.onPasswordChange}
                                disabled={this.state.isWaiting}
-                               onKeyPress={this.onKeyPress.bind(this)}
+                               onKeyPress={this.onKeyPress}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -112,7 +111,7 @@ export default class LoginDialog extends React.Component {
                     <Button
                         colored
                         raised
-                        onClick={this.onSignInClick.bind(this)}
+                        onClick={this.onSignInClick}
                         disabled={this.state.isWaiting} >Sign in</Button>
                 </DialogActions>
             </Dialog>

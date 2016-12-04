@@ -1,5 +1,4 @@
 import * as React from "react";
-import { findDOMNode } from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
 
 import StoryView from "./StoryView.jsx";
@@ -17,8 +16,6 @@ const cardStorySourceContract = {
 const cardStoryTargetContract = {
     drop(props, monitor) {
         const item = monitor.getItem();
-
-        console.log(item.index, props.index);
 
         props.moveCard(item.index, props.index);
 

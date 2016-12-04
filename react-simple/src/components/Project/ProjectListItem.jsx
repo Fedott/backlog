@@ -29,7 +29,7 @@ export default class ProjectListItem extends React.Component {
 
     onSaved(project) {
         this.setState({
-            proejct: project,
+            project: project,
             edit: false,
             isCreateForm: false,
         });

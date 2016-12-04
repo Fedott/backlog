@@ -4,7 +4,6 @@ import HTML5Backend from "react-dnd-html5-backend";
 import {DragDropContext} from "react-dnd";
 import {Link, routerShape} from "react-router";
 import UserLoginPanel from "../UserLoginPanel/UserLoginPanel.jsx";
-import User from "./User";
 
 class Application extends React.Component {
     constructor(props, context) {
@@ -21,6 +20,10 @@ class Application extends React.Component {
                 password: null,
             },
         };
+
+        this.onLogin = this.onLogin.bind(this);
+        this.onLogout = this.onLogout.bind(this);
+        this.onHeaderClick = this.onHeaderClick.bind(this);
     }
 
     onLogin(user) {
@@ -38,6 +41,7 @@ class Application extends React.Component {
     }
 
     onHeaderClick() {
+        //noinspection JSUnresolvedVariable
         this.context.router.push({ pathname: '/' });
     }
 
@@ -46,10 +50,10 @@ class Application extends React.Component {
         return (
             <div>
                 <Layout fixedHeader>
-                    <Header title={<span onClick={this.onHeaderClick.bind(this)} style={{cursor: 'pointer'}}>Backlog</span>}>
+                    <Header title={<span onClick={this.onHeaderClick} style={{cursor: 'pointer'}}>Backlog</span>}>
                         <UserLoginPanel
-                            onLogin={this.onLogin.bind(this)}
-                            onLogout={this.onLogout.bind(this)}
+                            onLogin={this.onLogin}
+                            onLogout={this.onLogout}
                         />
                         <Navigation>
                             <Link to="/projects">Projects</Link>

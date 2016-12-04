@@ -1,20 +1,8 @@
 import * as React from "react";
 import {
-    Layout,
-    Header,
-    Navigation,
-    Content,
-    FABButton,
     Button,
-    Icon,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    DialogActions,
-    Textfield,
 } from 'react-mdl';
 import webSocketClient from '../../libraries/WebSocket/WebSocketClient'
-import User from "../Application/User";
 import LoginDialog from "../LoginDialog/LoginDialog.jsx";
 
 export default class UserLoginPanel extends React.Component {
