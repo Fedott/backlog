@@ -1,5 +1,7 @@
-var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 const webpack = require('webpack');
 
 /**
@@ -9,7 +11,7 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        main: ["babel-polyfill", "./src/main.js", "./src/style.css"],
+        'backlog-app': ["babel-polyfill", "./src/main.js", "./src/style.css"],
         vendors: [
             'react',
             'react-mdl',
@@ -31,7 +33,9 @@ module.exports = {
         ]
     },
     output: {
-        filename: "../amphp/web/assets/backlog-app.js"
+        filename: "assets/[name].js",
+        path: __dirname + "/../amphp/web/",
+        publicPath: "/",
     },
     devtool: 'source-map',
     module: {
@@ -53,23 +57,23 @@ module.exports = {
         ]
     },
     plugins: [
+        new HtmlWebpackPlugin({
+            template: "web/index.tmpl.html",
+            hash: true,
+            filename: "index.html",
+        }),
         new CopyWebpackPlugin([
-            {from: 'web/index.html', to: '../amphp/web'},
-            {from: 'web/fonts', to: '../amphp/web/fonts'}
+            {from: 'web/fonts', to: __dirname + '/../amphp/web/fonts'}
         ]),
         new BrowserSyncPlugin({
             host: 'backlog.local',
             port: 3000,
             proxy: 'backlog.local:8080',
         }),
-//        new webpack.optimize.UglifyJsPlugin({
-//            minimize: true,
-//            compress: { warnings: false }
-//        }),
-        new webpack.optimize.CommonsChunkPlugin('vendors', '../amphp/web/assets/vendors.js'),
+        new webpack.optimize.CommonsChunkPlugin('vendors', 'assets/vendors.js'),
         new webpack.DefinePlugin({
             'process.env': {
-//                'NODE_ENV': JSON.stringify('production')
+               'NODE_ENV': JSON.stringify('production')
             }
         })
     ]

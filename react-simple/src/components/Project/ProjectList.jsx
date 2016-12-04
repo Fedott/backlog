@@ -4,7 +4,7 @@ import webSocketClient from '../../libraries/WebSocket/WebSocketClient.js';
 import ProjectListItem from './ProjectListItem.jsx';
 
 export default class ProjectList extends React.Component {
-    constructor(props, context:any) {
+    constructor(props, context) {
         super(props, context);
 
         this.state = {
@@ -28,12 +28,12 @@ export default class ProjectList extends React.Component {
     }
 
     render() {
-        var createForm = null;
+        let createForm = null;
         if (this.state.createForm) {
             createForm = <ProjectListItem edit={true} isCreateForm={true} index={-1}/>;
         }
 
-        var projectItems = this.state.projectCollection.map((project, i) => {
+        let projectItems = this.state.projectCollection.map((project, i) => {
             return <ProjectListItem project={project} key={i} />
         });
 
