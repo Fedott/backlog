@@ -19,6 +19,9 @@ class ProjectView extends React.Component {
 
         this.onChangeEdit = props.onChangeEdit || (() => {});
         this.onDeleted = props.onDeleted || (() => {});
+
+        this.onDelete = this.onDelete.bind(this);
+        this.goToStoryList = this.goToStoryList.bind(this);
     }
 
     async onDelete() {
@@ -45,7 +48,7 @@ class ProjectView extends React.Component {
                     <ReactMDL.Button onClick={this.onChangeEdit}>
                         Редактировать
                     </ReactMDL.Button>
-                    <ReactMDL.Button onClick={this.goToStoryList.bind(this)}>
+                    <ReactMDL.Button onClick={this.goToStoryList}>
                         Список историй
                     </ReactMDL.Button>
                 </ReactMDL.CardActions>
@@ -58,8 +61,8 @@ class ProjectView extends React.Component {
                         ripple
                     >
                         <ReactMDL.MenuItem
-                            onClick={this.onDelete.bind(this)}
-                        >Delete</ReactMDL.MenuItem>
+                            onClick={this.onDelete}
+                        >Удалить</ReactMDL.MenuItem>
                     </ReactMDL.Menu>
                 </ReactMDL.CardMenu>
             </ReactMDL.Card>

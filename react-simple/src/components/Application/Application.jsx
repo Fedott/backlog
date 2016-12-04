@@ -56,7 +56,7 @@ class Application extends React.Component {
                             onLogout={this.onLogout}
                         />
                         <Navigation>
-                            <Link to="/projects">Projects</Link>
+                            <Link to="/projects">Проекты</Link>
                         </Navigation>
                     </Header>
                     <Content style={{width: "900px", margin: "0px auto", display: "block"}}>

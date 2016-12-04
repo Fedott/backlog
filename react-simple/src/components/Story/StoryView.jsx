@@ -24,6 +24,9 @@ class StoryView extends React.Component {
         this.onChangeEdit = props.onChangeEdit || (() => {});
         this.onChangeRequirements = props.onChangeRequirements || (() => {});
         this.onDeleted = props.onDeleted || (() => {});
+
+        this.onDelete = this.onDelete.bind(this);
+        this.onMarkAsCompleted = this.onMarkAsCompleted.bind(this);
     }
 
     async onDelete() {
@@ -80,7 +83,7 @@ class StoryView extends React.Component {
                     <ReactMDL.Button>
                         Требования
                     </ReactMDL.Button>
-                    <ReactMDL.Button onClick={this.onMarkAsCompleted.bind(this)}>
+                    <ReactMDL.Button onClick={this.onMarkAsCompleted}>
                         Пометить готовой
                     </ReactMDL.Button>
                 </ReactMDL.CardActions>
@@ -93,8 +96,8 @@ class StoryView extends React.Component {
                         ripple
                     >
                         <ReactMDL.MenuItem
-                            onClick={this.onDelete.bind(this)}
-                        >Delete</ReactMDL.MenuItem>
+                            onClick={this.onDelete}
+                        >Удалить</ReactMDL.MenuItem>
                     </ReactMDL.Menu>
                 </ReactMDL.CardMenu>
             </ReactMDL.Card>
