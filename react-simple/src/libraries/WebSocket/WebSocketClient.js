@@ -1,10 +1,11 @@
+import Request from "./Request";
 
 export class WebSocketRequestExecutor {
-    request;
+    request: Request;
     resolveFunction;
     rejectFunction;
 
-    constructor(request) {
+    constructor(request: Request) {
         this.request = request;
     }
 
@@ -78,7 +79,7 @@ export class WebSocketClient {
         return ++this.requestsIds;
     }
 
-    async sendRequest(request) {
+    async sendRequest(request: Request) {
         await this.connect();
 
         request.id = this.getNextRequestId();

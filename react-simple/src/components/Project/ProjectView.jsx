@@ -25,12 +25,14 @@ class ProjectView extends React.Component {
     }
 
     async onDelete() {
-        await webSocketClient.sendRequest({
+        let response = await webSocketClient.sendRequest({
             type: "delete-project",
             payload: {projectId: this.state.project.id},
         });
 
-        this.onDeleted();
+        if (response.type == 'project-deleted') {
+            this.onDeleted();
+        }
     }
 
     goToStoryList() {
