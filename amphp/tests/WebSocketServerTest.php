@@ -69,10 +69,7 @@ class WebSocketServerTest extends BaseTestCase
             $this->createMock(WebSocketConnectionAuthenticationService::class)
         );
 
-        $webSocketServer->onStop(
-            $this->createMock(Request::class),
-            $this->createMock(Response::class)
-        );
+        $webSocketServer->onStop();
     }
 
     public function testOnOpen()
