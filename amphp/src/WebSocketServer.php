@@ -68,17 +68,13 @@ class WebSocketServer implements Websocket
      */
     public function onData(int $clientId, Websocket\Message $msg)
     {
-        $this->processMessage($clientId, yield $msg);
+        yield from $this->processMessage($clientId, yield $msg);
     }
     // @codeCoverageIgnoreEnd
 
-    /**
-     * @param int    $clientId
-     * @param string $message
-     */
     public function processMessage(int $clientId, string $message)
     {
-        $this->messageProcessor->processMessage($this->endpoint, $clientId, $message);
+        yield from $this->messageProcessor->processMessage($this->endpoint, $clientId, $message);
     }
 
     /**

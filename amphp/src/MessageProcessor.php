@@ -3,11 +3,14 @@
 namespace Fedot\Backlog;
 
 use Aerys\Websocket\Endpoint;
+use Amp\Failure;
 use Amp\Promise;
+use Amp\Success;
 use Fedot\Backlog\Infrastructure\Middleware\RunnerFactory;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocket\ResponseInterface;
+use Generator;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class MessageProcessor
@@ -30,7 +33,7 @@ class MessageProcessor
         $this->middlewareRunnerFactory = $middlewareRunnerFactory;
     }
 
-    public function processMessage(Endpoint $endpoint, int $clientId, string $message): Promise
+    public function processMessage(Endpoint $endpoint, int $clientId, string $message): Generator
     {
         /** @var Request $request */
         $request = $this->serializer->deserialize($message, Request::class, 'json');
@@ -39,19 +42,22 @@ class MessageProcessor
 
         $runner = $this->middlewareRunnerFactory->newInstance();
 
-        /** @var Promise $responsePromise */
-        $responsePromise = $runner($request, $response);
+        try {
+            /** @var Response $response */
+            $response = yield $runner($request, $response);
 
-        /** @noinspection PhpUnusedParameterInspection */
-        $responsePromise->when(function ($error, ResponseInterface $response) use ($endpoint) {
             $responseBody = json_encode($response);
             if ($response->isDirect()) {
                 $endpoint->send($response->getClientId(), $responseBody);
             } else {
                 $endpoint->send(null, $responseBody);
             }
-        });
+        } catch (\Exception $exception) {
+            $response = $response->withType('internal-server-error');
 
-        return $responsePromise;
+            $endpoint->send($clientId, json_encode($response));
+        }
+
+        yield;
     }
 }

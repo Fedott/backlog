@@ -30,7 +30,7 @@ class WebSocketServerTest extends BaseTestCase
             )
         ;
 
-        $webSocketServer->processMessage(123, "jj");
+        \Amp\resolve($webSocketServer->processMessage(123, "jj"));
     }
 
     public function testOnClose()

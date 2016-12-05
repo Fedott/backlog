@@ -61,7 +61,9 @@ class MessageProcessorTest extends BaseTestCase
             ->with(123, '{"requestId":1,"type":"test-response","payload":[]}')
         ;
 
-        \Amp\wait($webSocketServer->processMessage($endpointMock, 123, "jj"));
+        \Amp\run(function () use ($webSocketServer, $endpointMock) {
+            yield from $webSocketServer->processMessage($endpointMock, 123, "jj");
+        });
     }
 
     public function testProcessMessageNotDirectResponse()
@@ -113,6 +115,55 @@ class MessageProcessorTest extends BaseTestCase
             ->with(null, '{"requestId":1,"type":"test-response","payload":[]}')
         ;
 
-        \Amp\wait($webSocketServer->processMessage($endpointMock, 123, "jj"));
+        \Amp\run(function () use ($webSocketServer, $endpointMock) {
+            yield from $webSocketServer->processMessage($endpointMock, 123, "jj");
+        });
+    }
+
+    public function testProcessMessageException()
+    {
+        $serializerMock = $this->createMock(SerializerInterface::class);
+        $middlewareRunnerFactoryMock = $this->createMock(RunnerFactory::class);
+        $middlewareRunnerMock = $this->createMock(Runner::class);
+        $endpointMock = $this->createMock(Endpoint::class);
+
+        $webSocketServer = new MessageProcessor($middlewareRunnerFactoryMock, $serializerMock);
+
+        $request = new Request(1, 'test', 123, ['test' => 'test']);
+
+        $serializerMock->expects($this->once())
+            ->method('deserialize')
+            ->with("jj", Request::class, 'json')
+            ->willReturn($request)
+        ;
+        $middlewareRunnerFactoryMock->expects($this->once())
+            ->method('newInstance')
+            ->willReturn($middlewareRunnerMock)
+        ;
+        $middlewareRunnerMock->expects($this->once())
+            ->method('__invoke')
+            ->with($this->callback(function (RequestInterface $request) {
+                $this->assertEquals(1, $request->getId());
+                $this->assertEquals(123, $request->getClientId());
+                $this->assertEquals('test', $request->getType());
+
+                return true;
+            }), $this->callback(function (ResponseInterface $response) {
+                $this->assertEquals(1, $response->getRequestId());
+                $this->assertEquals(123, $response->getClientId());
+
+                return true;
+            }))
+            ->willThrowException(new \RuntimeException("Atata"))
+        ;
+
+        $endpointMock->expects($this->once())
+            ->method('send')
+            ->with(123, '{"requestId":1,"type":"internal-server-error","payload":[]}')
+        ;
+
+        \Amp\run(function () use ($webSocketServer, $endpointMock) {
+            yield from $webSocketServer->processMessage($endpointMock, 123, "jj");
+        });
     }
 }
