@@ -9,7 +9,7 @@ use Fedot\Backlog\Infrastructure\Redis\FetchManager;
 use Fedot\Backlog\Infrastructure\Redis\IndexManager;
 use Fedot\Backlog\Infrastructure\Redis\PersistManager;
 
-class ProjectsRepository
+class ProjectRepository
 {
     /**
      * @var IndexManager

@@ -9,17 +9,11 @@ use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class Ping extends AbstractProcessor
 {
-    /**
-     * @inheritDoc
-     */
     public function getSupportedType(): string
     {
         return 'ping';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getExpectedRequestPayload(): string
     {
         return EmptyPayload::class;

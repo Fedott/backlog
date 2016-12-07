@@ -4,39 +4,28 @@ namespace Fedot\Backlog\Request\Processor;
 use Amp\Promisor;
 use Fedot\Backlog\Payload\ProjectIdPayload;
 use Fedot\Backlog\Payload\StoriesPayload;
-use Fedot\Backlog\Repository\StoriesRepository;
+use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class GetStories extends AbstractProcessor
 {
     /**
-     * @var StoriesRepository
+     * @var StoryRepository
      */
-    protected $storiesRepository;
+    protected $storyRepository;
 
-    /**
-     * GetStories constructor.
-     *
-     * @param StoriesRepository                        $storiesRepository
-     */
     public function __construct(
-        StoriesRepository $storiesRepository
+        StoryRepository $storyRepository
     ){
-        $this->storiesRepository = $storiesRepository;
+        $this->storyRepository = $storyRepository;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getSupportedType(): string
     {
         return 'get-stories';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getExpectedRequestPayload(): string
     {
         return ProjectIdPayload::class;
@@ -47,7 +36,7 @@ class GetStories extends AbstractProcessor
         /** @var ProjectIdPayload $payload */
         $payload = $request->getAttribute('payloadObject');
         $projectId = $payload->projectId;
-        $stories = yield $this->storiesRepository->getAllByProjectId($projectId);
+        $stories = yield $this->storyRepository->getAllByProjectId($projectId);
 
         $response = $response->withType('stories');
         $storiesPayload = new StoriesPayload();

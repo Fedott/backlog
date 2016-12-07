@@ -5,18 +5,18 @@ use Amp\Promisor;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Payload\StoryIdPayload;
-use Fedot\Backlog\Repository\StoriesRepository;
+use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class MarkStoryAsCompleted extends AbstractProcessor
 {
     /**
-     * @var StoriesRepository
+     * @var StoryRepository
      */
     protected $storyRepository;
 
-    public function __construct(StoriesRepository $storyRepository)
+    public function __construct(StoryRepository $storyRepository)
     {
         $this->storyRepository = $storyRepository;
     }

@@ -25,12 +25,6 @@ class LoginToken extends AbstractProcessor
      */
     protected $webSocketAuthService;
 
-    /**
-     * LoginToken constructor.
-     *
-     * @param AuthenticationService                    $authenticationService
-     * @param WebSocketConnectionAuthenticationService $webSocketAuthService
-     */
     public function __construct(
         AuthenticationService $authenticationService,
         WebSocketConnectionAuthenticationService $webSocketAuthService
@@ -39,17 +33,11 @@ class LoginToken extends AbstractProcessor
         $this->webSocketAuthService = $webSocketAuthService;
     }
 
-    /**
-     * @return string
-     */
     public function getSupportedType(): string
     {
         return 'login-token';
     }
 
-    /**
-     * @return string - FQN class name implemented \Fedot\Backlog\PayloadInterface
-     */
     public function getExpectedRequestPayload(): string
     {
         return TokenPayload::class;

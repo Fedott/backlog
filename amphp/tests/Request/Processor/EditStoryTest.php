@@ -17,7 +17,7 @@ class EditStoryTest extends RequestProcessorTestCase
         $this->initProcessorMocks();
 
         return new EditStory(
-            $this->storiesRepositoryMock
+            $this->storyRepositoryMock
         );
     }
 
@@ -36,7 +36,7 @@ class EditStoryTest extends RequestProcessorTestCase
     public function testProcess()
     {
         $processor = $this->getProcessorInstance();
-        $storiesRepositoryMock = $this->storiesRepositoryMock;
+        $storyRepositoryMock = $this->storyRepositoryMock;
 
         $payload = new Story();
         $payload->id = 'story-id';
@@ -47,7 +47,7 @@ class EditStoryTest extends RequestProcessorTestCase
 
         $response = new Response($request->getId(), $request->getClientId());
 
-        $storiesRepositoryMock->expects($this->once())
+        $storyRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->callback(function (Story $story) {
                 $this->assertEquals('story-id', $story->id);
@@ -75,7 +75,7 @@ class EditStoryTest extends RequestProcessorTestCase
     public function testProcessWithError()
     {
         $processor = $this->getProcessorInstance();
-        $storiesRepositoryMock = $this->storiesRepositoryMock;
+        $storyRepositoryMock = $this->storyRepositoryMock;
 
         $payload = new Story();
         $payload->id = 'jgfjhfgj-erwer-dsfsd';
@@ -86,7 +86,7 @@ class EditStoryTest extends RequestProcessorTestCase
 
         $response = new Response($request->getId(), $request->getClientId());
 
-        $storiesRepositoryMock->expects($this->once())
+        $storyRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->callback(function (Story $story) {
                 $this->assertEquals('jgfjhfgj-erwer-dsfsd', $story->id);

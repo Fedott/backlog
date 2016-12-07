@@ -15,7 +15,7 @@ class DeleteStoryTest extends RequestProcessorTestCase
     {
         $this->initProcessorMocks();
 
-        $processor = new DeleteStory($this->storiesRepositoryMock);
+        $processor = new DeleteStory($this->storyRepositoryMock);
 
         return $processor;
     }
@@ -33,7 +33,7 @@ class DeleteStoryTest extends RequestProcessorTestCase
         $deleteStoryPayload->storyId = 'story-id';
         $deleteStoryPayload->projectId = 'project-id';
 
-        $this->storiesRepositoryMock->expects($this->once())
+        $this->storyRepositoryMock->expects($this->once())
             ->method('deleteByIds')
             ->with(
                 $this->equalTo('project-id'),

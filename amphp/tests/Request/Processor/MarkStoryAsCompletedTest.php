@@ -15,7 +15,7 @@ class MarkStoryAsCompletedTest extends RequestProcessorTestCase
 {
     protected function getProcessorInstance(): ProcessorInterface
     {
-        $processor = new MarkStoryAsCompleted($this->storiesRepositoryMock);
+        $processor = new MarkStoryAsCompleted($this->storyRepositoryMock);
 
         return $processor;
     }
@@ -29,13 +29,13 @@ class MarkStoryAsCompletedTest extends RequestProcessorTestCase
     {
         $story = new Story();
 
-        $this->storiesRepositoryMock->expects($this->once())
+        $this->storyRepositoryMock->expects($this->once())
             ->method('get')
             ->with('story-id')
             ->willReturn(new Success($story))
         ;
 
-        $this->storiesRepositoryMock->expects($this->once())
+        $this->storyRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->callback(function (Story $storyForSave) use ($story) {
                 $this->assertEquals($story, $storyForSave);

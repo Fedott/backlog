@@ -11,7 +11,7 @@ use Fedot\Backlog\Infrastructure\Redis\IndexManager;
 use Fedot\Backlog\Infrastructure\Redis\PersistManager;
 
 
-class StoriesRepository
+class StoryRepository
 {
     /**
      * @var FetchManager
@@ -29,7 +29,7 @@ class StoriesRepository
     protected $indexManager;
 
     /**
-     * @var ProjectsRepository
+     * @var ProjectRepository
      */
     protected $projectRepository;
 
@@ -37,13 +37,13 @@ class StoriesRepository
      * @param FetchManager $fetchManager
      * @param PersistManager $persistManager
      * @param IndexManager $indexManager
-     * @param ProjectsRepository $projectRepository
+     * @param ProjectRepository $projectRepository
      */
     public function __construct(
         FetchManager $fetchManager,
         PersistManager $persistManager,
         IndexManager $indexManager,
-        ProjectsRepository $projectRepository
+        ProjectRepository $projectRepository
     ) {
         $this->fetchManager = $fetchManager;
         $this->persistManager = $persistManager;

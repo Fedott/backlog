@@ -9,14 +9,14 @@ use Fedot\Backlog\Infrastructure\Redis\FetchManager;
 use Fedot\Backlog\Infrastructure\Redis\IndexManager;
 use Fedot\Backlog\Infrastructure\Redis\KeyGenerator;
 use Fedot\Backlog\Infrastructure\Redis\PersistManager;
-use Fedot\Backlog\Repository\ProjectsRepository;
+use Fedot\Backlog\Repository\ProjectRepository;
 use Symfony\Component\Serializer\SerializerInterface;
 use Tests\Fedot\Backlog\BaseTestCase;
 
 class ProjectRepositoryTest extends BaseTestCase
 {
     /**
-     * @var ProjectsRepository
+     * @var ProjectRepository
      */
     protected $repository;
 
@@ -47,7 +47,7 @@ class ProjectRepositoryTest extends BaseTestCase
         $persistManager = new PersistManager($keyGenerator, $this->redisClientMock, $this->serializerMock);
         $fetchManager = new FetchManager($keyGenerator, $this->redisClientMock, $this->serializerMock);
 
-        $this->repository = new ProjectsRepository($indexManager, $persistManager, $fetchManager);
+        $this->repository = new ProjectRepository($indexManager, $persistManager, $fetchManager);
     }
 
     public function testCreate()

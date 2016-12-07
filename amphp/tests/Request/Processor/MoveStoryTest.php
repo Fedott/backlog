@@ -15,7 +15,7 @@ class MoveStoryTest extends RequestProcessorTestCase
     {
         $this->initProcessorMocks();
 
-        $processor = new MoveStory($this->storiesRepositoryMock);
+        $processor = new MoveStory($this->storyRepositoryMock);
 
         return $processor;
     }
@@ -37,7 +37,7 @@ class MoveStoryTest extends RequestProcessorTestCase
         $request = $this->makeRequest(33, 432, 'move-story', $payload);
         $response = $this->makeResponse($request);
 
-        $this->storiesRepositoryMock->expects($this->once())
+        $this->storyRepositoryMock->expects($this->once())
             ->method('moveByIds')
             ->with('project-id', 'target-story-id', 'before-story-id')
             ->willReturn(new Success(true))
@@ -61,7 +61,7 @@ class MoveStoryTest extends RequestProcessorTestCase
         $request = $this->makeRequest(33, 432, 'move-story', $payload);
         $response = $this->makeResponse($request);
 
-        $this->storiesRepositoryMock->expects($this->once())
+        $this->storyRepositoryMock->expects($this->once())
             ->method('moveByIds')
             ->with('project-id', 'target-story-id', 'before-story-id')
             ->willReturn(new Success(false))

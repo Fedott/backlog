@@ -4,7 +4,7 @@ namespace Fedot\Backlog\Request\Processor;
 use Amp\Promisor;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\ProjectsPayload;
-use Fedot\Backlog\Repository\ProjectsRepository;
+use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
@@ -12,7 +12,7 @@ use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 class GetProjects extends AbstractProcessor
 {
     /**
-     * @var ProjectsRepository
+     * @var ProjectRepository
      */
     protected $projectRepository;
 
@@ -21,12 +21,8 @@ class GetProjects extends AbstractProcessor
      */
     protected $webSocketAuthService;
 
-    /**
-     * @param ProjectsRepository $projectRepository
-     * @param WebSocketConnectionAuthenticationService $webSocketAuthService
-     */
     public function __construct(
-        ProjectsRepository $projectRepository,
+        ProjectRepository $projectRepository,
         WebSocketConnectionAuthenticationService $webSocketAuthService
     ) {
         $this->projectRepository = $projectRepository;

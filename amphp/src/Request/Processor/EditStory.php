@@ -5,21 +5,21 @@ namespace Fedot\Backlog\Request\Processor;
 use Amp\Promisor;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Payload\ErrorPayload;
-use Fedot\Backlog\Repository\StoriesRepository;
+use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class EditStory extends AbstractProcessor
 {
     /**
-     * @var StoriesRepository
+     * @var StoryRepository
      */
-    protected $storiesRepository;
+    protected $storyRepository;
 
     public function __construct(
-        StoriesRepository $storiesRepository
+        StoryRepository $storyRepository
     ){
-        $this->storiesRepository = $storiesRepository;
+        $this->storyRepository = $storyRepository;
     }
 
     public function getSupportedType(): string
@@ -37,7 +37,7 @@ class EditStory extends AbstractProcessor
         /** @var Story $story */
         $story = $request->getAttribute('payloadObject');
 
-        $result = yield $this->storiesRepository->save($story);
+        $result = yield $this->storyRepository->save($story);
 
         if ($result === true) {
             $response = $response->withType('story-edited');

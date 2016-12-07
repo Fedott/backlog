@@ -4,7 +4,7 @@ namespace Tests\Fedot\Backlog;
 
 use Fedot\Backlog\PayloadInterface;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
-use Fedot\Backlog\Repository\StoriesRepository;
+use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\Response;
@@ -22,9 +22,9 @@ abstract class RequestProcessorTestCase extends BaseTestCase
     }
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|StoriesRepository
+     * @var PHPUnit_Framework_MockObject_MockObject|StoryRepository
      */
-    protected $storiesRepositoryMock;
+    protected $storyRepositoryMock;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject|WebSocketConnectionAuthenticationService
@@ -60,7 +60,7 @@ abstract class RequestProcessorTestCase extends BaseTestCase
 
     protected function initProcessorMocks()
     {
-        $this->storiesRepositoryMock = $this->createMock(StoriesRepository::class);
+        $this->storyRepositoryMock = $this->createMock(StoryRepository::class);
         $this->webSocketAuthServiceMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
     }
 

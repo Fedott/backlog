@@ -3,7 +3,7 @@ namespace Fedot\Backlog\Request\Processor;
 
 use Amp\Promisor;
 use Fedot\Backlog\Model\Project;
-use Fedot\Backlog\Repository\ProjectsRepository;
+use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
@@ -12,7 +12,7 @@ use Ramsey\Uuid\UuidFactory;
 class ProjectCreate extends AbstractProcessor
 {
     /**
-     * @var ProjectsRepository
+     * @var ProjectRepository
      */
     protected $projectRepository;
 
@@ -26,15 +26,8 @@ class ProjectCreate extends AbstractProcessor
      */
     protected $webSocketAuthService;
 
-    /**
-     * CreateStory constructor.
-     *
-     * @param ProjectsRepository $projectRepository
-     * @param UuidFactory $uuidFactory
-     * @param WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService
-     */
     public function __construct(
-        ProjectsRepository $projectRepository,
+        ProjectRepository $projectRepository,
         UuidFactory $uuidFactory,
         WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService
     ) {
@@ -43,9 +36,6 @@ class ProjectCreate extends AbstractProcessor
         $this->webSocketAuthService = $webSocketConnectionAuthenticationService;
     }
 
-    /**
-     * @return string
-     */
     public function getSupportedType(): string
     {
         return 'create-project';

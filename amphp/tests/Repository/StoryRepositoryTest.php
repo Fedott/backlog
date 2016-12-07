@@ -10,16 +10,16 @@ use Fedot\Backlog\Infrastructure\Redis\FetchManager;
 use Fedot\Backlog\Infrastructure\Redis\IndexManager;
 use Fedot\Backlog\Infrastructure\Redis\KeyGenerator;
 use Fedot\Backlog\Infrastructure\Redis\PersistManager;
-use Fedot\Backlog\Repository\ProjectsRepository;
-use Fedot\Backlog\Repository\StoriesRepository;
+use Fedot\Backlog\Repository\ProjectRepository;
+use Fedot\Backlog\Repository\StoryRepository;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Serializer\SerializerInterface;
 use Tests\Fedot\Backlog\BaseTestCase;
 
-class StoriesRepositoryTest extends BaseTestCase
+class StoryRepositoryTest extends BaseTestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|ProjectsRepository
+     * @var PHPUnit_Framework_MockObject_MockObject|ProjectRepository
      */
     protected $projectRepositoryMock;
 
@@ -34,7 +34,7 @@ class StoriesRepositoryTest extends BaseTestCase
     protected $serializerMock;
 
     /**
-     * @return StoriesRepository
+     * @return StoryRepository
      */
     protected function getRepositoryInstance()
     {
@@ -45,9 +45,9 @@ class StoriesRepositoryTest extends BaseTestCase
         $indexManager = new IndexManager($keyGenerator, $this->redisClientMock);
         $persistManager = new PersistManager($keyGenerator, $this->redisClientMock, $this->serializerMock);
         $fetchManager = new FetchManager($keyGenerator, $this->redisClientMock, $this->serializerMock);
-        $this->projectRepositoryMock = $this->createMock(ProjectsRepository::class);
+        $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
 
-        $repository = new StoriesRepository($fetchManager, $persistManager, $indexManager, $this->projectRepositoryMock);
+        $repository = new StoryRepository($fetchManager, $persistManager, $indexManager, $this->projectRepositoryMock);
 
         return $repository;
     }

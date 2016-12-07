@@ -6,30 +6,22 @@ use Amp\Promisor;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Payload\MoveStoryPayload;
-use Fedot\Backlog\Repository\StoriesRepository;
+use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class MoveStory extends AbstractProcessor
 {
     /**
-     * @var StoriesRepository
+     * @var StoryRepository
      */
-    protected $storiesRepository;
+    protected $storyRepository;
 
-    /**
-     * MoveStory constructor.
-     *
-     * @param StoriesRepository $storiesRepository
-     */
-    public function __construct(StoriesRepository $storiesRepository)
+    public function __construct(StoryRepository $storyRepository)
     {
-        $this->storiesRepository = $storiesRepository;
+        $this->storyRepository = $storyRepository;
     }
 
-    /**
-     * @return string
-     */
     public function getSupportedType(): string
     {
         return 'move-story';
@@ -45,7 +37,7 @@ class MoveStory extends AbstractProcessor
         /** @var MoveStoryPayload $payload */
         $payload = $request->getAttribute('payloadObject');
 
-        $result = yield $this->storiesRepository->moveByIds(
+        $result = yield $this->storyRepository->moveByIds(
             $payload->projectId,
             $payload->storyId,
             $payload->beforeStoryId

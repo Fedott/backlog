@@ -3,25 +3,20 @@ namespace Fedot\Backlog\Request\Processor;
 
 use Amp\Promisor;
 use Fedot\Backlog\Payload\DeleteStoryPayload;
-use Fedot\Backlog\Repository\StoriesRepository;
+use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class DeleteStory extends AbstractProcessor
 {
     /**
-     * @var StoriesRepository
+     * @var StoryRepository
      */
-    protected $storiesRepository;
+    protected $storyRepository;
 
-    /**
-     * DeleteStory constructor.
-     *
-     * @param StoriesRepository $storiesRepository
-     */
-    public function __construct(StoriesRepository $storiesRepository)
+    public function __construct(StoryRepository $storyRepository)
     {
-        $this->storiesRepository = $storiesRepository;
+        $this->storyRepository = $storyRepository;
     }
 
     /**
@@ -45,7 +40,7 @@ class DeleteStory extends AbstractProcessor
         /** @var DeleteStoryPayload $payload */
         $payload = $request->getAttribute('payloadObject');
 
-        $result = yield $this->storiesRepository->deleteByIds(
+        $result = yield $this->storyRepository->deleteByIds(
             $payload->projectId,
             $payload->storyId
         );

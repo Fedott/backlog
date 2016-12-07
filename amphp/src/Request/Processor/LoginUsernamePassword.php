@@ -23,12 +23,6 @@ class LoginUsernamePassword extends AbstractProcessor
      */
     protected $webSocketAuthService;
 
-    /**
-     * LoginToken constructor.
-     *
-     * @param AuthenticationService $authenticationService
-     * @param WebSocketConnectionAuthenticationService $webSocketAuthService
-     */
     public function __construct(
         AuthenticationService $authenticationService,
         WebSocketConnectionAuthenticationService $webSocketAuthService
@@ -37,17 +31,11 @@ class LoginUsernamePassword extends AbstractProcessor
         $this->webSocketAuthService = $webSocketAuthService;
     }
 
-    /**
-     * @return string
-     */
     public function getSupportedType(): string
     {
         return 'login-username-password';
     }
 
-    /**
-     * @return string - FQN class name implemented \Fedot\Backlog\PayloadInterface
-     */
     public function getExpectedRequestPayload(): string
     {
         return UsernamePasswordPayload::class;

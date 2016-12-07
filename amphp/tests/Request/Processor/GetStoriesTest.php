@@ -15,7 +15,7 @@ class GetStoriesTest extends RequestProcessorTestCase
     {
         $this->initProcessorMocks();
 
-        return new GetStories($this->storiesRepositoryMock, $this->webSocketAuthServiceMock);
+        return new GetStories($this->storyRepositoryMock, $this->webSocketAuthServiceMock);
     }
 
     protected function getExpectedValidRequestType(): string
@@ -39,7 +39,7 @@ class GetStoriesTest extends RequestProcessorTestCase
         $request = $this->makeRequest(34, 777, 'get-stories', $payload);
         $response = $this->makeResponse($request);
 
-        $this->storiesRepositoryMock->expects($this->once())
+        $this->storyRepositoryMock->expects($this->once())
             ->method('getAllByProjectId')
             ->with($this->equalTo('project-id'))
             ->willReturn(new Success($stories))

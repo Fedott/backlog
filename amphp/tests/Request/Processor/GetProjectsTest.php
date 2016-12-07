@@ -5,7 +5,7 @@ use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Payload\EmptyPayload;
-use Fedot\Backlog\Repository\ProjectsRepository;
+use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Request\Processor\GetProjects;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
 use Fedot\Backlog\WebSocket\Response;
@@ -16,7 +16,7 @@ use Tests\Fedot\Backlog\RequestProcessorTestCase;
 class GetProjectsTest extends RequestProcessorTestCase
 {
     /**
-     * @var ProjectsRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var ProjectRepository|PHPUnit_Framework_MockObject_MockObject
      */
     protected $projectRepositoryMock;
 
@@ -29,7 +29,7 @@ class GetProjectsTest extends RequestProcessorTestCase
     {
         $this->initProcessorMocks();
 
-        $this->projectRepositoryMock = $this->createMock(ProjectsRepository::class);
+        $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
 
         return new GetProjects($this->projectRepositoryMock, $this->webSocketAuthServiceMock);
     }

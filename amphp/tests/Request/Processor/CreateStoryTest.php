@@ -6,7 +6,7 @@ use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Payload\StoryPayload;
-use Fedot\Backlog\Repository\ProjectsRepository;
+use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Request\Processor\CreateStory;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
 use Fedot\Backlog\Response\ResponseSender;
@@ -25,7 +25,7 @@ class CreateStoryTest extends RequestProcessorTestCase
     protected $uuidFactoryMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|ProjectsRepository
+     * @var PHPUnit_Framework_MockObject_MockObject|ProjectRepository
      */
     protected $projectRepositoryMock;
 
@@ -34,9 +34,9 @@ class CreateStoryTest extends RequestProcessorTestCase
         $this->initProcessorMocks();
 
         $this->uuidFactoryMock = $this->createMock(UuidFactory::class);
-        $this->projectRepositoryMock = $this->createMock(ProjectsRepository::class);
+        $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
 
-        return new CreateStory($this->storiesRepositoryMock,
+        return new CreateStory($this->storyRepositoryMock,
             $this->projectRepositoryMock,
             $this->uuidFactoryMock,
             $this->webSocketAuthServiceMock
@@ -83,7 +83,7 @@ class CreateStoryTest extends RequestProcessorTestCase
             ->willReturn('UUIDSuperUnique')
         ;
 
-        $this->storiesRepositoryMock->expects($this->once())
+        $this->storyRepositoryMock->expects($this->once())
             ->method('create')
             ->with($this->equalTo($project), $this->callback(function (Story $story) {
                 $this->assertEquals('UUIDSuperUnique', $story->id);
@@ -142,7 +142,7 @@ class CreateStoryTest extends RequestProcessorTestCase
             ->willReturn('UUIDSuperUnique')
         ;
 
-        $this->storiesRepositoryMock->expects($this->once())
+        $this->storyRepositoryMock->expects($this->once())
             ->method('create')
             ->with($this->equalTo($project), $this->callback(function (Story $story) {
                 $this->assertEquals('UUIDSuperUnique', $story->id);
