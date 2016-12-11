@@ -54,6 +54,7 @@ class MessageProcessor
             }
         } catch (\Exception $exception) {
             $response = $response->withType('internal-server-error');
+            $response = $response->withPayload(['message' => $exception->getMessage()]);
 
             $endpoint->send($clientId, json_encode($response));
         }

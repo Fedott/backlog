@@ -159,7 +159,7 @@ class MessageProcessorTest extends BaseTestCase
 
         $endpointMock->expects($this->once())
             ->method('send')
-            ->with(123, '{"requestId":1,"type":"internal-server-error","payload":[]}')
+            ->with(123, '{"requestId":1,"type":"internal-server-error","payload":{"message":"Atata"}}')
         ;
 
         \Amp\run(function () use ($webSocketServer, $endpointMock) {
