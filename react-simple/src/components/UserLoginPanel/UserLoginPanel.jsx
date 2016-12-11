@@ -29,6 +29,7 @@ export default class UserLoginPanel extends React.Component {
 
         this.toggleLoginDialog = this.toggleLoginDialog.bind(this);
         this.onLogin = this.onLogin.bind(this);
+        this.onLogout = this.onLogout.bind(this);
     }
 
     async tryAutoLogin() {
@@ -55,21 +56,32 @@ export default class UserLoginPanel extends React.Component {
     }
 
     onLogin(user) {
+        window.localStorage.setItem(this.storageAuthTokenKey, user.token);
+
         this.setState({
             isLoginDialogOpen: false,
             isLogged: true,
             loggedUser: user,
         });
 
-        window.localStorage.setItem(this.storageAuthTokenKey, user.token);
-
         this.onLoginExt(user);
+    }
+
+    onLogout() {
+        window.localStorage.removeItem(this.storageAuthTokenKey);
+        this.setState({
+            isLoginDialogOpen: false,
+            isLogged: false,
+            loggedUser: null,
+        });
+
+        this.onLogoutExt();
     }
 
     render() {
         if (this.state.isLogged) {
             return (
-                <div>
+                <div onClick={this.onLogout}>
                     Привет, {this.state.loggedUser.username}
                 </div>
             );
