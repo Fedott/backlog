@@ -57,6 +57,7 @@ return [
         get(Processor\ProjectCreate::class),
         get(Processor\GetProjects::class),
         get(Processor\MarkStoryAsCompleted::class),
+        get(Processor\User\Registration::class),
     ]),
     RequestProcessorManager::class => object()
         ->method('addProcessors', get('request.processors')),
