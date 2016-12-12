@@ -9,7 +9,7 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        'backlog-app': ["babel-polyfill", "./src/main.js", "./src/style.css"],
+        'backlog-app': ["./src/main.js", "./src/style.css"],
         vendors: [
             'react',
             'react-mdl',
@@ -36,6 +36,13 @@ module.exports = {
         publicPath: "/",
     },
     devtool: 'source-map',
+    devServer: {
+        historyApiFallback: true,
+        contentBase: __dirname + "/web/",
+        inline: true,
+        host: "backlog.local",
+        port: 3000
+    },
     module: {
         loaders: [
             {
