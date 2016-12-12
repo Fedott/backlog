@@ -1,5 +1,3 @@
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const webpack = require('webpack');
@@ -34,7 +32,7 @@ module.exports = {
     },
     output: {
         filename: "assets/[name].js",
-        path: __dirname + "/../amphp/web/",
+        path: __dirname + "/web/",
         publicPath: "/",
     },
     devtool: 'source-map',
@@ -61,14 +59,6 @@ module.exports = {
             template: "web/index.tmpl.html",
             hash: true,
             filename: "index.html",
-        }),
-        new CopyWebpackPlugin([
-            {from: 'web/fonts', to: __dirname + '/../amphp/web/fonts'}
-        ]),
-        new BrowserSyncPlugin({
-            host: 'backlog.local',
-            port: 3000,
-            proxy: 'backlog.local:8080',
         }),
         new webpack.optimize.CommonsChunkPlugin('vendors', 'assets/vendors.js'),
         new webpack.DefinePlugin({
