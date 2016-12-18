@@ -30,7 +30,7 @@ class Registration extends AbstractProcessor
 
         $user = new User();
         $user->username = $payload->username;
-        $user->password = $payload->password;
+        $user->password = password_hash($payload->password, PASSWORD_DEFAULT);
 
         $result = yield $this->userRepository->create($user);
 

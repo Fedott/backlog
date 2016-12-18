@@ -49,7 +49,7 @@ class RegistrationTest extends RequestProcessorTestCase
             ->method('create')
             ->with($this->callback(function (User $user) {
                 $this->assertEquals('TestUserNew', $user->username);
-                $this->assertEquals('testPassword', $user->password);
+                $this->assertContains('$2y$10$', $user->password);
 
                 return true;
             }))
