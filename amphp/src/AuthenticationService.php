@@ -8,6 +8,7 @@ use Exception;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Exception\UserNotFoundException;
 use Fedot\Backlog\Model\User;
+use Fedot\Backlog\Repository\UserRepository;
 
 class AuthenticationService
 {
@@ -17,6 +18,11 @@ class AuthenticationService
     protected $redisClient;
 
     /**
+     * @var UserRepository
+     */
+    protected $userRepository;
+
+    /**
      * @var array
      */
     private $userPasswords = [
@@ -24,14 +30,10 @@ class AuthenticationService
         'fedot'    => '$2y$10$A2yCBJrvEdfxmc3CdQWMwezvqAZ1DYm9Cu9wKeGwDSoNS.WcJZUoC',
     ];
 
-    /**
-     * AuthenticationService constructor.
-     *
-     * @param Client $redisClient
-     */
-    public function __construct(Client $redisClient)
+    public function __construct(Client $redisClient, UserRepository $userRepository)
     {
         $this->redisClient = $redisClient;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -48,7 +50,7 @@ class AuthenticationService
 
         \Amp\immediately(function () use ($username, $password, $deferred) {
             try {
-                $user = $this->findUserByUsername($username);
+                $user = yield $this->findUserByUsername($username);
             } catch (UserNotFoundException $exception) {
                 $deferred->fail(new AuthenticationException("Invalid username or password"));
 
@@ -94,24 +96,30 @@ class AuthenticationService
         return $deferred->promise();
     }
 
-    /**
-     * @param string $username
-     *
-     * @return User
-     *
-     * @throws Exception
-     */
-    private function findUserByUsername(string $username): User
+    private function findUserByUsername(string $username): Promise
     {
-        if (!array_key_exists($username, $this->userPasswords)) {
-            throw new UserNotFoundException('User not found');
-        }
+        $deferred = new Deferred();
 
-        $user = new User();
-        $user->username = $username;
-        $user->password = $this->userPasswords[$username];
+        \Amp\immediately(function () use ($deferred, $username) {
+            $user = yield $this->userRepository->get($username);
+            if ($user) {
+                $deferred->succeed($user);
+                return;
+            }
 
-        return $user;
+            if (!array_key_exists($username, $this->userPasswords)) {
+                $deferred->fail(new UserNotFoundException('User not found'));
+                return;
+            }
+
+            $user = new User();
+            $user->username = $username;
+            $user->password = $this->userPasswords[$username];
+
+            $deferred->succeed($user);
+        });
+
+        return $deferred->promise();
     }
 
     /**

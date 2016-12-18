@@ -5,11 +5,22 @@ use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
+use Fedot\Backlog\Infrastructure\Redis\FetchManager;
+use Fedot\Backlog\Infrastructure\Redis\KeyGenerator;
+use Fedot\Backlog\Infrastructure\Redis\PersistManager;
 use Fedot\Backlog\Model\User;
+use Fedot\Backlog\Repository\UserRepository;
 use PHPUnit_Framework_MockObject_MockObject;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class AuthenticationServiceTest extends BaseTestCase
 {
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|SerializerInterface
+     */
+    protected $serializer;
+
     /**
      * @var PHPUnit_Framework_MockObject_MockObject|Client
      */
@@ -22,12 +33,35 @@ class AuthenticationServiceTest extends BaseTestCase
     {
         $this->redisClientMock = $this->createMock(Client::class);
 
-        return new AuthenticationService($this->redisClientMock);
+        $this->serializer = $this->createMock(SerializerInterface::class);
+
+        $userRepository = new UserRepository(
+            new FetchManager(new KeyGenerator(), $this->redisClientMock, $this->serializer),
+            new PersistManager(new KeyGenerator(), $this->redisClientMock, $this->serializer)
+        );
+
+        return new AuthenticationService($this->redisClientMock, $userRepository);
     }
 
     public function testAuthByUsernamePassword()
     {
         $service = $this->getServiceInstance();
+
+        $user = new User();
+        $user->username = 'testUser';
+        $user->password = '$2y$10$kEYXDhRhNmS1mk226hurv.i23tmnFXuqa1LCMG7UoyhZ3nF/PK7a2';
+
+        $this->serializer->expects($this->once())
+            ->method('deserialize')
+            ->with('user-json', User::class, 'json')
+            ->willReturn($user)
+        ;
+
+        $this->redisClientMock->expects($this->once())
+            ->method('get')
+            ->with('entity:fedot_backlog_model_user:testUser')
+            ->willReturn(new Success('user-json'))
+        ;
 
         $this->redisClientMock->expects($this->once())
             ->method('set')
