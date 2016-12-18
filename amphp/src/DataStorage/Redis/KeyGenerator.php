@@ -1,5 +1,5 @@
 <?php declare(strict_types = 1);
-namespace Fedot\Backlog\Infrastructure\Redis;
+namespace Fedot\DataStorage\Redis;
 
 use Fedot\DataStorage\Identifiable;
 use Fedot\DataStorage\KeyGeneratorInterface;

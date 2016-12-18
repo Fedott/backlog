@@ -5,9 +5,9 @@ use Amp\Deferred;
 use Amp\Promise;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Infrastructure\Redis\FetchManager;
-use Fedot\Backlog\Infrastructure\Redis\IndexManager;
-use Fedot\Backlog\Infrastructure\Redis\PersistManager;
+
+
+use Fedot\DataStorage\Redis\PersistManager;
 use Fedot\DataStorage\FetchManagerInterface;
 use Fedot\DataStorage\IndexManagerInterface;
 
@@ -28,15 +28,11 @@ class ProjectRepository
      */
     protected $fetchManager;
 
-    /**
-     * ProjectsRepository constructor.
-     *
-     * @param IndexManagerInterface $indexManager
-     * @param PersistManager $persistManager
-     * @param FetchManagerInterface $fetchManager
-     */
-    public function __construct(IndexManagerInterface $indexManager, PersistManager $persistManager, FetchManagerInterface $fetchManager)
-    {
+    public function __construct(
+        IndexManagerInterface $indexManager,
+        PersistManager $persistManager,
+        FetchManagerInterface $fetchManager
+    ) {
         $this->indexManager = $indexManager;
         $this->persistManager = $persistManager;
         $this->fetchManager = $fetchManager;

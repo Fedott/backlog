@@ -3,8 +3,8 @@ namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
 use Amp\Promise;
-use Fedot\Backlog\Infrastructure\Redis\FetchManager;
-use Fedot\Backlog\Infrastructure\Redis\PersistManager;
+
+use Fedot\DataStorage\Redis\PersistManager;
 use Fedot\Backlog\Model\User;
 use Fedot\DataStorage\FetchManagerInterface;
 

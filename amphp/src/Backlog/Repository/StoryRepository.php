@@ -6,9 +6,9 @@ use Amp\Deferred;
 
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
-use Fedot\Backlog\Infrastructure\Redis\FetchManager;
-use Fedot\Backlog\Infrastructure\Redis\IndexManager;
-use Fedot\Backlog\Infrastructure\Redis\PersistManager;
+
+
+use Fedot\DataStorage\Redis\PersistManager;
 use Fedot\DataStorage\FetchManagerInterface;
 use Fedot\DataStorage\IndexManagerInterface;
 
@@ -35,12 +35,6 @@ class StoryRepository
      */
     protected $projectRepository;
 
-    /**
-     * @param FetchManagerInterface $fetchManager
-     * @param PersistManager $persistManager
-     * @param IndexManagerInterface $indexManager
-     * @param ProjectRepository $projectRepository
-     */
     public function __construct(
         FetchManagerInterface $fetchManager,
         PersistManager $persistManager,
