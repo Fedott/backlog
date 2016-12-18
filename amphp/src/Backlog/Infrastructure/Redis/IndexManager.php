@@ -4,11 +4,14 @@ namespace Fedot\Backlog\Infrastructure\Redis;
 use Amp\Deferred;
 use Amp\Promise;
 use Amp\Redis\Client;
+use Fedot\DataStorage\Identifiable;
+use Fedot\DataStorage\IndexManagerInterface;
+use Fedot\DataStorage\KeyGeneratorInterface;
 
-class IndexManager
+class IndexManager implements IndexManagerInterface
 {
     /**
-     * @var KeyGenerator
+     * @var KeyGeneratorInterface
      */
     protected $keyGenerator;
 
@@ -17,7 +20,7 @@ class IndexManager
      */
     protected $redisClient;
 
-    public function __construct(KeyGenerator $keyGenerator, Client $redisClient)
+    public function __construct(KeyGeneratorInterface $keyGenerator, Client $redisClient)
     {
         $this->redisClient = $redisClient;
         $this->keyGenerator = $keyGenerator;

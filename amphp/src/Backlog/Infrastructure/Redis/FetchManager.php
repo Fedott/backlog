@@ -5,12 +5,14 @@ use Amp\Deferred;
 use Amp\Promise;
 use Amp\Redis\Client;
 use Amp\Success;
+use Fedot\DataStorage\FetchManagerInterface;
+use Fedot\DataStorage\KeyGeneratorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class FetchManager
+class FetchManager implements FetchManagerInterface
 {
     /**
-     * @var KeyGenerator
+     * @var KeyGeneratorInterface
      */
     protected $keyGenerator;
 
@@ -24,7 +26,7 @@ class FetchManager
      */
     protected $serializer;
 
-    public function __construct(KeyGenerator $keyGenerator, Client $redisClient, SerializerInterface $serializer)
+    public function __construct(KeyGeneratorInterface $keyGenerator, Client $redisClient, SerializerInterface $serializer)
     {
         $this->keyGenerator = $keyGenerator;
         $this->redisClient = $redisClient;

@@ -1,5 +1,5 @@
 <?php declare(strict_types = 1);
-namespace Fedot\Backlog\Infrastructure\Redis;
+namespace Fedot\DataStorage;
 
 interface Identifiable
 {

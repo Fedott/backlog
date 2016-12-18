@@ -3,12 +3,15 @@ namespace Fedot\Backlog\Infrastructure\Redis;
 
 use Amp\Promise;
 use Amp\Redis\Client;
+use Fedot\DataStorage\Identifiable;
+use Fedot\DataStorage\KeyGeneratorInterface;
+use Fedot\DataStorage\PersistManagerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class PersistManager
+class PersistManager implements PersistManagerInterface
 {
     /**
-     * @var KeyGenerator
+     * @var KeyGeneratorInterface
      */
     protected $keyGenerator;
 
@@ -22,7 +25,7 @@ class PersistManager
      */
     protected $serializer;
 
-    public function __construct(KeyGenerator $keyGenerator, Client $redisClient, SerializerInterface $serializer)
+    public function __construct(KeyGeneratorInterface $keyGenerator, Client $redisClient, SerializerInterface $serializer)
     {
         $this->keyGenerator = $keyGenerator;
         $this->redisClient = $redisClient;

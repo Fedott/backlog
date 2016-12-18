@@ -6,11 +6,12 @@ use Amp\Promise;
 use Fedot\Backlog\Infrastructure\Redis\FetchManager;
 use Fedot\Backlog\Infrastructure\Redis\PersistManager;
 use Fedot\Backlog\Model\User;
+use Fedot\DataStorage\FetchManagerInterface;
 
 class UserRepository
 {
     /**
-     * @var FetchManager
+     * @var FetchManagerInterface
      */
     protected $fetchManager;
 
@@ -19,7 +20,7 @@ class UserRepository
      */
     protected $persistManager;
 
-    public function __construct(FetchManager $fetchManager, PersistManager $persistManager)
+    public function __construct(FetchManagerInterface $fetchManager, PersistManager $persistManager)
     {
         $this->fetchManager = $fetchManager;
         $this->persistManager = $persistManager;

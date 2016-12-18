@@ -1,7 +1,10 @@
 <?php declare(strict_types = 1);
 namespace Fedot\Backlog\Infrastructure\Redis;
 
-class KeyGenerator
+use Fedot\DataStorage\Identifiable;
+use Fedot\DataStorage\KeyGeneratorInterface;
+
+class KeyGenerator implements KeyGeneratorInterface
 {
     public function getRedisName($model): string
     {
