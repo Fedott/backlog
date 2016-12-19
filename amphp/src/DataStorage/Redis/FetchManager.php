@@ -10,6 +10,7 @@ use Fedot\DataStorage\FetchManagerInterface;
 use Fedot\DataStorage\Identifiable;
 use Fedot\DataStorage\KeyGeneratorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use TypeError;
 
 class FetchManager implements FetchManagerInterface
 {
@@ -38,7 +39,7 @@ class FetchManager implements FetchManagerInterface
     public function fetchById(string $className, string $id): Promise
     {
         if (!is_subclass_of($className, Identifiable::class)) {
-            return new Failure(new \TypeError("{$className} not implemented " . Identifiable::class));
+            return new Failure(new TypeError("{$className} not implemented " . Identifiable::class));
         }
 
         $promisor = new Deferred();
@@ -62,6 +63,10 @@ class FetchManager implements FetchManagerInterface
 
     public function fetchCollectionByIds(string $className, array $ids): Promise
     {
+        if (!is_subclass_of($className, Identifiable::class)) {
+            return new Failure(new TypeError("{$className} not implemented " . Identifiable::class));
+        }
+
         if (empty($ids)) {
             return new Success([]);
         }

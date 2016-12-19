@@ -160,4 +160,80 @@ class FetchManagerTest extends BaseTestCase
         $this->assertInstanceOf($className, $actualResult[2]);
         $this->assertEquals('test-id4', $actualResult[2]->id);
     }
+
+    public function testFetchCollectionByIdsNotFound()
+    {
+        $instance = $this->getInstance();
+
+        $className = Identifiable::class;
+
+        $this->redisClientMock
+            ->expects($this->once())
+            ->method('mGet')
+            ->with([
+                'entity:tests_fedot_datastorage_stubs_identifiable:test-id1',
+                'entity:tests_fedot_datastorage_stubs_identifiable:test-id2',
+                'entity:tests_fedot_datastorage_stubs_identifiable:test-id3',
+                'entity:tests_fedot_datastorage_stubs_identifiable:test-id4',
+            ])
+            ->willReturn(new Success([]))
+        ;
+
+        $this->serializerMock
+            ->expects($this->never())
+            ->method('deserialize')
+        ;
+
+        $actualResult = \Amp\wait($instance->fetchCollectionByIds($className, [
+            'test-id1',
+            'test-id2',
+            'test-id3',
+            'test-id4',
+        ]));
+
+        $this->assertCount(0, $actualResult);
+    }
+
+    public function testFetchCollectionByIdsEmptyIds()
+    {
+        $instance = $this->getInstance();
+
+        $className = Identifiable::class;
+
+        $this->redisClientMock
+            ->expects($this->never())
+            ->method('mGet')
+        ;
+
+        $this->serializerMock
+            ->expects($this->never())
+            ->method('deserialize')
+        ;
+
+        $actualResult = \Amp\wait($instance->fetchCollectionByIds($className, []));
+
+        $this->assertCount(0, $actualResult);
+    }
+
+    public function testFetchCollectionByIdsNotIdentifiable()
+    {
+        $instance = $this->getInstance();
+
+        $className = NotIdentifiable::class;
+
+        $this->redisClientMock
+            ->expects($this->never())
+            ->method('mGet')
+        ;
+
+        $this->serializerMock
+            ->expects($this->never())
+            ->method('deserialize')
+        ;
+
+        $this->expectException(TypeError::class);
+        $this->expectExceptionMessage("{$className} not implemented " . IdentifiableInterface::class);
+
+        \Amp\wait($instance->fetchCollectionByIds($className, []));
+    }
 }
