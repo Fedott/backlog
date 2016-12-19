@@ -2,10 +2,12 @@
 namespace Fedot\DataStorage\Redis;
 
 use Amp\Deferred;
+use Amp\Failure;
 use Amp\Promise;
 use Amp\Redis\Client;
 use Fedot\DataStorage\Identifiable;
 use Fedot\DataStorage\RelationshipManagerInterface;
+use TypeError;
 
 class RelationshipManager implements RelationshipManagerInterface
 {
@@ -48,6 +50,10 @@ class RelationshipManager implements RelationshipManagerInterface
 
     public function getIdsOneToMany(Identifiable $forModel, string $modelClassName): Promise
     {
+        if (!is_subclass_of($modelClassName, Identifiable::class)) {
+            return new Failure(new TypeError("{$modelClassName} not implemented " . Identifiable::class));
+        }
+
         $indexName = $this->keyGenerator->getOneToManeIndexName($forModel, $modelClassName);
 
         return $this->getIdsFromIndex($indexName);
@@ -56,6 +62,13 @@ class RelationshipManager implements RelationshipManagerInterface
     private function removeFromIndex(string $indexName, string $key): Promise
     {
         return $this->redisClient->lRem($indexName, $key);
+    }
+
+    public function removeOneToMany(Identifiable $forModel, Identifiable $model): Promise
+    {
+        $indexName = $this->keyGenerator->getOneToManeIndexName($forModel, $model);
+
+        return $this->removeFromIndex($indexName, $model->getId());
     }
 
     private function moveValueOnIndex(string $indexName, string $targetId, string $positionId): Promise
@@ -95,13 +108,5 @@ class RelationshipManager implements RelationshipManagerInterface
             $model->getId(),
             $positionModel->getId()
         );
-    }
-
-    public function removeOneToMany(Identifiable $forModel, Identifiable $model): Promise
-    {
-        $indexName = $this->keyGenerator->getOneToManeIndexName($forModel, $model);
-        $modelKey = $this->keyGenerator->getKeyForIdentifiable($model);
-
-        return $this->removeFromIndex($indexName, $modelKey);
     }
 }

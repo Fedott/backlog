@@ -102,9 +102,9 @@ class FetchManagerTest extends BaseTestCase
             ->method('deserialize')
         ;
 
+
         $this->expectException(TypeError::class);
         $this->expectExceptionMessage("{$className} not implemented " . IdentifiableInterface::class);
-
         \Amp\wait($instance->fetchById($className, 'test-id'));
     }
 

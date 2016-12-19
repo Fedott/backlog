@@ -287,7 +287,7 @@ class StoryRepositoryTest extends BaseTestCase
             ->method('lRem')
             ->with(
                 "index:fedot_backlog_model_project:project-id:fedot_backlog_model_story",
-                "entity:fedot_backlog_model_story:story-id",
+                "story-id",
                 0
             )
             ->willReturn($redisLRemPromise)
@@ -340,7 +340,7 @@ class StoryRepositoryTest extends BaseTestCase
             ->method('lRem')
             ->with(
                 "index:fedot_backlog_model_project:project-id:fedot_backlog_model_story",
-                "entity:fedot_backlog_model_story:story-id",
+                "story-id",
                 0
             )
             ->willReturn($redisLRemPromise)
