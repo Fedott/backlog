@@ -37,6 +37,11 @@ return [
         ),
     SerializerInterface::class => get(Serializer::class),
 
+    \Fedot\DataStorage\FetchManagerInterface::class => get(\Fedot\DataStorage\Redis\FetchManager::class),
+    \Fedot\DataStorage\PersistManagerInterface::class => get(\Fedot\DataStorage\Redis\PersistManager::class),
+    \Fedot\DataStorage\IndexManagerInterface::class => get(\Fedot\DataStorage\Redis\IndexManager::class),
+    \Fedot\DataStorage\KeyGeneratorInterface::class => get(\Fedot\DataStorage\Redis\KeyGenerator::class),
+
     RunnerFactory::class => object()
         ->constructor(get('middleware.queue')),
 
