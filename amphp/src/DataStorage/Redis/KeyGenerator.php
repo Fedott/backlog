@@ -2,9 +2,8 @@
 namespace Fedot\DataStorage\Redis;
 
 use Fedot\DataStorage\Identifiable;
-use Fedot\DataStorage\KeyGeneratorInterface;
 
-class KeyGenerator implements KeyGeneratorInterface
+class KeyGenerator
 {
     private function getRedisName($model): string
     {

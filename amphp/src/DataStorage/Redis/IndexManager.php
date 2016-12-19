@@ -6,12 +6,11 @@ use Amp\Promise;
 use Amp\Redis\Client;
 use Fedot\DataStorage\Identifiable;
 use Fedot\DataStorage\IndexManagerInterface;
-use Fedot\DataStorage\KeyGeneratorInterface;
 
 class IndexManager implements IndexManagerInterface
 {
     /**
-     * @var KeyGeneratorInterface
+     * @var KeyGenerator
      */
     protected $keyGenerator;
 
@@ -20,7 +19,7 @@ class IndexManager implements IndexManagerInterface
      */
     protected $redisClient;
 
-    public function __construct(KeyGeneratorInterface $keyGenerator, Client $redisClient)
+    public function __construct(KeyGenerator $keyGenerator, Client $redisClient)
     {
         $this->redisClient = $redisClient;
         $this->keyGenerator = $keyGenerator;
