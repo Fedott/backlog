@@ -4,8 +4,6 @@ namespace Fedot\DataStorage;
 
 interface KeyGeneratorInterface
 {
-    public function getRedisName($model): string;
-
     public function getKeyForIdentifiable(Identifiable $model): string;
 
     public function getKeyForClassNameId(string $className, string $id): string;

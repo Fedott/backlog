@@ -6,7 +6,7 @@ use Fedot\DataStorage\KeyGeneratorInterface;
 
 class KeyGenerator implements KeyGeneratorInterface
 {
-    public function getRedisName($model): string
+    private function getRedisName($model): string
     {
         if (!is_string($model)) {
             $model = get_class($model);
