@@ -9,12 +9,12 @@ use Fedot\Backlog\Model\User;
 
 use Fedot\DataStorage\Redis\PersistManager;
 use Fedot\DataStorage\FetchManagerInterface;
-use Fedot\DataStorage\IndexManagerInterface;
+use Fedot\DataStorage\RelationshipManagerInterface;
 
 class ProjectRepository
 {
     /**
-     * @var IndexManagerInterface
+     * @var RelationshipManagerInterface
      */
     protected $indexManager;
 
@@ -29,7 +29,7 @@ class ProjectRepository
     protected $fetchManager;
 
     public function __construct(
-        IndexManagerInterface $indexManager,
+        RelationshipManagerInterface $indexManager,
         PersistManager $persistManager,
         FetchManagerInterface $fetchManager
     ) {

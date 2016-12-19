@@ -10,7 +10,7 @@ use Fedot\Backlog\Model\Story;
 
 use Fedot\DataStorage\Redis\PersistManager;
 use Fedot\DataStorage\FetchManagerInterface;
-use Fedot\DataStorage\IndexManagerInterface;
+use Fedot\DataStorage\RelationshipManagerInterface;
 
 
 class StoryRepository
@@ -26,7 +26,7 @@ class StoryRepository
     protected $persistManager;
 
     /**
-     * @var IndexManagerInterface
+     * @var RelationshipManagerInterface
      */
     protected $indexManager;
 
@@ -38,7 +38,7 @@ class StoryRepository
     public function __construct(
         FetchManagerInterface $fetchManager,
         PersistManager $persistManager,
-        IndexManagerInterface $indexManager,
+        RelationshipManagerInterface $indexManager,
         ProjectRepository $projectRepository
     ) {
         $this->fetchManager = $fetchManager;
@@ -164,7 +164,7 @@ class StoryRepository
      */
     public function move(Project $project, Story $story, Story $positionStory): Promise
     {
-        return $this->indexManager->moveValueOnOneToManyIndex($project, $story, $positionStory);
+        return $this->indexManager->moveValueOnOneToMany($project, $story, $positionStory);
     }
 
     public function moveByIds(string $projectId, string $storyId, string $positionStoryId): Promise

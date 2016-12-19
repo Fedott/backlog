@@ -7,7 +7,7 @@ use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\DataStorage\Redis\FetchManager;
-use Fedot\DataStorage\Redis\IndexManager;
+use Fedot\DataStorage\Redis\RelationshipManager;
 use Fedot\DataStorage\Redis\KeyGenerator;
 use Fedot\DataStorage\Redis\PersistManager;
 use Fedot\Backlog\Repository\ProjectRepository;
@@ -42,7 +42,7 @@ class StoryRepositoryTest extends BaseTestCase
         $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $keyGenerator = new KeyGenerator();
-        $indexManager = new IndexManager($keyGenerator, $this->redisClientMock);
+        $indexManager = new RelationshipManager($keyGenerator, $this->redisClientMock);
         $persistManager = new PersistManager($keyGenerator, $this->redisClientMock, $this->serializerMock);
         $fetchManager = new FetchManager($keyGenerator, $this->redisClientMock, $this->serializerMock);
         $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);

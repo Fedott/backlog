@@ -4,19 +4,17 @@ namespace Fedot\DataStorage;
 
 use Amp\Promise;
 
-interface IndexManagerInterface
+interface RelationshipManagerInterface
 {
     public function addOneToMany(Identifiable $forModel, Identifiable $model): Promise;
 
     public function getIdsOneToMany(Identifiable $forModel, string $modelClassName): Promise;
 
-    public function moveValueOnIndex(string $indexName, string $targetId, string $positionId): Promise;
+    public function removeOneToMany(Identifiable $forModel, Identifiable $model): Promise;
 
-    public function moveValueOnOneToManyIndex(
+    public function moveValueOnOneToMany(
         Identifiable $forModel,
         Identifiable $model,
         Identifiable $positionModel
     ): Promise;
-
-    public function removeOneToMany(Identifiable $forModel, Identifiable $model): Promise;
 }

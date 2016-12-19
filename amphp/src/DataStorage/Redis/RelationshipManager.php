@@ -5,9 +5,9 @@ use Amp\Deferred;
 use Amp\Promise;
 use Amp\Redis\Client;
 use Fedot\DataStorage\Identifiable;
-use Fedot\DataStorage\IndexManagerInterface;
+use Fedot\DataStorage\RelationshipManagerInterface;
 
-class IndexManager implements IndexManagerInterface
+class RelationshipManager implements RelationshipManagerInterface
 {
     /**
      * @var KeyGenerator
@@ -58,7 +58,7 @@ class IndexManager implements IndexManagerInterface
         return $this->redisClient->lRem($indexName, $key);
     }
 
-    public function moveValueOnIndex(string $indexName, string $targetId, string $positionId): Promise
+    private function moveValueOnIndex(string $indexName, string $targetId, string $positionId): Promise
     {
         $promisor = new Deferred();
 
@@ -83,7 +83,7 @@ class IndexManager implements IndexManagerInterface
         return $promisor->promise();
     }
 
-    public function moveValueOnOneToManyIndex(
+    public function moveValueOnOneToMany(
         Identifiable $forModel,
         Identifiable $model,
         Identifiable $positionModel

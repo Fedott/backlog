@@ -9,6 +9,12 @@ use Fedot\Backlog\Middleware\RequestProcessor;
 use Fedot\Backlog\Request\Processor;
 use Fedot\Backlog\Request\RequestProcessorManager;
 use Fedot\Backlog\SerializerService;
+use Fedot\DataStorage\FetchManagerInterface;
+use Fedot\DataStorage\PersistManagerInterface;
+use Fedot\DataStorage\Redis\FetchManager;
+use Fedot\DataStorage\Redis\PersistManager;
+use Fedot\DataStorage\Redis\RelationshipManager;
+use Fedot\DataStorage\RelationshipManagerInterface;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -37,10 +43,9 @@ return [
         ),
     SerializerInterface::class => get(Serializer::class),
 
-    \Fedot\DataStorage\FetchManagerInterface::class => get(\Fedot\DataStorage\Redis\FetchManager::class),
-    \Fedot\DataStorage\PersistManagerInterface::class => get(\Fedot\DataStorage\Redis\PersistManager::class),
-    \Fedot\DataStorage\IndexManagerInterface::class => get(\Fedot\DataStorage\Redis\IndexManager::class),
-    \Fedot\DataStorage\KeyGeneratorInterface::class => get(\Fedot\DataStorage\Redis\KeyGenerator::class),
+    FetchManagerInterface::class => get(FetchManager::class),
+    PersistManagerInterface::class => get(PersistManager::class),
+    RelationshipManagerInterface::class => get(RelationshipManager::class),
 
     RunnerFactory::class => object()
         ->constructor(get('middleware.queue')),
