@@ -2,10 +2,12 @@
 namespace Fedot\DataStorage\Redis;
 
 use Amp\Deferred;
+use Amp\Failure;
 use Amp\Promise;
 use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\DataStorage\FetchManagerInterface;
+use Fedot\DataStorage\Identifiable;
 use Fedot\DataStorage\KeyGeneratorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -35,6 +37,10 @@ class FetchManager implements FetchManagerInterface
 
     public function fetchById(string $className, string $id): Promise
     {
+        if (!is_subclass_of($className, Identifiable::class)) {
+            return new Failure(new \TypeError("{$className} not implemented " . Identifiable::class));
+        }
+
         $promisor = new Deferred();
 
         \Amp\immediately(function () use ($promisor, $className, $id) {
@@ -42,9 +48,13 @@ class FetchManager implements FetchManagerInterface
 
             $data = yield $this->redisClient->get($key);
 
-            $model = $this->serializer->deserialize($data, $className, 'json');
+            if (null === $data) {
+                $result = null;
+            } else {
+                $result = $this->serializer->deserialize($data, $className, 'json');
+            }
 
-            $promisor->succeed($model);
+            $promisor->succeed($result);
         });
 
         return $promisor->promise();
