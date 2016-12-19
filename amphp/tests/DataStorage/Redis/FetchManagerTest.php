@@ -107,4 +107,57 @@ class FetchManagerTest extends BaseTestCase
 
         \Amp\wait($instance->fetchById($className, 'test-id'));
     }
+
+    public function testFetchCollectionByIdsFound()
+    {
+        $instance = $this->getInstance();
+
+        $className = Identifiable::class;
+
+        $this->redisClientMock
+            ->expects($this->once())
+            ->method('mGet')
+            ->with([
+                'entity:tests_fedot_datastorage_stubs_identifiable:test-id1',
+                'entity:tests_fedot_datastorage_stubs_identifiable:test-id2',
+                'entity:tests_fedot_datastorage_stubs_identifiable:test-id3',
+                'entity:tests_fedot_datastorage_stubs_identifiable:test-id4',
+            ])
+            ->willReturn(new Success([
+                'test-json1',
+                'test-json2',
+                'test-json4',
+            ]))
+        ;
+
+        $this->serializerMock
+            ->expects($this->exactly(3))
+            ->method('deserialize')
+            ->withConsecutive(
+                ['test-json1', $className, 'json'],
+                ['test-json2', $className, 'json'],
+                ['test-json4', $className, 'json']
+            )
+            ->willReturnOnConsecutiveCalls(
+                new Identifiable('test-id1'),
+                new Identifiable('test-id2'),
+                new Identifiable('test-id4')
+            )
+        ;
+
+        $actualResult = \Amp\wait($instance->fetchCollectionByIds($className, [
+            'test-id1',
+            'test-id2',
+            'test-id3',
+            'test-id4',
+        ]));
+
+        $this->assertCount(3, $actualResult);
+        $this->assertInstanceOf($className, $actualResult[0]);
+        $this->assertEquals('test-id1', $actualResult[0]->id);
+        $this->assertInstanceOf($className, $actualResult[1]);
+        $this->assertEquals('test-id2', $actualResult[1]->id);
+        $this->assertInstanceOf($className, $actualResult[2]);
+        $this->assertEquals('test-id4', $actualResult[2]->id);
+    }
 }
