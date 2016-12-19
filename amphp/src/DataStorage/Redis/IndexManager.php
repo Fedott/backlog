@@ -26,12 +26,12 @@ class IndexManager implements IndexManagerInterface
         $this->keyGenerator = $keyGenerator;
     }
 
-    public function addToIndex(string $indexName, string $id): Promise
+    private function addToIndex(string $indexName, string $id): Promise
     {
         return $this->redisClient->lPush($indexName, $id);
     }
 
-    public function getIdsFromIndex(string $indexName): Promise
+    private function getIdsFromIndex(string $indexName): Promise
     {
         return $this->redisClient->lRange(
             $indexName,
@@ -54,7 +54,7 @@ class IndexManager implements IndexManagerInterface
         return $this->getIdsFromIndex($indexName);
     }
 
-    public function removeFromIndex(string $indexName, string $key): Promise
+    private function removeFromIndex(string $indexName, string $key): Promise
     {
         return $this->redisClient->lRem($indexName, $key);
     }
