@@ -122,4 +122,61 @@ class RelationshipManagerTest extends BaseTestCase
 
         $this->assertSame(1, $result);
     }
+
+    public function testMoveValueOnOneToManyPositive()
+    {
+        $instance = $this->getInstance();
+
+        $forModel = new Identifiable('for-id');
+        $model = new Identifiable('test-id');
+        $position = new Identifiable('position-id');
+
+        $indexName = 'index:tests_fedot_datastorage_stubs_identifiable:for-id:tests_fedot_datastorage_stubs_identifiable';
+
+        $this->redisClientMock->expects($this->once())
+            ->method('lRem')
+            ->with($indexName, 'test-id', 0)
+            ->willReturn(new Success(1))
+        ;
+        $this->redisClientMock->expects($this->once())
+            ->method('lInsert')
+            ->with($indexName, 'before', 'position-id', 'test-id')
+            ->willReturn(new Success(1))
+        ;
+
+        $result = \Amp\wait($instance->moveValueOnOneToMany($forModel, $model, $position));
+
+        $this->assertTrue($result);
+    }
+
+    public function testMoveValueOnOneToManyNegative()
+    {
+        $instance = $this->getInstance();
+
+        $forModel = new Identifiable('for-id');
+        $model = new Identifiable('test-id');
+        $position = new Identifiable('position-id');
+
+        $indexName = 'index:tests_fedot_datastorage_stubs_identifiable:for-id:tests_fedot_datastorage_stubs_identifiable';
+
+        $this->redisClientMock->expects($this->once())
+            ->method('lRem')
+            ->with($indexName, 'test-id', 0)
+            ->willReturn(new Success(1))
+        ;
+        $this->redisClientMock->expects($this->once())
+            ->method('lInsert')
+            ->with($indexName, 'before', 'position-id', 'test-id')
+            ->willReturn(new Success(-1))
+        ;
+        $this->redisClientMock->expects($this->once())
+            ->method('lPush')
+            ->with($indexName, 'test-id')
+            ->willReturn(new Success(1))
+        ;
+
+        $result = \Amp\wait($instance->moveValueOnOneToMany($forModel, $model, $position));
+
+        $this->assertFalse($result);
+    }
 }
