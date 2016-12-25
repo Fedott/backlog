@@ -109,4 +109,18 @@ class RelationshipManager implements RelationshipManagerInterface
             $positionModel->getId()
         );
     }
+
+    public function addManyToMany(Identifiable $modelFirst, Identifiable $modelSecond)
+    {
+        $promisor = new Deferred();
+
+        \Amp\immediately(function () use ($promisor, $modelFirst, $modelSecond) {
+            yield $this->redisClient->lPush($this->keyGenerator->getOneToManeIndexName($modelFirst, $modelSecond), $modelSecond->getId());
+            yield $this->redisClient->lPush($this->keyGenerator->getOneToManeIndexName($modelSecond, $modelFirst), $modelFirst->getId());
+
+            $promisor->succeed(true);
+        });
+
+        return $promisor->promise();
+    }
 }

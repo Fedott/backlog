@@ -7,6 +7,7 @@ use Fedot\DataStorage\Redis\KeyGenerator;
 use Fedot\DataStorage\Redis\RelationshipManager;
 use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Fedot\Backlog\BaseTestCase;
+use Tests\Fedot\DataStorage\Stubs\AnotherIdentifiable;
 use Tests\Fedot\DataStorage\Stubs\Identifiable;
 use Fedot\DataStorage\Identifiable as IdentifiableInterface;
 use Tests\Fedot\DataStorage\Stubs\NotIdentifiable;
@@ -178,5 +179,32 @@ class RelationshipManagerTest extends BaseTestCase
         $result = \Amp\wait($instance->moveValueOnOneToMany($forModel, $model, $position));
 
         $this->assertFalse($result);
+    }
+
+    public function testAddManyToMany()
+    {
+        $instance = $this->getInstance();
+
+        $entity1 = new Identifiable('entity-1');
+        $entity2 = new AnotherIdentifiable('entity-2');
+
+        $indexName1 = "index:tests_fedot_datastorage_stubs_identifiable:entity-1:tests_fedot_datastorage_stubs_anotheridentifiable";
+        $indexName2 = "index:tests_fedot_datastorage_stubs_anotheridentifiable:entity-2:tests_fedot_datastorage_stubs_identifiable";
+
+        $this->redisClientMock->expects($this->exactly(2))
+            ->method('lPush')
+            ->withConsecutive(
+                [$indexName1, 'entity-2'],
+                [$indexName2, 'entity-1']
+            )
+            ->willReturnOnConsecutiveCalls(
+                new Success(true),
+                new Success(true)
+            )
+        ;
+
+        $result = \Amp\wait($instance->addManyToMany($entity1, $entity2));
+
+        $this->assertTrue($result);
     }
 }
