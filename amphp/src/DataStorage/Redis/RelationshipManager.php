@@ -110,7 +110,7 @@ class RelationshipManager implements RelationshipManagerInterface
         );
     }
 
-    public function addManyToMany(Identifiable $modelFirst, Identifiable $modelSecond)
+    public function addManyToMany(Identifiable $modelFirst, Identifiable $modelSecond): Promise
     {
         $promisor = new Deferred();
 

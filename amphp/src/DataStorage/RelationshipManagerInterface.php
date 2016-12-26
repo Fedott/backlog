@@ -17,4 +17,6 @@ interface RelationshipManagerInterface
         Identifiable $model,
         Identifiable $positionModel
     ): Promise;
+
+    public function addManyToMany(Identifiable $modelFirst, Identifiable $modelSecond): Promise;
 }
