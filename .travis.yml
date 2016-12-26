@@ -20,11 +20,11 @@ install:
   - composer install --no-interaction --prefer-source
 
 script:
-  - php vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
+  - php bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
 
 after_script:
   - composer require satooshi/php-coveralls dev-master
-  - php vendor/bin/coveralls -v
+  - php bin/coveralls -v
   
 cache:
   directories:
