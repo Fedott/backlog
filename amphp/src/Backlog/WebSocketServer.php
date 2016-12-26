@@ -72,10 +72,12 @@ class WebSocketServer implements Websocket
     }
     // @codeCoverageIgnoreEnd
 
+    // @codeCoverageIgnoreStart
     public function processMessage(int $clientId, string $message)
     {
         yield from $this->messageProcessor->processMessage($this->endpoint, $clientId, $message);
     }
+    // @codeCoverageIgnoreEnd
 
     /**
      * @inheritDoc
