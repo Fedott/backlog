@@ -19,4 +19,6 @@ interface RelationshipManagerInterface
     ): Promise;
 
     public function addManyToMany(Identifiable $modelFirst, Identifiable $modelSecond): Promise;
+
+    public function removeManyToMany(Identifiable $modelFirst, Identifiable $modelSecond): Promise;
 }
