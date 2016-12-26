@@ -4,12 +4,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Fedot\\Backlog\\": "src/"
+            "Fedot\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\Fedot\\Backlog\\": "tests/"
+            "Tests\\Fedot\\": "tests/"
         }
     },
     "require": {

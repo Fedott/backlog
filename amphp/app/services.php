@@ -9,6 +9,12 @@ use Fedot\Backlog\Middleware\RequestProcessor;
 use Fedot\Backlog\Request\Processor;
 use Fedot\Backlog\Request\RequestProcessorManager;
 use Fedot\Backlog\SerializerService;
+use Fedot\DataStorage\FetchManagerInterface;
+use Fedot\DataStorage\PersistManagerInterface;
+use Fedot\DataStorage\Redis\FetchManager;
+use Fedot\DataStorage\Redis\PersistManager;
+use Fedot\DataStorage\Redis\RelationshipManager;
+use Fedot\DataStorage\RelationshipManagerInterface;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -37,6 +43,10 @@ return [
         ),
     SerializerInterface::class => get(Serializer::class),
 
+    FetchManagerInterface::class => get(FetchManager::class),
+    PersistManagerInterface::class => get(PersistManager::class),
+    RelationshipManagerInterface::class => get(RelationshipManager::class),
+
     RunnerFactory::class => object()
         ->constructor(get('middleware.queue')),
 
@@ -57,6 +67,7 @@ return [
         get(Processor\ProjectCreate::class),
         get(Processor\GetProjects::class),
         get(Processor\MarkStoryAsCompleted::class),
+        get(Processor\User\Registration::class),
     ]),
     RequestProcessorManager::class => object()
         ->method('addProcessors', get('request.processors')),

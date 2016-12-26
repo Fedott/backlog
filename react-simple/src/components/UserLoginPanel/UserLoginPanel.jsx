@@ -4,6 +4,7 @@ import {
 } from 'react-mdl';
 import webSocketClient from '../../libraries/WebSocket/WebSocketClient'
 import LoginDialog from "../LoginDialog/LoginDialog.jsx";
+import RegisterDialog from "../RegisterDialog/RegisterDialog.jsx";
 
 export default class UserLoginPanel extends React.Component {
     static propTypes = {
@@ -18,6 +19,7 @@ export default class UserLoginPanel extends React.Component {
 
         this.state = {
             isLoginDialogOpen: false,
+            isRegisterDialogOpen: false,
             isLogged: false,
             loggedUser: null,
         };
@@ -28,7 +30,9 @@ export default class UserLoginPanel extends React.Component {
         this.tryAutoLogin();
 
         this.toggleLoginDialog = this.toggleLoginDialog.bind(this);
+        this.toggleRegisterDialog = this.toggleRegisterDialog.bind(this);
         this.onLogin = this.onLogin.bind(this);
+        this.onLogout = this.onLogout.bind(this);
     }
 
     async tryAutoLogin() {
@@ -54,22 +58,39 @@ export default class UserLoginPanel extends React.Component {
         });
     }
 
+    toggleRegisterDialog() {
+        this.setState({
+            isRegisterDialogOpen: !this.state.isRegisterDialogOpen,
+        });
+    }
+
     onLogin(user) {
+        window.localStorage.setItem(this.storageAuthTokenKey, user.token);
+
         this.setState({
             isLoginDialogOpen: false,
             isLogged: true,
             loggedUser: user,
         });
 
-        window.localStorage.setItem(this.storageAuthTokenKey, user.token);
-
         this.onLoginExt(user);
+    }
+
+    onLogout() {
+        window.localStorage.removeItem(this.storageAuthTokenKey);
+        this.setState({
+            isLoginDialogOpen: false,
+            isLogged: false,
+            loggedUser: null,
+        });
+
+        this.onLogoutExt();
     }
 
     render() {
         if (this.state.isLogged) {
             return (
-                <div>
+                <div onClick={this.onLogout}>
                     Привет, {this.state.loggedUser.username}
                 </div>
             );
@@ -81,7 +102,12 @@ export default class UserLoginPanel extends React.Component {
                              onCancel={this.toggleLoginDialog}
                              onLoginSuccess={this.onLogin}
                 />
+                <RegisterDialog isOpen={this.state.isRegisterDialogOpen}
+                             onCancel={this.toggleRegisterDialog}
+                             onRegisterSuccess={this.onLogin}
+                />
                 <Button onClick={this.toggleLoginDialog}>Войти</Button>
+                <Button onClick={this.toggleRegisterDialog}>Зарегистрироваться</Button>
             </div>
         );
     }

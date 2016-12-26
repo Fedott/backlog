@@ -1,5 +1,3 @@
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const webpack = require('webpack');
@@ -11,7 +9,7 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        'backlog-app': ["babel-polyfill", "./src/main.js", "./src/style.css"],
+        'backlog-app': ["./src/main.js", "./src/style.css"],
         vendors: [
             'react',
             'react-mdl',
@@ -34,10 +32,17 @@ module.exports = {
     },
     output: {
         filename: "assets/[name].js",
-        path: __dirname + "/../amphp/web/",
+        path: __dirname + "/web/",
         publicPath: "/",
     },
     devtool: 'source-map',
+    devServer: {
+        historyApiFallback: true,
+        contentBase: __dirname + "/web/",
+        inline: true,
+        host: "backlog.local",
+        port: 3000
+    },
     module: {
         loaders: [
             {
@@ -61,14 +66,6 @@ module.exports = {
             template: "web/index.tmpl.html",
             hash: true,
             filename: "index.html",
-        }),
-        new CopyWebpackPlugin([
-            {from: 'web/fonts', to: __dirname + '/../amphp/web/fonts'}
-        ]),
-        new BrowserSyncPlugin({
-            host: 'backlog.local',
-            port: 3000,
-            proxy: 'backlog.local:8080',
         }),
         new webpack.optimize.CommonsChunkPlugin('vendors', 'assets/vendors.js'),
         new webpack.DefinePlugin({
