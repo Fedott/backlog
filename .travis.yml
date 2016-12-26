@@ -20,7 +20,7 @@ install:
   - composer install --no-interaction --prefer-source
 
 script:
-  - ls -l
+  - ls -l vendor/bin
   - php ./vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
 
 after_script:
