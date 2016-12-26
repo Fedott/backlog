@@ -1,0 +1,32 @@
+sudo: false
+
+language: php
+
+php:
+  - 7.0
+  - 7.1
+  - nightly
+
+matrix:
+  allow_failures:
+    - php: nightly
+  fast_finish: true
+
+before_install:
+  - cd amphp
+
+install:
+  - composer self-update
+  - composer install --no-interaction --prefer-source
+
+script:
+  - vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
+
+after_script:
+  - composer require satooshi/php-coveralls dev-master
+  - php vendor/bin/coveralls -v
+  
+cache:
+  directories:
+    - $HOME/.composer/cache
+
