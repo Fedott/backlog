@@ -20,7 +20,7 @@ $reWriter = new class implements \Aerys\Bootable
     /**
      * @inheritdoc
      */
-    function boot(\Aerys\Server $server, \Psr\Log\LoggerInterface $logger)
+    public function boot(\Aerys\Server $server, \Psr\Log\LoggerInterface $logger)
     {
         return function (Request $request, Response $response) {
             $response->end(file_get_contents(__DIR__ . "/../web/index.html"));
