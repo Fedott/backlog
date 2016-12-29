@@ -123,4 +123,18 @@ class RelationshipManager implements RelationshipManagerInterface
 
         return $promisor->promise();
     }
+
+    public function removeManyToMany(Identifiable $modelFirst, Identifiable $modelSecond): Promise
+    {
+        $promisor = new Deferred();
+
+        \Amp\immediately(function () use ($promisor, $modelFirst, $modelSecond) {
+            yield $this->redisClient->lRem($this->keyGenerator->getOneToManeIndexName($modelFirst, $modelSecond), $modelSecond->getId());
+            yield $this->redisClient->lRem($this->keyGenerator->getOneToManeIndexName($modelSecond, $modelFirst), $modelFirst->getId());
+
+            $promisor->succeed(true);
+        });
+
+        return $promisor->promise();
+    }
 }

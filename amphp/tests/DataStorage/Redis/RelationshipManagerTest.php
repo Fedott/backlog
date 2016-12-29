@@ -207,4 +207,31 @@ class RelationshipManagerTest extends BaseTestCase
 
         $this->assertTrue($result);
     }
+
+    public function testRemoveManyToMany()
+    {
+        $instance = $this->getInstance();
+
+        $entity1 = new Identifiable('entity-1');
+        $entity2 = new AnotherIdentifiable('entity-2');
+
+        $indexName1 = "index:tests_fedot_datastorage_stubs_identifiable:entity-1:tests_fedot_datastorage_stubs_anotheridentifiable";
+        $indexName2 = "index:tests_fedot_datastorage_stubs_anotheridentifiable:entity-2:tests_fedot_datastorage_stubs_identifiable";
+
+        $this->redisClientMock->expects($this->exactly(2))
+            ->method('lRem')
+            ->withConsecutive(
+                [$indexName1, 'entity-2'],
+                [$indexName2, 'entity-1']
+            )
+            ->willReturnOnConsecutiveCalls(
+                new Success(true),
+                new Success(true)
+            )
+        ;
+
+        $result = \Amp\wait($instance->removeManyToMany($entity1, $entity2));
+
+        $this->assertTrue($result);
+    }
 }
