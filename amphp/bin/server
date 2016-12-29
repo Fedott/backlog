@@ -1,10 +1,38 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types = 1);
+
+use Fedot\Backlog\DependencyInjection\Compiler\MiddlewarePass;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
 $application = new \Symfony\Component\Console\Application("Backlog server", "0.0.0");
 
+$buildContainerCommand = new class extends Command {
+    protected function configure()
+    {
+        $this->setName('build:container');
+    }
 
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $container = new ContainerBuilder();
+
+        $container->addCompilerPass(new MiddlewarePass());
+
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../app'));
+        $loader->load('services.yml');
+
+        $container->compile();
+    }
+};
+
+$application->add($buildContainerCommand);
 
 $application->run();

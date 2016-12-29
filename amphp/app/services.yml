@@ -1,0 +1,26 @@
+parameters:
+
+services:
+  backlog.web-socket.server:
+    class: Fedot\Backlog\WebSocketServer
+    autowire: true
+
+  backlog.infrastructure.runner-factory:
+    class: Fedot\Backlog\Infrastructure\Middleware\RunnerFactory
+    autowire: true
+
+  serializer:
+    class: Symfony\Component\Serializer\Serializer
+    autowire: true
+
+  backlog.middleware.payload-parser:
+    class: Fedot\Backlog\Middleware\PayloadParser
+    autowire: true
+    tags:
+      - { name: backlog.middleware, priority: 1 }
+
+  backlog.middleware.request-processor:
+    class: Fedot\Backlog\Middleware\RequestProcessor
+    autowire: true
+    tags:
+      - { name: backlog.middleware, priority: 5 }
