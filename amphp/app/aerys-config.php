@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 use Aerys\Request;
 use Aerys\Response;
-use Fedot\Backlog\WebSocketServer;
 
 require_once __DIR__ . "/bootstrap.php";
 
