@@ -7,8 +7,4 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-$container = new ContainerBuilder();
-$loader = new YamlFileLoader($container, new FileLocator(__DIR__));
-$loader->load('services.yml');
-
-$container->compile();
+$container = require_once __DIR__ . "/container.php";

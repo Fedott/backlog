@@ -22,12 +22,7 @@ $buildContainerCommand = new class extends Command {
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $container = new ContainerBuilder();
-
-        $container->addCompilerPass(new MiddlewarePass());
-
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../app'));
-        $loader->load('services.yml');
+        $container = require_once __DIR__  . '/../app/container.php';
 
         $container->compile();
     }
