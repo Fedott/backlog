@@ -8,6 +8,8 @@ require_once __DIR__ . "/bootstrap.php";
 
 $root = Aerys\root(__DIR__."/../web");
 
+$container->compile();
+
 $webSocketServer = $container->get('backlog.web-socket.server');
 $websocket       = \Aerys\websocket($webSocketServer);
 

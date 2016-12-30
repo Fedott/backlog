@@ -7,6 +7,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class MiddlewarePass implements CompilerPassInterface
 {
+    use PriorityTaggedServiceTrait;
+
     /**
      * @param ContainerBuilder $container
      */
@@ -16,23 +18,9 @@ class MiddlewarePass implements CompilerPassInterface
             return;
         }
 
+        $middlewares = $this->findAndSortTaggedServices('backlog.middleware', $container);
+
         $definition = $container->getDefinition('backlog.infrastructure.runner-factory');
-        $taggedServices = $container->findTaggedServiceIds('backlog.middleware');
-
-        $prioritiesMiddlewares = [];
-        foreach ($taggedServices as $id => $tag) {
-            foreach ($tag as $attributes) {
-                $prioritiesMiddlewares[$attributes['priority']][] = new Reference($id);
-            }
-        }
-
-        $middlewares = [];
-        foreach ($prioritiesMiddlewares as $priorityMiddleware) {
-            foreach ($priorityMiddleware as $middleware) {
-                $middlewares[] = $middleware;
-            }
-        }
-
         $definition->setAutowired(false);
         $definition->setArguments([
             $middlewares
