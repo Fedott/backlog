@@ -9,9 +9,6 @@ class MiddlewarePass implements CompilerPassInterface
 {
     use PriorityTaggedServiceTrait;
 
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container)
     {
         if (!$container->has('backlog.infrastructure.runner-factory')) {

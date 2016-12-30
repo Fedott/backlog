@@ -1,4 +1,9 @@
+imports:
+    - { resource: services/processors.yml }
+
 parameters:
+  backlog.data-storage.redis.client.uri: 'tcp://localhost:6379?database=11'
+  env(REDIS_URI): 'tcp://localhost:6379?database=11'
 
 services:
   backlog.web-socket.server:
@@ -8,6 +13,11 @@ services:
   backlog.infrastructure.runner-factory:
     class: Fedot\Backlog\Infrastructure\Middleware\RunnerFactory
     autowire: true
+
+  backlog.serializer-service:
+    class: Fedot\Backlog\SerializerService
+    arguments:
+      - "@serializer"
 
   backlog.middleware.payload-parser:
     class: Fedot\Backlog\Middleware\PayloadParser
@@ -21,6 +31,29 @@ services:
     tags:
       - { name: backlog.middleware, priority: 5 }
 
+  backlog.request.processor.manager:
+    class: Fedot\Backlog\Request\RequestProcessorManager
+
+  backlog.data-storage.redis.key-generator:
+    class: Fedot\DataStorage\Redis\KeyGenerator
+
+  backlog.data-storage.redis.fetch-manager:
+    class: Fedot\DataStorage\Redis\FetchManager
+    autowire: true
+
+  backlog.data-storage.redis.persist-manager:
+    class: Fedot\DataStorage\Redis\PersistManager
+    autowire: true
+
+  backlog.data-storage.redis.relationship-manager:
+    class: Fedot\DataStorage\Redis\RelationshipManager
+    autowire: true
+
+  backlog.data-storage.redis.client:
+    class: Amp\Redis\Client
+    arguments:
+      - "%backlog.data-storage.redis.client.uri%"
+
   serializer:
     class: Symfony\Component\Serializer\Serializer
     arguments: ['', '']
@@ -28,9 +61,9 @@ services:
   serializer.normolizer.object:
     class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
     arguments:
-      - ''
-      - ''
-      - ''
+      - null
+      - null
+      - null
       - '@property_info'
     tags:
       - { name: serializer.normalizer, priority: 0 }

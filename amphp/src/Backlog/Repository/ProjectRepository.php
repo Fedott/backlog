@@ -7,7 +7,7 @@ use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 
 
-use Fedot\DataStorage\Redis\PersistManager;
+use Fedot\DataStorage\PersistManagerInterface;
 use Fedot\DataStorage\FetchManagerInterface;
 use Fedot\DataStorage\RelationshipManagerInterface;
 
@@ -19,7 +19,7 @@ class ProjectRepository
     protected $indexManager;
 
     /**
-     * @var PersistManager
+     * @var PersistManagerInterface
      */
     protected $persistManager;
 
@@ -30,7 +30,7 @@ class ProjectRepository
 
     public function __construct(
         RelationshipManagerInterface $indexManager,
-        PersistManager $persistManager,
+        PersistManagerInterface $persistManager,
         FetchManagerInterface $fetchManager
     ) {
         $this->indexManager = $indexManager;

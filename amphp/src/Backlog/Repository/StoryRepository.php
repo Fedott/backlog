@@ -8,7 +8,7 @@ use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 
 
-use Fedot\DataStorage\Redis\PersistManager;
+use Fedot\DataStorage\PersistManagerInterface;
 use Fedot\DataStorage\FetchManagerInterface;
 use Fedot\DataStorage\RelationshipManagerInterface;
 
@@ -21,7 +21,7 @@ class StoryRepository
     protected $fetchManager;
 
     /**
-     * @var PersistManager
+     * @var PersistManagerInterface
      */
     protected $persistManager;
 
@@ -37,7 +37,7 @@ class StoryRepository
 
     public function __construct(
         FetchManagerInterface $fetchManager,
-        PersistManager $persistManager,
+        PersistManagerInterface $persistManager,
         RelationshipManagerInterface $indexManager,
         ProjectRepository $projectRepository
     ) {

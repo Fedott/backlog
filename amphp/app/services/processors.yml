@@ -1,0 +1,72 @@
+services:
+  backlog.request.processor.story-create:
+    class: Fedot\Backlog\Request\Processor\CreateStory
+    autowire: true
+    tags:
+      - { name: backlog.request.processor }
+
+  backlog.request.processor.story-delete:
+    class: Fedot\Backlog\Request\Processor\DeleteStory
+    autowire: true
+    tags:
+      - { name: backlog.request.processor }
+
+  backlog.request.processor.story-edit:
+    class: Fedot\Backlog\Request\Processor\EditStory
+    autowire: true
+    tags:
+      - { name: backlog.request.processor }
+
+  backlog.request.processor.story-move:
+    class: Fedot\Backlog\Request\Processor\MoveStory
+    autowire: true
+    tags:
+      - { name: backlog.request.processor }
+
+  backlog.request.processor.story-mark-as-completed:
+    class: Fedot\Backlog\Request\Processor\MarkStoryAsCompleted
+    autowire: true
+    tags:
+      - { name: backlog.request.processor }
+
+  backlog.request.processor.story-get-all:
+    class: Fedot\Backlog\Request\Processor\GetStories
+    autowire: true
+    tags:
+      - { name: backlog.request.processor }
+
+  backlog.request.processor.project-get-all:
+    class: Fedot\Backlog\Request\Processor\GetProjects
+    autowire: true
+    tags:
+      - { name: backlog.request.processor }
+
+  backlog.request.processor.project-create:
+    class: Fedot\Backlog\Request\Processor\ProjectCreate
+    autowire: true
+    tags:
+      - { name: backlog.request.processor }
+
+  backlog.request.processor.user-registration:
+    class: Fedot\Backlog\Request\Processor\User\Registration
+    autowire: true
+    tags:
+      - { name: backlog.request.processor }
+
+  backlog.request.processor.login-username-password:
+    class: Fedot\Backlog\Request\Processor\LoginUsernamePassword
+    autowire: true
+    tags:
+      - { name: backlog.request.processor }
+
+  backlog.request.processor.login-token:
+    class: Fedot\Backlog\Request\Processor\LoginToken
+    autowire: true
+    tags:
+      - { name: backlog.request.processor }
+
+  backlog.request.processor.ping:
+    class: Fedot\Backlog\Request\Processor\Ping
+    autowire: true
+    tags:
+      - { name: backlog.request.processor }
