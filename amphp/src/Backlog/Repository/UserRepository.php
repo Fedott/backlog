@@ -3,10 +3,9 @@ namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
 use Amp\Promise;
-
-use Fedot\DataStorage\Redis\PersistManager;
 use Fedot\Backlog\Model\User;
 use Fedot\DataStorage\FetchManagerInterface;
+use Fedot\DataStorage\PersistManagerInterface;
 
 class UserRepository
 {
@@ -16,11 +15,11 @@ class UserRepository
     protected $fetchManager;
 
     /**
-     * @var PersistManager
+     * @var PersistManagerInterface
      */
     protected $persistManager;
 
-    public function __construct(FetchManagerInterface $fetchManager, PersistManager $persistManager)
+    public function __construct(FetchManagerInterface $fetchManager, PersistManagerInterface $persistManager)
     {
         $this->fetchManager = $fetchManager;
         $this->persistManager = $persistManager;

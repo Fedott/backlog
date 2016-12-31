@@ -4,7 +4,6 @@ namespace Tests\Fedot\Backlog;
 use Aerys\Request;
 use Aerys\Response;
 use Aerys\Websocket\Endpoint;
-use Aerys\Websocket\Message;
 use Fedot\Backlog\MessageProcessor;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Fedot\Backlog\WebSocketServer;

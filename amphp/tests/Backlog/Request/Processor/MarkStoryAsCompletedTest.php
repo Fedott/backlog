@@ -6,9 +6,7 @@ use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Payload\StoryIdPayload;
 use Fedot\Backlog\Request\Processor\MarkStoryAsCompleted;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
-use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
-use Tests\Fedot\Backlog\BaseTestCase;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class MarkStoryAsCompletedTest extends RequestProcessorTestCase
@@ -55,5 +53,28 @@ class MarkStoryAsCompletedTest extends RequestProcessorTestCase
         $response = \Amp\wait($this->getProcessorInstance()->process($request, $response));
 
         $this->assertResponseBasic($response, 3, 166, 'story-marked-as-completed');
+    }
+
+    public function testProcessNotFoundStory()
+    {
+        $story = new Story();
+
+        $this->storyRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with('story-id')
+            ->willReturn(new Success(null))
+        ;
+
+        $this->storyRepositoryMock->expects($this->never())->method('save');
+
+        $payload = new StoryIdPayload();
+        $payload->storyId = 'story-id';
+        $request = $this->makeRequest(3, 166, 'story-mark-as-completed', $payload);
+        $response = $this->makeResponse($request);
+
+        /** @var Response $response */
+        $response = \Amp\wait($this->getProcessorInstance()->process($request, $response));
+
+        $this->assertResponseBasic($response, 3, 166, 'error');
     }
 }

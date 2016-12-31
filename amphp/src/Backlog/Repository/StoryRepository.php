@@ -1,15 +1,12 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Repository;
 
-use Amp\Promise;
 use Amp\Deferred;
-
+use Amp\Promise;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
-
-
-use Fedot\DataStorage\Redis\PersistManager;
 use Fedot\DataStorage\FetchManagerInterface;
+use Fedot\DataStorage\PersistManagerInterface;
 use Fedot\DataStorage\RelationshipManagerInterface;
 
 
@@ -21,7 +18,7 @@ class StoryRepository
     protected $fetchManager;
 
     /**
-     * @var PersistManager
+     * @var PersistManagerInterface
      */
     protected $persistManager;
 
@@ -37,7 +34,7 @@ class StoryRepository
 
     public function __construct(
         FetchManagerInterface $fetchManager,
-        PersistManager $persistManager,
+        PersistManagerInterface $persistManager,
         RelationshipManagerInterface $indexManager,
         ProjectRepository $projectRepository
     ) {
