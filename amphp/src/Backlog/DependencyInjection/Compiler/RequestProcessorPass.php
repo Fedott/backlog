@@ -9,8 +9,8 @@ class RequestProcessorPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('backlog.request.processor.manager')
-            || !$container->has('backlog.serializer-service')
+        if (!$container->hasDefinition('backlog.request.processor.manager')
+            || !$container->hasDefinition('backlog.serializer-service')
         ) {
             return;
         }

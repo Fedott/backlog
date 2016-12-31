@@ -10,7 +10,7 @@ class MiddlewarePass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('backlog.infrastructure.runner-factory')) {
+        if (!$container->hasDefinition('backlog.infrastructure.runner-factory')) {
             return;
         }
 
