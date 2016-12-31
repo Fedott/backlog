@@ -4,7 +4,6 @@ namespace Tests\Fedot\Backlog\DependencyInjection\Compiler;
 use Fedot\Backlog\DependencyInjection\Compiler\PropertyInfoPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Tests\Fedot\Backlog\BaseTestCase;
 
 class PropertyInfoPassTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,9 +6,7 @@ use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Payload\StoryIdPayload;
 use Fedot\Backlog\Request\Processor\MarkStoryAsCompleted;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
-use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
-use Tests\Fedot\Backlog\BaseTestCase;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class MarkStoryAsCompletedTest extends RequestProcessorTestCase

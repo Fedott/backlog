@@ -5,13 +5,12 @@ use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
+use Fedot\Backlog\Model\User;
+use Fedot\Backlog\Repository\UserRepository;
 use Fedot\DataStorage\Redis\FetchManager;
 use Fedot\DataStorage\Redis\KeyGenerator;
 use Fedot\DataStorage\Redis\PersistManager;
-use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Repository\UserRepository;
 use PHPUnit_Framework_MockObject_MockObject;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class AuthenticationServiceTest extends BaseTestCase

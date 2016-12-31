@@ -6,8 +6,6 @@ use Amp\Success;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Payload\LoginFailedPayload;
-use Fedot\Backlog\Payload\LoginSuccessPayload;
 use Fedot\Backlog\Payload\UsernamePasswordPayload;
 use Fedot\Backlog\Request\Processor\LoginUsernamePassword;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;

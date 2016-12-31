@@ -2,8 +2,8 @@
 namespace Tests\Fedot\Backlog\Request\Processor;
 
 use Amp\Success;
-use Fedot\Backlog\Request\Processor\DeleteStory;
 use Fedot\Backlog\Payload\DeleteStoryPayload;
+use Fedot\Backlog\Request\Processor\DeleteStory;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;

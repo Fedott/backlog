@@ -5,11 +5,11 @@ use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
+use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\DataStorage\Redis\FetchManager;
-use Fedot\DataStorage\Redis\RelationshipManager;
 use Fedot\DataStorage\Redis\KeyGenerator;
 use Fedot\DataStorage\Redis\PersistManager;
-use Fedot\Backlog\Repository\ProjectRepository;
+use Fedot\DataStorage\Redis\RelationshipManager;
 use Symfony\Component\Serializer\SerializerInterface;
 use Tests\Fedot\Backlog\BaseTestCase;
 

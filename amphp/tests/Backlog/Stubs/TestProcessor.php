@@ -5,9 +5,7 @@ namespace Tests\Fedot\Backlog\Stubs;
 use Amp\Promise;
 use Amp\Success;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
-use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\RequestInterface;
-use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 
 class TestProcessor implements ProcessorInterface

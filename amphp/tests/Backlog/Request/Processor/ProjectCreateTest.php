@@ -10,7 +10,6 @@ use Fedot\Backlog\Request\Processor\ProjectCreate;
 use Fedot\Backlog\WebSocket\Response;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;
-use Tests\Fedot\Backlog\BaseTestCase;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class ProjectCreateTest extends RequestProcessorTestCase
