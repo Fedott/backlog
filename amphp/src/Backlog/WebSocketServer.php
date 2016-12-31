@@ -4,6 +4,7 @@ namespace Fedot\Backlog;
 use Aerys\Request;
 use Aerys\Response;
 use Aerys\Websocket;
+use Generator;
 
 class WebSocketServer implements Websocket
 {
@@ -22,12 +23,6 @@ class WebSocketServer implements Websocket
      */
     protected $endpoint;
 
-    /**
-     * WebSocketServer constructor.
-     *
-     * @param MessageProcessor                         $messageProcessor
-     * @param WebSocketConnectionAuthenticationService $webSocketAuthService
-     */
     public function __construct(
         MessageProcessor $messageProcessor,
         WebSocketConnectionAuthenticationService $webSocketAuthService
@@ -36,24 +31,15 @@ class WebSocketServer implements Websocket
         $this->webSocketAuthService = $webSocketAuthService;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function onStart(Websocket\Endpoint $endpoint)
     {
         $this->endpoint = $endpoint;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function onHandshake(Request $request, Response $response)
     {
     }
 
-    /**
-     * @inheritDoc
-     */
     public function onOpen(int $clientId, $handshakeData)
     {
         $this->endpoint->send($clientId, json_encode([
@@ -64,32 +50,31 @@ class WebSocketServer implements Websocket
 
     /**
      * @inheritDoc
-     * @codeCoverageIgnoreStart
+     * @codeCoverageIgnore
      */
     public function onData(int $clientId, Websocket\Message $msg)
     {
         yield from $this->processMessage($clientId, yield $msg);
     }
-    // @codeCoverageIgnoreEnd
 
-    // @codeCoverageIgnoreStart
-    public function processMessage(int $clientId, string $message)
+    /**
+     * @codeCoverageIgnore
+     *
+     * @param int $clientId
+     * @param string $message
+     *
+     * @return Generator
+     */
+    public function processMessage(int $clientId, string $message): Generator
     {
         yield from $this->messageProcessor->processMessage($this->endpoint, $clientId, $message);
     }
-    // @codeCoverageIgnoreEnd
 
-    /**
-     * @inheritDoc
-     */
     public function onClose(int $clientId, int $code, string $reason)
     {
         $this->webSocketAuthService->unauthorizeClient($clientId);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function onStop()
     {
     }
