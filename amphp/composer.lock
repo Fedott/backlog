@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d070774bac32c8ceb6ad750e946d5b73",
+    "hash": "d79741b7346a38d34967344a08d868b7",
+    "content-hash": "fcaf649e56c85c37bc5c85bbe4f8e53c",
     "packages": [
         {
             "name": "amphp/aerys",
@@ -141,7 +142,7 @@
                 "non-blocking",
                 "promise"
             ],
-            "time": "2016-05-12T12:54:59+00:00"
+            "time": "2016-05-12 12:54:59"
         },
         {
             "name": "amphp/cache",
@@ -189,7 +190,7 @@
             ],
             "description": "A promise-aware caching API built on the amp concurrency framework",
             "homepage": "https://github.com/amphp/cache",
-            "time": "2015-09-08T22:26:20+00:00"
+            "time": "2015-09-08 22:26:20"
         },
         {
             "name": "amphp/dns",
@@ -257,7 +258,7 @@
                 "dns",
                 "resolve"
             ],
-            "time": "2016-05-26T19:49:36+00:00"
+            "time": "2016-05-26 19:49:36"
         },
         {
             "name": "amphp/file",
@@ -317,7 +318,7 @@
                 "non-blocking",
                 "static"
             ],
-            "time": "2016-10-01T17:43:52+00:00"
+            "time": "2016-10-01 17:43:52"
         },
         {
             "name": "amphp/redis",
@@ -367,7 +368,7 @@
                 "client",
                 "redis"
             ],
-            "time": "2016-05-06T19:03:43+00:00"
+            "time": "2016-05-06 19:03:43"
         },
         {
             "name": "amphp/socket",
@@ -422,34 +423,7 @@
                 "tcp",
                 "tls"
             ],
-            "time": "2016-07-18T22:03:24+00:00"
-        },
-        {
-            "name": "container-interop/container-interop",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/container-interop/container-interop.git",
-                "reference": "fc08354828f8fd3245f77a66b9e23a6bca48297e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/container-interop/container-interop/zipball/fc08354828f8fd3245f77a66b9e23a6bca48297e",
-                "reference": "fc08354828f8fd3245f77a66b9e23a6bca48297e",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Interop\\Container\\": "src/Interop/Container/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
-            "time": "2014-12-30T15:22:37+00:00"
+            "time": "2016-07-18 22:03:24"
         },
         {
             "name": "daverandom/libdns",
@@ -482,7 +456,7 @@
             "keywords": [
                 "dns"
             ],
-            "time": "2016-04-29T20:47:45+00:00"
+            "time": "2016-04-29 20:47:45"
         },
         {
             "name": "doctrine/annotations",
@@ -550,7 +524,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2016-10-24T11:45:47+00:00"
+            "time": "2016-10-24 11:45:47"
         },
         {
             "name": "doctrine/cache",
@@ -620,7 +594,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2016-10-29T11:16:17+00:00"
+            "time": "2016-10-29 11:16:17"
         },
         {
             "name": "doctrine/lexer",
@@ -674,7 +648,7 @@
                 "lexer",
                 "parser"
             ],
-            "time": "2014-09-09T13:34:57+00:00"
+            "time": "2014-09-09 13:34:57"
         },
         {
             "name": "league/climate",
@@ -725,7 +699,7 @@
                 "php",
                 "terminal"
             ],
-            "time": "2016-04-04T20:24:59+00:00"
+            "time": "2016-04-04 20:24:59"
         },
         {
             "name": "nikic/fast-route",
@@ -768,7 +742,7 @@
                 "router",
                 "routing"
             ],
-            "time": "2016-06-12T19:08:51+00:00"
+            "time": "2016-06-12 19:08:51"
         },
         {
             "name": "paragonie/random_compat",
@@ -816,147 +790,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-11-07T23:38:38+00:00"
-        },
-        {
-            "name": "php-di/invoker",
-            "version": "1.3.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PHP-DI/Invoker.git",
-                "reference": "1f4ca63b9abc66109e53b255e465d0ddb5c2e3f7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/Invoker/zipball/1f4ca63b9abc66109e53b255e465d0ddb5c2e3f7",
-                "reference": "1f4ca63b9abc66109e53b255e465d0ddb5c2e3f7",
-                "shasum": ""
-            },
-            "require": {
-                "container-interop/container-interop": "~1.1"
-            },
-            "require-dev": {
-                "athletic/athletic": "~0.1.8",
-                "phpunit/phpunit": "~4.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Invoker\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Generic and extensible callable invoker",
-            "homepage": "https://github.com/PHP-DI/Invoker",
-            "keywords": [
-                "callable",
-                "dependency",
-                "dependency-injection",
-                "injection",
-                "invoke",
-                "invoker"
-            ],
-            "time": "2016-07-14T13:09:58+00:00"
-        },
-        {
-            "name": "php-di/php-di",
-            "version": "5.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PHP-DI/PHP-DI.git",
-                "reference": "e348393488fa909e4bc0707ba5c9c44cd602a1cb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/e348393488fa909e4bc0707ba5c9c44cd602a1cb",
-                "reference": "e348393488fa909e4bc0707ba5c9c44cd602a1cb",
-                "shasum": ""
-            },
-            "require": {
-                "container-interop/container-interop": "~1.0",
-                "php": ">=5.5.0",
-                "php-di/invoker": "^1.3.2",
-                "php-di/phpdoc-reader": "^2.0.1"
-            },
-            "provide": {
-                "container-interop/container-interop-implementation": "^1.0"
-            },
-            "replace": {
-                "mnapoli/php-di": "*"
-            },
-            "require-dev": {
-                "doctrine/annotations": "~1.2",
-                "doctrine/cache": "~1.4",
-                "mnapoli/phpunit-easymock": "~0.2.0",
-                "ocramius/proxy-manager": "~1.0|~2.0",
-                "phpunit/phpunit": "~4.5"
-            },
-            "suggest": {
-                "doctrine/annotations": "Install it if you want to use annotations (version ~1.2)",
-                "doctrine/cache": "Install it if you want to use the cache (version ~1.4)",
-                "ocramius/proxy-manager": "Install it if you want to use lazy injection (version ~1.0 or ~2.0)"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "DI\\": "src/DI/"
-                },
-                "files": [
-                    "src/DI/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "The dependency injection container for humans",
-            "homepage": "http://php-di.org/",
-            "keywords": [
-                "container",
-                "dependency injection",
-                "di"
-            ],
-            "time": "2016-08-23T20:18:00+00:00"
-        },
-        {
-            "name": "php-di/phpdoc-reader",
-            "version": "2.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PHP-DI/PhpDocReader.git",
-                "reference": "83f5ead159defccfa8e7092e5b6c1c533b326d68"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/PhpDocReader/zipball/83f5ead159defccfa8e7092e5b6c1c533b326d68",
-                "reference": "83f5ead159defccfa8e7092e5b6c1c533b326d68",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PhpDocReader\\": "src/PhpDocReader"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "PhpDocReader parses @var and @param values in PHP docblocks (supports namespaced class names with the same resolution rules as PHP)",
-            "keywords": [
-                "phpdoc",
-                "reflection"
-            ],
-            "time": "2015-11-29T10:34:25+00:00"
+            "time": "2016-11-07 23:38:38"
         },
         {
             "name": "psr/log",
@@ -1003,7 +837,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10T12:19:37+00:00"
+            "time": "2016-10-10 12:19:37"
         },
         {
             "name": "ramsey/uuid",
@@ -1085,7 +919,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2016-11-22T19:21:44+00:00"
+            "time": "2016-11-22 19:21:44"
         },
         {
             "name": "seld/cli-prompt",
@@ -1133,7 +967,7 @@
                 "input",
                 "prompt"
             ],
-            "time": "2016-04-18T09:31:41+00:00"
+            "time": "2016-04-18 09:31:41"
         },
         {
             "name": "symfony/config",
@@ -1189,7 +1023,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2016-12-09T07:45:17+00:00"
+            "time": "2016-12-09 07:45:17"
         },
         {
             "name": "symfony/console",
@@ -1252,7 +1086,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-12-11T14:34:22+00:00"
+            "time": "2016-12-11 14:34:22"
         },
         {
             "name": "symfony/debug",
@@ -1309,7 +1143,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2016-11-16T22:18:16+00:00"
+            "time": "2016-11-16 22:18:16"
         },
         {
             "name": "symfony/dependency-injection",
@@ -1372,7 +1206,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2016-12-08T15:27:33+00:00"
+            "time": "2016-12-08 15:27:33"
         },
         {
             "name": "symfony/filesystem",
@@ -1421,7 +1255,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2016-11-24T00:46:43+00:00"
+            "time": "2016-11-24 00:46:43"
         },
         {
             "name": "symfony/inflector",
@@ -1478,7 +1312,7 @@
                 "symfony",
                 "words"
             ],
-            "time": "2016-06-14T11:18:32+00:00"
+            "time": "2016-06-14 11:18:32"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1537,7 +1371,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14T01:06:16+00:00"
+            "time": "2016-11-14 01:06:16"
         },
         {
             "name": "symfony/polyfill-php70",
@@ -1596,7 +1430,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14T01:06:16+00:00"
+            "time": "2016-11-14 01:06:16"
         },
         {
             "name": "symfony/property-access",
@@ -1664,7 +1498,7 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2016-12-08T15:18:22+00:00"
+            "time": "2016-12-08 15:18:22"
         },
         {
             "name": "symfony/property-info",
@@ -1738,7 +1572,7 @@
                 "type",
                 "validator"
             ],
-            "time": "2016-10-13T06:29:04+00:00"
+            "time": "2016-10-13 06:29:04"
         },
         {
             "name": "symfony/serializer",
@@ -1812,7 +1646,7 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2016-12-13T09:39:43+00:00"
+            "time": "2016-12-13 09:39:43"
         },
         {
             "name": "symfony/yaml",
@@ -1867,7 +1701,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-12-10T10:07:06+00:00"
+            "time": "2016-12-10 10:07:06"
         }
     ],
     "packages-dev": [
@@ -1923,7 +1757,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2015-06-14T21:17:01+00:00"
+            "time": "2015-06-14 21:17:01"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1965,7 +1799,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2016-10-31T17:19:45+00:00"
+            "time": "2016-10-31 17:19:45"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -2019,7 +1853,7 @@
                 "reflection",
                 "static analysis"
             ],
-            "time": "2015-12-27T11:43:31+00:00"
+            "time": "2015-12-27 11:43:31"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -2064,7 +1898,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2016-09-30T07:12:33+00:00"
+            "time": "2016-09-30 07:12:33"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -2111,7 +1945,7 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-            "time": "2016-11-25T06:54:22+00:00"
+            "time": "2016-11-25 06:54:22"
         },
         {
             "name": "phpspec/prophecy",
@@ -2174,7 +2008,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2016-11-21T14:58:47+00:00"
+            "time": "2016-11-21 14:58:47"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2237,7 +2071,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-20T15:22:42+00:00"
+            "time": "2016-12-20 15:22:42"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2284,7 +2118,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2016-10-03T07:40:28+00:00"
+            "time": "2016-10-03 07:40:28"
         },
         {
             "name": "phpunit/php-text-template",
@@ -2325,7 +2159,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2015-06-21T13:50:34+00:00"
+            "time": "2015-06-21 13:50:34"
         },
         {
             "name": "phpunit/php-timer",
@@ -2369,7 +2203,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2016-05-12T18:03:57+00:00"
+            "time": "2016-05-12 18:03:57"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -2418,7 +2252,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2016-11-15T14:06:22+00:00"
+            "time": "2016-11-15 14:06:22"
         },
         {
             "name": "phpunit/phpunit",
@@ -2500,7 +2334,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-13T16:19:44+00:00"
+            "time": "2016-12-13 16:19:44"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2559,7 +2393,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2016-12-08T20:27:08+00:00"
+            "time": "2016-12-08 20:27:08"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -2604,7 +2438,7 @@
             ],
             "description": "Looks up which function or method a line of code belongs to",
             "homepage": "https://github.com/sebastianbergmann/code-unit-reverse-lookup/",
-            "time": "2016-02-13T06:45:14+00:00"
+            "time": "2016-02-13 06:45:14"
         },
         {
             "name": "sebastian/comparator",
@@ -2668,7 +2502,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2016-11-19T09:18:40+00:00"
+            "time": "2016-11-19 09:18:40"
         },
         {
             "name": "sebastian/diff",
@@ -2720,7 +2554,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2015-12-08T07:14:41+00:00"
+            "time": "2015-12-08 07:14:41"
         },
         {
             "name": "sebastian/environment",
@@ -2770,7 +2604,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2016-11-26T07:53:53+00:00"
+            "time": "2016-11-26 07:53:53"
         },
         {
             "name": "sebastian/exporter",
@@ -2837,7 +2671,7 @@
                 "export",
                 "exporter"
             ],
-            "time": "2016-11-19T08:54:04+00:00"
+            "time": "2016-11-19 08:54:04"
         },
         {
             "name": "sebastian/global-state",
@@ -2888,7 +2722,7 @@
             "keywords": [
                 "global state"
             ],
-            "time": "2015-10-12T03:26:01+00:00"
+            "time": "2015-10-12 03:26:01"
         },
         {
             "name": "sebastian/object-enumerator",
@@ -2934,7 +2768,7 @@
             ],
             "description": "Traverses array structures and object graphs to enumerate all referenced objects",
             "homepage": "https://github.com/sebastianbergmann/object-enumerator/",
-            "time": "2016-11-19T07:35:10+00:00"
+            "time": "2016-11-19 07:35:10"
         },
         {
             "name": "sebastian/recursion-context",
@@ -2987,7 +2821,7 @@
             ],
             "description": "Provides functionality to recursively process PHP variables",
             "homepage": "http://www.github.com/sebastianbergmann/recursion-context",
-            "time": "2016-11-19T07:33:16+00:00"
+            "time": "2016-11-19 07:33:16"
         },
         {
             "name": "sebastian/resource-operations",
@@ -3029,7 +2863,7 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "time": "2015-07-28T20:34:47+00:00"
+            "time": "2015-07-28 20:34:47"
         },
         {
             "name": "sebastian/version",
@@ -3072,7 +2906,7 @@
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
-            "time": "2016-10-03T07:35:21+00:00"
+            "time": "2016-10-03 07:35:21"
         },
         {
             "name": "webmozart/assert",
@@ -3122,7 +2956,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2016-11-23T20:04:58+00:00"
+            "time": "2016-11-23 20:04:58"
         }
     ],
     "aliases": [],

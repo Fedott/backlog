@@ -1,9 +1,8 @@
 imports:
+    - { resource: parameters.php }
     - { resource: services/processors.yml }
 
 parameters:
-  backlog.data-storage.redis.client.uri: 'tcp://localhost:6379?database=11'
-  env(REDIS_URI): 'tcp://localhost:6379?database=11'
 
 services:
   backlog.web-socket.server:
