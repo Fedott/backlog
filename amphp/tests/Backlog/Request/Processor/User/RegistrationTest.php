@@ -61,4 +61,37 @@ class RegistrationTest extends RequestProcessorTestCase
         $this->assertResponseBasic($actualResponse, 123, 555, 'user-registered');
         $this->assertEquals('TestUserNew', $actualResponse->getPayload()['username']);
     }
+
+    public function testProcessNegative()
+    {
+        $processor = $this->getProcessorInstance();
+
+        $payload = new UsernamePasswordPayload();
+        $payload->username = 'TestUserNew';
+        $payload->password = 'testPassword';
+
+        $request = $this->makeRequest(123, 555, 'user-registration', $payload);
+        $response = $this->makeResponse($request);
+
+        $user = new User();
+        $user->username = 'TestUserNew';
+        $user->password = 'testPassword';
+
+        $this->userRepositoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->callback(function (User $user) {
+                $this->assertEquals('TestUserNew', $user->username);
+                $this->assertContains('$2y$10$', $user->password);
+
+                return true;
+            }))
+            ->willReturn(new Success(false))
+        ;
+
+        $actualResponse = \Amp\wait($processor->process($request, $response));
+
+        $this->assertResponseBasic($actualResponse, 123, 555, 'user-registration-error');
+        $this->assertEquals('Username busy', $actualResponse->getPayload()['message']);
+    }
 }
