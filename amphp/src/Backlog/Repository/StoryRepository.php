@@ -1,15 +1,12 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Repository;
 
-use Amp\Promise;
 use Amp\Deferred;
-
+use Amp\Promise;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
-
-
-use Fedot\DataStorage\PersistManagerInterface;
 use Fedot\DataStorage\FetchManagerInterface;
+use Fedot\DataStorage\PersistManagerInterface;
 use Fedot\DataStorage\RelationshipManagerInterface;
 
 

@@ -3,14 +3,12 @@
 namespace Fedot\Backlog;
 
 use Aerys\Websocket\Endpoint;
-
-
 use Fedot\Backlog\Infrastructure\Middleware\RunnerFactory;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
-
 use Generator;
 use Symfony\Component\Serializer\SerializerInterface;
+
 
 class MessageProcessor
 {

@@ -4,7 +4,6 @@ namespace Fedot\Backlog;
 use Amp\Deferred;
 use Amp\Promise;
 use Amp\Redis\Client;
-
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Exception\UserNotFoundException;
 use Fedot\Backlog\Model\User;

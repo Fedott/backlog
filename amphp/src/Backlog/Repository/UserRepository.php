@@ -3,10 +3,9 @@ namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
 use Amp\Promise;
-
-use Fedot\DataStorage\PersistManagerInterface;
 use Fedot\Backlog\Model\User;
 use Fedot\DataStorage\FetchManagerInterface;
+use Fedot\DataStorage\PersistManagerInterface;
 
 class UserRepository
 {
