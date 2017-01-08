@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
+
 namespace Tests\Fedot\Backlog\Repository;
 
 use Amp\Promise;
@@ -71,17 +72,25 @@ class StoryRepositoryTest extends BaseTestCase
         ];
         $this->redisClientMock->expects($this->once())
             ->method('lRange')
-            ->with($this->equalTo("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story"), $this->equalTo(0), $this->equalTo(-1))
+            ->with(
+                $this->equalTo("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story"),
+                $this->equalTo(0),
+                $this->equalTo(-1)
+            )
             ->willReturn(new Success($ids))
         ;
         $this->redisClientMock->expects($this->once())
             ->method('mGet')
             ->with($this->equalTo($keys))
-            ->willReturn(new Success([
-                "first",
-                "second",
-                "story 3",
-            ]))
+            ->willReturn(
+                new Success(
+                    [
+                        "first",
+                        "second",
+                        "story 3",
+                    ]
+                )
+            )
         ;
         $this->serializerMock->expects($this->exactly(3))
             ->method('deserialize')
@@ -103,9 +112,12 @@ class StoryRepositoryTest extends BaseTestCase
         $result = \Amp\wait($resultPromise);
 
         $this->assertCount(3, $result);
-        array_map(function($story) {
-            $this->assertInstanceOf(Story::class, $story);
-        }, $result);
+        array_map(
+            function ($story) {
+                $this->assertInstanceOf(Story::class, $story);
+            },
+            $result
+        );
     }
 
     public function testGetAllByProjectId()
@@ -132,17 +144,25 @@ class StoryRepositoryTest extends BaseTestCase
         ;
         $this->redisClientMock->expects($this->once())
             ->method('lRange')
-            ->with($this->equalTo("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story"), $this->equalTo(0), $this->equalTo(-1))
+            ->with(
+                $this->equalTo("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story"),
+                $this->equalTo(0),
+                $this->equalTo(-1)
+            )
             ->willReturn(new Success($ids))
         ;
         $this->redisClientMock->expects($this->once())
             ->method('mGet')
             ->with($this->equalTo($keys))
-            ->willReturn(new Success([
-                "first",
-                "second",
-                "story 3",
-            ]))
+            ->willReturn(
+                new Success(
+                    [
+                        "first",
+                        "second",
+                        "story 3",
+                    ]
+                )
+            )
         ;
         $this->serializerMock->expects($this->exactly(3))
             ->method('deserialize')
@@ -164,9 +184,12 @@ class StoryRepositoryTest extends BaseTestCase
         $result = \Amp\wait($resultPromise);
 
         $this->assertCount(3, $result);
-        array_map(function($story) {
-            $this->assertInstanceOf(Story::class, $story);
-        }, $result);
+        array_map(
+            function ($story) {
+                $this->assertInstanceOf(Story::class, $story);
+            },
+            $result
+        );
     }
 
     public function testGetAllEmpty()
@@ -179,7 +202,11 @@ class StoryRepositoryTest extends BaseTestCase
         $keys = [];
         $this->redisClientMock->expects($this->once())
             ->method('lRange')
-            ->with($this->equalTo("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story"), $this->equalTo(0), $this->equalTo(-1))
+            ->with(
+                $this->equalTo("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story"),
+                $this->equalTo(0),
+                $this->equalTo(-1)
+            )
             ->willReturn(new Success($keys))
         ;
         $this->redisClientMock->expects($this->never())
@@ -396,7 +423,12 @@ class StoryRepositoryTest extends BaseTestCase
 
         $this->redisClientMock->expects($this->once())
             ->method('lInsert')
-            ->with("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story", 'before', "story-id2", "story-id")
+            ->with(
+                "index:fedot_backlog_model_project:project-id:fedot_backlog_model_story",
+                'before',
+                "story-id2",
+                "story-id"
+            )
             ->willReturn(new Success(3))
         ;
 
@@ -426,7 +458,12 @@ class StoryRepositoryTest extends BaseTestCase
 
         $this->redisClientMock->expects($this->once())
             ->method('lInsert')
-            ->with("index:fedot_backlog_model_project:project-id:fedot_backlog_model_story", 'before', "story-id2", "story-id")
+            ->with(
+                "index:fedot_backlog_model_project:project-id:fedot_backlog_model_story",
+                'before',
+                "story-id2",
+                "story-id"
+            )
             ->willReturn(new Success(3))
         ;
 
