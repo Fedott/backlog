@@ -37,17 +37,21 @@ class StoriesList extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (undefined != nextProps.createForm) {
+        if (undefined !== nextProps.createForm) {
             this.setState({
                 createForm: nextProps.createForm
             });
         }
     }
 
-    moveCard(dragIndex, hoverIndex) {
+    moveCard(dragStoryId, hoverStoryId) {
         const stories = this.state.storiesCollection;
-        const dragStory = stories[dragIndex];
-        const hoverStory = stories[hoverIndex];
+        const dragStory = stories.find(function (story: Story) {
+            return story.id === dragStoryId;
+        });
+        const hoverStory = stories.find(function (story: Story) {
+            return story.id === hoverStoryId;
+        });
 
         webSocketClient.sendRequest({
             type: "move-story",
@@ -61,8 +65,8 @@ class StoriesList extends React.Component {
         this.setState(update(this.state, {
             storiesCollection: {
                 $splice: [
-                    [dragIndex, 1],
-                    [hoverIndex, 0, dragStory]
+                    [stories.indexOf(dragStory), 1],
+                    [stories.indexOf(hoverStory), 0, dragStory]
                 ]
             }
         }));
@@ -99,7 +103,7 @@ class StoriesList extends React.Component {
                 story={story}
                 projectId={this.state.projectId}
                 key={story.id}
-                index={i}
+                index={story.id}
                 moveCard={this.moveCard}
                 onStoryCompleted={this.onStoryCompleted}
             />
