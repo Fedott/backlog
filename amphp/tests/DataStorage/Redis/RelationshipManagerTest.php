@@ -208,6 +208,32 @@ class RelationshipManagerTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
+    public function testGetIdsManyToMany()
+    {
+        $instance = $this->getInstance();
+
+        $forModel = new Identifiable('for-id');
+        $modelClassName = Identifiable::class;
+
+        $this->redisClientMock->expects($this->once())
+            ->method('lRange')
+            ->with('index:tests_fedot_datastorage_stubs_identifiable:for-id:tests_fedot_datastorage_stubs_identifiable', 0, -1)
+            ->willReturn(new Success([
+                'test-id1',
+                'test-id2',
+                'test-id4',
+            ]))
+        ;
+
+        $result = \Amp\wait($instance->getIdsManyToMany($forModel, $modelClassName));
+
+        $this->assertSame([
+            'test-id1',
+            'test-id2',
+            'test-id4',
+        ], $result);
+    }
+
     public function testRemoveManyToMany()
     {
         $instance = $this->getInstance();
