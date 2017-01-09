@@ -51,7 +51,7 @@ class ProjectRepository
         \Amp\immediately(function () use ($promisor, $user, $project) {
             yield $this->persistManager->persist($project);
 
-            yield $this->indexManager->addOneToMany($user, $project);
+            yield $this->indexManager->addManyToMany($user, $project);
 
             $promisor->succeed(true);
         });
@@ -70,7 +70,7 @@ class ProjectRepository
         $promisor = new Deferred();
 
         \Amp\immediately(function () use ($promisor, $user) {
-            $projectIds = yield $this->indexManager->getIdsOneToMany($user, Project::class);
+            $projectIds = yield $this->indexManager->getIdsManyToMany($user, Project::class);
 
             $projects = yield $this->fetchManager->fetchCollectionByIds(Project::class, $projectIds);
 

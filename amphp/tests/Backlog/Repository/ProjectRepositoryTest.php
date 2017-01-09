@@ -63,7 +63,8 @@ class ProjectRepositoryTest extends BaseTestCase
         $this->fetchManagerInterfaceMock = $this->createMock(FetchManagerInterface::class);
 
         $this->repository = new ProjectRepository(
-            $this->relationshipManagerInterfaceMock, $this->persistManagerInterfaceMock,
+            $this->relationshipManagerInterfaceMock,
+            $this->persistManagerInterfaceMock,
             $this->fetchManagerInterfaceMock
         );
     }
@@ -84,7 +85,7 @@ class ProjectRepositoryTest extends BaseTestCase
         ;
 
         $this->relationshipManagerInterfaceMock->expects($this->once())
-            ->method('addOneToMany')
+            ->method('addManyToMany')
             ->with($user, $project)
             ->willReturn(new Success(true))
         ;
@@ -113,7 +114,7 @@ class ProjectRepositoryTest extends BaseTestCase
         ];
 
         $this->relationshipManagerInterfaceMock->expects($this->once())
-            ->method('getIdsOneToMany')
+            ->method('getIdsManyToMany')
             ->with($user, Project::class)
             ->willReturn(new Success($projectIds))
         ;

@@ -20,5 +20,7 @@ interface RelationshipManagerInterface
 
     public function addManyToMany(Identifiable $modelFirst, Identifiable $modelSecond): Promise;
 
+    public function getIdsManyToMany(Identifiable $forModel, string $targetClassName): Promise;
+
     public function removeManyToMany(Identifiable $modelFirst, Identifiable $modelSecond): Promise;
 }

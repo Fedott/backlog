@@ -124,6 +124,11 @@ class RelationshipManager implements RelationshipManagerInterface
         return $promisor->promise();
     }
 
+    public function getIdsManyToMany(Identifiable $forModel, string $targetClassName): Promise
+    {
+        return $this->getIdsOneToMany($forModel, $targetClassName);
+    }
+
     public function removeManyToMany(Identifiable $modelFirst, Identifiable $modelSecond): Promise
     {
         $promisor = new Deferred();
