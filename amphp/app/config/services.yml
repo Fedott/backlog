@@ -56,8 +56,12 @@ services:
   serializer:
     class: Symfony\Component\Serializer\Serializer
     arguments: ['', '']
+    autowiring_types:
+      - Symfony\Component\Serializer\Normalizer\NormalizerInterface
+      - Symfony\Component\Serializer\Normalizer\DenormalizerInterface
+      - Symfony\Component\Serializer\SerializerInterface
 
-  serializer.normolizer.object:
+  serializer.normalizer.object:
     class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
     arguments:
       - null

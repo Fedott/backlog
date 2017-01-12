@@ -1,5 +1,5 @@
 <?php declare(strict_types = 1);
-namespace Tests\Fedot\Backlog\Request\Processor;
+namespace Tests\Fedot\Backlog\Request\Processor\Project;
 
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
@@ -7,7 +7,7 @@ use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Payload\CreateProjectPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
-use Fedot\Backlog\Request\Processor\ProjectCreate;
+use Fedot\Backlog\Request\Processor\Project\ProjectCreate;
 use Fedot\Backlog\WebSocket\Response;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;

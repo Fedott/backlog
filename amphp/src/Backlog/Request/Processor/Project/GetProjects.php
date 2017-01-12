@@ -1,13 +1,15 @@
 <?php declare(strict_types = 1);
-namespace Fedot\Backlog\Request\Processor;
+namespace Fedot\Backlog\Request\Processor\Project;
 
 use Amp\Promisor;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\ProjectsPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
+use Fedot\Backlog\Request\Processor\AbstractProcessor;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class GetProjects extends AbstractProcessor
 {
@@ -21,12 +23,19 @@ class GetProjects extends AbstractProcessor
      */
     protected $webSocketAuthService;
 
+    /**
+     * @var NormalizerInterface
+     */
+    protected $normalizer;
+
     public function __construct(
         ProjectRepository $projectRepository,
-        WebSocketConnectionAuthenticationService $webSocketAuthService
+        WebSocketConnectionAuthenticationService $webSocketAuthService,
+        NormalizerInterface $normalizer
     ) {
         $this->projectRepository = $projectRepository;
         $this->webSocketAuthService = $webSocketAuthService;
+        $this->normalizer = $normalizer;
     }
 
     public function getSupportedType(): string
@@ -48,7 +57,7 @@ class GetProjects extends AbstractProcessor
         $payload->projects = $projects;
 
         $response = $response->withType('projects');
-        $response = $response->withPayload((array) $payload);
+        $response = $response->withPayload($this->normalizer->normalize($payload));
 
         $promisor->succeed($response);
     }

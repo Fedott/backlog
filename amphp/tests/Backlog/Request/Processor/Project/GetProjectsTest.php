@@ -1,16 +1,19 @@
 <?php declare(strict_types = 1);
-namespace Tests\Fedot\Backlog\Request\Processor;
+
+namespace Tests\Fedot\Backlog\Request\Processor\Project;
 
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Payload\EmptyPayload;
+use Fedot\Backlog\Payload\ProjectsPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
-use Fedot\Backlog\Request\Processor\GetProjects;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
+use Fedot\Backlog\Request\Processor\Project\GetProjects;
 use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use PHPUnit_Framework_MockObject_MockObject;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Tests\Fedot\Backlog\RequestProcessorTestCase;
 
 class GetProjectsTest extends RequestProcessorTestCase
@@ -25,13 +28,19 @@ class GetProjectsTest extends RequestProcessorTestCase
      */
     protected $webAuthMock;
 
+    /**
+     * @var NormalizerInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $normalizerMock;
+
     protected function getProcessorInstance(): ProcessorInterface
     {
         $this->initProcessorMocks();
 
         $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
+        $this->normalizerMock = $this->createMock(NormalizerInterface::class);
 
-        return new GetProjects($this->projectRepositoryMock, $this->webSocketAuthServiceMock);
+        return new GetProjects($this->projectRepositoryMock, $this->webSocketAuthServiceMock, $this->normalizerMock);
     }
 
     protected function getExpectedValidRequestType(): string
@@ -69,11 +78,36 @@ class GetProjectsTest extends RequestProcessorTestCase
             ->willReturn(new Success($projects))
         ;
 
+        $this->normalizerMock->expects($this->once())
+            ->method('normalize')
+            ->with($this->callback(function (ProjectsPayload $payload) use ($projects) {
+                $this->assertEquals($projects, $payload->projects);
+
+                return true;
+            }))
+            ->willReturn(
+                [
+                    'projects' => [
+                        ['id' => 'project-id', 'name' => 'project name 1'],
+                        ['id' => 'project-id2', 'name' => 'project name 2'],
+                        ['id' => 'project-id3', 'name' => 'project name 3'],
+                    ],
+                ]
+            )
+        ;
+
         /** @var Response $response */
         $response = \Amp\wait($processor->process($request, $response));
 
         $this->assertResponseBasic($response, 66, 432, 'projects');
 
-        $this->assertEquals((array) $projects, $response->getPayload()['projects']);
+        $this->assertEquals(
+            [
+                ['id' => 'project-id', 'name' => 'project name 1'],
+                ['id' => 'project-id2', 'name' => 'project name 2'],
+                ['id' => 'project-id3', 'name' => 'project name 3'],
+            ],
+            $response->getPayload()['projects']
+        );
     }
 }

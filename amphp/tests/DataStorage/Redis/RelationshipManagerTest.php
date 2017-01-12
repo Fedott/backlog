@@ -3,13 +3,13 @@ namespace Tests\Fedot\DataStorage\Redis;
 
 use Amp\Redis\Client;
 use Amp\Success;
+use Fedot\DataStorage\Identifiable as IdentifiableInterface;
 use Fedot\DataStorage\Redis\KeyGenerator;
 use Fedot\DataStorage\Redis\RelationshipManager;
 use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Fedot\Backlog\BaseTestCase;
 use Tests\Fedot\DataStorage\Stubs\AnotherIdentifiable;
 use Tests\Fedot\DataStorage\Stubs\Identifiable;
-use Fedot\DataStorage\Identifiable as IdentifiableInterface;
 use Tests\Fedot\DataStorage\Stubs\NotIdentifiable;
 use TypeError;
 
