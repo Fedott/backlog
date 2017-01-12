@@ -3,6 +3,7 @@ namespace Fedot\Backlog\Request\Processor;
 
 use Amp\Promisor;
 use Fedot\Backlog\Model\Project;
+use Fedot\Backlog\Payload\CreateProjectPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
@@ -43,21 +44,25 @@ class ProjectCreate extends AbstractProcessor
 
     public function getExpectedRequestPayload(): string
     {
-        return Project::class;
+        return CreateProjectPayload::class;
     }
 
     protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
     {
-        /** @var Project $project */
-        $project = $request->getAttribute('payloadObject');
-        $project->id = $this->uuidFactory->uuid4()->toString();
+        /** @var CreateProjectPayload $createProjectPayload */
+        $createProjectPayload = $request->getAttribute('payloadObject');
+
+        $project = new Project(
+            $this->uuidFactory->uuid4()->toString(),
+            $createProjectPayload->name
+        );
 
         $user = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
 
         yield $this->projectRepository->create($user, $project);
 
         $response = $response->withType('project-created');
-        $response = $response->withPayload((array) $project);
+        $response = $response->withPayload(['id' => $project->getId(), 'name' => $project->getName()]);
 
         $promisor->succeed($response);
     }

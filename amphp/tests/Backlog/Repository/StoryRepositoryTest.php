@@ -57,8 +57,7 @@ class StoryRepositoryTest extends BaseTestCase
     {
         $repository = $this->getRepositoryInstance();
 
-        $project = new Project();
-        $project->id = 'project-id';
+        $project = new Project('project-id', 'project name');
 
         $ids = [
             "story-id1",
@@ -124,8 +123,7 @@ class StoryRepositoryTest extends BaseTestCase
     {
         $repository = $this->getRepositoryInstance();
 
-        $project = new Project();
-        $project->id = 'project-id';
+        $project = new Project('project-id', 'project name');
 
         $ids = [
             "story-id1",
@@ -178,7 +176,7 @@ class StoryRepositoryTest extends BaseTestCase
             )
         ;
 
-        $resultPromise = $repository->getAllByProjectId($project->id);
+        $resultPromise = $repository->getAllByProjectId($project->getId());
         $this->assertInstanceOf(Promise::class, $resultPromise);
 
         $result = \Amp\wait($resultPromise);
@@ -196,8 +194,7 @@ class StoryRepositoryTest extends BaseTestCase
     {
         $repository = $this->getRepositoryInstance();
 
-        $project = new Project();
-        $project->id = 'project-id';
+        $project = new Project('project-id', 'project name');
 
         $keys = [];
         $this->redisClientMock->expects($this->once())
@@ -232,8 +229,7 @@ class StoryRepositoryTest extends BaseTestCase
         $story = new Story();
         $story->id = 'story-id';
 
-        $project = new Project();
-        $project->id = 'project-id';
+        $project = new Project('project-id', 'project name');
 
         $redisSetNXPromise = new Success(true);
         $redisLPushPromise = new Success(true);
@@ -267,8 +263,7 @@ class StoryRepositoryTest extends BaseTestCase
         $story = new Story();
         $story->id = 'story-id';
 
-        $project = new Project();
-        $project->id = 'project-id';
+        $project = new Project('project-id', 'project name');
 
         $redisSetNXPromise = new Success(false);
         $this->redisClientMock->expects($this->once())
@@ -294,8 +289,7 @@ class StoryRepositoryTest extends BaseTestCase
 
     public function testDelete()
     {
-        $project = new Project();
-        $project->id = 'project-id';
+        $project = new Project('project-id', 'project name');
 
         $story = new Story();
         $story->id = 'story-id';
@@ -327,8 +321,7 @@ class StoryRepositoryTest extends BaseTestCase
 
     public function testDeleteByIds()
     {
-        $project = new Project();
-        $project->id = 'project-id';
+        $project = new Project('project-id', 'project name');
 
         $story = new Story();
         $story->id = 'story-id';
@@ -373,7 +366,7 @@ class StoryRepositoryTest extends BaseTestCase
             ->willReturn($redisLRemPromise)
         ;
 
-        $resultPromise = $repository->deleteByIds($project->id, $story->id);
+        $resultPromise = $repository->deleteByIds($project->getId(), $story->id);
         $result = \Amp\wait($resultPromise);
         $this->assertEquals(true, $result);
     }
@@ -406,8 +399,7 @@ class StoryRepositoryTest extends BaseTestCase
     {
         $repository = $this->getRepositoryInstance();
 
-        $project = new Project();
-        $project->id = 'project-id';
+        $project = new Project('project-id', 'project name');
 
         $story = new Story();
         $story->id = 'story-id';
@@ -441,8 +433,7 @@ class StoryRepositoryTest extends BaseTestCase
     {
         $repository = $this->getRepositoryInstance();
 
-        $project = new Project();
-        $project->id = 'project-id';
+        $project = new Project('project-id', 'project name');
 
         $story = new Story();
         $story->id = 'story-id';
@@ -469,7 +460,7 @@ class StoryRepositoryTest extends BaseTestCase
 
         $this->projectRepositoryMock->expects($this->once())
             ->method('get')
-            ->with($project->id)
+            ->with($project->getId())
             ->willReturn(new Success($project))
         ;
 
@@ -497,7 +488,7 @@ class StoryRepositoryTest extends BaseTestCase
             )
         ;
 
-        $resultPromise = $repository->moveByIds($project->id, $story->id, $positionStory->id);
+        $resultPromise = $repository->moveByIds($project->getId(), $story->id, $positionStory->id);
         $result = \Amp\wait($resultPromise);
         $this->assertEquals(true, $result);
     }

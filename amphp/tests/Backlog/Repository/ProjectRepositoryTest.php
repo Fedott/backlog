@@ -74,9 +74,7 @@ class ProjectRepositoryTest extends BaseTestCase
         $user = new User();
         $user->username = 'testUser';
 
-        $project = new Project();
-        $project->id = 'random-uuid';
-        $project->name = "First project";
+        $project = new Project('project-id', 'project name');
 
         $this->persistManagerInterfaceMock->expects($this->once())
             ->method('persist')
@@ -108,9 +106,9 @@ class ProjectRepositoryTest extends BaseTestCase
         ];
 
         $projects = [
-            new Project(),
-            new Project(),
-            new Project(),
+            new Project('project-id', 'project name'),
+            new Project('project-id2', 'project name 2'),
+            new Project('project-id3', 'project name 3'),
         ];
 
         $this->relationshipManagerInterfaceMock->expects($this->once())
@@ -141,7 +139,7 @@ class ProjectRepositoryTest extends BaseTestCase
     public function testGet()
     {
         $projectId = 'id1';
-        $project = new Project();
+        $project = new Project('project-id', 'project name');
 
         $this->fetchManagerInterfaceMock->expects($this->once())
             ->method('fetchById')

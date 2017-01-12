@@ -4,6 +4,7 @@ namespace Tests\Fedot\Backlog\Request\Processor;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
+use Fedot\Backlog\Payload\CreateProjectPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
 use Fedot\Backlog\Request\Processor\ProjectCreate;
@@ -47,7 +48,7 @@ class ProjectCreateTest extends RequestProcessorTestCase
 
     public function testProcess()
     {
-        $payload = new Project();
+        $payload = new CreateProjectPayload();
         $payload->name = 'first project';
 
         $request = $this->makeRequest(33, 432, 'create-project', $payload);
@@ -76,9 +77,9 @@ class ProjectCreateTest extends RequestProcessorTestCase
 
         $this->projectRepositoryMock->expects($this->once())
             ->method('create')
-            ->with($this->equalTo($user), $this->callback(function (Project $story) {
-                $this->assertEquals('UUIDSuperUnique', $story->id);
-                $this->assertEquals('first project', $story->name);
+            ->with($this->equalTo($user), $this->callback(function (Project $project) {
+                $this->assertEquals('UUIDSuperUnique', $project->getId());
+                $this->assertEquals('first project', $project->getName());
 
                 return true;
             }))

@@ -4,20 +4,31 @@ namespace Fedot\Backlog\Model;
 use Fedot\Backlog\PayloadInterface;
 use Fedot\DataStorage\Identifiable;
 
-class Project implements Identifiable, PayloadInterface
+class Project implements Identifiable
 {
     /**
-     * @var string|null
+     * @var string
      */
-    public $id;
+    private $id;
 
     /**
      * @var string
      */
-    public $name;
+    private $name;
+
+    public function __construct(string $id, string $name)
+    {
+        $this->id = $id;
+        $this->name = $name;
+    }
 
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 }

@@ -52,8 +52,7 @@ class CreateStoryTest extends RequestProcessorTestCase
     {
         $processor = $this->getProcessorInstance();
 
-        $project = new Project();
-        $project->id = 'project-id';
+        $project = new Project('project-id', 'project name');
 
         $this->projectRepositoryMock->expects($this->once())
             ->method('get')
@@ -114,8 +113,7 @@ class CreateStoryTest extends RequestProcessorTestCase
 
         $processor = $this->getProcessorInstance();
 
-        $project = new Project();
-        $project->id = 'project-id';
+        $project = new Project('project-id', 'project name');
 
         $this->projectRepositoryMock->expects($this->once())
             ->method('get')

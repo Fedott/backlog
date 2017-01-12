@@ -58,9 +58,9 @@ class GetProjectsTest extends RequestProcessorTestCase
         ;
 
         $projects = [
-            new Project(),
-            new Project(),
-            new Project(),
+            new Project('project-id', 'project name 1'),
+            new Project('project-id2', 'project name 2'),
+            new Project('project-id3', 'project name 3'),
         ];
 
         $this->projectRepositoryMock->expects($this->once())
