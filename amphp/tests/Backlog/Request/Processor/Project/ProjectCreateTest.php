@@ -5,6 +5,7 @@ use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Payload\CreateProjectPayload;
+use Fedot\Backlog\Payload\ProjectPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Request\Processor\ProcessorInterface;
 use Fedot\Backlog\Request\Processor\Project\ProjectCreate;
@@ -35,9 +36,11 @@ class ProjectCreateTest extends RequestProcessorTestCase
 
     protected function getProcessorInstance(): ProcessorInterface
     {
-        return new ProjectCreate($this->projectRepositoryMock,
+        return new ProjectCreate(
+            $this->projectRepositoryMock,
             $this->uuidFactoryMock,
-            $this->webSocketAuthServiceMock
+            $this->webSocketAuthServiceMock,
+            $this->normalizerMock
         );
     }
 
@@ -84,6 +87,20 @@ class ProjectCreateTest extends RequestProcessorTestCase
                 return true;
             }))
             ->willReturn(new Success(true))
+        ;
+
+        $this->normalizerMock->expects($this->once())
+            ->method('normalize')
+            ->with($this->callback(function (Project $project) {
+                $this->assertEquals('UUIDSuperUnique', $project->getId());
+                $this->assertEquals('first project', $project->getName());
+
+                return true;
+            }))
+            ->willReturn([
+                'id' => 'UUIDSuperUnique',
+                'name' => 'first project',
+            ])
         ;
 
         $processor = $this->getProcessorInstance();

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Tests\Fedot\Backlog;
 
@@ -11,6 +11,7 @@ use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use PHPUnit_Framework_MockObject_MockObject;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 abstract class RequestProcessorTestCase extends BaseTestCase
 {
@@ -32,10 +33,15 @@ abstract class RequestProcessorTestCase extends BaseTestCase
     protected $webSocketAuthServiceMock;
 
     /**
+     * @var PHPUnit_Framework_MockObject_MockObject|NormalizerInterface
+     */
+    protected $normalizerMock;
+
+    /**
      * @dataProvider providerSupportsRequest
      *
      * @param RequestInterface $request
-     * @param bool    $expectedResult
+     * @param bool $expectedResult
      */
     public function testSupportsRequest(RequestInterface $request, bool $expectedResult)
     {
@@ -62,6 +68,7 @@ abstract class RequestProcessorTestCase extends BaseTestCase
     {
         $this->storyRepositoryMock = $this->createMock(StoryRepository::class);
         $this->webSocketAuthServiceMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
+        $this->normalizerMock = $this->createMock(NormalizerInterface::class);
     }
 
     protected function assertResponseBasic(Response $response, int $requestId, int $clientId, string $type)
@@ -76,8 +83,7 @@ abstract class RequestProcessorTestCase extends BaseTestCase
         int $clientId,
         string $requestType,
         PayloadInterface $payload
-    ):Request
-    {
+    ): RequestInterface {
         $request = new Request($requestId, $requestType, $clientId, (array)$payload);
         $request = $request->withAttribute('payloadObject', $payload);
 
@@ -90,5 +96,6 @@ abstract class RequestProcessorTestCase extends BaseTestCase
     }
 
     abstract protected function getProcessorInstance(): ProcessorInterface;
+
     abstract protected function getExpectedValidRequestType(): string;
 }

@@ -10,6 +10,7 @@ use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Ramsey\Uuid\UuidFactory;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ProjectCreate extends AbstractProcessor
 {
@@ -28,14 +29,21 @@ class ProjectCreate extends AbstractProcessor
      */
     protected $webSocketAuthService;
 
+    /**
+     * @var NormalizerInterface
+     */
+    protected $normalizer;
+
     public function __construct(
         ProjectRepository $projectRepository,
         UuidFactory $uuidFactory,
-        WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService
+        WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService,
+        NormalizerInterface $normalizer
     ) {
         $this->projectRepository = $projectRepository;
         $this->uuidFactory = $uuidFactory;
         $this->webSocketAuthService = $webSocketConnectionAuthenticationService;
+        $this->normalizer = $normalizer;
     }
 
     public function getSupportedType(): string
@@ -63,7 +71,7 @@ class ProjectCreate extends AbstractProcessor
         yield $this->projectRepository->create($user, $project);
 
         $response = $response->withType('project-created');
-        $response = $response->withPayload(['id' => $project->getId(), 'name' => $project->getName()]);
+        $response = $response->withPayload($this->normalizer->normalize($project));
 
         $promisor->succeed($response);
     }
