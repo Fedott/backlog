@@ -1,0 +1,78 @@
+services:
+  backlog.action.story-create:
+    class: Fedot\Backlog\Action\CreateStory
+    autowire: true
+    tags:
+      - { name: backlog.action }
+
+  backlog.action.story-delete:
+    class: Fedot\Backlog\Action\DeleteStory
+    autowire: true
+    tags:
+      - { name: backlog.action }
+
+  backlog.action.story-edit:
+    class: Fedot\Backlog\Action\EditStory
+    autowire: true
+    tags:
+      - { name: backlog.action }
+
+  backlog.action.story-move:
+    class: Fedot\Backlog\Action\MoveStory
+    autowire: true
+    tags:
+      - { name: backlog.action }
+
+  backlog.action.story-mark-as-completed:
+    class: Fedot\Backlog\Action\MarkStoryAsCompleted
+    autowire: true
+    tags:
+      - { name: backlog.action }
+
+  backlog.action.story-get-all:
+    class: Fedot\Backlog\Action\GetStories
+    autowire: true
+    tags:
+      - { name: backlog.action }
+
+  backlog.action.project-get-all:
+    class: Fedot\Backlog\Action\Project\GetProjects
+    autowire: true
+    tags:
+      - { name: backlog.action }
+
+  backlog.action.project-create:
+    class: Fedot\Backlog\Action\Project\ProjectCreate
+    autowire: true
+    tags:
+      - { name: backlog.action }
+
+  backlog.action.share:
+    class: Fedot\Backlog\Action\Project\Share\ShareProject
+    autowire: true
+    tags:
+      - { name: backlog.action }
+
+  backlog.action.user-registration:
+    class: Fedot\Backlog\Action\User\Registration
+    autowire: true
+    tags:
+      - { name: backlog.action }
+
+  backlog.action.login-username-password:
+    class: Fedot\Backlog\Action\LoginUsernamePassword
+    autowire: true
+    tags:
+      - { name: backlog.action }
+
+  backlog.action.login-token:
+    class: Fedot\Backlog\Action\LoginToken
+    autowire: true
+    tags:
+      - { name: backlog.action }
+
+  backlog.action.ping:
+    class: Fedot\Backlog\Action\Ping
+    autowire: true
+    tags:
+      - { name: backlog.action }

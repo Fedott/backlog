@@ -9,11 +9,11 @@ use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\UserRepository;
-use Fedot\Backlog\Request\Processor\ProcessorInterface;
+use Fedot\Backlog\Action\ActionInterface;
 use PHPUnit_Framework_MockObject_MockObject;
-use Tests\Fedot\Backlog\RequestProcessorTestCase;
+use Tests\Fedot\Backlog\ActionTestCase;
 
-class ShareProjectTest extends RequestProcessorTestCase
+class ShareProjectTest extends ActionTestCase
 {
     /**
      * @var UserRepository|PHPUnit_Framework_MockObject_MockObject
@@ -25,15 +25,15 @@ class ShareProjectTest extends RequestProcessorTestCase
      */
     protected $projectRepositoryMock;
 
-    protected function initProcessorMocks()
+    protected function initActionMocks()
     {
-        parent::initProcessorMocks();
+        parent::initActionMocks();
 
         $this->userRepositoryMock = $this->createMock(UserRepository::class);
         $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
     }
 
-    protected function getProcessorInstance(): ProcessorInterface
+    protected function getProcessorInstance(): ActionInterface
     {
         return new ShareProject(
             $this->userRepositoryMock,
@@ -76,7 +76,7 @@ class ShareProjectTest extends RequestProcessorTestCase
         $request = $this->makeRequest(1, 2, 'project/share', $payload);
         $response = $this->makeResponse($request);
 
-        $response = \Amp\wait($this->processor->process($request, $response));
+        $response = \Amp\wait($this->action->process($request, $response));
 
         $this->assertResponseBasic($response, 1, 2, 'success');
     }
@@ -108,7 +108,7 @@ class ShareProjectTest extends RequestProcessorTestCase
         $request = $this->makeRequest(1, 2, 'project/share', $payload);
         $response = $this->makeResponse($request);
 
-        $response = \Amp\wait($this->processor->process($request, $response));
+        $response = \Amp\wait($this->action->process($request, $response));
 
         $this->assertResponseError($response, 1, 2, 'User or Project not found');
     }
@@ -140,7 +140,7 @@ class ShareProjectTest extends RequestProcessorTestCase
         $request = $this->makeRequest(1, 2, 'project/share', $payload);
         $response = $this->makeResponse($request);
 
-        $response = \Amp\wait($this->processor->process($request, $response));
+        $response = \Amp\wait($this->action->process($request, $response));
 
         $this->assertResponseError($response, 1, 2, 'User or Project not found');
     }

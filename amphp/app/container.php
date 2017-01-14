@@ -2,7 +2,7 @@
 
 use Fedot\Backlog\DependencyInjection\Compiler\MiddlewarePass;
 use Fedot\Backlog\DependencyInjection\Compiler\PropertyInfoPass;
-use Fedot\Backlog\DependencyInjection\Compiler\RequestProcessorPass;
+use Fedot\Backlog\DependencyInjection\Compiler\ActionPass;
 use Fedot\Backlog\DependencyInjection\Compiler\SerializerPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderResolver;
@@ -15,7 +15,7 @@ $container = new ContainerBuilder();
 $container->addCompilerPass(new MiddlewarePass());
 $container->addCompilerPass(new SerializerPass());
 $container->addCompilerPass(new PropertyInfoPass());
-$container->addCompilerPass(new RequestProcessorPass());
+$container->addCompilerPass(new ActionPass());
 
 $phpLoader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../app/config'));
 $yamlLoader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../app/config'));

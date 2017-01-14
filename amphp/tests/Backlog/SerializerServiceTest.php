@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Tests\Fedot\Backlog\Stubs\NestedObject;
 use Tests\Fedot\Backlog\Stubs\TestPayload;
-use Tests\Fedot\Backlog\Stubs\TestProcessor;
+use Tests\Fedot\Backlog\Stubs\TestAction;
 
 class SerializerServiceTest extends BaseTestCase
 {
@@ -39,8 +39,8 @@ JSON;
         );
 
         $serializerService = new SerializerService($serializer);
-        $serializerService->addAllPayloadTypesFromProcessors([
-            new TestProcessor(),
+        $serializerService->addAllPayloadTypesFromActions([
+            new TestAction(),
         ]);
 
         $actualRequest = $serializer->deserialize($requestJsonString, Request::class, 'json');
@@ -81,8 +81,8 @@ JSON;
         );
 
         $serializerService = new SerializerService($serializer);
-        $serializerService->addAllPayloadTypesFromProcessors([
-            new TestProcessor(),
+        $serializerService->addAllPayloadTypesFromActions([
+            new TestAction(),
         ]);
 
         $actualRequest = $serializer->deserialize($requestJsonString, Request::class, 'json');

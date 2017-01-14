@@ -6,11 +6,11 @@ use Amp\Promisor;
 use Fedot\Backlog\Payload\ErrorPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\UserRepository;
-use Fedot\Backlog\Request\Processor\AbstractProcessor;
+use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 
-class ShareProject extends AbstractProcessor
+class ShareProject extends AbstractAction
 {
     /**
      * @var UserRepository
