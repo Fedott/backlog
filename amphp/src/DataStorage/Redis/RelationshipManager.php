@@ -51,7 +51,7 @@ class RelationshipManager implements RelationshipManagerInterface
     public function getIdsOneToMany(Identifiable $forModel, string $modelClassName): Promise
     {
         if (!is_subclass_of($modelClassName, Identifiable::class)) {
-            return new Failure(new TypeError("{$modelClassName} not implemented " . Identifiable::class));
+            return new Failure(new TypeError("{$modelClassName} not implemented ".Identifiable::class));
         }
 
         $indexName = $this->keyGenerator->getOneToManeIndexName($forModel, $modelClassName);
