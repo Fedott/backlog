@@ -17,8 +17,8 @@ $container->addCompilerPass(new SerializerPass());
 $container->addCompilerPass(new PropertyInfoPass());
 $container->addCompilerPass(new ActionPass());
 
-$phpLoader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../app/config'));
-$yamlLoader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../app/config'));
+$phpLoader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../app/config'));
+$yamlLoader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../app/config'));
 
 $resolver = new LoaderResolver([
     $phpLoader,
