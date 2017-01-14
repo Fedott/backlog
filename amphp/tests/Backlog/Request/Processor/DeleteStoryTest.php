@@ -13,8 +13,6 @@ class DeleteStoryTest extends RequestProcessorTestCase
 {
     protected function getProcessorInstance(): ProcessorInterface
     {
-        $this->initProcessorMocks();
-
         $processor = new DeleteStory($this->storyRepositoryMock);
 
         return $processor;

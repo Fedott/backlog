@@ -20,7 +20,13 @@ abstract class RequestProcessorTestCase extends BaseTestCase
         parent::setUp();
 
         $this->initProcessorMocks();
+        $this->initProcessorInstance();
     }
+
+    /**
+     * @var ProcessorInterface
+     */
+    protected $processor;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject|StoryRepository
@@ -71,11 +77,23 @@ abstract class RequestProcessorTestCase extends BaseTestCase
         $this->normalizerMock = $this->createMock(NormalizerInterface::class);
     }
 
+    protected function initProcessorInstance()
+    {
+        $this->processor = $this->getProcessorInstance();
+    }
+
     protected function assertResponseBasic(Response $response, int $requestId, int $clientId, string $type)
     {
         $this->assertEquals($requestId, $response->getRequestId());
         $this->assertEquals($clientId, $response->getClientId());
         $this->assertEquals($type, $response->getType());
+    }
+
+    protected function assertResponseError(Response $response, int $requestId, int $clientId, string $message)
+    {
+        $this->assertResponseBasic($response, $requestId, $clientId, 'error');
+
+        $this->assertEquals($message, $response->getPayload()['message']);
     }
 
     protected function makeRequest(

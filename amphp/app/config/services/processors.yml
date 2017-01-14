@@ -47,6 +47,12 @@ services:
     tags:
       - { name: backlog.request.processor }
 
+  backlog.request.processor.share:
+    class: Fedot\Backlog\Action\Project\Share\ShareProject
+    autowire: true
+    tags:
+      - { name: backlog.request.processor }
+
   backlog.request.processor.user-registration:
     class: Fedot\Backlog\Request\Processor\User\Registration
     autowire: true

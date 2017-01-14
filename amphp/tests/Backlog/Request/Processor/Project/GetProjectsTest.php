@@ -35,8 +35,6 @@ class GetProjectsTest extends RequestProcessorTestCase
 
     protected function getProcessorInstance(): ProcessorInterface
     {
-        $this->initProcessorMocks();
-
         $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
         $this->normalizerMock = $this->createMock(NormalizerInterface::class);
 

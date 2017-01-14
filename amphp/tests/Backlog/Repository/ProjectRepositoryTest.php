@@ -153,4 +153,20 @@ class ProjectRepositoryTest extends BaseTestCase
 
         $this->assertEquals($project, $actualProject);
     }
+
+    public function testAddUser()
+    {
+        $project = new Project('project-id', 'project name');
+        $user = new User();
+
+        $this->relationshipManagerInterfaceMock->expects($this->once())
+            ->method('addManyToMany')
+            ->with($project, $user)
+            ->willReturn(new Success(true))
+        ;
+
+        $result = \Amp\wait($this->repository->addUser($project, $user));
+
+        $this->assertTrue($result);
+    }
 }

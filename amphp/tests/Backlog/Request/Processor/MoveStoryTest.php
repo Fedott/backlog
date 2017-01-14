@@ -13,8 +13,6 @@ class MoveStoryTest extends RequestProcessorTestCase
 {
     protected function getProcessorInstance(): ProcessorInterface
     {
-        $this->initProcessorMocks();
-
         $processor = new MoveStory($this->storyRepositoryMock);
 
         return $processor;

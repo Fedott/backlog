@@ -31,8 +31,6 @@ class CreateStoryTest extends RequestProcessorTestCase
 
     protected function getProcessorInstance(): ProcessorInterface
     {
-        $this->initProcessorMocks();
-
         $this->uuidFactoryMock = $this->createMock(UuidFactory::class);
         $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
 

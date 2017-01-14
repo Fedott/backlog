@@ -13,8 +13,6 @@ class GetStoriesTest extends RequestProcessorTestCase
 {
     protected function getProcessorInstance(): ProcessorInterface
     {
-        $this->initProcessorMocks();
-
         return new GetStories($this->storyRepositoryMock, $this->webSocketAuthServiceMock);
     }
 

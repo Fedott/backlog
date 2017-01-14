@@ -14,8 +14,6 @@ class EditStoryTest extends RequestProcessorTestCase
 {
     protected function getProcessorInstance(): ProcessorInterface
     {
-        $this->initProcessorMocks();
-
         return new EditStory(
             $this->storyRepositoryMock
         );
