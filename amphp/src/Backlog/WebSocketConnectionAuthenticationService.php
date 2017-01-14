@@ -2,7 +2,6 @@
 
 namespace Fedot\Backlog;
 
-
 use Exception;
 use Fedot\Backlog\Model\User;
 

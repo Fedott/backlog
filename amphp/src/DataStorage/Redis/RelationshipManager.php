@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 namespace Fedot\DataStorage\Redis;
 
 use Amp\Deferred;
@@ -100,8 +100,7 @@ class RelationshipManager implements RelationshipManagerInterface
         Identifiable $forModel,
         Identifiable $model,
         Identifiable $positionModel
-    ): Promise
-    {
+    ): Promise {
         $indexName = $this->keyGenerator->getOneToManeIndexName($forModel, $model);
 
         return $this->moveValueOnIndex($indexName,

@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 namespace Fedot\Backlog\Middleware;
 
 use Amp\Promise;
@@ -24,8 +24,7 @@ class PayloadParser implements MiddlewareInterface
         RequestInterface $request,
         ResponseInterface $response,
         callable $next = null
-    ): Promise
-    {
+    ): Promise {
         if (null === $next) {
             return new Success($response);
         }

@@ -18,7 +18,7 @@ class EditStory extends AbstractAction
 
     public function __construct(
         StoryRepository $storyRepository
-    ){
+    ) {
         $this->storyRepository = $storyRepository;
     }
 

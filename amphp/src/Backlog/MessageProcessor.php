@@ -9,7 +9,6 @@ use Fedot\Backlog\WebSocket\Response;
 use Generator;
 use Symfony\Component\Serializer\SerializerInterface;
 
-
 class MessageProcessor
 {
     /**

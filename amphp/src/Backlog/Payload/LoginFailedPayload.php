@@ -2,7 +2,6 @@
 
 namespace Fedot\Backlog\Payload;
 
-
 class LoginFailedPayload
 {
     /**

@@ -17,7 +17,7 @@ class GetStories extends AbstractAction
 
     public function __construct(
         StoryRepository $storyRepository
-    ){
+    ) {
         $this->storyRepository = $storyRepository;
     }
 
