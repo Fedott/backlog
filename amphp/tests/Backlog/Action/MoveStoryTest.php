@@ -3,9 +3,9 @@
 namespace Tests\Fedot\Backlog\Action;
 
 use Amp\Success;
-use Fedot\Backlog\Payload\MoveStoryPayload;
-use Fedot\Backlog\Action\MoveStory;
 use Fedot\Backlog\Action\ActionInterface;
+use Fedot\Backlog\Action\Story\Move\MoveStory;
+use Fedot\Backlog\Action\Story\Move\MoveStoryPayload;
 use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\ActionTestCase;
 

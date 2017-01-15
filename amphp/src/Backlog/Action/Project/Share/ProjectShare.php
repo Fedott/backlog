@@ -3,10 +3,10 @@
 namespace Fedot\Backlog\Action\Project\Share;
 
 use Amp\Promisor;
-use Fedot\Backlog\Payload\ErrorPayload;
+use Fedot\Backlog\Action\AbstractAction;
+use Fedot\Backlog\Action\ErrorPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\UserRepository;
-use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 

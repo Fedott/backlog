@@ -1,13 +1,12 @@
 <?php declare(strict_types=1);
-namespace Fedot\Backlog\Action\User;
+namespace Fedot\Backlog\Action\User\Registration;
 
 use Amp\Promisor;
-use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Payload\ErrorPayload;
-use Fedot\Backlog\Payload\UsernamePasswordPayload;
-use Fedot\Backlog\Payload\UsernamePayload;
-use Fedot\Backlog\Repository\UserRepository;
 use Fedot\Backlog\Action\AbstractAction;
+use Fedot\Backlog\Action\ErrorPayload;
+use Fedot\Backlog\Action\User\Login\UsernamePasswordPayload;
+use Fedot\Backlog\Model\User;
+use Fedot\Backlog\Repository\UserRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 

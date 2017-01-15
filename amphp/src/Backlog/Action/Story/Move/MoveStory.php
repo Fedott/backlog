@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Fedot\Backlog\Action;
+namespace Fedot\Backlog\Action\Story\Move;
 
 use Amp\Promisor;
-use Fedot\Backlog\Payload\EmptyPayload;
-use Fedot\Backlog\Payload\ErrorPayload;
-use Fedot\Backlog\Payload\MoveStoryPayload;
+use Fedot\Backlog\Action\AbstractAction;
+use Fedot\Backlog\Action\EmptyPayload;
+use Fedot\Backlog\Action\ErrorPayload;
 use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;

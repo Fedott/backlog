@@ -2,9 +2,9 @@
 namespace Tests\Fedot\Backlog\Action;
 
 use Amp\Success;
-use Fedot\Backlog\Payload\DeleteStoryPayload;
-use Fedot\Backlog\Action\DeleteStory;
 use Fedot\Backlog\Action\ActionInterface;
+use Fedot\Backlog\Action\Story\Delete\DeleteStory;
+use Fedot\Backlog\Action\Story\Delete\DeleteStoryPayload;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\ActionTestCase;

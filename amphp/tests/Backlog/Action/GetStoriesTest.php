@@ -2,10 +2,10 @@
 namespace Tests\Fedot\Backlog\Action;
 
 use Amp\Success;
-use Fedot\Backlog\Model\Story;
-use Fedot\Backlog\Payload\ProjectIdPayload;
-use Fedot\Backlog\Action\GetStories;
 use Fedot\Backlog\Action\ActionInterface;
+use Fedot\Backlog\Action\Story\GetAll\GetStories;
+use Fedot\Backlog\Action\Story\GetAll\ProjectIdPayload;
+use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\ActionTestCase;
 

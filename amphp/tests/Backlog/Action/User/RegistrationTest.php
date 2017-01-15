@@ -2,11 +2,11 @@
 namespace Tests\Fedot\Backlog\Action\User;
 
 use Amp\Success;
-use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Payload\UsernamePasswordPayload;
-use Fedot\Backlog\Repository\UserRepository;
 use Fedot\Backlog\Action\ActionInterface;
-use Fedot\Backlog\Action\User\Registration;
+use Fedot\Backlog\Action\User\Login\UsernamePasswordPayload;
+use Fedot\Backlog\Action\User\Registration\Registration;
+use Fedot\Backlog\Model\User;
+use Fedot\Backlog\Repository\UserRepository;
 use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Fedot\Backlog\ActionTestCase;
 

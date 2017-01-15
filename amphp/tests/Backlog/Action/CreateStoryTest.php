@@ -3,11 +3,11 @@
 namespace Tests\Fedot\Backlog\Action;
 
 use Amp\Success;
+use Fedot\Backlog\Action\Story\Create\CreateStory;
+use Fedot\Backlog\Action\Story\Create\StoryCreatePayload;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
-use Fedot\Backlog\Payload\StoryPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
-use Fedot\Backlog\Action\CreateStory;
 use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
@@ -118,7 +118,7 @@ class CreateStoryTest extends ActionTestCase
             ->willReturn(new Success($project))
         ;
 
-        $payload = new StoryPayload();
+        $payload = new StoryCreatePayload();
         $payload->story = new Story();
         $payload->story->title = 'story title';
         $payload->story->text = 'story text';

@@ -2,8 +2,6 @@
 namespace Fedot\Backlog\Action;
 
 use Amp\Promisor;
-use Fedot\Backlog\Payload\EmptyPayload;
-use Fedot\Backlog\Payload\PongPayload;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 

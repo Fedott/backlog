@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
-namespace Fedot\Backlog\Action;
+namespace Fedot\Backlog\Action\Story\GetAll;
 
 use Amp\Promisor;
-use Fedot\Backlog\Payload\ProjectIdPayload;
-use Fedot\Backlog\Payload\StoriesPayload;
+use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;

@@ -4,12 +4,12 @@ namespace Tests\Fedot\Backlog\Action;
 
 use Amp\Failure;
 use Amp\Success;
+use Fedot\Backlog\Action\ActionInterface;
+use Fedot\Backlog\Action\User\Login\LoginToken;
+use Fedot\Backlog\Action\User\Login\TokenPayload;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Payload\TokenPayload;
-use Fedot\Backlog\Action\LoginToken;
-use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use PHPUnit_Framework_MockObject_MockObject;

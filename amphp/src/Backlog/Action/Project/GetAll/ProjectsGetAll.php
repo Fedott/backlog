@@ -3,8 +3,7 @@ namespace Fedot\Backlog\Action\Project\GetAll;
 
 use Amp\Promisor;
 use Fedot\Backlog\Action\AbstractAction;
-use Fedot\Backlog\Payload\EmptyPayload;
-use Fedot\Backlog\Payload\ProjectsPayload;
+use Fedot\Backlog\Action\EmptyPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;

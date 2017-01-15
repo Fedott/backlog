@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Fedot\Backlog\Payload;
+namespace Fedot\Backlog\Action\Story\GetAll;
 
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\PayloadInterface;

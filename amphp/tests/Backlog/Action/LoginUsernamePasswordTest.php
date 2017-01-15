@@ -3,12 +3,11 @@ namespace Tests\Fedot\Backlog\Action;
 
 use Amp\Failure;
 use Amp\Success;
+use Fedot\Backlog\Action\ActionInterface;
+use Fedot\Backlog\Action\User\Login\UsernamePasswordPayload;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Payload\UsernamePasswordPayload;
-use Fedot\Backlog\Action\LoginUsernamePassword;
-use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -31,7 +30,7 @@ class LoginUsernamePasswordTest extends ActionTestCase
         $this->authMock = $this->createMock(AuthenticationService::class);
         $this->webSocketAuthMock = $this->createMock(WebSocketConnectionAuthenticationService::class);
 
-        return new LoginUsernamePassword(
+        return new \Fedot\Backlog\Action\User\Login\LoginUsernamePassword(
             $this->authMock,
             $this->webSocketAuthMock
         );

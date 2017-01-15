@@ -4,11 +4,11 @@ namespace Tests\Fedot\Backlog\Action\Project;
 
 use Amp\Success;
 use Fedot\Backlog\Action\ActionInterface;
-use Fedot\Backlog\Action\Project\Get\GetProjects;
+use Fedot\Backlog\Action\EmptyPayload;
+use Fedot\Backlog\Action\Project\GetAll\ProjectsGetAll;
+use Fedot\Backlog\Action\Project\GetAll\ProjectsPayload;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Payload\EmptyPayload;
-use Fedot\Backlog\Payload\ProjectsPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
@@ -38,7 +38,7 @@ class GetProjectsTest extends ActionTestCase
         $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
         $this->normalizerMock = $this->createMock(NormalizerInterface::class);
 
-        return new GetProjects($this->projectRepositoryMock, $this->webSocketAuthServiceMock, $this->normalizerMock);
+        return new ProjectsGetAll($this->projectRepositoryMock, $this->webSocketAuthServiceMock, $this->normalizerMock);
     }
 
     protected function getExpectedValidRequestType(): string

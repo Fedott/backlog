@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
-namespace Fedot\Backlog\Action;
+namespace Fedot\Backlog\Action\Story\Create;
 
 use Amp\Promisor;
-use Fedot\Backlog\Payload\ErrorPayload;
-use Fedot\Backlog\Payload\StoryPayload;
+use Fedot\Backlog\Action\AbstractAction;
+use Fedot\Backlog\Action\ErrorPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
@@ -52,12 +52,12 @@ class CreateStory extends AbstractAction
 
     public function getExpectedRequestPayload(): string
     {
-        return StoryPayload::class;
+        return StoryCreatePayload::class;
     }
 
     protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
     {
-        /** @var StoryPayload $payload */
+        /** @var StoryCreatePayload $payload */
         $payload = $request->getAttribute('payloadObject');
         $projectId = $payload->projectId;
         $project = yield $this->projectRepository->get($projectId);
