@@ -4,7 +4,7 @@ namespace Tests\Fedot\Backlog\Action\Project\Share;
 
 use Amp\Success;
 use Fedot\Backlog\Action\Project\Share\ProjectSharePayload;
-use Fedot\Backlog\Action\Project\Share\ShareProject;
+use Fedot\Backlog\Action\Project\Share\ProjectShare;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\ProjectRepository;
@@ -35,7 +35,7 @@ class ShareProjectTest extends ActionTestCase
 
     protected function getProcessorInstance(): ActionInterface
     {
-        return new ShareProject(
+        return new ProjectShare(
             $this->userRepositoryMock,
             $this->projectRepositoryMock
         );

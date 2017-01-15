@@ -52,12 +52,12 @@ class ProjectCreate extends AbstractAction
 
     public function getExpectedRequestPayload(): string
     {
-        return CreateProjectPayload::class;
+        return ProjectCreatePayload::class;
     }
 
     protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
     {
-        /** @var CreateProjectPayload $createProjectPayload */
+        /** @var ProjectCreatePayload $createProjectPayload */
         $createProjectPayload = $request->getAttribute('payloadObject');
 
         $project = new Project(

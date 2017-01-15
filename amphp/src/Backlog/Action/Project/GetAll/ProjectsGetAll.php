@@ -11,7 +11,7 @@ use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class GetProjects extends AbstractAction
+class ProjectsGetAll extends AbstractAction
 {
     /**
      * @var ProjectRepository

@@ -3,7 +3,7 @@ namespace Tests\Fedot\Backlog\Action\Project;
 
 use Amp\Success;
 use Fedot\Backlog\Action\ActionInterface;
-use Fedot\Backlog\Action\Project\Create\CreateProjectPayload;
+use Fedot\Backlog\Action\Project\Create\ProjectCreatePayload;
 use Fedot\Backlog\Action\Project\Create\ProjectCreate;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
@@ -50,7 +50,7 @@ class ProjectCreateTest extends ActionTestCase
 
     public function testProcess()
     {
-        $payload = new CreateProjectPayload();
+        $payload = new ProjectCreatePayload();
         $payload->name = 'first project';
 
         $request = $this->makeRequest(33, 432, 'create-project', $payload);

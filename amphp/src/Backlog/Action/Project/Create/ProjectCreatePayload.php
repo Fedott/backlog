@@ -4,7 +4,7 @@ namespace Fedot\Backlog\Action\Project\Create;
 
 use Fedot\Backlog\PayloadInterface;
 
-class CreateProjectPayload implements PayloadInterface
+class ProjectCreatePayload implements PayloadInterface
 {
     /**
      * @var string

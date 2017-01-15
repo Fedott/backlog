@@ -10,7 +10,7 @@ use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 
-class ShareProject extends AbstractAction
+class ProjectShare extends AbstractAction
 {
     /**
      * @var UserRepository
