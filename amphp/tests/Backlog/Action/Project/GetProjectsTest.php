@@ -3,13 +3,13 @@
 namespace Tests\Fedot\Backlog\Action\Project;
 
 use Amp\Success;
+use Fedot\Backlog\Action\ActionInterface;
+use Fedot\Backlog\Action\Project\Get\GetProjects;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\ProjectsPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
-use Fedot\Backlog\Action\ActionInterface;
-use Fedot\Backlog\Action\Project\GetProjects;
 use Fedot\Backlog\WebSocket\Response;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use PHPUnit_Framework_MockObject_MockObject;

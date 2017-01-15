@@ -2,12 +2,12 @@
 namespace Tests\Fedot\Backlog\Action\Project;
 
 use Amp\Success;
+use Fedot\Backlog\Action\ActionInterface;
+use Fedot\Backlog\Action\Project\Create\CreateProjectPayload;
+use Fedot\Backlog\Action\Project\Create\ProjectCreate;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Payload\CreateProjectPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
-use Fedot\Backlog\Action\ActionInterface;
-use Fedot\Backlog\Action\Project\ProjectCreate;
 use Fedot\Backlog\WebSocket\Response;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;

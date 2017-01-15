@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
-namespace Fedot\Backlog\Action\Project;
+namespace Fedot\Backlog\Action\Project\GetAll;
 
 use Amp\Promisor;
+use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Payload\EmptyPayload;
 use Fedot\Backlog\Payload\ProjectsPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
-use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;

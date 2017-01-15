@@ -10,8 +10,8 @@ services:
   Fedot\Backlog\Action\MarkStoryAsCompleted: ~
   Fedot\Backlog\Action\GetStories: ~
 
-  Fedot\Backlog\Action\Project\GetProjects: ~
-  Fedot\Backlog\Action\Project\ProjectCreate: ~
+  Fedot\Backlog\Action\Project\GetAll\GetProjects: ~
+  Fedot\Backlog\Action\Project\Create\ProjectCreate: ~
   Fedot\Backlog\Action\Project\Share\ShareProject: ~
 
   Fedot\Backlog\Action\User\Registration: ~
