@@ -22,7 +22,7 @@
         "amphp/redis": "^0.2.5",
         "ramsey/uuid": "^3.4",
         "symfony/property-info": "^3.1",
-        "symfony/dependency-injection": "^3.2",
+        "symfony/dependency-injection": "3.3.x-dev",
         "symfony/yaml": "^3.2",
         "symfony/config": "^3.2",
         "symfony/console": "^3.2"
