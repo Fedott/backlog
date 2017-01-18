@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog;
 
-use Fedot\Backlog\Request\Processor\ProcessorInterface;
+use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Symfony\Component\Serializer\Serializer;
 
@@ -37,20 +37,20 @@ class SerializerService
     }
 
     /**
-     * @param ProcessorInterface $processor
+     * @param ActionInterface $action
      */
-    public function addPayloadTypeFromProcessor(ProcessorInterface $processor)
+    public function addPayloadTypeFromAction(ActionInterface $action)
     {
-        $this->addPayloadType($processor->getSupportedType(), $processor->getExpectedRequestPayload());
+        $this->addPayloadType($action->getSupportedType(), $action->getExpectedRequestPayload());
     }
 
     /**
-     * @param ProcessorInterface[] $processors
+     * @param ActionInterface[] $actions
      */
-    public function addAllPayloadTypesFromProcessors(array $processors)
+    public function addAllPayloadTypesFromActions(array $actions)
     {
-        foreach ($processors as $processor) {
-            $this->addPayloadTypeFromProcessor($processor);
+        foreach ($actions as $action) {
+            $this->addPayloadTypeFromAction($action);
         }
     }
 

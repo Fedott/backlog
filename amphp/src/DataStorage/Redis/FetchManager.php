@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 namespace Fedot\DataStorage\Redis;
 
 use Amp\Deferred;
@@ -73,7 +73,6 @@ class FetchManager implements FetchManagerInterface
         $promisor = new Deferred();
 
         \Amp\immediately(function () use ($promisor, $className, $ids) {
-
             $keys = array_map(function ($id) use ($className) {
                 return $this->keyGenerator->getKeyForClassNameId($className, $id);
             }, $ids);

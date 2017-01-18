@@ -9,7 +9,6 @@ use Fedot\DataStorage\FetchManagerInterface;
 use Fedot\DataStorage\PersistManagerInterface;
 use Fedot\DataStorage\RelationshipManagerInterface;
 
-
 class StoryRepository
 {
     /**
@@ -125,7 +124,7 @@ class StoryRepository
     {
         $promisor = new Deferred();
 
-        \Amp\immediately(function() use ($promisor, $story, $project) {
+        \Amp\immediately(function () use ($promisor, $story, $project) {
             yield $this->indexManager->removeOneToMany($project, $story);
 
             yield $this->persistManager->remove($story);
@@ -140,7 +139,7 @@ class StoryRepository
     {
         $promisor = new Deferred();
 
-        \Amp\immediately(function() use ($promisor, $projectId, $storyId) {
+        \Amp\immediately(function () use ($promisor, $projectId, $storyId) {
             $project = yield $this->projectRepository->get($projectId);
             $story = yield $this->get($storyId);
 
@@ -168,7 +167,7 @@ class StoryRepository
     {
         $promisor = new Deferred();
 
-        \Amp\immediately(function() use ($promisor, $projectId, $storyId, $positionStoryId) {
+        \Amp\immediately(function () use ($promisor, $projectId, $storyId, $positionStoryId) {
             $project = yield $this->projectRepository->get($projectId);
             $story = yield $this->get($storyId);
             $positionStory = yield $this->get($positionStoryId);

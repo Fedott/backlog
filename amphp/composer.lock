@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d79741b7346a38d34967344a08d868b7",
-    "content-hash": "fcaf649e56c85c37bc5c85bbe4f8e53c",
+    "hash": "5eb0fd2364b8005e899c3386b499c4e0",
+    "content-hash": "74284e2649900fb410ed09456cf3f315",
     "packages": [
         {
             "name": "amphp/aerys",
@@ -1147,16 +1147,16 @@
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v3.2.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "037054501c41007c93b6de1b5c7a7acb83523593"
+                "reference": "74b310dbf6a5e717e4c8aafcb2e1ba2eab116a52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/037054501c41007c93b6de1b5c7a7acb83523593",
-                "reference": "037054501c41007c93b6de1b5c7a7acb83523593",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/74b310dbf6a5e717e4c8aafcb2e1ba2eab116a52",
+                "reference": "74b310dbf6a5e717e4c8aafcb2e1ba2eab116a52",
                 "shasum": ""
             },
             "require": {
@@ -1179,7 +1179,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -1206,7 +1206,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2016-12-08 15:27:33"
+            "time": "2017-01-11 21:31:22"
         },
         {
             "name": "symfony/filesystem",
@@ -2962,7 +2962,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "amphp/aerys": 20
+        "amphp/aerys": 20,
+        "symfony/dependency-injection": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

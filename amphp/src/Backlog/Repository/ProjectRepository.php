@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
@@ -9,13 +9,12 @@ use Fedot\DataStorage\FetchManagerInterface;
 use Fedot\DataStorage\PersistManagerInterface;
 use Fedot\DataStorage\RelationshipManagerInterface;
 
-
 class ProjectRepository
 {
     /**
      * @var RelationshipManagerInterface
      */
-    protected $indexManager;
+    protected $relationshipManager;
 
     /**
      * @var PersistManagerInterface
@@ -32,26 +31,19 @@ class ProjectRepository
         PersistManagerInterface $persistManager,
         FetchManagerInterface $fetchManager
     ) {
-        $this->indexManager = $indexManager;
+        $this->relationshipManager = $indexManager;
         $this->persistManager = $persistManager;
         $this->fetchManager = $fetchManager;
     }
 
-    /**
-     * @param User $user
-     * @param Project $project
-     *
-     * @return Promise
-     * @yield bool
-     */
-    public function create(User $user, Project $project): Promise
+    public function create(User $user, Project $project): Promise /** @yield bool */
     {
         $promisor = new Deferred();
 
         \Amp\immediately(function () use ($promisor, $user, $project) {
             yield $this->persistManager->persist($project);
 
-            yield $this->indexManager->addOneToMany($user, $project);
+            yield $this->relationshipManager->addManyToMany($user, $project);
 
             $promisor->succeed(true);
         });
@@ -59,18 +51,12 @@ class ProjectRepository
         return $promisor->promise();
     }
 
-    /**
-     * @param User $user
-     *
-     * @return Promise
-     * @yield Project[]
-     */
-    public function getAllByUser(User $user): Promise
+    public function getAllByUser(User $user): Promise /** @yield Project[] */
     {
         $promisor = new Deferred();
 
         \Amp\immediately(function () use ($promisor, $user) {
-            $projectIds = yield $this->indexManager->getIdsOneToMany($user, Project::class);
+            $projectIds = yield $this->relationshipManager->getIdsManyToMany($user, Project::class);
 
             $projects = yield $this->fetchManager->fetchCollectionByIds(Project::class, $projectIds);
 
@@ -80,14 +66,13 @@ class ProjectRepository
         return $promisor->promise();
     }
 
-    /**
-     * @param string $id
-     *
-     * @return Promise
-     * @yield Project
-     */
-    public function get(string $id): Promise
+    public function get(string $id): Promise /** @yield Project */
     {
         return $this->fetchManager->fetchById(Project::class, $id);
+    }
+
+    public function addUser(Project $project, User $user): Promise /** @yield bool */
+    {
+        return $this->relationshipManager->addManyToMany($project, $user);
     }
 }

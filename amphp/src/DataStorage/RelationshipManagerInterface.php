@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Fedot\DataStorage;
 
@@ -19,6 +19,8 @@ interface RelationshipManagerInterface
     ): Promise;
 
     public function addManyToMany(Identifiable $modelFirst, Identifiable $modelSecond): Promise;
+
+    public function getIdsManyToMany(Identifiable $forModel, string $targetClassName): Promise;
 
     public function removeManyToMany(Identifiable $modelFirst, Identifiable $modelSecond): Promise;
 }

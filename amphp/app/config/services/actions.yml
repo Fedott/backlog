@@ -1,0 +1,21 @@
+services:
+  _defaults:
+    autowire: true
+    tags: [ backlog.action ]
+
+  Fedot\Backlog\Action\Story\Create\CreateStory: ~
+  Fedot\Backlog\Action\Story\Delete\DeleteStory: ~
+  Fedot\Backlog\Action\Story\Edit\EditStory: ~
+  Fedot\Backlog\Action\Story\Move\MoveStory: ~
+  Fedot\Backlog\Action\Story\MarkAsCompleted\MarkStoryAsCompleted: ~
+  Fedot\Backlog\Action\Story\GetAll\GetStories: ~
+
+  Fedot\Backlog\Action\Project\GetAll\ProjectsGetAll: ~
+  Fedot\Backlog\Action\Project\Create\ProjectCreate: ~
+  Fedot\Backlog\Action\Project\Share\ProjectShare: ~
+
+  Fedot\Backlog\Action\User\Registration\Registration: ~
+  Fedot\Backlog\Action\User\Login\LoginUsernamePassword: ~
+  Fedot\Backlog\Action\User\Login\LoginToken: ~
+
+  Fedot\Backlog\Action\Ping: ~

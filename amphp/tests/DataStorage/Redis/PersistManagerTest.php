@@ -9,9 +9,6 @@ use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Serializer\SerializerInterface;
 use Tests\Fedot\Backlog\BaseTestCase;
 use Tests\Fedot\DataStorage\Stubs\Identifiable;
-use \Fedot\DataStorage\Identifiable as IdentifiableInterface;
-use Tests\Fedot\DataStorage\Stubs\NotIdentifiable;
-use TypeError;
 
 class PersistManagerTest extends BaseTestCase
 {

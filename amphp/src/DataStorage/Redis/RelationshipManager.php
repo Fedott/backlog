@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 namespace Fedot\DataStorage\Redis;
 
 use Amp\Deferred;
@@ -51,7 +51,7 @@ class RelationshipManager implements RelationshipManagerInterface
     public function getIdsOneToMany(Identifiable $forModel, string $modelClassName): Promise
     {
         if (!is_subclass_of($modelClassName, Identifiable::class)) {
-            return new Failure(new TypeError("{$modelClassName} not implemented " . Identifiable::class));
+            return new Failure(new TypeError("{$modelClassName} not implemented ".Identifiable::class));
         }
 
         $indexName = $this->keyGenerator->getOneToManeIndexName($forModel, $modelClassName);
@@ -100,8 +100,7 @@ class RelationshipManager implements RelationshipManagerInterface
         Identifiable $forModel,
         Identifiable $model,
         Identifiable $positionModel
-    ): Promise
-    {
+    ): Promise {
         $indexName = $this->keyGenerator->getOneToManeIndexName($forModel, $model);
 
         return $this->moveValueOnIndex($indexName,
@@ -122,6 +121,11 @@ class RelationshipManager implements RelationshipManagerInterface
         });
 
         return $promisor->promise();
+    }
+
+    public function getIdsManyToMany(Identifiable $forModel, string $targetClassName): Promise
+    {
+        return $this->getIdsOneToMany($forModel, $targetClassName);
     }
 
     public function removeManyToMany(Identifiable $modelFirst, Identifiable $modelSecond): Promise

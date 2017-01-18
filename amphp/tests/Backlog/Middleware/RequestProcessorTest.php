@@ -2,8 +2,8 @@
 namespace Tests\Fedot\Backlog\Middleware;
 
 use Amp\Success;
-use Fedot\Backlog\Middleware\RequestProcessor;
-use Fedot\Backlog\Request\RequestProcessorManager;
+use Fedot\Backlog\Middleware\ActionProcessor;
+use Fedot\Backlog\Action\ActionManager;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\Response;
@@ -14,8 +14,8 @@ class RequestProcessorTest extends BaseTestCase
 {
     public function testWithoutNext()
     {
-        $requestProcessorManagerMock = $this->createMock(RequestProcessorManager::class);
-        $requestProcessor = new RequestProcessor($requestProcessorManagerMock);
+        $requestProcessorManagerMock = $this->createMock(ActionManager::class);
+        $requestProcessor = new ActionProcessor($requestProcessorManagerMock);
 
         $request = new Request(1, 'test', 3);
         $incomingResponse = new Response($request->getId(), $request->getClientId());
@@ -35,8 +35,8 @@ class RequestProcessorTest extends BaseTestCase
 
     public function testWithNext()
     {
-        $requestProcessorManagerMock = $this->createMock(RequestProcessorManager::class);
-        $requestProcessor = new RequestProcessor($requestProcessorManagerMock);
+        $requestProcessorManagerMock = $this->createMock(ActionManager::class);
+        $requestProcessor = new ActionProcessor($requestProcessorManagerMock);
 
         $request = new Request(1, 'test', 3);
         $incomingResponse = new Response($request->getId(), $request->getClientId());

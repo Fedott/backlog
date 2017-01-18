@@ -1,6 +1,6 @@
 imports:
     - { resource: parameters.php }
-    - { resource: services/processors.yml }
+    - { resource: services/actions.yml }
 
 parameters:
 
@@ -25,13 +25,13 @@ services:
       - { name: backlog.middleware, priority: 5 }
 
   backlog.middleware.request-processor:
-    class: Fedot\Backlog\Middleware\RequestProcessor
+    class: Fedot\Backlog\Middleware\ActionProcessor
     autowire: true
     tags:
       - { name: backlog.middleware, priority: 0 }
 
-  backlog.request.processor.manager:
-    class: Fedot\Backlog\Request\RequestProcessorManager
+  backlog.action.manager:
+    class: Fedot\Backlog\Action\ActionManager
 
   backlog.data-storage.redis.key-generator:
     class: Fedot\DataStorage\Redis\KeyGenerator
@@ -56,8 +56,12 @@ services:
   serializer:
     class: Symfony\Component\Serializer\Serializer
     arguments: ['', '']
+    autowiring_types:
+      - Symfony\Component\Serializer\Normalizer\NormalizerInterface
+      - Symfony\Component\Serializer\Normalizer\DenormalizerInterface
+      - Symfony\Component\Serializer\SerializerInterface
 
-  serializer.normolizer.object:
+  serializer.normalizer.object:
     class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
     arguments:
       - null
