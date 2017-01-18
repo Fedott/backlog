@@ -1,7 +1,8 @@
 import * as React from "react";
-import * as ReactMDL from 'react-mdl';
+import * as ReactMDL from "react-mdl";
 import {browserHistory} from "react-router";
-import webSocketClient from '../../libraries/WebSocket/WebSocketClient.js';
+import ShareDialog from "./Share/ShareDialog.jsx";
+import webSocketClient from "../../libraries/WebSocket/WebSocketClient.js";
 
 class ProjectView extends React.Component {
     static propTypes = {
@@ -15,6 +16,7 @@ class ProjectView extends React.Component {
 
         this.state = {
             project: props.project,
+            shareDialogOpen: false,
         };
 
         this.onChangeEdit = props.onChangeEdit || (() => {});
@@ -22,6 +24,7 @@ class ProjectView extends React.Component {
 
         this.onDelete = this.onDelete.bind(this);
         this.goToStoryList = this.goToStoryList.bind(this);
+        this.toggleShareDialog = this.toggleShareDialog.bind(this);
     }
 
     async onDelete() {
@@ -30,9 +33,15 @@ class ProjectView extends React.Component {
             payload: {projectId: this.state.project.id},
         });
 
-        if (response.type == 'project-deleted') {
+        if (response.type === 'project-deleted') {
             this.onDeleted();
         }
+    }
+
+    toggleShareDialog() {
+        this.setState({
+            shareDialogOpen: !this.state.shareDialogOpen
+        });
     }
 
     goToStoryList() {
@@ -63,10 +72,24 @@ class ProjectView extends React.Component {
                         ripple
                     >
                         <ReactMDL.MenuItem
+                            onClick={this.toggleShareDialog}
+                        >
+                            Пригласить пользователя
+                        </ReactMDL.MenuItem>
+                        <ReactMDL.MenuItem
                             onClick={this.onDelete}
-                        >Удалить</ReactMDL.MenuItem>
+                        >
+                            Удалить
+                        </ReactMDL.MenuItem>
                     </ReactMDL.Menu>
                 </ReactMDL.CardMenu>
+                {
+                    this.state.shareDialogOpen &&
+                    <ShareDialog
+                        onClose={this.toggleShareDialog}
+                        project={this.state.project}
+                    />
+                }
             </ReactMDL.Card>
         );
     }
