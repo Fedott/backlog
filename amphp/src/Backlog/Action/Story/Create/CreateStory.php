@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Action\Story\Create;
 
-use Amp\Promisor;
+use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Action\ErrorPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
@@ -74,6 +74,6 @@ class CreateStory extends AbstractAction
             $response = $response->withPayload((array) new ErrorPayload("Story id '{$story->id}' already exists"));
         }
 
-        $promisor->succeed($response);
+        $promisor->resolve($response);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Fedot\DataStorage;
 
-use Amp\Promise;
+use AsyncInterop\Promise;
 
 interface PersistManagerInterface
 {

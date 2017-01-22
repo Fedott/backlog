@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Action\Project\Create;
 
-use Amp\Promisor;
+use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Repository\ProjectRepository;
@@ -72,6 +72,6 @@ class ProjectCreate extends AbstractAction
         $response = $response->withType('project-created');
         $response = $response->withPayload($this->normalizer->normalize($project));
 
-        $promisor->succeed($response);
+        $promisor->resolve($response);
     }
 }

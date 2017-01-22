@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Action\Story\GetAll;
 
-use Amp\Promisor;
+use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
@@ -42,6 +42,6 @@ class GetStories extends AbstractAction
         $storiesPayload->stories = $stories;
         $response = $response->withPayload((array)$storiesPayload);
 
-        $promisor->succeed($response);
+        $promisor->resolve($response);
     }
 }

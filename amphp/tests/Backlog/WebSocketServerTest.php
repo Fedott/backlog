@@ -4,6 +4,9 @@ namespace Tests\Fedot\Backlog;
 use Aerys\Request;
 use Aerys\Response;
 use Aerys\Websocket\Endpoint;
+use Amp\Success;
+use function Amp\wrap;
+use AsyncInterop\Loop;
 use Fedot\Backlog\MessageProcessor;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Fedot\Backlog\WebSocketServer;
@@ -27,9 +30,14 @@ class WebSocketServerTest extends BaseTestCase
                 123,
                 'jj'
             )
+            ->willReturnCallback(function() {
+                yield new Success();
+            })
         ;
 
-        \Amp\resolve($webSocketServer->processMessage(123, "jj"));
+        Loop::execute(wrap(function () use ($webSocketServer) {
+            yield from $webSocketServer->processMessage(123, "jj");
+        }));
 
         $this->assertTrue(true);
     }

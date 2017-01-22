@@ -3,7 +3,6 @@ namespace Tests\Fedot\Backlog\Action;
 
 use Fedot\Backlog\Action\Ping;
 use Fedot\Backlog\Action\ActionInterface;
-use Fedot\Backlog\Response\ResponseSender;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\ActionTestCase;

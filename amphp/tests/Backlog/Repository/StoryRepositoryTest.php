@@ -2,7 +2,7 @@
 
 namespace Tests\Fedot\Backlog\Repository;
 
-use Amp\Promise;
+use AsyncInterop\Promise;
 use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;

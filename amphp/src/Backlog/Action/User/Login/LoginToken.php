@@ -2,7 +2,7 @@
 
 namespace Fedot\Backlog\Action\User\Login;
 
-use Amp\Promisor;
+use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
@@ -69,6 +69,6 @@ class LoginToken extends AbstractAction
             $response = $response->withPayload((array) $loginFailedPayload);
         }
 
-        $promisor->succeed($response);
+        $promisor->resolve($response);
     }
 }

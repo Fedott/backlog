@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Action\Project\GetAll;
 
-use Amp\Promisor;
+use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Action\EmptyPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
@@ -58,6 +58,6 @@ class ProjectsGetAll extends AbstractAction
         $response = $response->withType('projects');
         $response = $response->withPayload($this->normalizer->normalize($payload));
 
-        $promisor->succeed($response);
+        $promisor->resolve($response);
     }
 }

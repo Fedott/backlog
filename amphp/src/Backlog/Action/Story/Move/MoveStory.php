@@ -2,7 +2,7 @@
 
 namespace Fedot\Backlog\Action\Story\Move;
 
-use Amp\Promisor;
+use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Action\EmptyPayload;
 use Fedot\Backlog\Action\ErrorPayload;
@@ -54,6 +54,6 @@ class MoveStory extends AbstractAction
             $response = $response->withPayload((array)$errorPayload);
         }
 
-        $promisor->succeed($response);
+        $promisor->resolve($response);
     }
 }

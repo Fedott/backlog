@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Action\User\Login;
 
-use Amp\Promisor;
+use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
@@ -65,6 +65,6 @@ class LoginUsernamePassword extends AbstractAction
             $response = $response->withPayload((array) $newPayload);
         }
 
-        $promisor->succeed($response);
+        $promisor->resolve($response);
     }
 }
