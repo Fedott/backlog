@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dbff00ef622b6dae177faae85f27c1bc",
-    "content-hash": "fa882a10cba2ff077583f3056c12ec17",
+    "hash": "3054c58f6b604aa79676159bec325d76",
+    "content-hash": "e0c853e95e28071914f704c047e159dc",
     "packages": [
         {
             "name": "amphp/aerys",
@@ -449,13 +449,13 @@
             "version": "dev-amp_v2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Fedott/redis.git",
-                "reference": "2bd079c9d68dc7e0edbfa7d964808354237d6596"
+                "url": "https://github.com/amphp/redis.git",
+                "reference": "dd6867469dbd580f834f6f3abfa5b9d824478652"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Fedott/redis/zipball/2bd079c9d68dc7e0edbfa7d964808354237d6596",
-                "reference": "2bd079c9d68dc7e0edbfa7d964808354237d6596",
+                "url": "https://api.github.com/repos/amphp/redis/zipball/dd6867469dbd580f834f6f3abfa5b9d824478652",
+                "reference": "dd6867469dbd580f834f6f3abfa5b9d824478652",
                 "shasum": ""
             },
             "require": {
@@ -474,11 +474,7 @@
                     "Amp\\Redis\\": "lib"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Amp\\Redis\\": "test"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -498,11 +494,7 @@
                 "client",
                 "redis"
             ],
-            "support": {
-                "issues": "https://github.com/amphp/redis/issues",
-                "source": "https://github.com/Fedott/redis/tree/amp_v2"
-            },
-            "time": "2017-01-21 23:22:20"
+            "time": "2017-01-22 08:15:01"
         },
         {
             "name": "amphp/socket",
