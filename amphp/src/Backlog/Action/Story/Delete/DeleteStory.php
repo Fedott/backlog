@@ -3,6 +3,7 @@ namespace Fedot\Backlog\Action\Story\Delete;
 
 use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
+use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
@@ -14,9 +15,15 @@ class DeleteStory extends AbstractAction
      */
     protected $storyRepository;
 
-    public function __construct(StoryRepository $storyRepository)
+    /**
+     * @var ProjectRepository
+     */
+    protected $projectRepository;
+
+    public function __construct(StoryRepository $storyRepository, ProjectRepository $projectRepository)
     {
         $this->storyRepository = $storyRepository;
+        $this->projectRepository = $projectRepository;
     }
 
     /**
@@ -40,9 +47,12 @@ class DeleteStory extends AbstractAction
         /** @var DeleteStoryPayload $payload */
         $payload = $request->getAttribute('payloadObject');
 
-        $result = yield $this->storyRepository->deleteByIds(
-            $payload->projectId,
-            $payload->storyId
+        $project = yield $this->projectRepository->get($payload->projectId);
+        $story = yield $this->storyRepository->get($payload->storyId);
+
+        $result = yield $this->storyRepository->delete(
+            $project,
+            $story
         );
 
         if ($result) {

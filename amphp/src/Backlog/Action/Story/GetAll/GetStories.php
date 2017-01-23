@@ -3,6 +3,7 @@ namespace Fedot\Backlog\Action\Story\GetAll;
 
 use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
+use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
@@ -14,10 +15,17 @@ class GetStories extends AbstractAction
      */
     protected $storyRepository;
 
+    /**
+     * @var ProjectRepository
+     */
+    protected $projectRepository;
+
     public function __construct(
-        StoryRepository $storyRepository
+        StoryRepository $storyRepository,
+        ProjectRepository $projectRepository
     ) {
         $this->storyRepository = $storyRepository;
+        $this->projectRepository = $projectRepository;
     }
 
     public function getSupportedType(): string
@@ -34,8 +42,8 @@ class GetStories extends AbstractAction
     {
         /** @var ProjectIdPayload $payload */
         $payload = $request->getAttribute('payloadObject');
-        $projectId = $payload->projectId;
-        $stories = yield $this->storyRepository->getAllByProjectId($projectId);
+        $project = yield $this->projectRepository->get($payload->projectId);
+        $stories = yield $this->storyRepository->getAllByProject($project);
 
         $response = $response->withType('stories');
         $storiesPayload = new StoriesPayload();

@@ -6,6 +6,7 @@ use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Action\EmptyPayload;
 use Fedot\Backlog\Action\ErrorPayload;
+use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
@@ -17,9 +18,15 @@ class MoveStory extends AbstractAction
      */
     protected $storyRepository;
 
-    public function __construct(StoryRepository $storyRepository)
+    /**
+     * @var ProjectRepository
+     */
+    protected $projectRepository;
+
+    public function __construct(StoryRepository $storyRepository, ProjectRepository $projectRepository)
     {
         $this->storyRepository = $storyRepository;
+        $this->projectRepository = $projectRepository;
     }
 
     public function getSupportedType(): string
@@ -37,13 +44,17 @@ class MoveStory extends AbstractAction
         /** @var MoveStoryPayload $payload */
         $payload = $request->getAttribute('payloadObject');
 
-        $result = yield $this->storyRepository->moveByIds(
-            $payload->projectId,
-            $payload->storyId,
-            $payload->beforeStoryId
-        );
+        $project = yield $this->projectRepository->get($payload->projectId);
+        $story = yield $this->storyRepository->get($payload->storyId);
+        $positionStory = yield $this->storyRepository->get($payload->beforeStoryId);
 
-        if ($result === true) {
+        if ($project && $story && $positionStory) {
+            yield $this->storyRepository->move(
+                $project,
+                $story,
+                $positionStory
+            );
+
             $response = $response->withType('story-moved');
             $response = $response->withPayload((array) new EmptyPayload());
         } else {

@@ -45,21 +45,6 @@ class StoryRepository
         $this->projectRepository = $projectRepository;
     }
 
-    public function getAllByProjectId($projectId): Promise
-    {
-        $deferred = new Deferred;
-
-        Loop::defer(wrap(function () use ($deferred, $projectId) {
-            $project = yield $this->projectRepository->get($projectId);
-
-            $stories = yield $this->getAllByProject($project);
-
-            $deferred->resolve($stories);
-        }));
-
-        return $deferred->promise();
-    }
-
     /**
      * @param Project $project
      *
@@ -73,7 +58,11 @@ class StoryRepository
         Loop::defer(wrap(function () use ($deferred, $project) {
             $storiesIds = yield $this->indexManager->getIdsOneToMany($project, Story::class);
 
-            $stories = $this->fetchManager->fetchCollectionByIds(Story::class, $storiesIds);
+            if (!empty($storiesIds)) {
+                $stories = $this->fetchManager->fetchCollectionByIds(Story::class, $storiesIds);
+            } else {
+                $stories = [];
+            }
 
             $deferred->resolve($stories);
         }));
@@ -137,22 +126,6 @@ class StoryRepository
         return $promisor->promise();
     }
 
-    public function deleteByIds(string $projectId, string $storyId): Promise
-    {
-        $promisor = new Deferred();
-
-        Loop::defer(wrap(function () use ($promisor, $projectId, $storyId) {
-            $project = yield $this->projectRepository->get($projectId);
-            $story = yield $this->get($storyId);
-
-            $result = yield $this->delete($project, $story);
-
-            $promisor->resolve($result);
-        }));
-
-        return $promisor->promise();
-    }
-
     /**
      * @param Project $project
      * @param Story $story
@@ -163,23 +136,6 @@ class StoryRepository
     public function move(Project $project, Story $story, Story $positionStory): Promise
     {
         return $this->indexManager->moveValueOnOneToMany($project, $story, $positionStory);
-    }
-
-    public function moveByIds(string $projectId, string $storyId, string $positionStoryId): Promise
-    {
-        $promisor = new Deferred();
-
-        Loop::defer(wrap(function () use ($promisor, $projectId, $storyId, $positionStoryId) {
-            $project = yield $this->projectRepository->get($projectId);
-            $story = yield $this->get($storyId);
-            $positionStory = yield $this->get($positionStoryId);
-
-            $result = yield $this->move($project, $story, $positionStory);
-
-            $promisor->resolve($result);
-        }));
-
-        return $promisor->promise();
     }
 
     public function get(string $storyId): Promise

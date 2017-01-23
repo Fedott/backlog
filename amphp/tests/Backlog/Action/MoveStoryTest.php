@@ -6,14 +6,30 @@ use Amp\Success;
 use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\Action\Story\Move\MoveStory;
 use Fedot\Backlog\Action\Story\Move\MoveStoryPayload;
+use Fedot\Backlog\Model\Project;
+use Fedot\Backlog\Model\Story;
+use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\WebSocket\Response;
+use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Fedot\Backlog\ActionTestCase;
 
 class MoveStoryTest extends ActionTestCase
 {
+    /**
+     * @var ProjectRepository|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $projectRepositoryMock;
+
+    protected function initActionMocks()
+    {
+        parent::initActionMocks();
+
+        $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
+    }
+
     protected function getProcessorInstance(): ActionInterface
     {
-        $processor = new MoveStory($this->storyRepositoryMock);
+        $processor = new MoveStory($this->storyRepositoryMock, $this->projectRepositoryMock);
 
         return $processor;
     }
@@ -32,12 +48,28 @@ class MoveStoryTest extends ActionTestCase
         $payload->beforeStoryId = 'before-story-id';
         $payload->projectId = 'project-id';
 
+        $project = new Project('project-id', 'name');
+        $story = new Story();
+        $positionStory = new Story();
+
+        $this->projectRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with('project-id')
+            ->willReturn(new Success($project))
+        ;
+
+        $this->storyRepositoryMock->expects($this->exactly(2))
+            ->method('get')
+            ->withConsecutive(['target-story-id'], ['before-story-id'])
+            ->willReturnOnConsecutiveCalls(new Success($story), new Success($positionStory))
+        ;
+
         $request = $this->makeRequest(33, 432, 'move-story', $payload);
         $response = $this->makeResponse($request);
 
         $this->storyRepositoryMock->expects($this->once())
-            ->method('moveByIds')
-            ->with('project-id', 'target-story-id', 'before-story-id')
+            ->method('move')
+            ->with($project, $story, $positionStory)
             ->willReturn(new Success(true))
         ;
 
@@ -56,13 +88,27 @@ class MoveStoryTest extends ActionTestCase
         $payload->beforeStoryId = 'before-story-id';
         $payload->projectId = 'project-id';
 
+        $project = new Project('project-id', 'name');
+        $story = new Story();
+        $positionStory = new Story();
+
+        $this->projectRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with('project-id')
+            ->willReturn(new Success($project))
+        ;
+
+        $this->storyRepositoryMock->expects($this->exactly(2))
+            ->method('get')
+            ->withConsecutive(['target-story-id'], ['before-story-id'])
+            ->willReturnOnConsecutiveCalls(new Success(null), new Success(null))
+        ;
+
         $request = $this->makeRequest(33, 432, 'move-story', $payload);
         $response = $this->makeResponse($request);
 
-        $this->storyRepositoryMock->expects($this->once())
-            ->method('moveByIds')
-            ->with('project-id', 'target-story-id', 'before-story-id')
-            ->willReturn(new Success(false))
+        $this->storyRepositoryMock->expects($this->never())
+            ->method('move')
         ;
 
         /** @var Response $response */

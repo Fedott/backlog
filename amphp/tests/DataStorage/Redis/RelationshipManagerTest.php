@@ -35,6 +35,12 @@ class RelationshipManagerTest extends BaseTestCase
         $model = new Identifiable('test-id');
 
         $this->redisClientMock->expects($this->once())
+            ->method('lRem')
+            ->with('index:tests_fedot_datastorage_stubs_identifiable:for-id:tests_fedot_datastorage_stubs_identifiable', 'test-id', 0)
+            ->willReturn(new Success(1))
+        ;
+
+        $this->redisClientMock->expects($this->once())
             ->method('lPush')
             ->with('index:tests_fedot_datastorage_stubs_identifiable:for-id:tests_fedot_datastorage_stubs_identifiable', 'test-id')
             ->willReturn(new Success(1))
@@ -42,7 +48,7 @@ class RelationshipManagerTest extends BaseTestCase
 
         $result = \Amp\wait($instance->addOneToMany($forModel, $model));
 
-        $this->assertSame(1, $result);
+        $this->assertTrue($result);
     }
 
     public function testGetIdsOneToMany()
@@ -190,6 +196,18 @@ class RelationshipManagerTest extends BaseTestCase
 
         $indexName1 = "index:tests_fedot_datastorage_stubs_identifiable:entity-1:tests_fedot_datastorage_stubs_anotheridentifiable";
         $indexName2 = "index:tests_fedot_datastorage_stubs_anotheridentifiable:entity-2:tests_fedot_datastorage_stubs_identifiable";
+
+        $this->redisClientMock->expects($this->exactly(2))
+            ->method('lRem')
+            ->withConsecutive(
+                [$indexName1, 'entity-2', 0],
+                [$indexName2, 'entity-1', 0]
+            )
+            ->willReturnOnConsecutiveCalls(
+                new Success(1),
+                new Success(1)
+            )
+        ;
 
         $this->redisClientMock->expects($this->exactly(2))
             ->method('lPush')

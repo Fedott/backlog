@@ -31,7 +31,17 @@ class RelationshipManager implements RelationshipManagerInterface
 
     private function addToIndex(string $indexName, string $id): Promise
     {
-        return $this->redisClient->lPush($indexName, $id);
+        $promisor = new Deferred();
+
+        Loop::defer(wrap(function () use ($promisor, $id, $indexName) {
+            yield $this->redisClient->lRem($indexName, $id, 0);
+
+            yield $this->redisClient->lPush($indexName, $id);
+
+            $promisor->resolve(true);
+        }));
+
+        return $promisor->promise();
     }
 
     private function getIdsFromIndex(string $indexName): Promise
@@ -116,8 +126,8 @@ class RelationshipManager implements RelationshipManagerInterface
         $promisor = new Deferred();
 
         Loop::defer(wrap(function () use ($promisor, $modelFirst, $modelSecond) {
-            yield $this->redisClient->lPush($this->keyGenerator->getOneToManeIndexName($modelFirst, $modelSecond), $modelSecond->getId());
-            yield $this->redisClient->lPush($this->keyGenerator->getOneToManeIndexName($modelSecond, $modelFirst), $modelFirst->getId());
+            yield $this->addOneToMany($modelFirst, $modelSecond);
+            yield $this->addOneToMany($modelSecond, $modelFirst);
 
             $promisor->resolve(true);
         }));

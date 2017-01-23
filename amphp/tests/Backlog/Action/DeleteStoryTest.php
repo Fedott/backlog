@@ -5,15 +5,31 @@ use Amp\Success;
 use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\Action\Story\Delete\DeleteStory;
 use Fedot\Backlog\Action\Story\Delete\DeleteStoryPayload;
+use Fedot\Backlog\Model\Project;
+use Fedot\Backlog\Model\Story;
+use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
+use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Fedot\Backlog\ActionTestCase;
 
 class DeleteStoryTest extends ActionTestCase
 {
+    /**
+     * @var ProjectRepository|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $projectRepositoryMock;
+
+    protected function initActionMocks()
+    {
+        parent::initActionMocks();
+
+        $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
+    }
+
     protected function getProcessorInstance(): ActionInterface
     {
-        $processor = new DeleteStory($this->storyRepositoryMock);
+        $processor = new DeleteStory($this->storyRepositoryMock, $this->projectRepositoryMock);
 
         return $processor;
     }
@@ -31,11 +47,25 @@ class DeleteStoryTest extends ActionTestCase
         $deleteStoryPayload->storyId = 'story-id';
         $deleteStoryPayload->projectId = 'project-id';
 
+        $project = new Project('project-id', 'name');
+        $story = new Story();
+
+        $this->projectRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with('project-id')
+            ->willReturn(new Success($project))
+        ;
+
         $this->storyRepositoryMock->expects($this->once())
-            ->method('deleteByIds')
+            ->method('get')
+            ->with('story-id')
+            ->willReturn(new Success($story))
+        ;
+
+        $this->storyRepositoryMock->expects($this->once())
+            ->method('delete')
             ->with(
-                $this->equalTo('project-id'),
-                $this->equalTo('story-id')
+                $project, $story
             )
             ->willReturn(new Success(true))
         ;
