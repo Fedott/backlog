@@ -2,7 +2,9 @@
 namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
-use Amp\Promise;
+use function Amp\wrap;
+use AsyncInterop\Loop;
+use AsyncInterop\Promise;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\DataStorage\FetchManagerInterface;
@@ -47,13 +49,13 @@ class StoryRepository
     {
         $deferred = new Deferred;
 
-        \Amp\immediately(function () use ($deferred, $projectId) {
+        Loop::defer(wrap(function () use ($deferred, $projectId) {
             $project = yield $this->projectRepository->get($projectId);
 
             $stories = yield $this->getAllByProject($project);
 
-            $deferred->succeed($stories);
-        });
+            $deferred->resolve($stories);
+        }));
 
         return $deferred->promise();
     }
@@ -68,13 +70,13 @@ class StoryRepository
     {
         $deferred = new Deferred;
 
-        \Amp\immediately(function () use ($deferred, $project) {
+        Loop::defer(wrap(function () use ($deferred, $project) {
             $storiesIds = yield $this->indexManager->getIdsOneToMany($project, Story::class);
 
             $stories = $this->fetchManager->fetchCollectionByIds(Story::class, $storiesIds);
 
-            $deferred->succeed($stories);
-        });
+            $deferred->resolve($stories);
+        }));
 
         return $deferred->promise();
     }
@@ -89,17 +91,17 @@ class StoryRepository
     {
         $promisor = new Deferred();
 
-        \Amp\immediately(function () use ($promisor, $story, $project) {
+        Loop::defer(wrap(function () use ($promisor, $story, $project) {
             $created = yield $this->persistManager->persist($story);
 
             if ($created) {
                 yield $this->indexManager->addOneToMany($project, $story);
 
-                $promisor->succeed(true);
+                $promisor->resolve(true);
             } else {
-                $promisor->succeed(false);
+                $promisor->resolve(false);
             }
-        });
+        }));
 
         return $promisor->promise();
     }
@@ -124,13 +126,13 @@ class StoryRepository
     {
         $promisor = new Deferred();
 
-        \Amp\immediately(function () use ($promisor, $story, $project) {
+        Loop::defer(wrap(function () use ($promisor, $story, $project) {
             yield $this->indexManager->removeOneToMany($project, $story);
 
             yield $this->persistManager->remove($story);
 
-            $promisor->succeed(true);
-        });
+            $promisor->resolve(true);
+        }));
 
         return $promisor->promise();
     }
@@ -139,14 +141,14 @@ class StoryRepository
     {
         $promisor = new Deferred();
 
-        \Amp\immediately(function () use ($promisor, $projectId, $storyId) {
+        Loop::defer(wrap(function () use ($promisor, $projectId, $storyId) {
             $project = yield $this->projectRepository->get($projectId);
             $story = yield $this->get($storyId);
 
             $result = yield $this->delete($project, $story);
 
-            $promisor->succeed($result);
-        });
+            $promisor->resolve($result);
+        }));
 
         return $promisor->promise();
     }
@@ -167,15 +169,15 @@ class StoryRepository
     {
         $promisor = new Deferred();
 
-        \Amp\immediately(function () use ($promisor, $projectId, $storyId, $positionStoryId) {
+        Loop::defer(wrap(function () use ($promisor, $projectId, $storyId, $positionStoryId) {
             $project = yield $this->projectRepository->get($projectId);
             $story = yield $this->get($storyId);
             $positionStory = yield $this->get($positionStoryId);
 
             $result = yield $this->move($project, $story, $positionStory);
 
-            $promisor->succeed($result);
-        });
+            $promisor->resolve($result);
+        }));
 
         return $promisor->promise();
     }

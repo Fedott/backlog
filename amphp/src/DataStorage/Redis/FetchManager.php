@@ -3,7 +3,9 @@ namespace Fedot\DataStorage\Redis;
 
 use Amp\Deferred;
 use Amp\Failure;
-use Amp\Promise;
+use function Amp\wrap;
+use AsyncInterop\Loop;
+use AsyncInterop\Promise;
 use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\DataStorage\FetchManagerInterface;
@@ -43,7 +45,7 @@ class FetchManager implements FetchManagerInterface
 
         $promisor = new Deferred();
 
-        \Amp\immediately(function () use ($promisor, $className, $id) {
+        Loop::defer(wrap(function () use ($promisor, $className, $id) {
             $key = $this->keyGenerator->getKeyForClassNameId($className, $id);
 
             $data = yield $this->redisClient->get($key);
@@ -54,8 +56,8 @@ class FetchManager implements FetchManagerInterface
                 $result = $this->serializer->deserialize($data, $className, 'json');
             }
 
-            $promisor->succeed($result);
-        });
+            $promisor->resolve($result);
+        }));
 
         return $promisor->promise();
     }
@@ -72,7 +74,7 @@ class FetchManager implements FetchManagerInterface
 
         $promisor = new Deferred();
 
-        \Amp\immediately(function () use ($promisor, $className, $ids) {
+        Loop::defer(wrap(function () use ($promisor, $className, $ids) {
             $keys = array_map(function ($id) use ($className) {
                 return $this->keyGenerator->getKeyForClassNameId($className, $id);
             }, $ids);
@@ -83,8 +85,8 @@ class FetchManager implements FetchManagerInterface
                 return $this->serializer->deserialize($rawModel, $className, 'json');
             }, $rawModels);
 
-            $promisor->succeed($models);
-        });
+            $promisor->resolve($models);
+        }));
 
         return $promisor->promise();
     }

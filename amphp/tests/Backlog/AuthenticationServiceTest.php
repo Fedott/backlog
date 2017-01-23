@@ -90,6 +90,11 @@ class AuthenticationServiceTest extends BaseTestCase
     {
         $service = $this->getServiceInstance();
 
+        $this->redisClientMock->expects($this->once())
+            ->method('get')
+            ->with('entity:fedot_backlog_model_user:notFound')
+            ->willReturn(new Success(null))
+        ;
         $this->redisClientMock->expects($this->never())
             ->method('set')
         ;
@@ -104,6 +109,22 @@ class AuthenticationServiceTest extends BaseTestCase
     {
         $service = $this->getServiceInstance();
 
+        $user = new User();
+        $user->username = 'testUser';
+        $user->password = '$2y$10$kEYXDhRhNmS1mk226hurv.i23tmnFXuqa1LCMG7UoyhZ3nF/PK7a2';
+
+        $this->serializer->expects($this->once())
+            ->method('deserialize')
+            ->with('user-json', User::class, 'json')
+            ->willReturn($user)
+        ;
+
+        $this->redisClientMock->expects($this->once())
+            ->method('get')
+            ->with('entity:fedot_backlog_model_user:testUser')
+            ->willReturn(new Success('user-json'))
+        ;
+
         $this->redisClientMock->expects($this->never())
             ->method('set')
         ;
@@ -117,6 +138,22 @@ class AuthenticationServiceTest extends BaseTestCase
     public function testAuthByUsernamePasswordTokenAlready()
     {
         $service = $this->getServiceInstance();
+
+        $user = new User();
+        $user->username = 'testUser';
+        $user->password = '$2y$10$kEYXDhRhNmS1mk226hurv.i23tmnFXuqa1LCMG7UoyhZ3nF/PK7a2';
+
+        $this->serializer->expects($this->once())
+            ->method('deserialize')
+            ->with('user-json', User::class, 'json')
+            ->willReturn($user)
+        ;
+
+        $this->redisClientMock->expects($this->once())
+            ->method('get')
+            ->with('entity:fedot_backlog_model_user:testUser')
+            ->willReturn(new Success('user-json'))
+        ;
 
         $this->redisClientMock->expects($this->exactly(2))
             ->method('set')

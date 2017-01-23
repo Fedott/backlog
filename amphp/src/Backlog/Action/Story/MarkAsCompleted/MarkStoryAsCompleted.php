@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Action\Story\MarkAsCompleted;
 
-use Amp\Promisor;
+use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Action\ErrorPayload;
 use Fedot\Backlog\Model\Story;
@@ -39,7 +39,7 @@ class MarkStoryAsCompleted extends AbstractAction
             $response = $response->withPayload((array) $errorPayload);
         }
 
-        $promisor->succeed($response);
+        $promisor->resolve($response);
     }
 
     public function getSupportedType(): string

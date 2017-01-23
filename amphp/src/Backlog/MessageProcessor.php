@@ -3,6 +3,7 @@
 namespace Fedot\Backlog;
 
 use Aerys\Websocket\Endpoint;
+use Amp\Success;
 use Fedot\Backlog\Infrastructure\Middleware\RunnerFactory;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
@@ -55,6 +56,6 @@ class MessageProcessor
             $endpoint->send($clientId, json_encode($response));
         }
 
-        yield;
+        yield new Success();
     }
 }

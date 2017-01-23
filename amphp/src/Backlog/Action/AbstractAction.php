@@ -2,8 +2,10 @@
 namespace Fedot\Backlog\Action;
 
 use Amp\Deferred;
-use Amp\Promise;
-use Amp\Promisor;
+use function Amp\wrap;
+use AsyncInterop\Loop;
+use AsyncInterop\Promise;
+use Amp\Deferred as Promisor;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 
@@ -11,16 +13,17 @@ abstract class AbstractAction implements ActionInterface
 {
     abstract protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response);
 
-    /**
-     * @inheritdoc
-     */
     public function process(RequestInterface $request, ResponseInterface $response): Promise
     {
         $promisor = new Deferred();
 
-        \Amp\immediately(function () use ($promisor, $request, $response) {
-            yield from $this->execute($promisor, $request, $response);
-        });
+        Loop::defer(wrap(function () use ($promisor, $request, $response) {
+            $generator = $this->execute($promisor, $request, $response);
+
+            if (null !== $generator) {
+                yield from $generator;
+            }
+        }));
 
         return $promisor->promise();
     }

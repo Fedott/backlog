@@ -3,7 +3,9 @@ namespace Fedot\DataStorage\Redis;
 
 use Amp\Deferred;
 use Amp\Failure;
-use Amp\Promise;
+use function Amp\wrap;
+use AsyncInterop\Loop;
+use AsyncInterop\Promise;
 use Amp\Redis\Client;
 use Fedot\DataStorage\Identifiable;
 use Fedot\DataStorage\RelationshipManagerInterface;
@@ -75,7 +77,7 @@ class RelationshipManager implements RelationshipManagerInterface
     {
         $promisor = new Deferred();
 
-        \Amp\immediately(function () use ($promisor, $targetId, $positionId, $indexName) {
+        Loop::defer(wrap(function () use ($promisor, $targetId, $positionId, $indexName) {
             yield $this->redisClient->lRem($indexName, $targetId, 0);
             $insertResult = yield $this->redisClient->lInsert(
                 $indexName,
@@ -85,13 +87,13 @@ class RelationshipManager implements RelationshipManagerInterface
             );
 
             if ($insertResult !== -1) {
-                $promisor->succeed(true);
+                $promisor->resolve(true);
             } else {
                 yield $this->redisClient->lPush($indexName, $targetId);
 
-                $promisor->succeed(false);
+                $promisor->resolve(false);
             }
-        });
+        }));
 
         return $promisor->promise();
     }
@@ -113,12 +115,12 @@ class RelationshipManager implements RelationshipManagerInterface
     {
         $promisor = new Deferred();
 
-        \Amp\immediately(function () use ($promisor, $modelFirst, $modelSecond) {
+        Loop::defer(wrap(function () use ($promisor, $modelFirst, $modelSecond) {
             yield $this->redisClient->lPush($this->keyGenerator->getOneToManeIndexName($modelFirst, $modelSecond), $modelSecond->getId());
             yield $this->redisClient->lPush($this->keyGenerator->getOneToManeIndexName($modelSecond, $modelFirst), $modelFirst->getId());
 
-            $promisor->succeed(true);
-        });
+            $promisor->resolve(true);
+        }));
 
         return $promisor->promise();
     }
@@ -132,12 +134,12 @@ class RelationshipManager implements RelationshipManagerInterface
     {
         $promisor = new Deferred();
 
-        \Amp\immediately(function () use ($promisor, $modelFirst, $modelSecond) {
+        Loop::defer(wrap(function () use ($promisor, $modelFirst, $modelSecond) {
             yield $this->redisClient->lRem($this->keyGenerator->getOneToManeIndexName($modelFirst, $modelSecond), $modelSecond->getId());
             yield $this->redisClient->lRem($this->keyGenerator->getOneToManeIndexName($modelSecond, $modelFirst), $modelFirst->getId());
 
-            $promisor->succeed(true);
-        });
+            $promisor->resolve(true);
+        }));
 
         return $promisor->promise();
     }

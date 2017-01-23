@@ -4,6 +4,8 @@ namespace Tests\Fedot\Backlog;
 
 use Aerys\Websocket\Endpoint;
 use Amp\Success;
+use function Amp\wrap;
+use AsyncInterop\Loop;
 use Fedot\Backlog\Infrastructure\Middleware\Runner;
 use Fedot\Backlog\Infrastructure\Middleware\RunnerFactory;
 use Fedot\Backlog\MessageProcessor;
@@ -57,9 +59,9 @@ class MessageProcessorTest extends BaseTestCase
             ->with(123, '{"requestId":1,"type":"test-response","payload":[]}')
         ;
 
-        \Amp\run(function () use ($webSocketServer, $endpointMock) {
+        Loop::execute(wrap(function () use ($webSocketServer, $endpointMock) {
             yield from $webSocketServer->processMessage($endpointMock, 123, "jj");
-        });
+        }));
     }
 
     public function testProcessMessageNotDirectResponse()
@@ -111,9 +113,9 @@ class MessageProcessorTest extends BaseTestCase
             ->with(null, '{"requestId":1,"type":"test-response","payload":[]}')
         ;
 
-        \Amp\run(function () use ($webSocketServer, $endpointMock) {
+        Loop::execute(wrap(function () use ($webSocketServer, $endpointMock) {
             yield from $webSocketServer->processMessage($endpointMock, 123, "jj");
-        });
+        }));
     }
 
     public function testProcessMessageException()
@@ -158,8 +160,8 @@ class MessageProcessorTest extends BaseTestCase
             ->with(123, '{"requestId":1,"type":"internal-server-error","payload":{"message":"Atata"}}')
         ;
 
-        \Amp\run(function () use ($webSocketServer, $endpointMock) {
+        Loop::execute(wrap(function () use ($webSocketServer, $endpointMock) {
             yield from $webSocketServer->processMessage($endpointMock, 123, "jj");
-        });
+        }));
     }
 }

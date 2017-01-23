@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Action;
 
-use Amp\Promise;
+use AsyncInterop\Promise;
 use Amp\Success;
-use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 

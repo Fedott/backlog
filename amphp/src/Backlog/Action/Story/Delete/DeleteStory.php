@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Action\Story\Delete;
 
-use Amp\Promisor;
+use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
@@ -49,6 +49,6 @@ class DeleteStory extends AbstractAction
             $response = $response->withType('story-deleted');
         }
 
-        $promisor->succeed($response);
+        $promisor->resolve($response);
     }
 }

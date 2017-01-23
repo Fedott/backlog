@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\DataStorage\Redis;
 
-use Amp\Promise;
+use AsyncInterop\Promise;
 use Amp\Redis\Client;
 use Fedot\DataStorage\Identifiable;
 use Fedot\DataStorage\PersistManagerInterface;
