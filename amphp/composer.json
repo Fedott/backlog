@@ -15,7 +15,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^7",
+        "php": "^7.1",
         "amphp/aerys": "dev-amp_v2",
         "amphp/redis": "dev-amp_v2",
         "amphp/loop": "dev-master",
