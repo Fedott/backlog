@@ -53,4 +53,9 @@ class RequirementRepository
 
         return $promisor->promise();
     }
+
+    public function save(Requirement $requirement): Promise /** @yield bool */
+    {
+        return $this->persistManager->persist($requirement, true);
+    }
 }

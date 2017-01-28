@@ -70,4 +70,19 @@ class RequirementRepositoryTest extends BaseTestCase
 
         $this->assertTrue($result);
     }
+
+    public function testSave()
+    {
+        $requirement = new Requirement('id', 'text');
+
+        $this->persistManagerInterfaceMock->expects($this->once())
+            ->method('persist')
+            ->with($requirement, true)
+            ->willReturn(new Success(true))
+        ;
+
+        $result = wait($this->repository->save($requirement));
+
+        $this->assertTrue($result);
+    }
 }
