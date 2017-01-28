@@ -2,12 +2,12 @@
 namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
-use function Amp\wrap;
 use AsyncInterop\Loop;
 use AsyncInterop\Promise;
 use Fedot\Backlog\Model\User;
 use Fedot\DataStorage\FetchManagerInterface;
 use Fedot\DataStorage\PersistManagerInterface;
+use function Amp\wrap;
 
 class UserRepository
 {

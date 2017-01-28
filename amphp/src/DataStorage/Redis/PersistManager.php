@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 namespace Fedot\DataStorage\Redis;
 
-use AsyncInterop\Promise;
 use Amp\Redis\Client;
+use AsyncInterop\Promise;
 use Fedot\DataStorage\Identifiable;
 use Fedot\DataStorage\PersistManagerInterface;
 use Symfony\Component\Serializer\SerializerInterface;

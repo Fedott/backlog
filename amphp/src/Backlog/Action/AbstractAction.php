@@ -2,12 +2,12 @@
 namespace Fedot\Backlog\Action;
 
 use Amp\Deferred;
-use function Amp\wrap;
+use Amp\Deferred as Promisor;
 use AsyncInterop\Loop;
 use AsyncInterop\Promise;
-use Amp\Deferred as Promisor;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
+use function Amp\wrap;
 
 abstract class AbstractAction implements ActionInterface
 {

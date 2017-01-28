@@ -2,13 +2,13 @@
 namespace Fedot\Backlog\Middleware;
 
 use Amp\Deferred;
-use function Amp\wrap;
 use AsyncInterop\Loop;
 use AsyncInterop\Promise;
-use Fedot\Backlog\Infrastructure\Middleware\MiddlewareInterface;
 use Fedot\Backlog\Action\ActionManager;
+use Fedot\Backlog\Infrastructure\Middleware\MiddlewareInterface;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
+use function Amp\wrap;
 
 class ActionProcessor implements MiddlewareInterface
 {
