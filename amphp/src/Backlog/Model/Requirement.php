@@ -16,6 +16,11 @@ class Requirement implements Identifiable
      */
     private $text;
 
+    /**
+     * @var bool
+     */
+    private $isCompleted = false;
+
     public function __construct(string $id, string $text)
     {
         $this->id = $id;
@@ -35,5 +40,15 @@ class Requirement implements Identifiable
     public function edit(string $text): void
     {
         $this->text = $text;
+    }
+
+    public function isCompleted()
+    {
+        return $this->isCompleted;
+    }
+
+    public function complete(): void
+    {
+        $this->isCompleted = true;
     }
 }

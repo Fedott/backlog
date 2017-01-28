@@ -15,10 +15,16 @@ class RequirementTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('id', $requirement->getId());
         $this->assertEquals('text', $requirement->getText());
+        $this->assertFalse($requirement->isCompleted());
 
         $requirement->edit('new text');
 
         $this->assertEquals('id', $requirement->getId());
         $this->assertEquals('new text', $requirement->getText());
+        $this->assertFalse($requirement->isCompleted());
+
+        $requirement->complete();
+
+        $this->assertTrue($requirement->isCompleted());
     }
 }
