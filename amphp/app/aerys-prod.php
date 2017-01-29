@@ -37,7 +37,7 @@ $http = (new Host())
         '/etc/letsencrypt/live/new-backlog.fedot.name/fullchain.pem',
         '/etc/letsencrypt/live/new-backlog.fedot.name/privkey.pem'
     )
-    ->use($router
+    ->use($router)
     ->use($root)
     ->use($reWriter)
 ;
