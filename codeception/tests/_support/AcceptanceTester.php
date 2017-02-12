@@ -37,7 +37,7 @@ class AcceptanceTester extends \Codeception\Actor
         $I->click('#login-button');
         $I->fillField('#login-dialog-username', 'testUser');
         $I->fillField('#login-dialog-password', 'testPassword');
-        $I->click('Войти', '#login-dialog');
+        $I->click('Войти', '.login-dialog');
         $I->waitForText('Привет, testUser');
     }
 }
