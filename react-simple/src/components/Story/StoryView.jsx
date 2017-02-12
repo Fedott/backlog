@@ -1,5 +1,12 @@
 import * as React from "react";
-import * as ReactMDL from 'react-mdl';
+import {
+    Card,
+    CardActions,
+    CardText,
+    CardTitle,
+    FlatButton,
+    Divider
+} from 'material-ui';
 import nl2br from 'react-nl2br';
 import webSocketClient from '../../libraries/WebSocket/WebSocketClient.js';
 
@@ -48,14 +55,14 @@ class StoryView extends React.Component {
             }
         });
 
-        if (response.type != 'error') {
+        if (response.type !== 'error') {
             this.state.story.isCompleted = true;
             this.props.onCompleted(this.state.story);
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (undefined != nextProps.isDragging || undefined != nextProps.isOver ) {
+        if (undefined !== nextProps.isDragging || undefined !== nextProps.isOver ) {
             this.setState({
                 isDragging: nextProps.isDragging,
             });
@@ -67,40 +74,23 @@ class StoryView extends React.Component {
         if (this.state.isDragging) {
             style = {opacity: 0.1}
         }
+
         return (
-            <ReactMDL.Card shadow={this.state.isDragging ? 7 : 2} className="backlog-story" style={style}>
-                <ReactMDL.CardTitle expand className="backlog-story-title">
-                    {this.state.story.title}
-                </ReactMDL.CardTitle>
-                <ReactMDL.CardText>
+            <Card className="backlog-story" style={style}>
+                <CardTitle title={this.state.story.title} className="backlog-story-title"/>
+                <CardText>
                     {nl2br(this.state.story.text)}
-                </ReactMDL.CardText>
-
-                <ReactMDL.CardActions border>
-                    <ReactMDL.Button onClick={this.onChangeEdit}>
-                        Редактировать
-                    </ReactMDL.Button>
-                    <ReactMDL.Button>
-                        Требования
-                    </ReactMDL.Button>
-                    <ReactMDL.Button onClick={this.onMarkAsCompleted}>
-                        Пометить готовой
-                    </ReactMDL.Button>
-                </ReactMDL.CardActions>
-
-                <ReactMDL.CardMenu>
-                    <ReactMDL.IconButton name='more_vert' id={"card-story-menu" + this.state.story.id} />
-                    <ReactMDL.Menu
-                        target={"card-story-menu" + this.state.story.id}
-                        align="right"
-                        ripple
-                    >
-                        <ReactMDL.MenuItem
-                            onClick={this.onDelete}
-                        >Удалить</ReactMDL.MenuItem>
-                    </ReactMDL.Menu>
-                </ReactMDL.CardMenu>
-            </ReactMDL.Card>
+                </CardText>
+                <Divider />
+                <CardActions showExpandableButton={true}>
+                    <FlatButton label="Редактировать" onTouchTap={this.onChangeEdit} />
+                    <FlatButton label="Требования" />
+                    <FlatButton label="Пометить готовой" onTouchTap={this.onMarkAsCompleted} />
+                </CardActions>
+                <CardActions expandable={true}>
+                    <FlatButton label="Удалить" onTouchTap={this.onDelete} />
+                </CardActions>
+            </Card>
         );
     }
 }

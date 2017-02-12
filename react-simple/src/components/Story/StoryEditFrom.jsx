@@ -1,6 +1,15 @@
 import * as React from "react";
-import * as ReactMDL from 'react-mdl';
-import TextareaAutosize from 'react-autosize-textarea';
+import {
+    Card,
+    CardActions,
+    CardText,
+    CardTitle,
+    FlatButton,
+    Divider,
+    TextField,
+    LinearProgress
+} from 'material-ui';
+
 import webSocketClient from './../../libraries/WebSocket/WebSocketClient';
 
 class StoryEditFrom extends React.Component {
@@ -43,7 +52,7 @@ class StoryEditFrom extends React.Component {
     }
 
     async onSave() {
-        if (this.state.status == 'saving') {
+        if (this.state.status === 'saving') {
             return;
         }
 
@@ -59,7 +68,7 @@ class StoryEditFrom extends React.Component {
             } : this.state.story,
         });
 
-        if (response.type != 'error') {
+        if (response.type !== 'error') {
             this.setState({
                 status: 'editing',
                 isCreateForm: false,
@@ -80,48 +89,46 @@ class StoryEditFrom extends React.Component {
         let editIsLocked = false;
         let progressBar = null;
 
-        if (this.state.status == 'saving') {
-            progressBar = <ReactMDL.ProgressBar indeterminate style={{width: "100%"}}/>;
+        if (this.state.status === 'saving') {
+            progressBar = <LinearProgress mode="indeterminate" />;
             editIsLocked = true;
         }
 
-        return (
-            <ReactMDL.Card shadow={2} className="backlog-story mdl-cell mdl-cell--12-col">
-                <ReactMDL.CardTitle expand className="backlog-story-title">
-                    <input
-                        type="text"
-                        value={this.state.story.title}
-                        placeholder="Title"
-                        onChange={this.onChangeTitle}
-                        disabled={editIsLocked}
-                    />
-                </ReactMDL.CardTitle>
-                <ReactMDL.CardText>
-                    <TextareaAutosize
-                        rows="3"
-                        value={this.state.story.text}
-                        placeholder="Text"
-                        onChange={this.onChangeText}
-                        disabled={editIsLocked}
-                    />
-                </ReactMDL.CardText>
-                {progressBar}
+        const titleField = <TextField
+            id={"backlog-story-edit-title"}
+            value={this.state.story.title}
+            hintText={"Title"}
+            onChange={this.onChangeTitle}
+            disabled={editIsLocked}
+            style={{
+                "font-size": "24px",
+                width: '100%',
+            }}
+        />;
 
-                <ReactMDL.CardActions border>
-                    <ReactMDL.Button
-                        onClick={this.onSave}
-                        disabled={editIsLocked}
-                    >
-                        Сохранить
-                    </ReactMDL.Button>
-                    <ReactMDL.Button
-                        onClick={this.onCancel}
-                        disabled={editIsLocked}
-                    >
-                        Отмена
-                    </ReactMDL.Button>
-                </ReactMDL.CardActions>
-            </ReactMDL.Card>
+        return (
+            <Card className="backlog-story">
+                <CardTitle title={titleField} className="backlog-story-title" />
+                <CardText>
+                    <TextField
+                        id={"backlog-story-edit-text"}
+                        multiLine={true}
+                        value={this.state.story.text}
+                        onChange={this.onChangeText}
+                        hintText={"Text"}
+                        style={{
+                            "font-size": "14px",
+                            "width": "100%",
+                        }}
+                    />
+                </CardText>
+                {progressBar}
+                <Divider />
+                <CardActions>
+                    <FlatButton label="Сохранить" onTouchTap={this.onSave} />
+                    <FlatButton label="Отмена" onTouchTap={this.onCancel} />
+                </CardActions>
+            </Card>
         );
     }
 }

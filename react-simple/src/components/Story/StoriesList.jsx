@@ -110,7 +110,7 @@ class StoriesList extends React.Component {
         });
 
         return (
-            <div className="backlog-list mdl-grid">
+            <div className="backlog-list">
                 {createForm}
                 {stories}
             </div>
