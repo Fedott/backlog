@@ -71,7 +71,7 @@ export default class LoginDialog extends React.Component {
             isWaiting: false,
         });
 
-        if (response.type == 'login-success') {
+        if (response.type === 'login-success') {
             let user = new User();
             user.username = response.payload.username;
             user.token = response.payload.token;
@@ -80,7 +80,7 @@ export default class LoginDialog extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.state.isOpen != nextProps.isOpen) {
+        if (this.state.isOpen !== nextProps.isOpen) {
             this.setState({
                 isOpen: nextProps.isOpen,
             });
@@ -89,7 +89,7 @@ export default class LoginDialog extends React.Component {
 
     render() {
         return (
-            <Dialog open={this.state.isOpen}>
+            <Dialog open={this.state.isOpen} id="login-dialog">
                 <DialogTitle>Авторизация</DialogTitle>
                 <DialogContent>
                     <Textfield label="Имя пользовтаеля"
@@ -97,6 +97,7 @@ export default class LoginDialog extends React.Component {
                                onChange={this.onUsernameChange}
                                disabled={this.state.isWaiting}
                                onKeyPress={this.onKeyPress}
+                               id="login-dialog-username"
                     />
                     <Textfield label="Пароль"
                                floatingLabel
@@ -104,6 +105,7 @@ export default class LoginDialog extends React.Component {
                                onChange={this.onPasswordChange}
                                disabled={this.state.isWaiting}
                                onKeyPress={this.onKeyPress}
+                               id="login-dialog-password"
                     />
                 </DialogContent>
                 <DialogActions>

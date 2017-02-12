@@ -22,6 +22,7 @@ class AcceptanceTester extends \Codeception\Actor
 
     public function clearLocalStorage()
     {
+        $this->amOnPage('/');
         $this->executeJS('localStorage.clear();');
     }
 
@@ -29,14 +30,14 @@ class AcceptanceTester extends \Codeception\Actor
     {
         $I = $this;
 
-        $I->amOnPage('/');
         $I->clearLocalStorage();
+
         $I->amOnPage('/');
         $I->see('Войти');
-        $I->click('#application > div > div > div > div > header > div > div:nth-child(3) > button:nth-child(3)');
-        $I->fillField('#textfield-', 'testUser');
-        $I->fillField('input[type=password]', 'testPassword');
-        $I->click('Войти');
+        $I->click('#login-button');
+        $I->fillField('#login-dialog-username', 'testUser');
+        $I->fillField('#login-dialog-password', 'testPassword');
+        $I->click('Войти', '#login-dialog');
         $I->waitForText('Привет, testUser');
     }
 }
