@@ -1,5 +1,6 @@
 import * as React from "react";
 import {Layout, Header, Navigation, Content} from "react-mdl";
+import {MuiThemeProvider} from 'material-ui';
 import HTML5Backend from "react-dnd-html5-backend";
 import {DragDropContext} from "react-dnd";
 import {Link, routerShape} from "react-router";
@@ -48,7 +49,7 @@ class Application extends React.Component {
     render() {
 
         return (
-            <div>
+            <MuiThemeProvider>
                 <Layout fixedHeader>
                     <Header title={<span onClick={this.onHeaderClick} style={{cursor: 'pointer'}}>Backlog</span>}>
                         <UserLoginPanel
@@ -65,7 +66,7 @@ class Application extends React.Component {
                         })}
                     </Content>
                 </Layout>
-            </div>
+            </MuiThemeProvider>
         )
     }
 }
