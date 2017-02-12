@@ -71,7 +71,7 @@ export default class RegisterDialog extends React.Component {
             isWaiting: false,
         });
 
-        if (response.type == 'user-registered') {
+        if (response.type === 'user-registered') {
             let user = new User();
             user.username = response.payload.username;
             user.token = response.payload.token;
@@ -80,7 +80,7 @@ export default class RegisterDialog extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.state.isOpen != nextProps.isOpen) {
+        if (this.state.isOpen !== nextProps.isOpen) {
             this.setState({
                 isOpen: nextProps.isOpen,
             });
@@ -89,7 +89,7 @@ export default class RegisterDialog extends React.Component {
 
     render() {
         return (
-            <Dialog open={this.state.isOpen}>
+            <Dialog open={this.state.isOpen} id="register-dialog">
                 <DialogTitle>Регистрация</DialogTitle>
                 <DialogContent>
                     <Textfield label="Имя пользователя"
@@ -97,6 +97,7 @@ export default class RegisterDialog extends React.Component {
                                onChange={this.onUsernameChange}
                                disabled={this.state.isWaiting}
                                onKeyPress={this.onKeyPress}
+                               id="register-dialog-username"
                     />
                     <Textfield label="Пароль"
                                floatingLabel
@@ -104,6 +105,7 @@ export default class RegisterDialog extends React.Component {
                                onChange={this.onPasswordChange}
                                disabled={this.state.isWaiting}
                                onKeyPress={this.onKeyPress}
+                               id="register-dialog-password"
                     />
                 </DialogContent>
                 <DialogActions>
@@ -112,7 +114,7 @@ export default class RegisterDialog extends React.Component {
                         colored
                         raised
                         onClick={this.onSignUpClick}
-                        disabled={this.state.isWaiting} >Заренистироваться</Button>
+                        disabled={this.state.isWaiting} >Зарегистрироваться</Button>
                 </DialogActions>
             </Dialog>
         );

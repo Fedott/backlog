@@ -106,8 +106,8 @@ export default class UserLoginPanel extends React.Component {
                              onCancel={this.toggleRegisterDialog}
                              onRegisterSuccess={this.onLogin}
                 />
-                <Button onClick={this.toggleLoginDialog}>Войти</Button>
-                <Button onClick={this.toggleRegisterDialog}>Зарегистрироваться</Button>
+                <Button onClick={this.toggleLoginDialog} id="login-button">Войти</Button>
+                <Button onClick={this.toggleRegisterDialog} id="register-button">Зарегистрироваться</Button>
             </div>
         );
     }
