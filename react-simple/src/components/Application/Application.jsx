@@ -1,5 +1,12 @@
 import * as React from "react";
-import {Layout, Header, Navigation, Content} from "react-mdl";
+import {
+    AppBar
+} from 'material-ui';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import {
+    indigo500,
+    pink500
+} from 'material-ui/styles/colors'
 import {MuiThemeProvider} from 'material-ui';
 import HTML5Backend from "react-dnd-html5-backend";
 import {DragDropContext} from "react-dnd";
@@ -47,6 +54,33 @@ class Application extends React.Component {
     }
 
     render() {
+        const muiTheme = getMuiTheme({
+            palette: {
+                primary1Color: indigo500,
+                accent1Color: pink500,
+            }
+        });
+
+        return (
+            <MuiThemeProvider muiTheme={muiTheme}>
+                <div>
+                    <AppBar
+                        title={"Backlog"}
+                        onTitleTouchTap={this.onHeaderClick}
+                        iconClassNameLeft={null}
+                        iconElementRight={<UserLoginPanel
+                            onLogin={this.onLogin}
+                            onLogout={this.onLogout}
+                        />}
+                    />
+                    <div style={{width: "900px", margin: "0px auto", display: "block"}}>
+                        {this.props.children && React.cloneElement(this.props.children, {
+                            isLogged: this.state.isLogged,
+                        })}
+                    </div>
+                </div>
+            </MuiThemeProvider>
+        );
 
         return (
             <MuiThemeProvider>
@@ -60,11 +94,11 @@ class Application extends React.Component {
                             <Link to="/projects">Проекты</Link>
                         </Navigation>
                     </Header>
-                    <Content style={{width: "900px", margin: "0px auto", display: "block"}}>
+                    <div style={{width: "900px", margin: "0px auto", display: "block"}}>
                         {this.props.children && React.cloneElement(this.props.children, {
                             isLogged: this.state.isLogged,
                         })}
-                    </Content>
+                    </div>
                 </Layout>
             </MuiThemeProvider>
         )

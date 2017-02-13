@@ -9,11 +9,6 @@ import Application from './components/Application/Application.jsx';
 import StoriesPage from './components/Story/StoriesPage.jsx';
 import ProjectsPage from './components/Project/ProjectsPage.jsx';
 
-require("../node_modules/material-design-lite/material.min.css");
-require("../node_modules/material-design-lite/dist/material.indigo-pink.min.css");
-require("../node_modules/material-design-lite/material.min.js");
-require("./style.css");
-
 ReactDOM.render((
     <Router history={browserHistory}>
         <Route path="/" component={Application}>
