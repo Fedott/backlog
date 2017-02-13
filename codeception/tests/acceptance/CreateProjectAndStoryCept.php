@@ -4,8 +4,8 @@ $I->wantTo('create project and story');
 
 $I->loginAsTestUser();
 
-$I->click('#add-story-button');
-$I->fillField('Name', 'TestProject');
+$I->click('.add-project-button');
+$I->fillField('#backlog-project-edit-name', 'TestProject');
 $I->click('Сохранить');
 $I->waitForText('TestProject');
 

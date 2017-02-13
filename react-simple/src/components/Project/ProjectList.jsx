@@ -20,7 +20,7 @@ export default class ProjectList extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (undefined != nextProps.createForm) {
+        if (undefined !== nextProps.createForm) {
             this.setState({
                 createForm: nextProps.createForm
             });
@@ -38,7 +38,7 @@ export default class ProjectList extends React.Component {
         });
 
         return (
-            <div>
+            <div className="backlog-list">
                 {createForm}
                 {projectItems}
             </div>

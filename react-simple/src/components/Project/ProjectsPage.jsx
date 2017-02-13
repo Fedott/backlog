@@ -1,8 +1,6 @@
 import * as React from "react";
-import {
-    FABButton,
-    Icon,
-} from 'react-mdl';
+import {FloatingActionButton} from 'material-ui';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import ProjectList from './ProjectList.jsx';
 
 
@@ -40,9 +38,19 @@ class ProjectsPage extends React.Component {
         }
         return (<div>
             <ProjectList createForm={this.state.createForm} />
-            <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm}>
-                <Icon name="add" />
-            </FABButton>
+            <FloatingActionButton
+                className="add-project-button"
+                onTouchTab={this.toggleCreateForm}
+                onClick={this.toggleCreateForm}
+                secondary={true}
+                style={{
+                    position: 'fixed',
+                    bottom: '30px',
+                    right: '30px',
+                }}
+            >
+                <ContentAdd />
+            </FloatingActionButton>
         </div>);
     }
 }

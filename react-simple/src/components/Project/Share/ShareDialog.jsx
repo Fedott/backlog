@@ -1,5 +1,9 @@
 import * as React from "react";
-import {Dialog, DialogTitle, DialogActions, DialogContent, Textfield, Button} from "react-mdl";
+import {
+    Dialog,
+    FlatButton,
+    TextField
+} from 'material-ui';
 
 import webSocketClient from "../../../libraries/WebSocket/WebSocketClient.js";
 import Request from "../../../libraries/WebSocket/Request";
@@ -49,28 +53,32 @@ export default class ShareDialog extends React.Component {
     }
 
     render() {
+        const actions = [
+            <FlatButton
+                label="Войти"
+                primary={true}
+                onTouchTap={this.shareProject}
+            />,
+            <FlatButton
+                label="Отмена"
+                onTouchTap={this.props.onClose}
+            />
+        ];
+
         return (
-            <Dialog open={true}>
-                <DialogTitle>
-                    Пригласить пользователя
-                </DialogTitle>
-                <DialogContent>
-                    <Textfield
-                        value={this.state.username}
-                        onChange={this.onUsernameChange}
-                        label="Имя пользовтеля"
-                        error={this.state.usernameError}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.props.onClose}>
-                        Отмена
-                    </Button>
-                    <Button onClick={this.shareProject}>
-                        Добавить
-                    </Button>
-                </DialogActions>
+            <Dialog
+                open={true}
+                className={"project-share-dialog"}
+                actions={actions}
+                title={"Пригласить пользователя"}
+            >
+                <TextField
+                    value={this.state.username}
+                    name={"username"}
+                    onChange={this.onUsernameChange}
+                    errorText={this.state.usernameError}
+                />
             </Dialog>
-        )
+        );
     }
 }

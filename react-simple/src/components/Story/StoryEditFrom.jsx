@@ -116,6 +116,7 @@ class StoryEditFrom extends React.Component {
                         value={this.state.story.text}
                         onChange={this.onChangeText}
                         hintText={"Text"}
+                        disabled={editIsLocked}
                         style={{
                             "font-size": "14px",
                             "width": "100%",
@@ -125,8 +126,8 @@ class StoryEditFrom extends React.Component {
                 {progressBar}
                 <Divider />
                 <CardActions>
-                    <FlatButton label="Сохранить" onTouchTap={this.onSave} />
-                    <FlatButton label="Отмена" onTouchTap={this.onCancel} />
+                    <FlatButton label="Сохранить" onTouchTap={this.onSave} disabled={editIsLocked} />
+                    <FlatButton label="Отмена" onTouchTap={this.onCancel} disabled={editIsLocked} />
                 </CardActions>
             </Card>
         );
