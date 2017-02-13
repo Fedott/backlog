@@ -1,8 +1,6 @@
 import * as React from "react";
-import {
-    Button,
-} from 'react-mdl';
-import webSocketClient from '../../libraries/WebSocket/WebSocketClient'
+import {FlatButton} from "material-ui";
+import webSocketClient from "../../libraries/WebSocket/WebSocketClient";
 import LoginDialog from "../LoginDialog/LoginDialog.jsx";
 import RegisterDialog from "../RegisterDialog/RegisterDialog.jsx";
 
@@ -88,6 +86,10 @@ export default class UserLoginPanel extends React.Component {
     }
 
     render() {
+        const style = {
+            color: 'white',
+        };
+
         if (this.state.isLogged) {
             return (
                 <div onClick={this.onLogout}>
@@ -106,8 +108,11 @@ export default class UserLoginPanel extends React.Component {
                              onCancel={this.toggleRegisterDialog}
                              onRegisterSuccess={this.onLogin}
                 />
-                <Button onClick={this.toggleLoginDialog} id="login-button">Войти</Button>
-                <Button onClick={this.toggleRegisterDialog} id="register-button">Зарегистрироваться</Button>
+                <FlatButton onTouchTap={this.toggleLoginDialog} id="login-button" label="Войти" style={style}/>
+                <FlatButton onTouchTap={this.toggleRegisterDialog}
+                            id="register-button"
+                            label="Зарегистрироваться"
+                            style={style}/>
             </div>
         );
     }

@@ -50,23 +50,23 @@ export default class ProjectListItem extends React.Component {
             return null;
         }
 
+        let projectContent;
+
         if (this.state.edit) {
-            return <ProjectEditForm
+            projectContent = <ProjectEditForm
                 project={this.state.project}
                 onCancel={this.onChangeEdit}
                 onSaved={this.onSaved}
                 isCreateForm={this.state.isCreateForm}
-            />;
+            />
         } else {
-            return (
-                <div className="mdl-cell mdl-cell--12-col">
-                    <ProjectView
-                        project={this.state.project}
-                        onChangeEdit={this.onChangeEdit}
-                        onDeleted={this.onDeleted}
-                    />
-                </div>
-            );
+            projectContent = <ProjectView
+                project={this.state.project}
+                onChangeEdit={this.onChangeEdit}
+                onDeleted={this.onDeleted}
+            />
         }
+
+        return projectContent;
     }
 }

@@ -4,17 +4,17 @@ $I->wantTo('create project and story');
 
 $I->loginAsTestUser();
 
-$I->click('#add-story-button');
-$I->fillField('#application > div > div > div > div > div > div > div > div > div.mdl-card__title.mdl-card--expand.backlog-project-name > input[type="text"]', 'TestProject');
-$I->click('#application > div > div > div > div > div > div > div > div > div.mdl-card__actions.mdl-card--border > button:nth-child(1)');
+$I->click('.add-project-button');
+$I->fillField('#backlog-project-edit-name', 'TestProject');
+$I->click('Сохранить');
 $I->waitForText('TestProject');
 
 $I->see('Список историй');
 $I->click('Список историй');
 
-$I->click('#add-story-button');
-$I->fillField('Title', 'Story title');
-$I->fillField('Text', 'Story text');
+$I->click('.add-story-button');
+$I->fillField('#backlog-story-edit-title', 'Story title');
+$I->fillField('#backlog-story-edit-text', 'Story text');
 $I->click('Сохранить');
 
 $I->waitForText('Story title', 1);
@@ -22,8 +22,8 @@ $I->see('Story title');
 $I->see('Story text');
 
 $I->click('Редактировать');
-$I->appendField('Title', ' edited');
-$I->appendField('Text', ' edited');
+$I->appendField('#backlog-story-edit-title', ' edited');
+$I->appendField('#backlog-story-edit-text', ' edited');
 $I->click('Сохранить');
 
 $I->waitForText('Story title edited', 1);

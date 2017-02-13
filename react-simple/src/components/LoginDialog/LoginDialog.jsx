@@ -1,12 +1,9 @@
 import * as React from "react";
 import {
-    Button,
     Dialog,
-    DialogContent,
-    DialogTitle,
-    DialogActions,
-    Textfield,
-} from 'react-mdl';
+    FlatButton,
+    TextField
+} from 'material-ui';
 import webSocketClient from '../../libraries/WebSocket/WebSocketClient'
 import User from "../Application/User";
 
@@ -88,34 +85,42 @@ export default class LoginDialog extends React.Component {
     }
 
     render() {
+        const actions = [
+            <FlatButton
+                label="Войти"
+                primary={true}
+                onTouchTap={this.onSignInClick}
+                disabled={this.state.isWaiting}
+            />,
+            <FlatButton
+                label="Отмена"
+                onTouchTap={this.onCancel}
+                disabled={this.state.isWaiting}
+            />
+        ];
         return (
-            <Dialog open={this.state.isOpen} id="login-dialog">
-                <DialogTitle>Авторизация</DialogTitle>
-                <DialogContent>
-                    <Textfield label="Имя пользовтаеля"
-                               floatingLabel
-                               onChange={this.onUsernameChange}
-                               disabled={this.state.isWaiting}
-                               onKeyPress={this.onKeyPress}
-                               id="login-dialog-username"
-                    />
-                    <Textfield label="Пароль"
-                               floatingLabel
-                               type="password"
-                               onChange={this.onPasswordChange}
-                               disabled={this.state.isWaiting}
-                               onKeyPress={this.onKeyPress}
-                               id="login-dialog-password"
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.onCancel} disabled={this.state.isWaiting}>Отмена</Button>
-                    <Button
-                        colored
-                        raised
-                        onClick={this.onSignInClick}
-                        disabled={this.state.isWaiting} >Войти</Button>
-                </DialogActions>
+            <Dialog
+                className="login-dialog"
+                title="Авторизация"
+                open={this.state.isOpen}
+                actions={actions}
+            >
+                <TextField
+                    id="login-dialog-username"
+                    floatingLabelText="Имя пользователя"
+                    onChange={this.onUsernameChange}
+                    disabled={this.state.isWaiting}
+                    onKeyPress={this.onKeyPress}
+                />
+                <br/>
+                <TextField
+                    id="login-dialog-password"
+                    floatingLabelText="Пароль"
+                    onChange={this.onPasswordChange}
+                    disabled={this.state.isWaiting}
+                    onKeyPress={this.onKeyPress}
+                    type="password"
+                />
             </Dialog>
         );
     }

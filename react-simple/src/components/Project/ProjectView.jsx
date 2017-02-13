@@ -1,5 +1,11 @@
 import * as React from "react";
-import * as ReactMDL from "react-mdl";
+import {
+    Card,
+    CardActions,
+    CardTitle,
+    FlatButton,
+    Divider
+} from 'material-ui';
 import {browserHistory} from "react-router";
 import ShareDialog from "./Share/ShareDialog.jsx";
 import webSocketClient from "../../libraries/WebSocket/WebSocketClient.js";
@@ -49,40 +55,23 @@ class ProjectView extends React.Component {
     }
 
     render() {
+        const style = {
+            width: '100%',
+            margin: '10px',
+        };
+
         return (
-            <ReactMDL.Card shadow={2} className="backlog-project">
-                <ReactMDL.CardTitle expand className="backlog-project-name">
-                    {this.state.project.name}
-                </ReactMDL.CardTitle>
-
-                <ReactMDL.CardActions border>
-                    <ReactMDL.Button onClick={this.onChangeEdit}>
-                        Редактировать
-                    </ReactMDL.Button>
-                    <ReactMDL.Button onClick={this.goToStoryList}>
-                        Список историй
-                    </ReactMDL.Button>
-                </ReactMDL.CardActions>
-
-                <ReactMDL.CardMenu>
-                    <ReactMDL.IconButton name='more_vert' id={"card-project-menu" + this.state.project.id} />
-                    <ReactMDL.Menu
-                        target={"card-project-menu" + this.state.project.id}
-                        align="right"
-                        ripple
-                    >
-                        <ReactMDL.MenuItem
-                            onClick={this.toggleShareDialog}
-                        >
-                            Пригласить пользователя
-                        </ReactMDL.MenuItem>
-                        <ReactMDL.MenuItem
-                            onClick={this.onDelete}
-                        >
-                            Удалить
-                        </ReactMDL.MenuItem>
-                    </ReactMDL.Menu>
-                </ReactMDL.CardMenu>
+            <Card className="backlog-project" style={style}>
+                <CardTitle title={this.state.project.name} className="backlog-project-name"/>
+                <Divider />
+                <CardActions showExpandableButton={true}>
+                    <FlatButton label={"Список историй"} onTouchTap={this.goToStoryList} />
+                    <FlatButton label={"Редактировать"} onTouchTap={this.onChangeEdit} />
+                </CardActions>
+                <CardActions expandable={true}>
+                    <FlatButton label={"Пригласить пользователей"} onTouchTap={this.toggleShareDialog} />
+                    <FlatButton label={"Удалить"} onTouchTap={this.onDelete} />
+                </CardActions>
                 {
                     this.state.shareDialogOpen &&
                     <ShareDialog
@@ -90,7 +79,7 @@ class ProjectView extends React.Component {
                         project={this.state.project}
                     />
                 }
-            </ReactMDL.Card>
+            </Card>
         );
     }
 }
