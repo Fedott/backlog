@@ -68,6 +68,12 @@ class Application extends React.Component {
                         title={"Backlog"}
                         onTitleTouchTap={this.onHeaderClick}
                         iconClassNameLeft={null}
+                        iconStyleRight={{
+                            display: "flex",
+                            alignItems: "center",
+                            marginTop: '0',
+                            color: 'white',
+                        }}
                         iconElementRight={<UserLoginPanel
                             onLogin={this.onLogin}
                             onLogout={this.onLogout}
@@ -81,27 +87,6 @@ class Application extends React.Component {
                 </div>
             </MuiThemeProvider>
         );
-
-        return (
-            <MuiThemeProvider>
-                <Layout fixedHeader>
-                    <Header title={<span onClick={this.onHeaderClick} style={{cursor: 'pointer'}}>Backlog</span>}>
-                        <UserLoginPanel
-                            onLogin={this.onLogin}
-                            onLogout={this.onLogout}
-                        />
-                        <Navigation>
-                            <Link to="/projects">Проекты</Link>
-                        </Navigation>
-                    </Header>
-                    <div style={{width: "900px", margin: "0px auto", display: "block"}}>
-                        {this.props.children && React.cloneElement(this.props.children, {
-                            isLogged: this.state.isLogged,
-                        })}
-                    </div>
-                </Layout>
-            </MuiThemeProvider>
-        )
     }
 }
 
