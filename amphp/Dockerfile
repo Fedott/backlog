@@ -1,4 +1,4 @@
-FROM fedot/php:7.1.0-alpine
+FROM fedot/php:7.1.1-alpine
 RUN apk add --no-cache \
     libevent-dev \
     autoconf \
