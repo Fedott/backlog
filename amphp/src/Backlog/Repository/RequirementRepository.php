@@ -57,4 +57,24 @@ class RequirementRepository
     {
         return $this->persistManager->persist($requirement, true);
     }
+
+    public function getAllByStory(Story $story): Promise /** @yield Requirement[] */
+    {
+        $promisor = new Deferred();
+
+        Loop::defer(wrap(function () use ($promisor, $story) {
+            $requirementIds = yield $this->relationshipManager->getIdsOneToMany(
+                $story,
+                Requirement::class
+            );
+            $requirements = yield $this->fetchManager->fetchCollectionByIds(
+                Requirement::class,
+                $requirementIds
+            );
+
+            $promisor->resolve($requirements);
+        }));
+
+        return $promisor->promise();
+    }
 }

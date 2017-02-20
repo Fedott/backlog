@@ -85,4 +85,35 @@ class RequirementRepositoryTest extends BaseTestCase
 
         $this->assertTrue($result);
     }
+
+    public function testGetAllByStory()
+    {
+        $story = new Story();
+        $requirement = new Requirement('id1', 'text1');
+        $requirement2 = new Requirement('id2', 'text2');
+
+        $this->relationshipManagerInterfaceMock->expects($this->once())
+            ->method('getIdsOneToMany')
+            ->with($story, Requirement::class)
+            ->willReturn(new Success([
+                'id1',
+                'id2',
+            ]))
+        ;
+        $this->fetchManagerInterfaceMock->expects($this->once())
+            ->method('fetchCollectionByIds')
+            ->with(Requirement::class, ['id1', 'id2'])
+            ->willReturn(new Success([
+                $requirement,
+                $requirement2
+            ]))
+        ;
+
+        $result = wait($this->repository->getAllByStory($story));
+
+        $this->assertEquals([
+            $requirement,
+            $requirement2,
+        ], $result);
+    }
 }
