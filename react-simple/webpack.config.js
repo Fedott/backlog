@@ -23,6 +23,7 @@ module.exports = {
             'core-js',
             'babel-polyfill',
             'material-ui',
+            'react-tap-event-plugin',
             './node_modules/core-js/fn/regexp/escape.js',
             './node_modules/react/lib/update.js',
         ]
