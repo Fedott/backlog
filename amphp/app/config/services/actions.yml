@@ -18,4 +18,7 @@ services:
   Fedot\Backlog\Action\User\Login\LoginUsernamePassword: ~
   Fedot\Backlog\Action\User\Login\LoginToken: ~
 
+  Fedot\Backlog\Action\Requirement\Create\CreateRequirementAction: ~
+  Fedot\Backlog\Action\Requirement\GetAll\GetAllRequirementsAction: ~
+
   Fedot\Backlog\Action\Ping: ~

@@ -74,7 +74,7 @@ class CreateRequirementAction extends AbstractAction
 
     public function getSupportedType(): string
     {
-        return 'story/requirement/create';
+        return 'story/requirements/create';
     }
 
     /**
