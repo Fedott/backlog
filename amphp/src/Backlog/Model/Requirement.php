@@ -19,7 +19,7 @@ class Requirement implements Identifiable
     /**
      * @var bool
      */
-    private $isCompleted = false;
+    private $completed = false;
 
     public function __construct(string $id, string $text)
     {
@@ -44,11 +44,11 @@ class Requirement implements Identifiable
 
     public function isCompleted()
     {
-        return $this->isCompleted;
+        return $this->completed;
     }
 
     public function complete(): void
     {
-        $this->isCompleted = true;
+        $this->completed = true;
     }
 }
