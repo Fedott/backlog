@@ -41,7 +41,7 @@ class CreateRequirementActionTest extends ActionTestCase
 
     protected function getExpectedValidRequestType(): string
     {
-        return 'story/requirement/create';
+        return 'story/requirements/create';
     }
 
     public function testProcessPositive()
