@@ -8,6 +8,10 @@ export default class RequirementListItem extends React.Component {
     static propsType = {
         requirement: React.PropTypes.object.isRequired,
         editMode: React.PropTypes.bool,
+        createForm: React.PropTypes.bool,
+
+        onSavedHandler: React.PropTypes.func,
+        onCanceledHandler: React.PropTypes.func,
     };
 
     constructor(props, context) {
@@ -16,6 +20,7 @@ export default class RequirementListItem extends React.Component {
         this.state = {
             requirement: props.requirement,
             editMode: props.editMode || false,
+            createForm: props.createForm || false,
             requirementText: null,
             disabled: false,
         };
@@ -32,27 +37,53 @@ export default class RequirementListItem extends React.Component {
         this.setState({
             editMode: false,
         });
+
+        if (this.props.onCanceledHandler) {
+            this.props.onCanceledHandler(this.state.requirement);
+        }
     };
 
     save = async () => {
         this.setState({
             disabled: true,
         });
-        let response = await webSocketClient.sendRequest({
-            type: 'story/requirements/save',
-            payload: {
-                id: this.state.requirement.id,
-                text: this.state.requirementText,
-            }
-        });
 
-        if (response.type === 'success') {
+        let request;
+
+        if (this.state.createForm) {
+            request = {
+                type: 'story/requirements/create',
+                payload: {
+                    storyId: this.state.requirement.storyId,
+                    text: this.state.requirementText,
+                }
+            };
+        } else {
+            request = {
+                type: 'story/requirements/save',
+                payload: {
+                    id: this.state.requirement.id,
+                    text: this.state.requirementText,
+                }
+            };
+        }
+        let response = await webSocketClient.sendRequest(request);
+
+        if (response.type === 'success' || (this.state.createForm && response.type === 'requirement-created')) {
+            if (this.state.createForm) {
+                this.state.requirement.id = response.payload.id;
+            }
             this.state.requirement.text = this.state.requirementText;
 
             this.setState({
                 disabled: false,
                 editMode: false,
-            })
+                createForm: false,
+            });
+
+            if (this.props.onSavedHandler) {
+                this.props.onSavedHandler(this.state.requirement);
+            }
         } else {
             this.setState({
                 disabled: false,
@@ -70,10 +101,15 @@ export default class RequirementListItem extends React.Component {
         if (event.keyCode === 27) {
             this.cancel();
         }
+
+        if (event.keyCode === 13) {
+            this.save();
+        }
     };
 
     render() {
         let rightControls;
+        let leftControls;
         let primaryText;
 
         if (this.state.editMode) {
@@ -84,9 +120,11 @@ export default class RequirementListItem extends React.Component {
                 disabled={this.state.disabled}
                 autoFocus
             />;
-            rightControls = <IconButton onTouchTap={this.save} disabled={this.state.disabled}><ContentSave /></IconButton>
+            rightControls = <IconButton onTouchTap={this.save} disabled={this.state.disabled}><ContentSave /></IconButton>;
+            leftControls = <Checkbox checked={this.state.requirement.completed} disabled={true}/>;
         } else {
             primaryText = this.state.requirement.text;
+            leftControls = <Checkbox checked={this.state.requirement.completed} />;
             rightControls = <IconButton
                 onTouchTap={this.enableEditMode}
                 disabled={this.state.disabled}
@@ -97,7 +135,7 @@ export default class RequirementListItem extends React.Component {
 
         return <ListItem
             primaryText={primaryText}
-            leftCheckbox={<Checkbox checked={this.state.requirement.completed} />}
+            leftCheckbox={leftControls}
             rightIconButton={rightControls}
         />
     }
