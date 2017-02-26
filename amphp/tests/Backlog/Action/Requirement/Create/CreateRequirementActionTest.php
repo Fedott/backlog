@@ -90,7 +90,7 @@ class CreateRequirementActionTest extends ActionTestCase
         $this->assertEquals([
             'id' => 'UUIDSuperUnique',
             'text' => 'requirement-text',
-            'isCompleted' => false,
+            'completed' => false,
         ], $actualPayload);
     }
 

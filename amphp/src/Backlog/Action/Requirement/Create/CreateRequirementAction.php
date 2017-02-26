@@ -65,7 +65,7 @@ class CreateRequirementAction extends AbstractAction
         $response = $response->withPayload([
             'id' => $requirement->getId(),
             'text' => $requirement->getText(),
-            'isCompleted' => $requirement->isCompleted(),
+            'completed' => $requirement->isCompleted(),
         ]);
 
         $promisor->resolve($response);
