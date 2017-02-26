@@ -77,4 +77,9 @@ class RequirementRepository
 
         return $promisor->promise();
     }
+
+    public function get(string $id): Promise /** @yield Requirement|null */
+    {
+        return $this->fetchManager->fetchById(Requirement::class, $id);
+    }
 }

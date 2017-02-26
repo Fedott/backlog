@@ -116,4 +116,30 @@ class RequirementRepositoryTest extends BaseTestCase
             $requirement2,
         ], $result);
     }
+
+    public function testGetPositive()
+    {
+        $requirement = new Requirement('id', 'Req text');
+
+        $this->fetchManagerInterfaceMock->expects($this->once())
+            ->method('fetchById')
+            ->with(Requirement::class, 'id')
+            ->willReturn(new Success($requirement))
+        ;
+
+        $result = wait($this->repository->get('id'));
+        $this->assertEquals($requirement, $result);
+    }
+
+    public function testGetNegative()
+    {
+        $this->fetchManagerInterfaceMock->expects($this->once())
+            ->method('fetchById')
+            ->with(Requirement::class, 'id')
+            ->willReturn(new Success(null))
+        ;
+
+        $result = wait($this->repository->get('id'));
+        $this->assertNull($result);
+    }
 }

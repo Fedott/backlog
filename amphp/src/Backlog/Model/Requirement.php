@@ -51,4 +51,9 @@ class Requirement implements Identifiable
     {
         $this->completed = true;
     }
+
+    public function incomplete(): void
+    {
+        $this->completed = false;
+    }
 }

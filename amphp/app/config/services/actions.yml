@@ -20,5 +20,6 @@ services:
 
   Fedot\Backlog\Action\Requirement\Create\CreateRequirementAction: ~
   Fedot\Backlog\Action\Requirement\GetAll\GetAllRequirementsAction: ~
+  Fedot\Backlog\Action\Requirement\ChangeCompleted\RequirementChangeCompletedAction: ~
 
   Fedot\Backlog\Action\Ping: ~
