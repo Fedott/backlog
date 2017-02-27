@@ -3,6 +3,7 @@ import {Checkbox, IconButton, ListItem, TextField} from "material-ui";
 import EditorModeEdit from "material-ui/svg-icons/editor/mode-edit";
 import ContentSave from "material-ui/svg-icons/content/save";
 import webSocketClient from '../../../libraries/WebSocket/WebSocketClient.js';
+import Request from "../../../libraries/WebSocket/Request";
 
 export default class RequirementListItem extends React.Component {
     static propsType = {
@@ -107,6 +108,21 @@ export default class RequirementListItem extends React.Component {
         }
     };
 
+    handleCheckboxClick = async () => {
+        const request = new Request('story/requirements/change-completed', {
+            requirementId: this.state.requirement.id,
+            completed: !this.state.requirement.completed,
+        });
+
+        const response = await webSocketClient.sendRequest(request);
+
+        if (response.type === 'success') {
+            this.state.requirement.completed = !this.state.requirement.completed;
+        }
+
+        this.forceUpdate();
+    };
+
     render() {
         let rightControls;
         let leftControls;
@@ -124,7 +140,7 @@ export default class RequirementListItem extends React.Component {
             leftControls = <Checkbox checked={this.state.requirement.completed} disabled={true}/>;
         } else {
             primaryText = this.state.requirement.text;
-            leftControls = <Checkbox checked={this.state.requirement.completed} />;
+            leftControls = <Checkbox checked={this.state.requirement.completed} onCheck={this.handleCheckboxClick} />;
             rightControls = <IconButton
                 onTouchTap={this.enableEditMode}
                 disabled={this.state.disabled}
