@@ -32,7 +32,7 @@ $reWriter = new class implements \Aerys\Bootable
 
 $http = (new Host())
     ->expose('*', 443)
-    ->name("new-backlog.fedot.name")
+    ->name("backlog.fedot.name")
     ->encrypt(
         '/etc/letsencrypt/live/new-backlog.fedot.name/fullchain.pem',
         '/etc/letsencrypt/live/new-backlog.fedot.name/privkey.pem'
@@ -42,8 +42,23 @@ $http = (new Host())
     ->use($reWriter)
 ;
 
+$http = (new Host())
+    ->expose('*', 443)
+    ->name("new-backlog.fedot.name")
+    ->encrypt(
+        '/etc/letsencrypt/live/new-backlog.fedot.name/fullchain.pem',
+        '/etc/letsencrypt/live/new-backlog.fedot.name/privkey.pem'
+    )
+    ->redirect('https://backlog.fedot.name')
+;
+
 (new Host)
     ->expose("*", 80)
     ->name("new-backlog.fedot.name")
-    ->redirect('https://new-backlog.fedot.name')
+    ->redirect('https://backlog.fedot.name')
+;
+(new Host)
+    ->expose("*", 80)
+    ->name("backlog.fedot.name")
+    ->redirect('https://backlog.fedot.name')
 ;
