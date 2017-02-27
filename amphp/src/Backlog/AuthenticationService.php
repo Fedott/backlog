@@ -2,14 +2,14 @@
 namespace Fedot\Backlog;
 
 use Amp\Deferred;
-use function Amp\wrap;
+use Amp\Redis\Client;
 use AsyncInterop\Loop;
 use AsyncInterop\Promise;
-use Amp\Redis\Client;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Exception\UserNotFoundException;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\UserRepository;
+use function Amp\wrap;
 
 class AuthenticationService
 {

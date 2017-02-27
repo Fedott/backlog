@@ -101,17 +101,24 @@ class StoryItem extends React.Component {
 
         const { isOver, isDragging, connectDragSource, connectDropTarget } = this.props;
 
+        let style = {
+            width: '100%',
+            margin: '10px',
+        };
+
         if (this.state.edit) {
-            return <StoryEditForm
-                story={this.state.story}
-                projectId={this.state.projectId}
-                onCancel={this.onChangeEdit}
-                onSaved={this.onSaved}
-                isCreateForm={this.state.isCreateForm}
-            />;
+            return <div style={style}>
+                <StoryEditForm
+                    story={this.state.story}
+                    projectId={this.state.projectId}
+                    onCancel={this.onChangeEdit}
+                    onSaved={this.onSaved}
+                    isCreateForm={this.state.isCreateForm}
+                />
+            </div>;
         } else {
             return connectDragSource(connectDropTarget(
-                <div className="mdl-cell mdl-cell--12-col">
+                <div style={style}>
                     {isOver && <hr className="storyDropTarget"/>}
                     <StoryView
                         story={this.state.story}

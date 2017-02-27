@@ -18,16 +18,14 @@ module.exports = {
             'react-dnd-html5-backend',
             'react-autosize-textarea',
             'react-addons-css-transition-group',
-            'material-design-lite',
             'react-nl2br',
             'react-router',
             'core-js',
             'babel-polyfill',
+            'material-ui',
+            'react-tap-event-plugin',
             './node_modules/core-js/fn/regexp/escape.js',
             './node_modules/react/lib/update.js',
-            './node_modules/material-design-lite/material.min.js',
-            './node_modules/material-design-lite/dist/material.indigo-pink.min.css',
-            './node_modules/material-design-lite/material.min.css',
         ]
     },
     output: {

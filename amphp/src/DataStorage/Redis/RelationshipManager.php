@@ -3,13 +3,13 @@ namespace Fedot\DataStorage\Redis;
 
 use Amp\Deferred;
 use Amp\Failure;
-use function Amp\wrap;
+use Amp\Redis\Client;
 use AsyncInterop\Loop;
 use AsyncInterop\Promise;
-use Amp\Redis\Client;
 use Fedot\DataStorage\Identifiable;
 use Fedot\DataStorage\RelationshipManagerInterface;
 use TypeError;
+use function Amp\wrap;
 
 class RelationshipManager implements RelationshipManagerInterface
 {

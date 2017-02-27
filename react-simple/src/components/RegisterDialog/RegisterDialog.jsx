@@ -1,12 +1,9 @@
 import * as React from "react";
 import {
-    Button,
     Dialog,
-    DialogContent,
-    DialogTitle,
-    DialogActions,
-    Textfield,
-} from 'react-mdl';
+    FlatButton,
+    TextField
+} from 'material-ui';
 import webSocketClient from '../../libraries/WebSocket/WebSocketClient'
 import User from "../Application/User";
 
@@ -71,7 +68,7 @@ export default class RegisterDialog extends React.Component {
             isWaiting: false,
         });
 
-        if (response.type == 'user-registered') {
+        if (response.type === 'user-registered') {
             let user = new User();
             user.username = response.payload.username;
             user.token = response.payload.token;
@@ -80,7 +77,7 @@ export default class RegisterDialog extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.state.isOpen != nextProps.isOpen) {
+        if (this.state.isOpen !== nextProps.isOpen) {
             this.setState({
                 isOpen: nextProps.isOpen,
             });
@@ -88,32 +85,42 @@ export default class RegisterDialog extends React.Component {
     }
 
     render() {
+        const actions = [
+            <FlatButton
+                label="Зарегистрироваться"
+                primary={true}
+                onTouchTap={this.onSignUpClick}
+                disabled={this.state.isWaiting}
+            />,
+            <FlatButton
+                label="Отмена"
+                onTouchTap={this.onCancel}
+                disabled={this.state.isWaiting}
+            />
+        ];
         return (
-            <Dialog open={this.state.isOpen}>
-                <DialogTitle>Регистрация</DialogTitle>
-                <DialogContent>
-                    <Textfield label="Имя пользователя"
-                               floatingLabel
-                               onChange={this.onUsernameChange}
-                               disabled={this.state.isWaiting}
-                               onKeyPress={this.onKeyPress}
-                    />
-                    <Textfield label="Пароль"
-                               floatingLabel
-                               type="password"
-                               onChange={this.onPasswordChange}
-                               disabled={this.state.isWaiting}
-                               onKeyPress={this.onKeyPress}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.onCancel} disabled={this.state.isWaiting}>Отмена</Button>
-                    <Button
-                        colored
-                        raised
-                        onClick={this.onSignUpClick}
-                        disabled={this.state.isWaiting} >Заренистироваться</Button>
-                </DialogActions>
+            <Dialog
+                className="register-dialog"
+                title="Регистрация"
+                open={this.state.isOpen}
+                actions={actions}
+            >
+                <TextField
+                    id="register-dialog-username"
+                    floatingLabelText="Имя пользователя"
+                    onChange={this.onUsernameChange}
+                    disabled={this.state.isWaiting}
+                    onKeyPress={this.onKeyPress}
+                />
+                <br/>
+                <TextField
+                    id="register-dialog-password"
+                    floatingLabelText="Пароль"
+                    onChange={this.onPasswordChange}
+                    disabled={this.state.isWaiting}
+                    onKeyPress={this.onKeyPress}
+                    type="password"
+                />
             </Dialog>
         );
     }

@@ -1,5 +1,13 @@
 import * as React from "react";
-import * as ReactMDL from 'react-mdl';
+import {
+    Card,
+    CardActions,
+    CardTitle,
+    FlatButton,
+    Divider,
+    TextField,
+    LinearProgress
+} from 'material-ui';
 import webSocketClient from './../../libraries/WebSocket/WebSocketClient';
 
 class ProjectEditFrom extends React.Component {
@@ -34,7 +42,7 @@ class ProjectEditFrom extends React.Component {
     }
 
     async onSave() {
-        if (this.state.status == 'saving') {
+        if (this.state.status === 'saving') {
             return;
         }
 
@@ -47,7 +55,7 @@ class ProjectEditFrom extends React.Component {
             payload: this.state.project,
         });
 
-        if (response.type != 'error') {
+        if (response.type !== 'error') {
             this.setState({
                 status: 'editing',
                 isCreateForm: false,
@@ -68,39 +76,39 @@ class ProjectEditFrom extends React.Component {
         let editIsLocked = false;
         let progressBar = null;
 
-        if (this.state.status == 'saving') {
-            progressBar = <ReactMDL.ProgressBar indeterminate style={{width: "100%"}}/>;
+        if (this.state.status === 'saving') {
+            progressBar = <LinearProgress mode="indeterminate" />;
             editIsLocked = true;
         }
 
-        return (
-            <ReactMDL.Card shadow={2} className="backlog-project mdl-cell mdl-cell--12-col">
-                <ReactMDL.CardTitle expand className="backlog-project-name">
-                    <input
-                        type="text"
-                        value={this.state.project.name}
-                        placeholder="Name"
-                        onChange={this.onChangeName}
-                        disabled={editIsLocked}
-                    />
-                </ReactMDL.CardTitle>
-                {progressBar}
+        const style = {
+            width: '100%',
+            margin: '10px',
+        };
 
-                <ReactMDL.CardActions border>
-                    <ReactMDL.Button
-                        onClick={this.onSave}
-                        disabled={editIsLocked}
-                    >
-                        Сохранить
-                    </ReactMDL.Button>
-                    <ReactMDL.Button
-                        onClick={this.onCancel}
-                        disabled={editIsLocked}
-                    >
-                        Отмена
-                    </ReactMDL.Button>
-                </ReactMDL.CardActions>
-            </ReactMDL.Card>
+        const titleField = <TextField
+            id={"backlog-project-edit-name"}
+            value={this.state.project.name}
+            hintText={"Name"}
+            name={"name"}
+            onChange={this.onChangeName}
+            disabled={editIsLocked}
+            style={{
+                "font-size": "24px",
+                width: '100%',
+            }}
+        />;
+
+        return (
+            <Card className="backlog-project" style={style}>
+                <CardTitle title={titleField} className="backlog-project-name" />
+                {progressBar}
+                <Divider />
+                <CardActions>
+                    <FlatButton label="Сохранить" onTouchTap={this.onSave} disabled={editIsLocked} />
+                    <FlatButton label="Отмена" onTouchTap={this.onCancel} disabled={editIsLocked} />
+                </CardActions>
+            </Card>
         );
     }
 }

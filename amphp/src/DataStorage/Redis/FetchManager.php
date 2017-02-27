@@ -3,15 +3,15 @@ namespace Fedot\DataStorage\Redis;
 
 use Amp\Deferred;
 use Amp\Failure;
-use function Amp\wrap;
-use AsyncInterop\Loop;
-use AsyncInterop\Promise;
 use Amp\Redis\Client;
 use Amp\Success;
+use AsyncInterop\Loop;
+use AsyncInterop\Promise;
 use Fedot\DataStorage\FetchManagerInterface;
 use Fedot\DataStorage\Identifiable;
 use Symfony\Component\Serializer\SerializerInterface;
 use TypeError;
+use function Amp\wrap;
 
 class FetchManager implements FetchManagerInterface
 {

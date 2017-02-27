@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Middleware;
 
-use AsyncInterop\Promise;
 use Amp\Success;
+use AsyncInterop\Promise;
 use Fedot\Backlog\Infrastructure\Middleware\MiddlewareInterface;
 use Fedot\Backlog\SerializerService;
 use Fedot\Backlog\WebSocket\RequestInterface;

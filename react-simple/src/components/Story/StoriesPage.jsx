@@ -1,8 +1,6 @@
 import * as React from "react";
-import {
-    FABButton,
-    Icon,
-} from 'react-mdl';
+import {FloatingActionButton} from 'material-ui';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import StoriesList from '../Story/StoriesList.jsx';
 
@@ -42,9 +40,19 @@ class StoriesPage extends React.Component {
                 projectId={this.state.projectId}
                 onStoryCreatedCallback={this.toggleCreateForm}
             />
-            <FABButton id="add-story-button" colored ripple onClick={this.toggleCreateForm}>
-                <Icon name="add" />
-            </FABButton>
+            <FloatingActionButton
+                className="add-story-button"
+                onTouchTab={this.toggleCreateForm}
+                onClick={this.toggleCreateForm}
+                secondary={true}
+                style={{
+                    position: 'fixed',
+                    bottom: '30px',
+                    right: '30px',
+                }}
+            >
+                <ContentAdd />
+            </FloatingActionButton>
         </div>);
     }
 }

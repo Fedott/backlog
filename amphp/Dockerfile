@@ -1,4 +1,14 @@
-FROM fedot/php:7.0.16-fix-ssl
+FROM fedot/php:7.1.1-alpine
+RUN apk add --no-cache \
+    libevent-dev \
+    autoconf \
+    build-base \
+    && pecl install -f ev \
+    && docker-php-ext-enable ev \
+    && apk del \
+    libevent-dev \
+    autoconf \
+    build-base
 
 ## uncomment for debug
 #RUN php /usr/share/php7/peclcmd.php install -f xdebug && \

@@ -1,4 +1,5 @@
 import Request from "./Request";
+import Response from "./Response";
 
 export class WebSocketRequestExecutor {
     request: Request;
@@ -79,7 +80,7 @@ export class WebSocketClient {
         return ++this.requestsIds;
     }
 
-    async sendRequest(request: Request) {
+    async sendRequest(request: Request): Response {
         await this.connect();
 
         request.id = this.getNextRequestId();
