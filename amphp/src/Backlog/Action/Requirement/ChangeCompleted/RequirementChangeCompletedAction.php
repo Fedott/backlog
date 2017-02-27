@@ -33,6 +33,7 @@ class RequirementChangeCompletedAction extends AbstractAction
             if ($payload->completed === true) {
                 if (!$requirement->isCompleted()) {
                     $requirement->complete();
+                    yield $this->requirementRepository->save($requirement);
 
                     $promisor->resolve($response->withType('success'));
                     return;
@@ -40,6 +41,7 @@ class RequirementChangeCompletedAction extends AbstractAction
             } elseif ($payload->completed === false) {
                 if ($requirement->isCompleted()) {
                     $requirement->incomplete();
+                    yield $this->requirementRepository->save($requirement);
 
                     $promisor->resolve($response->withType('success'));
                     return;

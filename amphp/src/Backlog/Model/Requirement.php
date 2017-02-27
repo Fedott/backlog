@@ -21,10 +21,11 @@ class Requirement implements Identifiable
      */
     private $completed = false;
 
-    public function __construct(string $id, string $text)
+    public function __construct(string $id, string $text, bool $completed = false)
     {
         $this->id = $id;
         $this->text = $text;
+        $this->completed = $completed;
     }
 
     public function getId(): string

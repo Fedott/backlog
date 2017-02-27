@@ -51,6 +51,11 @@ class RequirementChangeCompletedActionTest extends ActionTestCase
             $requirementMock->expects($this->once())
                 ->method($expectedMethod)
             ;
+            $this->requirementRepositoryMock->expects($this->once())
+                ->method('save')
+                ->with($requirementMock)
+                ->willReturn(new Success(true))
+            ;
         } else {
             $requirementMock->expects($this->never())->method('complete');
             $requirementMock->expects($this->never())->method('incomplete');
