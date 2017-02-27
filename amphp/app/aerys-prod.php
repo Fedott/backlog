@@ -37,13 +37,13 @@ $http = (new Host())
         '/etc/letsencrypt/live/new-backlog.fedot.name/fullchain.pem',
         '/etc/letsencrypt/live/new-backlog.fedot.name/privkey.pem'
     )
-    ->redirect("https://new-backlog.fedot.name")
+    ->use($router)
+    ->use($root)
+    ->use($reWriter)
 ;
 
 (new Host)
     ->expose("*", 80)
     ->name("new-backlog.fedot.name")
-    ->use($router)
-    ->use($root)
-    ->use($reWriter)
+    ->redirect('https://new-backlog.fedot.name')
 ;
