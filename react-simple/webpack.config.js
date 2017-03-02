@@ -12,11 +12,9 @@ module.exports = {
         'backlog-app': ["./src/main.js", "./src/style.css"],
         vendors: [
             'react',
-            'react-mdl',
             'react-dom',
             'react-dnd',
             'react-dnd-html5-backend',
-            'react-autosize-textarea',
             'react-addons-css-transition-group',
             'react-nl2br',
             'react-router',
