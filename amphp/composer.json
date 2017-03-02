@@ -19,18 +19,18 @@
         "amphp/aerys": "dev-amp_v2",
         "amphp/redis": "dev-amp_v2",
         "amphp/loop": "dev-master",
-        "symfony/serializer": "^3.1",
+        "symfony/serializer": "^3.2",
         "doctrine/annotations": "^1.2",
         "doctrine/cache": "^1.6",
-        "symfony/property-access": "^3.1",
+        "symfony/property-access": "^3.2",
         "ramsey/uuid": "^3.4",
-        "symfony/property-info": "^3.1",
+        "symfony/property-info": "^3.2",
         "symfony/dependency-injection": "3.3.x-dev",
         "symfony/yaml": "^3.2",
         "symfony/config": "^3.2",
         "symfony/console": "^3.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.4"
+        "phpunit/phpunit": "^6.0"
     }
 }

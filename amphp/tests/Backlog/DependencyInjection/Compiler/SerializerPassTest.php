@@ -2,11 +2,12 @@
 namespace Tests\Fedot\Backlog\DependencyInjection\Compiler;
 
 use Fedot\Backlog\DependencyInjection\Compiler\SerializerPass;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class SerializerPassTest extends \PHPUnit_Framework_TestCase
+class SerializerPassTest extends TestCase
 {
     public function testThrowExceptionWhenNoNormalizers()
     {
