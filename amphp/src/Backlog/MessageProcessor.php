@@ -45,15 +45,15 @@ class MessageProcessor
 
             $responseBody = json_encode($response);
             if ($response->isDirect()) {
-                $endpoint->send($response->getClientId(), $responseBody);
+                $endpoint->send($responseBody, $response->getClientId());
             } else {
-                $endpoint->send(null, $responseBody);
+                $endpoint->broadcast($responseBody);
             }
         } catch (\Exception $exception) {
             $response = $response->withType('internal-server-error');
             $response = $response->withPayload(['message' => $exception->getMessage()]);
 
-            $endpoint->send($clientId, json_encode($response));
+            $endpoint->send(json_encode($response), $clientId);
         }
 
         yield new Success();

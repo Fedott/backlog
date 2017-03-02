@@ -42,10 +42,10 @@ class WebSocketServer implements Websocket
 
     public function onOpen(int $clientId, $handshakeData)
     {
-        $this->endpoint->send($clientId, json_encode([
+        $this->endpoint->send(json_encode([
             "id" => null,
             "type" => "hello",
-        ]));
+        ]), $clientId);
     }
 
     /**
