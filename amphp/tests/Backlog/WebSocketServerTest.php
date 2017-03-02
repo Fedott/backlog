@@ -69,6 +69,8 @@ class WebSocketServerTest extends BaseTestCase
             $this->createMock(Request::class),
             $this->createMock(Response::class)
         );
+
+        $this->assertTrue(true);
     }
 
     public function testOnStop()
@@ -79,6 +81,8 @@ class WebSocketServerTest extends BaseTestCase
         );
 
         $webSocketServer->onStop();
+
+        $this->assertTrue(true);
     }
 
     public function testOnOpen()

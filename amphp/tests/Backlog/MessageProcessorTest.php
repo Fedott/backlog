@@ -56,7 +56,7 @@ class MessageProcessorTest extends BaseTestCase
 
         $endpointMock->expects($this->once())
             ->method('send')
-            ->with(123, '{"requestId":1,"type":"test-response","payload":[]}')
+            ->with('{"requestId":1,"type":"test-response","payload":[]}', 123)
         ;
 
         Loop::execute(wrap(function () use ($webSocketServer, $endpointMock) {
@@ -109,8 +109,8 @@ class MessageProcessorTest extends BaseTestCase
         ;
 
         $endpointMock->expects($this->once())
-            ->method('send')
-            ->with(null, '{"requestId":1,"type":"test-response","payload":[]}')
+            ->method('broadcast')
+            ->with('{"requestId":1,"type":"test-response","payload":[]}')
         ;
 
         Loop::execute(wrap(function () use ($webSocketServer, $endpointMock) {
@@ -157,7 +157,7 @@ class MessageProcessorTest extends BaseTestCase
 
         $endpointMock->expects($this->once())
             ->method('send')
-            ->with(123, '{"requestId":1,"type":"internal-server-error","payload":{"message":"Atata"}}')
+            ->with('{"requestId":1,"type":"internal-server-error","payload":{"message":"Atata"}}', 123)
         ;
 
         Loop::execute(wrap(function () use ($webSocketServer, $endpointMock) {

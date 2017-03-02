@@ -4,8 +4,9 @@ declare(strict_types = 1);
 namespace Tests\Fedot\Backlog\WebSocket;
 
 use Fedot\Backlog\WebSocket\Request;
+use PHPUnit\Framework\TestCase;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends TestCase
 {
     public function testId()
     {

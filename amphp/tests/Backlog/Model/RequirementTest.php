@@ -4,8 +4,9 @@ namespace Tests\Fedot\Backlog\Model;
 
 use Fedot\Backlog\Model\Requirement;
 use Fedot\DataStorage\Identifiable;
+use PHPUnit\Framework\TestCase;
 
-class RequirementTest extends \PHPUnit_Framework_TestCase
+class RequirementTest extends TestCase
 {
     public function test()
     {
