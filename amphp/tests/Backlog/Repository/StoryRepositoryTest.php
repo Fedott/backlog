@@ -234,4 +234,22 @@ class StoryRepositoryTest extends BaseTestCase
         $result = \Amp\wait($resultPromise);
         $this->assertEquals(true, $result);
     }
+
+    public function testGet()
+    {
+        $storyRepository = $this->getRepositoryInstance();
+
+        $story = new Story();
+
+        $this->fetchManager
+            ->expects($this->once())
+            ->method('fetchById')
+            ->with(Story::class, 'story-id')
+            ->willReturn(new Success($story))
+        ;
+
+        $result = wait($storyRepository->get('story-id'));
+
+        $this->assertEquals($story, $result);
+    }
 }
