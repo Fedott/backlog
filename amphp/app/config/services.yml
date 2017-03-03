@@ -34,18 +34,18 @@ services:
     class: Fedot\Backlog\Action\ActionManager
 
   backlog.data-storage.redis.key-generator:
-    class: Fedot\DataStorage\Redis\KeyGenerator
+    class: Fedot\DataMapper\Redis\KeyGenerator
 
   backlog.data-storage.redis.fetch-manager:
-    class: Fedot\DataStorage\Redis\FetchManager
+    class: Fedot\DataMapper\Redis\FetchManager
     autowire: true
 
   backlog.data-storage.redis.persist-manager:
-    class: Fedot\DataStorage\Redis\PersistManager
+    class: Fedot\DataMapper\Redis\PersistManager
     autowire: true
 
   backlog.data-storage.redis.relationship-manager:
-    class: Fedot\DataStorage\Redis\RelationshipManager
+    class: Fedot\DataMapper\Redis\RelationshipManager
     autowire: true
 
   backlog.data-storage.redis.client:

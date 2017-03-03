@@ -6,9 +6,9 @@ use AsyncInterop\Loop;
 use AsyncInterop\Promise;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
-use Fedot\DataStorage\FetchManagerInterface;
-use Fedot\DataStorage\PersistManagerInterface;
-use Fedot\DataStorage\RelationshipManagerInterface;
+use Fedot\DataMapper\FetchManagerInterface;
+use Fedot\DataMapper\PersistManagerInterface;
+use Fedot\DataMapper\RelationshipManagerInterface;
 use function Amp\wrap;
 
 class ProjectRepository

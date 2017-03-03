@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Model;
 
-use Fedot\DataStorage\Identifiable;
+use Fedot\DataMapper\Identifiable;
 
 class Project implements Identifiable
 {

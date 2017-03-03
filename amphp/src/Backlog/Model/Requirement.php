@@ -2,7 +2,7 @@
 
 namespace Fedot\Backlog\Model;
 
-use Fedot\DataStorage\Identifiable;
+use Fedot\DataMapper\Identifiable;
 
 class Requirement implements Identifiable
 {

@@ -21,3 +21,6 @@ web/
 .idea/gradle.xml
 .idea/libraries
 
+# PHPStorm
+.idea/php-test-framework.xml
+

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "91bc89d129bd35ec07b365a77bfb46b8",
+    "content-hash": "6417f2ad7683f0d0fc6d2abb96f579e8",
     "packages": [
         {
             "name": "amphp/aerys",
@@ -956,6 +956,54 @@
                 "parser"
             ],
             "time": "2014-09-09T13:34:57+00:00"
+        },
+        {
+            "name": "fedot/async-data-mapper",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Fedott/async-data-mapper.git",
+                "reference": "f6faf655707c56df6068b122e6d57ea3447a0333"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Fedott/async-data-mapper/zipball/f6faf655707c56df6068b122e6d57ea3447a0333",
+                "reference": "f6faf655707c56df6068b122e6d57ea3447a0333",
+                "shasum": ""
+            },
+            "require": {
+                "async-interop/promise": "^0.4",
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "amphp/loop": "dev-master",
+                "amphp/redis": "dev-amp_v2",
+                "phpunit/phpunit": "^6.0",
+                "symfony/serializer": "^3.2"
+            },
+            "suggest": {
+                "amphp/loop": "Needed for Redis implementation",
+                "amphp/redis": "Needed for Redis implementation",
+                "symfony/serializer": "Needed for Redis implementation"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fedot\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vladimir \"Fedot\" Fedorov",
+                    "email": "fedotru@gmail.com"
+                }
+            ],
+            "description": "Simple async datamaper",
+            "time": "2017-03-03 15:30:04"
         },
         {
             "name": "league/climate",
@@ -3338,7 +3386,8 @@
         "amphp/aerys": 20,
         "amphp/redis": 20,
         "amphp/loop": 20,
-        "symfony/dependency-injection": 20
+        "symfony/dependency-injection": 20,
+        "fedot/async-data-mapper": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

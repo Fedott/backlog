@@ -7,9 +7,9 @@ use function Amp\wait;
 use Fedot\Backlog\Model\Requirement;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\RequirementRepository;
-use Fedot\DataStorage\FetchManagerInterface;
-use Fedot\DataStorage\PersistManagerInterface;
-use Fedot\DataStorage\RelationshipManagerInterface;
+use Fedot\DataMapper\FetchManagerInterface;
+use Fedot\DataMapper\PersistManagerInterface;
+use Fedot\DataMapper\RelationshipManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Fedot\Backlog\BaseTestCase;
 

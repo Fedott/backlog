@@ -3,7 +3,7 @@
 namespace Tests\Fedot\Backlog\Model;
 
 use Fedot\Backlog\Model\Requirement;
-use Fedot\DataStorage\Identifiable;
+use Fedot\DataMapper\Identifiable;
 use PHPUnit\Framework\TestCase;
 
 class RequirementTest extends TestCase
