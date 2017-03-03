@@ -7,9 +7,9 @@ use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\UserRepository;
-use Fedot\DataStorage\Redis\FetchManager;
-use Fedot\DataStorage\Redis\KeyGenerator;
-use Fedot\DataStorage\Redis\PersistManager;
+use Fedot\DataMapper\Redis\FetchManager;
+use Fedot\DataMapper\Redis\KeyGenerator;
+use Fedot\DataMapper\Redis\PersistManager;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Serializer\SerializerInterface;
 

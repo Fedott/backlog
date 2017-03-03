@@ -10,10 +10,10 @@ use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\StoryRepository;
-use Fedot\DataStorage\Redis\FetchManager;
-use Fedot\DataStorage\Redis\KeyGenerator;
-use Fedot\DataStorage\Redis\PersistManager;
-use Fedot\DataStorage\Redis\RelationshipManager;
+use Fedot\DataMapper\Redis\FetchManager;
+use Fedot\DataMapper\Redis\KeyGenerator;
+use Fedot\DataMapper\Redis\PersistManager;
+use Fedot\DataMapper\Redis\RelationshipManager;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Serializer\SerializerInterface;
 use Tests\Fedot\Backlog\BaseTestCase;
@@ -233,5 +233,23 @@ class StoryRepositoryTest extends BaseTestCase
         $resultPromise = $repository->move($project, $story, $positionStory);
         $result = \Amp\wait($resultPromise);
         $this->assertEquals(true, $result);
+    }
+
+    public function testGet()
+    {
+        $storyRepository = $this->getRepositoryInstance();
+
+        $story = new Story();
+
+        $this->fetchManager
+            ->expects($this->once())
+            ->method('fetchById')
+            ->with(Story::class, 'story-id')
+            ->willReturn(new Success($story))
+        ;
+
+        $result = wait($storyRepository->get('story-id'));
+
+        $this->assertEquals($story, $result);
     }
 }

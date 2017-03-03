@@ -3,7 +3,7 @@
 namespace Tests\Fedot\Backlog\Model;
 
 use Fedot\Backlog\Model\Story;
-use Fedot\DataStorage\Identifiable;
+use Fedot\DataMapper\Identifiable;
 use Tests\Fedot\Backlog\BaseTestCase;
 
 class StoryTest extends BaseTestCase

@@ -4,8 +4,8 @@ namespace Tests\Fedot\Backlog\Repository;
 use Amp\Success;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\UserRepository;
-use Fedot\DataStorage\Redis\FetchManager;
-use Fedot\DataStorage\Redis\PersistManager;
+use Fedot\DataMapper\Redis\FetchManager;
+use Fedot\DataMapper\Redis\PersistManager;
 use Tests\Fedot\Backlog\BaseTestCase;
 
 class UserRepositoryTest extends BaseTestCase
