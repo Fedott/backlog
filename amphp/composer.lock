@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6417f2ad7683f0d0fc6d2abb96f579e8",
+    "content-hash": "dda63992bb1ba57d38286915d05aabcb",
     "packages": [
         {
             "name": "amphp/aerys",
@@ -959,7 +959,7 @@
         },
         {
             "name": "fedot/async-data-mapper",
-            "version": "dev-master",
+            "version": "v0.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Fedott/async-data-mapper.git",
@@ -1003,7 +1003,7 @@
                 }
             ],
             "description": "Simple async datamaper",
-            "time": "2017-03-03 15:30:04"
+            "time": "2017-03-03T15:30:04+00:00"
         },
         {
             "name": "league/climate",
@@ -3386,8 +3386,7 @@
         "amphp/aerys": 20,
         "amphp/redis": 20,
         "amphp/loop": 20,
-        "symfony/dependency-injection": 20,
-        "fedot/async-data-mapper": 20
+        "symfony/dependency-injection": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
