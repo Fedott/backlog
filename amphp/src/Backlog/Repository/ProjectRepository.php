@@ -7,11 +7,8 @@ use AsyncInterop\Loop;
 use AsyncInterop\Promise;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
-use Fedot\DataMapper\FetchManagerInterface;
 use Fedot\DataMapper\IdentityMap;
-use Fedot\DataMapper\PersistManagerInterface;
 use Fedot\DataMapper\Redis\ModelManager;
-use Fedot\DataMapper\RelationshipManagerInterface;
 use function Amp\wrap;
 
 class ProjectRepository

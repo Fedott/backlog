@@ -5,7 +5,6 @@ use Fedot\DataMapper\Annotation\Field;
 use Fedot\DataMapper\Annotation\Id;
 use Fedot\DataMapper\Annotation\ReferenceMany;
 use Fedot\DataMapper\Annotation\ReferenceOne;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 class Story

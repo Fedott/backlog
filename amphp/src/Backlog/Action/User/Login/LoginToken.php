@@ -7,7 +7,6 @@ use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Model\User;
-use Fedot\Backlog\Repository\UserRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;

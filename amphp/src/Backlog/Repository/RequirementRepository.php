@@ -8,10 +8,7 @@ use AsyncInterop\Loop;
 use AsyncInterop\Promise;
 use Fedot\Backlog\Model\Requirement;
 use Fedot\Backlog\Model\Story;
-use Fedot\DataMapper\FetchManagerInterface;
 use Fedot\DataMapper\ModelManagerInterface;
-use Fedot\DataMapper\PersistManagerInterface;
-use Fedot\DataMapper\RelationshipManagerInterface;
 use function Amp\wrap;
 
 class RequirementRepository

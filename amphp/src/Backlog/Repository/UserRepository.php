@@ -5,9 +5,7 @@ use Amp\Deferred;
 use AsyncInterop\Loop;
 use AsyncInterop\Promise;
 use Fedot\Backlog\Model\User;
-use Fedot\DataMapper\FetchManagerInterface;
 use Fedot\DataMapper\ModelManagerInterface;
-use Fedot\DataMapper\PersistManagerInterface;
 use function Amp\wrap;
 
 class UserRepository

@@ -4,7 +4,6 @@ namespace Fedot\Backlog\Model;
 use Fedot\DataMapper\Annotation\Field;
 use Fedot\DataMapper\Annotation\Id;
 use Fedot\DataMapper\Annotation\ReferenceMany;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 class Project
 {

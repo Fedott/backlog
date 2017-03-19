@@ -3,7 +3,6 @@ namespace Fedot\Backlog\Action\Story\Create;
 
 use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
-use Fedot\Backlog\Action\ErrorPayload;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\StoryRepository;
