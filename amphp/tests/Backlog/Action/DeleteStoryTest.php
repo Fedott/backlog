@@ -39,6 +39,11 @@ class DeleteStoryTest extends ActionTestCase
         return 'delete-story';
     }
 
+    protected function getExpectedPayloadType(): ?string
+    {
+        return DeleteStoryPayload::class;
+    }
+
     public function testProcess()
     {
         $processor = $this->getProcessorInstance();
@@ -47,8 +52,8 @@ class DeleteStoryTest extends ActionTestCase
         $deleteStoryPayload->storyId = 'story-id';
         $deleteStoryPayload->projectId = 'project-id';
 
-        $project = new Project('project-id', 'name');
-        $story = new Story();
+        $project = $this->createMock(Project::class);
+        $story = $this->createMock(Story::class);
 
         $this->projectRepositoryMock->expects($this->once())
             ->method('get')

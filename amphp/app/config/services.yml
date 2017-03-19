@@ -62,14 +62,20 @@ services:
       - Symfony\Component\Serializer\SerializerInterface
 
   serializer.normalizer.object:
-    class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
+    class: Fedot\Backlog\ExcludePluralPropertiesObjectNormalizer
     arguments:
-      - null
+      - '@Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory'
       - null
       - null
       - '@property_info'
     tags:
       - { name: serializer.normalizer, priority: 0 }
+
+  Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory:
+    autowire: true
+
+  Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader:
+    autowire: true
 
   serializer.encoder.json:
     class: Symfony\Component\Serializer\Encoder\JsonEncoder
@@ -84,3 +90,10 @@ services:
     class: Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor
     tags:
       - { name: property_info.type_extractor, priority: 0 }
+
+  Fedot\DataMapper\Metadata\Driver\AnnotationDriver:
+    autowire: true
+  Symfony\Component\PropertyAccess\PropertyAccessor:
+    autowire: true
+  Doctrine\Common\Annotations\AnnotationReader:
+    autowire: true

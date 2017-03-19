@@ -38,14 +38,18 @@ class ProjectCreateTest extends ActionTestCase
         return new ProjectCreate(
             $this->projectRepositoryMock,
             $this->uuidFactoryMock,
-            $this->webSocketAuthServiceMock,
-            $this->normalizerMock
+            $this->webSocketAuthServiceMock
         );
     }
 
     protected function getExpectedValidRequestType(): string
     {
         return 'create-project';
+    }
+
+    protected function getExpectedPayloadType(): ?string
+    {
+        return ProjectCreatePayload::class;
     }
 
     public function testProcess()
@@ -56,7 +60,7 @@ class ProjectCreateTest extends ActionTestCase
         $request = $this->makeRequest(33, 432, 'create-project', $payload);
         $response = $this->makeResponse($request);
 
-        $user = new User();
+        $user = new User('testUser', 'hash');
 
         $this->webSocketAuthServiceMock
             ->expects($this->once())
@@ -86,20 +90,6 @@ class ProjectCreateTest extends ActionTestCase
                 return true;
             }))
             ->willReturn(new Success(true))
-        ;
-
-        $this->normalizerMock->expects($this->once())
-            ->method('normalize')
-            ->with($this->callback(function (Project $project) {
-                $this->assertEquals('UUIDSuperUnique', $project->getId());
-                $this->assertEquals('first project', $project->getName());
-
-                return true;
-            }))
-            ->willReturn([
-                'id' => 'UUIDSuperUnique',
-                'name' => 'first project',
-            ])
         ;
 
         $processor = $this->getProcessorInstance();

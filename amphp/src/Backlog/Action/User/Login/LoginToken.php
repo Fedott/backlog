@@ -7,6 +7,7 @@ use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Model\User;
+use Fedot\Backlog\Repository\UserRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
@@ -58,8 +59,8 @@ class LoginToken extends AbstractAction
             $response = $response->withType('login-success');
             $response = $response->withPayload((array) $newPayload);
 
-            $user = new User();
-            $user->username = $username;
+            /** @var User $user */
+            $user = yield $this->authenticationService->findUserByUsername($username);
 
             $this->webSocketAuthService->authorizeClient($request->getClientId(), $user);
         } catch (AuthenticationException $exception) {

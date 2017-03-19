@@ -29,7 +29,7 @@ class MarkStoryAsCompleted extends AbstractAction
         $story = yield $this->storyRepository->get($payload->storyId);
 
         if ($story) {
-            $story->isCompleted = true;
+            $story->complete();
             $this->storyRepository->save($story);
 
             $response = $response->withType('story-marked-as-completed');

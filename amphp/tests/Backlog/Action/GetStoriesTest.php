@@ -39,12 +39,17 @@ class GetStoriesTest extends ActionTestCase
         return 'get-stories';
     }
 
+    protected function getExpectedPayloadType(): ?string
+    {
+        return ProjectIdPayload::class;
+    }
+
     public function testProcess()
     {
         $stories = [
-            new Story(),
-            new Story(),
-            new Story(),
+            $this->createMock(Story::class),
+            $this->createMock(Story::class),
+            $this->createMock(Story::class),
         ];
 
         $processor = $this->getProcessorInstance();
@@ -52,7 +57,7 @@ class GetStoriesTest extends ActionTestCase
         $payload = new ProjectIdPayload();
         $payload->projectId = 'project-id';
 
-        $project = new Project('project-id', 'Project');
+        $project = $this->createMock(Project::class);
 
         $request = $this->makeRequest(34, 777, 'get-stories', $payload);
         $response = $this->makeResponse($request);

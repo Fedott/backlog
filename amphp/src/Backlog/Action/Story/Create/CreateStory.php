@@ -4,6 +4,7 @@ namespace Fedot\Backlog\Action\Story\Create;
 use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Action\ErrorPayload;
+use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
@@ -61,18 +62,21 @@ class CreateStory extends AbstractAction
         $payload = $request->getAttribute('payloadObject');
         $projectId = $payload->projectId;
         $project = yield $this->projectRepository->get($projectId);
-        $story = $payload->story;
-        $story->id = $this->uuidFactory->uuid4()->toString();
+        $story = new Story(
+            $this->uuidFactory->uuid4()->toString(),
+            $payload->title,
+            $payload->text,
+            $project
+        );
 
-        $result = yield $this->storyRepository->create($project, $story);
+        yield $this->storyRepository->create($project, $story);
 
-        if ($result === true) {
-            $response = $response->withType('story-created');
-            $response = $response->withPayload((array) $story);
-        } else {
-            $response = $response->withType('error');
-            $response = $response->withPayload((array) new ErrorPayload("Story id '{$story->id}' already exists"));
-        }
+        $response = $response->withType('story-created');
+        $response = $response->withPayload([
+            'id' => $story->getId(),
+            'title' => $story->getTitle(),
+            'text' => $story->getText(),
+        ]);
 
         $promisor->resolve($response);
     }

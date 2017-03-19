@@ -29,7 +29,7 @@
         "symfony/yaml": "^3.2",
         "symfony/config": "^3.2",
         "symfony/console": "^3.2",
-        "fedot/async-data-mapper": "0.0.1"
+        "fedot/async-data-mapper": "dev-dev-annotation-mapping"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0"

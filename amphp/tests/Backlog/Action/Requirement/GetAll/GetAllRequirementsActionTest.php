@@ -44,13 +44,17 @@ class GetAllRequirementsActionTest extends ActionTestCase
         return 'story/requirements/getAll';
     }
 
+    protected function getExpectedPayloadType(): ?string
+    {
+        return GetAllRequirementsPayload::class;
+    }
+
     public function testProcess()
     {
-        $story = new Story();
-        $story->id = 'story-id';
-        $requirement1 = new Requirement('req1', 'req text 1');
-        $requirement2 = new Requirement('req2', 'req text 2');
-        $requirement3 = new Requirement('req2', 'req text 3');
+        $story = $this->createMock(Story::class);
+        $requirement1 = $this->createMock(Requirement::class);
+        $requirement2 = $this->createMock(Requirement::class);
+        $requirement3 = $this->createMock(Requirement::class);
 
         $this->storyRepositoryMock->expects($this->once())
             ->method('get')
@@ -58,7 +62,7 @@ class GetAllRequirementsActionTest extends ActionTestCase
             ->willReturn(new Success($story))
         ;
 
-        $stories = [
+        $requirements = [
             $requirement1,
             $requirement2,
             $requirement3,
@@ -68,14 +72,14 @@ class GetAllRequirementsActionTest extends ActionTestCase
             ->with($story)
             ->willReturn(
                 new Success(
-                    $stories
+                    $requirements
                 )
             )
         ;
 
         $this->normalizerMock->expects($this->once())
             ->method('normalize')
-            ->with($stories)
+            ->with($requirements)
             ->willReturn([
                 ['id' => 'req1', 'text' => 'req text 1'],
                 ['id' => 'req2', 'text' => 'req text 2'],

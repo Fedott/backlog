@@ -7,9 +7,14 @@ use Fedot\Backlog\PayloadInterface;
 class StoryCreatePayload implements PayloadInterface
 {
     /**
-     * @var Story
+     * @var string
      */
-    public $story;
+    public $title;
+
+    /**
+     * @var string
+     */
+    public $text;
 
     /**
      * @var string

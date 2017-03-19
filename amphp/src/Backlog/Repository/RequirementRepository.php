@@ -3,11 +3,13 @@
 namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
+use Amp\Success;
 use AsyncInterop\Loop;
 use AsyncInterop\Promise;
 use Fedot\Backlog\Model\Requirement;
 use Fedot\Backlog\Model\Story;
 use Fedot\DataMapper\FetchManagerInterface;
+use Fedot\DataMapper\ModelManagerInterface;
 use Fedot\DataMapper\PersistManagerInterface;
 use Fedot\DataMapper\RelationshipManagerInterface;
 use function Amp\wrap;
@@ -15,28 +17,13 @@ use function Amp\wrap;
 class RequirementRepository
 {
     /**
-     * @var PersistManagerInterface
+     * @var ModelManagerInterface
      */
-    protected $persistManager;
+    private $modelManager;
 
-    /**
-     * @var FetchManagerInterface
-     */
-    protected $fetchManager;
-
-    /**
-     * @var RelationshipManagerInterface
-     */
-    protected $relationshipManager;
-
-    public function __construct(
-        PersistManagerInterface $persistManager,
-        FetchManagerInterface $fetchManager,
-        RelationshipManagerInterface $relationshipManager
-    ) {
-        $this->persistManager = $persistManager;
-        $this->fetchManager = $fetchManager;
-        $this->relationshipManager = $relationshipManager;
+    public function __construct(ModelManagerInterface $modelManager)
+    {
+        $this->modelManager = $modelManager;
     }
 
     public function create(Story $story, Requirement $requirement): Promise /** @yield bool */
@@ -44,8 +31,8 @@ class RequirementRepository
         $promisor = new Deferred();
 
         Loop::defer(wrap(function () use ($promisor, $story, $requirement) {
-            yield $this->persistManager->persist($requirement);
-            yield $this->relationshipManager->addOneToMany($story, $requirement);
+            yield $this->modelManager->persist($requirement);
+            yield $this->modelManager->persist($story);
 
             $promisor->resolve(true);
         }));
@@ -55,31 +42,16 @@ class RequirementRepository
 
     public function save(Requirement $requirement): Promise /** @yield bool */
     {
-        return $this->persistManager->persist($requirement, true);
+        return $this->modelManager->persist($requirement);
     }
 
     public function getAllByStory(Story $story): Promise /** @yield Requirement[] */
     {
-        $promisor = new Deferred();
-
-        Loop::defer(wrap(function () use ($promisor, $story) {
-            $requirementIds = yield $this->relationshipManager->getIdsOneToMany(
-                $story,
-                Requirement::class
-            );
-            $requirements = yield $this->fetchManager->fetchCollectionByIds(
-                Requirement::class,
-                $requirementIds
-            );
-
-            $promisor->resolve($requirements);
-        }));
-
-        return $promisor->promise();
+        return new Success($story->getRequirements());
     }
 
     public function get(string $id): Promise /** @yield Requirement|null */
     {
-        return $this->fetchManager->fetchById(Requirement::class, $id);
+        return $this->modelManager->find(Requirement::class, $id);
     }
 }

@@ -48,7 +48,7 @@ class GetStories extends AbstractAction
         $response = $response->withType('stories');
         $storiesPayload = new StoriesPayload();
         $storiesPayload->stories = $stories;
-        $response = $response->withPayload((array)$storiesPayload);
+        $response = $response->withPayload((array) $storiesPayload);
 
         $promisor->resolve($response);
     }

@@ -41,6 +41,11 @@ class LoginUsernamePasswordTest extends ActionTestCase
         return 'login-username-password';
     }
 
+    protected function getExpectedPayloadType(): ?string
+    {
+        return UsernamePasswordPayload::class;
+    }
+
     public function testProcessSuccess()
     {
         $processor = $this->getProcessorInstance();
@@ -52,9 +57,10 @@ class LoginUsernamePasswordTest extends ActionTestCase
         $request = $this->makeRequest(34, 777, 'login-username-password', $payload);
         $response = $this->makeResponse($request);
 
-        $user = new User();
-        $user->username = 'testUser';
-        $user->password = '$2y$10$kEYXDhRhNmS1mk226hurv.i23tmnFXuqa1LCMG7UoyhZ3nF/PK7a2';
+        $user = new User(
+            'testUser',
+            '$2y$10$kEYXDhRhNmS1mk226hurv.i23tmnFXuqa1LCMG7UoyhZ3nF/PK7a2'
+        );
         $this->authMock->expects($this->once())
             ->method('authByUsernamePassword')
             ->with('testUser', 'testPassword')

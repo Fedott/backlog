@@ -27,9 +27,10 @@ class Registration extends AbstractAction
         /** @var UsernamePasswordPayload $payload */
         $payload = $request->getAttribute('payloadObject');
 
-        $user = new User();
-        $user->username = $payload->username;
-        $user->password = password_hash($payload->password, PASSWORD_DEFAULT);
+        $user = new User(
+            $payload->username,
+            password_hash($payload->password, PASSWORD_DEFAULT)
+        );
 
         $result = yield $this->userRepository->create($user);
 
@@ -37,7 +38,7 @@ class Registration extends AbstractAction
             $response = $response->withType('user-registered');
 
             $responsePayload = new UsernamePayload();
-            $responsePayload->username = $user->username;
+            $responsePayload->username = $user->getUsername();
 
             $response = $response->withPayload((array) $responsePayload);
         } else {

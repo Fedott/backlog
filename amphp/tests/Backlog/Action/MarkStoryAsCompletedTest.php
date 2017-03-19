@@ -5,6 +5,7 @@ use Amp\Success;
 use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\Action\Story\MarkAsCompleted\MarkStoryAsCompleted;
 use Fedot\Backlog\Action\Story\MarkAsCompleted\StoryIdPayload;
+use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\ActionTestCase;
@@ -13,9 +14,7 @@ class MarkStoryAsCompletedTest extends ActionTestCase
 {
     protected function getProcessorInstance(): ActionInterface
     {
-        $processor = new MarkStoryAsCompleted($this->storyRepositoryMock);
-
-        return $processor;
+        return new MarkStoryAsCompleted($this->storyRepositoryMock);
     }
 
     protected function getExpectedValidRequestType(): string
@@ -23,9 +22,18 @@ class MarkStoryAsCompletedTest extends ActionTestCase
         return 'story-mark-as-completed';
     }
 
+    protected function getExpectedPayloadType(): ?string
+    {
+        return StoryIdPayload::class;
+    }
+
     public function testProcess()
     {
-        $story = new Story();
+        $story = $this->createMock(Story::class);
+
+        $story->expects($this->once())
+            ->method('complete')
+        ;
 
         $this->storyRepositoryMock->expects($this->once())
             ->method('get')
@@ -35,12 +43,7 @@ class MarkStoryAsCompletedTest extends ActionTestCase
 
         $this->storyRepositoryMock->expects($this->once())
             ->method('save')
-            ->with($this->callback(function (Story $storyForSave) use ($story) {
-                $this->assertEquals($story, $storyForSave);
-                $this->assertEquals(true, $storyForSave->isCompleted);
-
-                return true;
-            }))
+            ->with($story)
             ->willReturn(new Success(true))
         ;
 
@@ -57,8 +60,6 @@ class MarkStoryAsCompletedTest extends ActionTestCase
 
     public function testProcessNotFoundStory()
     {
-        $story = new Story();
-
         $this->storyRepositoryMock->expects($this->once())
             ->method('get')
             ->with('story-id')

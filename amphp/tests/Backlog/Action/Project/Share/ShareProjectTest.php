@@ -46,6 +46,11 @@ class ShareProjectTest extends ActionTestCase
         return 'project/share';
     }
 
+    protected function getExpectedPayloadType(): ?string
+    {
+        return ProjectSharePayload::class;
+    }
+
     public function testSharePositive()
     {
         $payload = new ProjectSharePayload();
@@ -53,7 +58,7 @@ class ShareProjectTest extends ActionTestCase
         $payload->userId = 'user-id';
 
         $project = new Project('project-id', 'project 1');
-        $user = new User();
+        $user = new User('testUser', 'hash');
 
         $this->projectRepositoryMock->expects($this->once())
             ->method('get')
@@ -119,7 +124,7 @@ class ShareProjectTest extends ActionTestCase
         $payload->projectId = 'project-id';
         $payload->userId = 'user-id';
 
-        $user = new User();
+        $user = new User('testUser', 'hash');
 
         $this->projectRepositoryMock->expects($this->once())
             ->method('get')

@@ -44,6 +44,11 @@ class CreateRequirementActionTest extends ActionTestCase
         return 'story/requirements/create';
     }
 
+    protected function getExpectedPayloadType(): ?string
+    {
+        return CreateRequirementPayload::class;
+    }
+
     public function testProcessPositive()
     {
         $payload = new CreateRequirementPayload();
@@ -51,8 +56,7 @@ class CreateRequirementActionTest extends ActionTestCase
         $payload->storyId = 'story-id';
         $request = $this->makeRequest(7, 777, 'story/requirement/create', $payload);
 
-        $story = new Story();
-        $story->id = 'story-id';
+        $story = $this->createMock(Story::class);
 
         $this->storyRepositoryMock->expects($this->once())
             ->method('get')

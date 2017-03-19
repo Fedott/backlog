@@ -2,40 +2,28 @@
 namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
+use Amp\Success;
 use AsyncInterop\Loop;
 use AsyncInterop\Promise;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\DataMapper\FetchManagerInterface;
+use Fedot\DataMapper\IdentityMap;
 use Fedot\DataMapper\PersistManagerInterface;
+use Fedot\DataMapper\Redis\ModelManager;
 use Fedot\DataMapper\RelationshipManagerInterface;
 use function Amp\wrap;
 
 class ProjectRepository
 {
     /**
-     * @var RelationshipManagerInterface
+     * @var ModelManager
      */
-    protected $relationshipManager;
+    private $modelManager;
 
-    /**
-     * @var PersistManagerInterface
-     */
-    protected $persistManager;
-
-    /**
-     * @var FetchManagerInterface
-     */
-    protected $fetchManager;
-
-    public function __construct(
-        RelationshipManagerInterface $indexManager,
-        PersistManagerInterface $persistManager,
-        FetchManagerInterface $fetchManager
-    ) {
-        $this->relationshipManager = $indexManager;
-        $this->persistManager = $persistManager;
-        $this->fetchManager = $fetchManager;
+    public function __construct(ModelManager $modelManager)
+    {
+        $this->modelManager = $modelManager;
     }
 
     public function create(User $user, Project $project): Promise /** @yield bool */
@@ -43,9 +31,11 @@ class ProjectRepository
         $promisor = new Deferred();
 
         Loop::defer(wrap(function () use ($promisor, $user, $project) {
-            yield $this->persistManager->persist($project);
+            $user->addProject($project);
 
-            yield $this->relationshipManager->addManyToMany($user, $project);
+            $identityMap = new IdentityMap();
+            yield $this->modelManager->persist($project, $identityMap);
+            yield $this->modelManager->persist($user, $identityMap);
 
             $promisor->resolve(true);
         }));
@@ -55,26 +45,28 @@ class ProjectRepository
 
     public function getAllByUser(User $user): Promise /** @yield Project[] */
     {
-        $promisor = new Deferred();
-
-        Loop::defer(wrap(function () use ($promisor, $user) {
-            $projectIds = yield $this->relationshipManager->getIdsManyToMany($user, Project::class);
-
-            $projects = yield $this->fetchManager->fetchCollectionByIds(Project::class, $projectIds);
-
-            $promisor->resolve($projects);
-        }));
-
-        return $promisor->promise();
+        return new Success($user->getProjects());
     }
 
     public function get(string $id): Promise /** @yield Project */
     {
-        return $this->fetchManager->fetchById(Project::class, $id);
+        return $this->modelManager->find(Project::class, $id);
     }
 
     public function addUser(Project $project, User $user): Promise /** @yield bool */
     {
-        return $this->relationshipManager->addManyToMany($project, $user);
+        $deferred = new Deferred();
+
+        Loop::defer(wrap(function () use ($deferred, $user, $project) {
+            $project->share($user);
+
+            $identityMap = new IdentityMap();
+            yield $this->modelManager->persist($project, $identityMap);
+            yield $this->modelManager->persist($user, $identityMap);
+
+            $deferred->resolve(true);
+        }));
+
+        return $deferred->promise();
     }
 }

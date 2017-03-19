@@ -2,30 +2,48 @@
 
 namespace Fedot\Backlog\Model;
 
-use Fedot\DataMapper\Identifiable;
+use Fedot\DataMapper\Annotation\Field;
+use Fedot\DataMapper\Annotation\Id;
+use Fedot\DataMapper\Annotation\ReferenceOne;
 
-class Requirement implements Identifiable
+class Requirement
 {
     /**
+     * @Id
+     *
      * @var string
      */
     private $id;
 
     /**
+     * @Field
+     *
      * @var string
      */
     private $text;
 
     /**
+     * @ReferenceOne(target=Story::class)
+     *
+     * @var Story
+     */
+    private $story;
+
+    /**
+     * @Field
+     *
      * @var bool
      */
-    private $completed = false;
+    private $completed;
 
-    public function __construct(string $id, string $text, bool $completed = false)
+    public function __construct(string $id, string $text, Story $story, bool $completed = false)
     {
         $this->id = $id;
         $this->text = $text;
         $this->completed = $completed;
+
+        $this->story = $story;
+        $this->story->createRequirement($this);
     }
 
     public function getId(): string
@@ -38,12 +56,17 @@ class Requirement implements Identifiable
         return $this->text;
     }
 
+    public function getStory(): Story
+    {
+        return $this->story;
+    }
+
     public function edit(string $text): void
     {
         $this->text = $text;
     }
 
-    public function isCompleted()
+    public function isCompleted(): bool
     {
         return $this->completed;
     }

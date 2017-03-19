@@ -58,7 +58,7 @@ class CreateRequirementAction extends AbstractAction
 
         $uuid = $this->uuidFactory->uuid4()->toString();
 
-        $requirement = new Requirement($uuid, $payload->text);
+        $requirement = new Requirement($uuid, $payload->text, $story);
         yield $this->requirementRepository->create($story, $requirement);
 
         $response = $response->withType('requirement-created');

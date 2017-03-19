@@ -9,7 +9,6 @@ use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Ramsey\Uuid\UuidFactory;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ProjectCreate extends AbstractAction
 {
@@ -28,21 +27,14 @@ class ProjectCreate extends AbstractAction
      */
     protected $webSocketAuthService;
 
-    /**
-     * @var NormalizerInterface
-     */
-    protected $normalizer;
-
     public function __construct(
         ProjectRepository $projectRepository,
         UuidFactory $uuidFactory,
-        WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService,
-        NormalizerInterface $normalizer
+        WebSocketConnectionAuthenticationService $webSocketConnectionAuthenticationService
     ) {
         $this->projectRepository = $projectRepository;
         $this->uuidFactory = $uuidFactory;
         $this->webSocketAuthService = $webSocketConnectionAuthenticationService;
-        $this->normalizer = $normalizer;
     }
 
     public function getSupportedType(): string
@@ -70,7 +62,10 @@ class ProjectCreate extends AbstractAction
         yield $this->projectRepository->create($user, $project);
 
         $response = $response->withType('project-created');
-        $response = $response->withPayload($this->normalizer->normalize($project));
+        $response = $response->withPayload([
+            'id' => $project->getId(),
+            'name' => $project->getName()
+        ]);
 
         $promisor->resolve($response);
     }

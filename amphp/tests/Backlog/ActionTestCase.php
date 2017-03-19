@@ -70,6 +70,13 @@ abstract class ActionTestCase extends BaseTestCase
         ];
     }
 
+    public function testExpectedPayload()
+    {
+        $processor = $this->getProcessorInstance();
+
+        $this->assertEquals($this->getExpectedPayloadType(), $processor->getExpectedRequestPayload());
+    }
+
     protected function initActionMocks()
     {
         $this->storyRepositoryMock = $this->createMock(StoryRepository::class);
@@ -116,4 +123,6 @@ abstract class ActionTestCase extends BaseTestCase
     abstract protected function getProcessorInstance(): ActionInterface;
 
     abstract protected function getExpectedValidRequestType(): string;
+
+    abstract protected function getExpectedPayloadType(): ?string;
 }

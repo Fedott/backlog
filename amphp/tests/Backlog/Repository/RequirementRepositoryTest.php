@@ -8,6 +8,7 @@ use Fedot\Backlog\Model\Requirement;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\RequirementRepository;
 use Fedot\DataMapper\FetchManagerInterface;
+use Fedot\DataMapper\ModelManagerInterface;
 use Fedot\DataMapper\PersistManagerInterface;
 use Fedot\DataMapper\RelationshipManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -16,19 +17,9 @@ use Tests\Fedot\Backlog\BaseTestCase;
 class RequirementRepositoryTest extends BaseTestCase
 {
     /**
-     * @var RelationshipManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ModelManagerInterface|PHPUnit_Framework_MockObject_MockObject
      */
-    protected $relationshipManagerInterfaceMock;
-
-    /**
-     * @var PersistManagerInterface|PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $persistManagerInterfaceMock;
-
-    /**
-     * @var FetchManagerInterface|PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $fetchManagerInterfaceMock;
+    protected $modelManagerMock;
 
     /**
      * @var RequirementRepository
@@ -39,30 +30,24 @@ class RequirementRepositoryTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->relationshipManagerInterfaceMock = $this->createMock(RelationshipManagerInterface::class);
-        $this->persistManagerInterfaceMock = $this->createMock(PersistManagerInterface::class);
-        $this->fetchManagerInterfaceMock = $this->createMock(FetchManagerInterface::class);
+        $this->modelManagerMock = $this->createMock(ModelManagerInterface::class);
 
         $this->repository = new RequirementRepository(
-            $this->persistManagerInterfaceMock,
-            $this->fetchManagerInterfaceMock,
-            $this->relationshipManagerInterfaceMock
+            $this->modelManagerMock
         );
     }
 
     public function testCreate()
     {
-        $story = new Story();
-        $requirement = new Requirement('id', 'text');
+        $story = $this->createMock(Story::class);
+        $requirement = $this->createMock(Requirement::class);
 
-        $this->persistManagerInterfaceMock->expects($this->once())
+        $this->modelManagerMock->expects($this->exactly(2))
             ->method('persist')
-            ->with($requirement)
-            ->willReturn(new Success(true))
-        ;
-        $this->relationshipManagerInterfaceMock->expects($this->once())
-            ->method('addOneToMany')
-            ->with($story, $requirement)
+            ->withConsecutive(
+                [$requirement],
+                [$story]
+            )
             ->willReturn(new Success(true))
         ;
 
@@ -73,11 +58,11 @@ class RequirementRepositoryTest extends BaseTestCase
 
     public function testSave()
     {
-        $requirement = new Requirement('id', 'text');
+        $requirement = $this->createMock(Requirement::class);
 
-        $this->persistManagerInterfaceMock->expects($this->once())
+        $this->modelManagerMock->expects($this->once())
             ->method('persist')
-            ->with($requirement, true)
+            ->with($requirement)
             ->willReturn(new Success(true))
         ;
 
@@ -88,25 +73,16 @@ class RequirementRepositoryTest extends BaseTestCase
 
     public function testGetAllByStory()
     {
-        $story = new Story();
-        $requirement = new Requirement('id1', 'text1');
-        $requirement2 = new Requirement('id2', 'text2');
+        $story = $this->createMock(Story::class);
+        $requirement = $this->createMock(Requirement::class);
+        $requirement2 = $this->createMock(Requirement::class);
 
-        $this->relationshipManagerInterfaceMock->expects($this->once())
-            ->method('getIdsOneToMany')
-            ->with($story, Requirement::class)
-            ->willReturn(new Success([
-                'id1',
-                'id2',
-            ]))
-        ;
-        $this->fetchManagerInterfaceMock->expects($this->once())
-            ->method('fetchCollectionByIds')
-            ->with(Requirement::class, ['id1', 'id2'])
-            ->willReturn(new Success([
+        $story->expects($this->once())
+            ->method('getRequirements')
+            ->willReturn([
                 $requirement,
                 $requirement2
-            ]))
+            ])
         ;
 
         $result = wait($this->repository->getAllByStory($story));
@@ -119,10 +95,10 @@ class RequirementRepositoryTest extends BaseTestCase
 
     public function testGetPositive()
     {
-        $requirement = new Requirement('id', 'Req text');
+        $requirement = $this->createMock(Requirement::class);
 
-        $this->fetchManagerInterfaceMock->expects($this->once())
-            ->method('fetchById')
+        $this->modelManagerMock->expects($this->once())
+            ->method('find')
             ->with(Requirement::class, 'id')
             ->willReturn(new Success($requirement))
         ;
@@ -133,8 +109,8 @@ class RequirementRepositoryTest extends BaseTestCase
 
     public function testGetNegative()
     {
-        $this->fetchManagerInterfaceMock->expects($this->once())
-            ->method('fetchById')
+        $this->modelManagerMock->expects($this->once())
+            ->method('find')
             ->with(Requirement::class, 'id')
             ->willReturn(new Success(null))
         ;

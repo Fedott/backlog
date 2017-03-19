@@ -29,6 +29,11 @@ class RegistrationTest extends ActionTestCase
         return 'user-registration';
     }
 
+    protected function getExpectedPayloadType(): ?string
+    {
+        return UsernamePasswordPayload::class;
+    }
+
     public function testProcessPositive()
     {
         $processor = $this->getProcessorInstance();
@@ -40,16 +45,17 @@ class RegistrationTest extends ActionTestCase
         $request = $this->makeRequest(123, 555, 'user-registration', $payload);
         $response = $this->makeResponse($request);
 
-        $user = new User();
-        $user->username = 'TestUserNew';
-        $user->password = 'testPassword';
+        $user = new User(
+            'TestUserNew',
+            'testPassword'
+        );
 
         $this->userRepositoryMock
             ->expects($this->once())
             ->method('create')
             ->with($this->callback(function (User $user) {
-                $this->assertEquals('TestUserNew', $user->username);
-                $this->assertContains('$2y$10$', $user->password);
+                $this->assertEquals('TestUserNew', $user->getUsername());
+                $this->assertContains('$2y$10$', $user->getPasswordHash());
 
                 return true;
             }))
@@ -73,16 +79,14 @@ class RegistrationTest extends ActionTestCase
         $request = $this->makeRequest(123, 555, 'user-registration', $payload);
         $response = $this->makeResponse($request);
 
-        $user = new User();
-        $user->username = 'TestUserNew';
-        $user->password = 'testPassword';
+        $user = new User('TestUserNew', 'testPassword');
 
         $this->userRepositoryMock
             ->expects($this->once())
             ->method('create')
             ->with($this->callback(function (User $user) {
-                $this->assertEquals('TestUserNew', $user->username);
-                $this->assertContains('$2y$10$', $user->password);
+                $this->assertEquals('TestUserNew', $user->getUsername());
+                $this->assertContains('$2y$10$', $user->getPasswordHash());
 
                 return true;
             }))

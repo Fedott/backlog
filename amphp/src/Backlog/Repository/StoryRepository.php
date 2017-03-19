@@ -2,47 +2,28 @@
 namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
+use Amp\Success;
 use AsyncInterop\Loop;
 use AsyncInterop\Promise;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\DataMapper\FetchManagerInterface;
+use Fedot\DataMapper\IdentityMap;
 use Fedot\DataMapper\PersistManagerInterface;
+use Fedot\DataMapper\Redis\ModelManager;
 use Fedot\DataMapper\RelationshipManagerInterface;
 use function Amp\wrap;
 
 class StoryRepository
 {
     /**
-     * @var FetchManagerInterface
+     * @var ModelManager
      */
-    protected $fetchManager;
+    private $modelManager;
 
-    /**
-     * @var PersistManagerInterface
-     */
-    protected $persistManager;
-
-    /**
-     * @var RelationshipManagerInterface
-     */
-    protected $indexManager;
-
-    /**
-     * @var ProjectRepository
-     */
-    protected $projectRepository;
-
-    public function __construct(
-        FetchManagerInterface $fetchManager,
-        PersistManagerInterface $persistManager,
-        RelationshipManagerInterface $indexManager,
-        ProjectRepository $projectRepository
-    ) {
-        $this->fetchManager = $fetchManager;
-        $this->persistManager = $persistManager;
-        $this->indexManager = $indexManager;
-        $this->projectRepository = $projectRepository;
+    public function __construct(ModelManager $modelManager)
+    {
+        $this->modelManager = $modelManager;
     }
 
     /**
@@ -53,43 +34,26 @@ class StoryRepository
      */
     public function getAllByProject(Project $project): Promise
     {
-        $deferred = new Deferred;
-
-        Loop::defer(wrap(function () use ($deferred, $project) {
-            $storiesIds = yield $this->indexManager->getIdsOneToMany($project, Story::class);
-
-            if (!empty($storiesIds)) {
-                $stories = $this->fetchManager->fetchCollectionByIds(Story::class, $storiesIds);
-            } else {
-                $stories = [];
-            }
-
-            $deferred->resolve($stories);
-        }));
-
-        return $deferred->promise();
+        return new Success($project->getStories());
     }
 
     /**
      * @param Project $project
      * @param Story $story
      *
-     * @return Promise|bool
+     * @return Promise
+     * @yield bool
      */
     public function create(Project $project, Story $story): Promise
     {
         $promisor = new Deferred();
 
         Loop::defer(wrap(function () use ($promisor, $story, $project) {
-            $created = yield $this->persistManager->persist($story);
+            $identityMap = new IdentityMap();
+            yield $this->modelManager->persist($story, $identityMap);
+            yield $this->modelManager->persist($project, $identityMap);
 
-            if ($created) {
-                yield $this->indexManager->addOneToMany($project, $story);
-
-                $promisor->resolve(true);
-            } else {
-                $promisor->resolve(false);
-            }
+            $promisor->resolve(true);
         }));
 
         return $promisor->promise();
@@ -98,27 +62,30 @@ class StoryRepository
     /**
      * @param Story $story
      *
-     * @return Promise|bool
+     * @return Promise
+     * @yield bool
      */
     public function save(Story $story): Promise
     {
-        return $this->persistManager->persist($story, true);
+        return $this->modelManager->persist($story);
     }
 
     /**
      * @param Project $project
      * @param Story $story
      *
-     * @return Promise|bool
+     * @return Promise
+     * @yield bool
      */
     public function delete(Project $project, Story $story): Promise
     {
         $promisor = new Deferred();
 
         Loop::defer(wrap(function () use ($promisor, $story, $project) {
-            yield $this->indexManager->removeOneToMany($project, $story);
+            $project->removeStory($story);
 
-            yield $this->persistManager->remove($story);
+            yield $this->modelManager->remove($story);
+            yield $this->modelManager->persist($project);
 
             $promisor->resolve(true);
         }));
@@ -131,15 +98,18 @@ class StoryRepository
      * @param Story $story
      * @param Story $positionStory
      *
-     * @return Promise|bool
+     * @return Promise
+     * @yield bool
      */
     public function move(Project $project, Story $story, Story $positionStory): Promise
     {
-        return $this->indexManager->moveValueOnOneToMany($project, $story, $positionStory);
+        $project->moveStoryBeforeStory($story, $positionStory);
+
+        return $this->modelManager->persist($project);
     }
 
-    public function get(string $storyId): Promise
+    public function get(string $storyId): Promise /** @yield Story|null */
     {
-        return $this->fetchManager->fetchById(Story::class, $storyId);
+        return $this->modelManager->find(Story::class, $storyId);
     }
 }
