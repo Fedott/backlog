@@ -9,7 +9,9 @@ class ExcludePluralPropertiesObjectNormalizer extends ObjectNormalizer
 {
     protected function isAllowedAttribute($classOrObject, $attribute, $format = null, array $context = [])
     {
-        if (Inflector::singularize($attribute) !== $attribute) {
+        if (!$classOrObject instanceof PayloadInterface
+            && Inflector::singularize($attribute) !== $attribute
+        ) {
             return false;
         }
 
