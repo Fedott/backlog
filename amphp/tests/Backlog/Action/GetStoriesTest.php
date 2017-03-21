@@ -5,6 +5,7 @@ use Amp\Success;
 use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\Action\Story\GetAll\GetStories;
 use Fedot\Backlog\Action\Story\GetAll\ProjectIdPayload;
+use Fedot\Backlog\Action\Story\GetAll\StoriesPayload;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\ProjectRepository;
@@ -30,7 +31,8 @@ class GetStoriesTest extends ActionTestCase
     {
         return new GetStories(
             $this->storyRepositoryMock,
-            $this->projectRepositoryMock
+            $this->projectRepositoryMock,
+            $this->normalizerMock
         );
     }
 
@@ -74,11 +76,22 @@ class GetStoriesTest extends ActionTestCase
             ->willReturn(new Success($stories))
         ;
 
+        $normalizedStories = ['stories' => [
+            ['id' => 'test'],
+            ['id' => 'test2'],
+            ['id' => 'test3'],
+        ]];
+        $this->normalizerMock->expects($this->once())
+            ->method('normalize')
+            ->with($this->isInstanceOf(StoriesPayload::class))
+            ->willReturn($normalizedStories)
+        ;
+
         /** @var Response $response */
         $response = \Amp\wait($processor->process($request, $response));
 
         $this->assertResponseBasic($response, 34, 777, 'stories');
 
-        $this->assertEquals((array) $stories, $response->getPayload()['stories']);
+        $this->assertEquals($normalizedStories, $response->getPayload());
     }
 }
