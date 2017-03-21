@@ -81,7 +81,7 @@ class Story
 
     public function isCompleted(): bool
     {
-        return $this->completed;
+        return (bool) $this->completed;
     }
 
     public function complete(): void
