@@ -60,12 +60,18 @@ class StoryEditFrom extends React.Component {
             status: 'saving',
         });
 
+        let payload = {
+            title: this.state.story.title,
+            text: this.state.story.text,
+        };
+        if (this.state.isCreateForm) {
+            payload.projectId = this.state.projectId;
+        } else {
+            payload.id = this.state.story.id;
+        }
         const response = await webSocketClient.sendRequest({
             type: this.state.isCreateForm ? "create-story" : "edit-story",
-            payload: this.state.isCreateForm ? {
-                story: this.state.story,
-                projectId: this.state.projectId,
-            } : this.state.story,
+            payload: payload,
         });
 
         if (response.type !== 'error') {
