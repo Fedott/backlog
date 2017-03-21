@@ -1017,12 +1017,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Fedott/async-data-mapper.git",
-                "reference": "f84444dc3a4e743b82277793fda4827f16f0c197"
+                "reference": "bca9ab912af5dc4f21e68811d729af22e372d8d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Fedott/async-data-mapper/zipball/f84444dc3a4e743b82277793fda4827f16f0c197",
-                "reference": "f84444dc3a4e743b82277793fda4827f16f0c197",
+                "url": "https://api.github.com/repos/Fedott/async-data-mapper/zipball/bca9ab912af5dc4f21e68811d729af22e372d8d1",
+                "reference": "bca9ab912af5dc4f21e68811d729af22e372d8d1",
                 "shasum": ""
             },
             "require": {
@@ -1062,7 +1062,7 @@
                 }
             ],
             "description": "Simple async datamaper",
-            "time": "2017-03-18 13:06:49"
+            "time": "2017-03-21 15:41:44"
         },
         {
             "name": "jms/metadata",

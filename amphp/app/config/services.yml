@@ -97,3 +97,5 @@ services:
     autowire: true
   Doctrine\Common\Annotations\AnnotationReader:
     autowire: true
+  Fedot\DataMapper\Redis\ModelManager:
+    autowire: true
