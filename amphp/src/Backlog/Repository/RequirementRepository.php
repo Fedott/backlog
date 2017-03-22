@@ -3,13 +3,12 @@
 namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
+use Amp\Loop;
+use Amp\Promise;
 use Amp\Success;
-use AsyncInterop\Loop;
-use AsyncInterop\Promise;
 use Fedot\Backlog\Model\Requirement;
 use Fedot\Backlog\Model\Story;
 use Fedot\DataMapper\ModelManagerInterface;
-use function Amp\wrap;
 
 class RequirementRepository
 {
@@ -27,12 +26,12 @@ class RequirementRepository
     {
         $promisor = new Deferred();
 
-        Loop::defer(wrap(function () use ($promisor, $story, $requirement) {
+        Loop::defer(function () use ($promisor, $story, $requirement) {
             yield $this->modelManager->persist($requirement);
             yield $this->modelManager->persist($story);
 
             $promisor->resolve(true);
-        }));
+        });
 
         return $promisor->promise();
     }

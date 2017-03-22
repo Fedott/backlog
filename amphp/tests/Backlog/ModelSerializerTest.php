@@ -5,7 +5,6 @@ namespace Tests\Fedot\Backlog;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Requirement;
 use Fedot\Backlog\Model\Story;
-use Fedot\Backlog\Model\User;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Serializer;
 

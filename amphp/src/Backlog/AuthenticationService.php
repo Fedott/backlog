@@ -2,14 +2,13 @@
 namespace Fedot\Backlog;
 
 use Amp\Deferred;
+use Amp\Loop;
+use Amp\Promise;
 use Amp\Redis\Client;
-use AsyncInterop\Loop;
-use AsyncInterop\Promise;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Exception\UserNotFoundException;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\UserRepository;
-use function Amp\wrap;
 
 class AuthenticationService
 {
@@ -49,7 +48,7 @@ class AuthenticationService
     {
         $deferred = new Deferred();
 
-        Loop::defer(wrap(function () use ($username, $password, $deferred) {
+        Loop::defer(function () use ($username, $password, $deferred) {
             try {
                 /** @var User $user */
                 $user = yield $this->findUserByUsername($username);
@@ -68,7 +67,7 @@ class AuthenticationService
             $token = yield $this->getNewTokenForUser($user, 10*24*60*60);
 
             $deferred->resolve([$user, $token]);
-        }));
+        });
 
         return $deferred->promise();
     }
@@ -83,7 +82,7 @@ class AuthenticationService
     {
         $deferred = new Deferred();
 
-        Loop::defer(wrap(function () use ($token, $deferred) {
+        Loop::defer(function () use ($token, $deferred) {
             $username = yield $this->redisClient->get("auth:token:{$token}");
 
             if (null === $username) {
@@ -93,7 +92,7 @@ class AuthenticationService
             }
 
             $deferred->resolve($username);
-        }));
+        });
 
         return $deferred->promise();
     }
@@ -102,7 +101,7 @@ class AuthenticationService
     {
         $deferred = new Deferred();
 
-        Loop::defer(wrap(function () use ($deferred, $username) {
+        Loop::defer(function () use ($deferred, $username) {
             $user = yield $this->userRepository->get($username);
             if ($user) {
                 $deferred->resolve($user);
@@ -120,7 +119,7 @@ class AuthenticationService
             );
 
             $deferred->resolve($user);
-        }));
+        });
 
         return $deferred->promise();
     }
@@ -141,7 +140,7 @@ class AuthenticationService
     {
         $deferred = new Deferred();
 
-        Loop::defer(wrap(function () use ($user, $ttl, $deferred) {
+        Loop::defer(function () use ($user, $ttl, $deferred) {
             do {
                 $token = bin2hex(random_bytes(32));
 
@@ -151,7 +150,7 @@ class AuthenticationService
             } while (!$uniqueTokenGenerated);
 
             $deferred->resolve($token);
-        }));
+        });
 
         return $deferred->promise();
     }

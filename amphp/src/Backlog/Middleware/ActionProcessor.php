@@ -2,13 +2,12 @@
 namespace Fedot\Backlog\Middleware;
 
 use Amp\Deferred;
-use AsyncInterop\Loop;
-use AsyncInterop\Promise;
+use Amp\Loop;
+use Amp\Promise;
 use Fedot\Backlog\Action\ActionManager;
 use Fedot\Backlog\Infrastructure\Middleware\MiddlewareInterface;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
-use function Amp\wrap;
 
 class ActionProcessor implements MiddlewareInterface
 {
@@ -35,13 +34,13 @@ class ActionProcessor implements MiddlewareInterface
 
         $promisor = new Deferred();
 
-        Loop::defer(wrap(function () use ($promisor, $request, $responsePromise, $next) {
+        Loop::defer(function () use ($promisor, $request, $responsePromise, $next) {
             $response = yield $responsePromise;
 
             $nextResponse = yield $next($request, $response);
 
             $promisor->resolve($nextResponse);
-        }));
+        });
 
         return $promisor->promise();
     }

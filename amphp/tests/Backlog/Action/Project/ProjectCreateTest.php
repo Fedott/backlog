@@ -3,8 +3,8 @@ namespace Tests\Fedot\Backlog\Action\Project;
 
 use Amp\Success;
 use Fedot\Backlog\Action\ActionInterface;
-use Fedot\Backlog\Action\Project\Create\ProjectCreatePayload;
 use Fedot\Backlog\Action\Project\Create\ProjectCreate;
+use Fedot\Backlog\Action\Project\Create\ProjectCreatePayload;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\ProjectRepository;
@@ -95,7 +95,7 @@ class ProjectCreateTest extends ActionTestCase
         $processor = $this->getProcessorInstance();
 
         /** @var Response $response */
-        $response = \Amp\wait($processor->process($request, $response));
+        $response = \Amp\Promise\wait($processor->process($request, $response));
 
         $this->assertResponseBasic($response, 33, 432, 'project-created');
 

@@ -35,7 +35,7 @@ class PayloadParserTest extends BaseTestCase
             return new Success($response);
         });
 
-        $actualResponse = \Amp\wait($responsePromise);
+        $actualResponse = \Amp\Promise\wait($responsePromise);
         $this->assertEquals($response, $actualResponse);
     }
 
@@ -54,7 +54,7 @@ class PayloadParserTest extends BaseTestCase
 
         $responsePromise = $payloadParserMiddleware($request, $response);
 
-        $actualResponse = \Amp\wait($responsePromise);
+        $actualResponse = \Amp\Promise\wait($responsePromise);
         $this->assertEquals($response, $actualResponse);
     }
 }

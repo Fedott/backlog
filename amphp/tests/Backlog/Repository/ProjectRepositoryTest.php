@@ -2,7 +2,6 @@
 
 namespace Tests\Fedot\Backlog\Repository;
 
-use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
@@ -13,7 +12,6 @@ use Fedot\DataMapper\PersistManagerInterface;
 use Fedot\DataMapper\Redis\ModelManager;
 use Fedot\DataMapper\RelationshipManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
-use Symfony\Component\Serializer\SerializerInterface;
 use Tests\Fedot\Backlog\BaseTestCase;
 
 class ProjectRepositoryTest extends BaseTestCase
@@ -66,7 +64,7 @@ class ProjectRepositoryTest extends BaseTestCase
 
         $promise = $this->repository->create($userMock, $project);
 
-        $result = \Amp\wait($promise);
+        $result = \Amp\Promise\wait($promise);
         $this->assertEquals(true, $result);
     }
 
@@ -87,7 +85,7 @@ class ProjectRepositoryTest extends BaseTestCase
 
         $resultPromise = $this->repository->getAllByUser($userMock);
 
-        $result = \Amp\wait($resultPromise);
+        $result = \Amp\Promise\wait($resultPromise);
 
         $this->assertCount(3, $result);
         array_map(
@@ -111,7 +109,7 @@ class ProjectRepositoryTest extends BaseTestCase
 
         $resultPromise = $this->repository->get('id1');
 
-        $actualProject = \Amp\wait($resultPromise);
+        $actualProject = \Amp\Promise\wait($resultPromise);
 
         $this->assertEquals($project, $actualProject);
     }
@@ -135,7 +133,7 @@ class ProjectRepositoryTest extends BaseTestCase
             ->with($userMock)
         ;
 
-        $result = \Amp\wait($this->repository->addUser($projectMock, $userMock));
+        $result = \Amp\Promise\wait($this->repository->addUser($projectMock, $userMock));
 
         $this->assertTrue($result);
     }

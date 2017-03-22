@@ -55,7 +55,7 @@ class ActionManagerTest extends BaseTestCase
             $testAction3,
         ]);
 
-        $actualResponse = \Amp\wait($manager->process($request, $response));
+        $actualResponse = \Amp\Promise\wait($manager->process($request, $response));
 
         $this->assertEquals($expectedResponse, $actualResponse);
     }
@@ -66,7 +66,7 @@ class ActionManagerTest extends BaseTestCase
 
         $manager = new ActionManager();
 
-        $actualResponse = \Amp\wait($manager->process($request, $response));
+        $actualResponse = \Amp\Promise\wait($manager->process($request, $response));
 
         $this->assertEquals($response, $actualResponse);
     }

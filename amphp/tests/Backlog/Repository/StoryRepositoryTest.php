@@ -2,13 +2,10 @@
 
 namespace Tests\Fedot\Backlog\Repository;
 
-use function Amp\wait;
-use AsyncInterop\Promise;
-use Amp\Redis\Client;
+use Amp\Promise;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
-use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\DataMapper\IdentityMap;
 use Fedot\DataMapper\Redis\FetchManager;
@@ -17,8 +14,8 @@ use Fedot\DataMapper\Redis\ModelManager;
 use Fedot\DataMapper\Redis\PersistManager;
 use Fedot\DataMapper\Redis\RelationshipManager;
 use PHPUnit_Framework_MockObject_MockObject;
-use Symfony\Component\Serializer\SerializerInterface;
 use Tests\Fedot\Backlog\BaseTestCase;
+use function Amp\Promise\wait;
 
 class StoryRepositoryTest extends BaseTestCase
 {
@@ -57,7 +54,7 @@ class StoryRepositoryTest extends BaseTestCase
         $resultPromise = $repository->getAllByProject($projectMock);
         $this->assertInstanceOf(Promise::class, $resultPromise);
 
-        $result = \Amp\wait($resultPromise);
+        $result = \Amp\Promise\wait($resultPromise);
 
         $this->assertEquals($stories, $result);
     }
@@ -79,7 +76,7 @@ class StoryRepositoryTest extends BaseTestCase
         ;
 
         $resultPromise = $repository->create($project, $storyMock);
-        $result = \Amp\wait($resultPromise);
+        $result = \Amp\Promise\wait($resultPromise);
         $this->assertEquals(true, $result);
     }
 
@@ -149,7 +146,7 @@ class StoryRepositoryTest extends BaseTestCase
         ;
 
         $resultPromise = $repository->move($project, $story, $positionStory);
-        $result = \Amp\wait($resultPromise);
+        $result = \Amp\Promise\wait($resultPromise);
         $this->assertEquals(true, $result);
     }
 

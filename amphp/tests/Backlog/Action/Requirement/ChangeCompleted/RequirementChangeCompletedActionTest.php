@@ -10,7 +10,7 @@ use Fedot\Backlog\Model\Requirement;
 use Fedot\Backlog\Repository\RequirementRepository;
 use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Fedot\Backlog\ActionTestCase;
-use function Amp\wait;
+use function Amp\Promise\wait;
 
 class RequirementChangeCompletedActionTest extends ActionTestCase
 {

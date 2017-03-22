@@ -3,13 +3,13 @@
 namespace Tests\Fedot\Backlog\Action\Project\Share;
 
 use Amp\Success;
-use Fedot\Backlog\Action\Project\Share\ProjectSharePayload;
+use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\Action\Project\Share\ProjectShare;
+use Fedot\Backlog\Action\Project\Share\ProjectSharePayload;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\UserRepository;
-use Fedot\Backlog\Action\ActionInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Fedot\Backlog\ActionTestCase;
 
@@ -81,7 +81,7 @@ class ShareProjectTest extends ActionTestCase
         $request = $this->makeRequest(1, 2, 'project/share', $payload);
         $response = $this->makeResponse($request);
 
-        $response = \Amp\wait($this->action->process($request, $response));
+        $response = \Amp\Promise\wait($this->action->process($request, $response));
 
         $this->assertResponseBasic($response, 1, 2, 'success');
     }
@@ -113,7 +113,7 @@ class ShareProjectTest extends ActionTestCase
         $request = $this->makeRequest(1, 2, 'project/share', $payload);
         $response = $this->makeResponse($request);
 
-        $response = \Amp\wait($this->action->process($request, $response));
+        $response = \Amp\Promise\wait($this->action->process($request, $response));
 
         $this->assertResponseError($response, 1, 2, 'User or Project not found');
     }
@@ -145,7 +145,7 @@ class ShareProjectTest extends ActionTestCase
         $request = $this->makeRequest(1, 2, 'project/share', $payload);
         $response = $this->makeResponse($request);
 
-        $response = \Amp\wait($this->action->process($request, $response));
+        $response = \Amp\Promise\wait($this->action->process($request, $response));
 
         $this->assertResponseError($response, 1, 2, 'User or Project not found');
     }

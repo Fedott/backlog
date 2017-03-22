@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 namespace Tests\Fedot\Backlog\Action;
 
+use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\Action\EmptyPayload;
 use Fedot\Backlog\Action\Ping;
-use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\ActionTestCase;
@@ -33,7 +33,7 @@ class PingTest extends ActionTestCase
         $processor = new Ping();
 
         /** @var Response $response */
-        $response = \Amp\wait($processor->process($request, $response));
+        $response = \Amp\Promise\wait($processor->process($request, $response));
 
         $this->assertResponseBasic($response, 321, 777, 'pong');
 

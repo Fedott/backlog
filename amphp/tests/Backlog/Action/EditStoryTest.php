@@ -8,7 +8,6 @@ use Fedot\Backlog\Action\Story\Edit\EditStory;
 use Fedot\Backlog\Action\Story\Edit\EditStoryPayload;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
-use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\ActionTestCase;
@@ -74,7 +73,7 @@ class EditStoryTest extends ActionTestCase
         ;
 
         /** @var Response $response */
-        $response = \Amp\wait($processor->process($request, $response));
+        $response = \Amp\Promise\wait($processor->process($request, $response));
 
         $this->assertEquals(33, $response->getRequestId());
         $this->assertEquals(432, $response->getClientId());
@@ -111,7 +110,7 @@ class EditStoryTest extends ActionTestCase
         ;
 
         /** @var Response $response */
-        $response = \Amp\wait($processor->process($request, $response));
+        $response = \Amp\Promise\wait($processor->process($request, $response));
 
         $this->assertEquals(33, $response->getRequestId());
         $this->assertEquals(432, $response->getClientId());

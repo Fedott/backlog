@@ -7,11 +7,7 @@ use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\UserRepository;
-use Fedot\DataMapper\Redis\FetchManager;
-use Fedot\DataMapper\Redis\KeyGenerator;
-use Fedot\DataMapper\Redis\PersistManager;
 use PHPUnit_Framework_MockObject_MockObject;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class AuthenticationServiceTest extends BaseTestCase
 {
@@ -64,7 +60,7 @@ class AuthenticationServiceTest extends BaseTestCase
         ;
 
         /** @var User $actualUser */
-        list($actualUser, $actualToken) = \Amp\wait(
+        list($actualUser, $actualToken) = \Amp\Promise\wait(
             $service->authByUsernamePassword('testUser', 'testPassword')
         );
 
@@ -103,7 +99,7 @@ class AuthenticationServiceTest extends BaseTestCase
         ;
 
         /** @var User $actualUser */
-        list($actualUser, $actualToken) = \Amp\wait(
+        list($actualUser, $actualToken) = \Amp\Promise\wait(
             $service->authByUsernamePassword('testUser', 'testPassword')
         );
 
@@ -131,7 +127,7 @@ class AuthenticationServiceTest extends BaseTestCase
         $this->expectException(AuthenticationException::class);
         $this->expectExceptionMessage('Invalid username or password');
 
-        \Amp\wait($service->authByUsernamePassword('notFound', 'Wrong'));
+        \Amp\Promise\wait($service->authByUsernamePassword('notFound', 'Wrong'));
     }
 
     public function testAuthByUsernamePasswordWrongPassword()
@@ -156,7 +152,7 @@ class AuthenticationServiceTest extends BaseTestCase
         $this->expectException(AuthenticationException::class);
         $this->expectExceptionMessage('Invalid username or password');
 
-        \Amp\wait($service->authByUsernamePassword('testUser', 'Wrong'));
+        \Amp\Promise\wait($service->authByUsernamePassword('testUser', 'Wrong'));
     }
 
     public function testAuthByUsernamePasswordTokenAlready()
@@ -190,7 +186,7 @@ class AuthenticationServiceTest extends BaseTestCase
         ;
 
         /** @var User $actualUser */
-        list($actualUser, $actualToken) = \Amp\wait(
+        list($actualUser, $actualToken) = \Amp\Promise\wait(
             $service->authByUsernamePassword("testUser", "testPassword")
         );
 
@@ -213,7 +209,7 @@ class AuthenticationServiceTest extends BaseTestCase
             ->willReturn(new Success("testUser"))
         ;
 
-        $actualUsername = \Amp\wait(
+        $actualUsername = \Amp\Promise\wait(
             $service->authByToken("auth-token")
         );
 
@@ -235,6 +231,6 @@ class AuthenticationServiceTest extends BaseTestCase
         $this->expectException(AuthenticationException::class);
         $this->expectExceptionMessage('Invalid or expired token');
 
-        \Amp\wait($service->authByToken("auth-token"));
+        \Amp\Promise\wait($service->authByToken("auth-token"));
     }
 }

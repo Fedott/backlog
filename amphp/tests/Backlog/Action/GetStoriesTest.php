@@ -88,7 +88,7 @@ class GetStoriesTest extends ActionTestCase
         ;
 
         /** @var Response $response */
-        $response = \Amp\wait($processor->process($request, $response));
+        $response = \Amp\Promise\wait($processor->process($request, $response));
 
         $this->assertResponseBasic($response, 34, 777, 'stories');
 

@@ -3,7 +3,6 @@
 namespace Tests\Fedot\Backlog\Repository;
 
 use Amp\Success;
-use function Amp\wait;
 use Fedot\Backlog\Model\Requirement;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\RequirementRepository;
@@ -13,6 +12,7 @@ use Fedot\DataMapper\PersistManagerInterface;
 use Fedot\DataMapper\RelationshipManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Fedot\Backlog\BaseTestCase;
+use function Amp\Promise\wait;
 
 class RequirementRepositoryTest extends BaseTestCase
 {

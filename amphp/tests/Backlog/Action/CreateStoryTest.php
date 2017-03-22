@@ -3,12 +3,12 @@
 namespace Tests\Fedot\Backlog\Action;
 
 use Amp\Success;
+use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\Action\Story\Create\CreateStory;
 use Fedot\Backlog\Action\Story\Create\StoryCreatePayload;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\ProjectRepository;
-use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -99,7 +99,7 @@ class CreateStoryTest extends ActionTestCase
         $response = new Response($request->getId(), $request->getClientId());
 
         /** @var Response $response */
-        $response = \Amp\wait($processor->process($request, $response));
+        $response = \Amp\Promise\wait($processor->process($request, $response));
 
         $this->assertEquals(33, $response->getRequestId());
         $this->assertEquals(432, $response->getClientId());

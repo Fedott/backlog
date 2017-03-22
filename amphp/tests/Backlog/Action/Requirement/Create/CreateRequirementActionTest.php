@@ -13,7 +13,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;
 use Tests\Fedot\Backlog\ActionTestCase;
-use function Amp\wait;
+use function Amp\Promise\wait;
 
 class CreateRequirementActionTest extends ActionTestCase
 {

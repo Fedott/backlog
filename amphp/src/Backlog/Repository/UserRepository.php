@@ -2,11 +2,10 @@
 namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
-use AsyncInterop\Loop;
-use AsyncInterop\Promise;
+use Amp\Loop;
+use Amp\Promise;
 use Fedot\Backlog\Model\User;
 use Fedot\DataMapper\ModelManagerInterface;
-use function Amp\wrap;
 
 class UserRepository
 {
@@ -24,7 +23,7 @@ class UserRepository
     {
         $promisor = new Deferred();
 
-        Loop::defer(wrap(function () use ($promisor, $user) {
+        Loop::defer(function () use ($promisor, $user) {
             $loadedUser = yield $this->modelManager->find(User::class, $user->getUsername());
 
             if (null === $loadedUser) {
@@ -34,7 +33,7 @@ class UserRepository
             }
 
             $promisor->resolve($result);
-        }));
+        });
 
         return $promisor->promise();
     }
@@ -43,11 +42,11 @@ class UserRepository
     {
         $promisor = new Deferred();
 
-        Loop::defer(wrap(function () use ($promisor, $username) {
+        Loop::defer(function () use ($promisor, $username) {
             $user = yield $this->modelManager->find(User::class, $username);
 
             $promisor->resolve($user);
-        }));
+        });
 
         return $promisor->promise();
     }

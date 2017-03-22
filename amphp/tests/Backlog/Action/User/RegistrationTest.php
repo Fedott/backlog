@@ -62,7 +62,7 @@ class RegistrationTest extends ActionTestCase
             ->willReturn(new Success(true))
         ;
 
-        $actualResponse = \Amp\wait($processor->process($request, $response));
+        $actualResponse = \Amp\Promise\wait($processor->process($request, $response));
 
         $this->assertResponseBasic($actualResponse, 123, 555, 'user-registered');
         $this->assertEquals('TestUserNew', $actualResponse->getPayload()['username']);
@@ -93,7 +93,7 @@ class RegistrationTest extends ActionTestCase
             ->willReturn(new Success(false))
         ;
 
-        $actualResponse = \Amp\wait($processor->process($request, $response));
+        $actualResponse = \Amp\Promise\wait($processor->process($request, $response));
 
         $this->assertResponseBasic($actualResponse, 123, 555, 'user-registration-error');
         $this->assertEquals('Username busy', $actualResponse->getPayload()['message']);

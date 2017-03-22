@@ -3,9 +3,8 @@
 namespace Tests\Fedot\Backlog;
 
 use Aerys\Websocket\Endpoint;
+use Amp\Loop;
 use Amp\Success;
-use function Amp\wrap;
-use AsyncInterop\Loop;
 use Fedot\Backlog\Infrastructure\Middleware\Runner;
 use Fedot\Backlog\Infrastructure\Middleware\RunnerFactory;
 use Fedot\Backlog\MessageProcessor;
@@ -17,6 +16,16 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class MessageProcessorTest extends BaseTestCase
 {
+    public static function setUpBeforeClass()
+    {
+        Loop::set(new Loop\NativeDriver());
+    }
+
+    public static function tearDownAfterClass()
+    {
+        Loop::stop();
+    }
+
     public function testProcessMessage()
     {
         $serializerMock = $this->createMock(SerializerInterface::class);
@@ -59,9 +68,9 @@ class MessageProcessorTest extends BaseTestCase
             ->with('{"requestId":1,"type":"test-response","payload":[]}', 123)
         ;
 
-        Loop::execute(wrap(function () use ($webSocketServer, $endpointMock) {
+        Loop::run(function () use ($webSocketServer, $endpointMock) {
             yield from $webSocketServer->processMessage($endpointMock, 123, "jj");
-        }));
+        });
     }
 
     public function testProcessMessageNotDirectResponse()
@@ -113,9 +122,9 @@ class MessageProcessorTest extends BaseTestCase
             ->with('{"requestId":1,"type":"test-response","payload":[]}')
         ;
 
-        Loop::execute(wrap(function () use ($webSocketServer, $endpointMock) {
+        Loop::run(function () use ($webSocketServer, $endpointMock) {
             yield from $webSocketServer->processMessage($endpointMock, 123, "jj");
-        }));
+        });
     }
 
     public function testProcessMessageException()
@@ -160,8 +169,8 @@ class MessageProcessorTest extends BaseTestCase
             ->with('{"requestId":1,"type":"internal-server-error","payload":{"message":"Atata"}}', 123)
         ;
 
-        Loop::execute(wrap(function () use ($webSocketServer, $endpointMock) {
+        Loop::run(function () use ($webSocketServer, $endpointMock) {
             yield from $webSocketServer->processMessage($endpointMock, 123, "jj");
-        }));
+        });
     }
 }

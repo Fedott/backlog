@@ -5,7 +5,6 @@ use Amp\Success;
 use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\Action\Story\MarkAsCompleted\MarkStoryAsCompleted;
 use Fedot\Backlog\Action\Story\MarkAsCompleted\StoryIdPayload;
-use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\ActionTestCase;
@@ -53,7 +52,7 @@ class MarkStoryAsCompletedTest extends ActionTestCase
         $response = $this->makeResponse($request);
 
         /** @var Response $response */
-        $response = \Amp\wait($this->getProcessorInstance()->process($request, $response));
+        $response = \Amp\Promise\wait($this->getProcessorInstance()->process($request, $response));
 
         $this->assertResponseBasic($response, 3, 166, 'story-marked-as-completed');
     }
@@ -74,7 +73,7 @@ class MarkStoryAsCompletedTest extends ActionTestCase
         $response = $this->makeResponse($request);
 
         /** @var Response $response */
-        $response = \Amp\wait($this->getProcessorInstance()->process($request, $response));
+        $response = \Amp\Promise\wait($this->getProcessorInstance()->process($request, $response));
 
         $this->assertResponseBasic($response, 3, 166, 'error');
     }

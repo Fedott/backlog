@@ -10,8 +10,8 @@ use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Tests\Fedot\Backlog\Stubs\NestedObject;
-use Tests\Fedot\Backlog\Stubs\TestPayload;
 use Tests\Fedot\Backlog\Stubs\TestAction;
+use Tests\Fedot\Backlog\Stubs\TestPayload;
 
 class SerializerServiceTest extends BaseTestCase
 {
