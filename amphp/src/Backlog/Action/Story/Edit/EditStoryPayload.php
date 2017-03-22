@@ -1,10 +1,16 @@
 <?php declare(strict_types=1);
-namespace Fedot\Backlog\Action\Story\Create;
+
+namespace Fedot\Backlog\Action\Story\Edit;
 
 use Fedot\Backlog\PayloadInterface;
 
-class StoryCreatePayload implements PayloadInterface
+class EditStoryPayload implements PayloadInterface
 {
+    /**
+     * @var string
+     */
+    public $id;
+
     /**
      * @var string
      */
@@ -14,9 +20,4 @@ class StoryCreatePayload implements PayloadInterface
      * @var string
      */
     public $text;
-
-    /**
-     * @var string
-     */
-    public $projectId;
 }

@@ -8,7 +8,9 @@ use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\DataMapper\FetchManagerInterface;
+use Fedot\DataMapper\IdentityMap;
 use Fedot\DataMapper\PersistManagerInterface;
+use Fedot\DataMapper\Redis\ModelManager;
 use Fedot\DataMapper\RelationshipManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -17,34 +19,14 @@ use Tests\Fedot\Backlog\BaseTestCase;
 class ProjectRepositoryTest extends BaseTestCase
 {
     /**
-     * @var RelationshipManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ModelManager|PHPUnit_Framework_MockObject_MockObject
      */
-    protected $relationshipManagerInterfaceMock;
-
-    /**
-     * @var PersistManagerInterface|PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $persistManagerInterfaceMock;
-
-    /**
-     * @var FetchManagerInterface|PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $fetchManagerInterfaceMock;
+    protected $modelManagerMock;
 
     /**
      * @var ProjectRepository
      */
     protected $repository;
-
-    /**
-     * @var Client|PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $redisClientMock;
-
-    /**
-     * @var SerializerInterface|PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $serializerMock;
 
     protected function setUp()
     {
@@ -55,40 +37,34 @@ class ProjectRepositoryTest extends BaseTestCase
 
     private function initRepositoryWithMocks()
     {
-        $this->redisClientMock = $this->createMock(Client::class);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
-
-        $this->relationshipManagerInterfaceMock = $this->createMock(RelationshipManagerInterface::class);
-        $this->persistManagerInterfaceMock = $this->createMock(PersistManagerInterface::class);
-        $this->fetchManagerInterfaceMock = $this->createMock(FetchManagerInterface::class);
+        $this->modelManagerMock = $this->createMock(ModelManager::class);
 
         $this->repository = new ProjectRepository(
-            $this->relationshipManagerInterfaceMock,
-            $this->persistManagerInterfaceMock,
-            $this->fetchManagerInterfaceMock
+            $this->modelManagerMock
         );
     }
 
     public function testCreate()
     {
-        $user = new User();
-        $user->username = 'testUser';
+        $userMock = $this->createMock(User::class);
 
         $project = new Project('project-id', 'project name');
 
-        $this->persistManagerInterfaceMock->expects($this->once())
+        $this->modelManagerMock->expects($this->exactly(2))
             ->method('persist')
-            ->with($project, false)
+            ->withConsecutive(
+                [$project, $this->isInstanceOf(IdentityMap::class)],
+                [$userMock, $this->isInstanceOf(IdentityMap::class)]
+            )
             ->willReturn(new Success(true))
         ;
 
-        $this->relationshipManagerInterfaceMock->expects($this->once())
-            ->method('addManyToMany')
-            ->with($user, $project)
-            ->willReturn(new Success(true))
+        $userMock->expects($this->once())
+            ->method('addProject')
+            ->with($project)
         ;
 
-        $promise = $this->repository->create($user, $project);
+        $promise = $this->repository->create($userMock, $project);
 
         $result = \Amp\wait($promise);
         $this->assertEquals(true, $result);
@@ -96,14 +72,7 @@ class ProjectRepositoryTest extends BaseTestCase
 
     public function testGetAll()
     {
-        $user = new User();
-        $user->username = 'testUser';
-
-        $projectIds = [
-            'id1',
-            'id2',
-            'id3',
-        ];
+        $userMock = $this->createMock(User::class);
 
         $projects = [
             new Project('project-id', 'project name'),
@@ -111,25 +80,18 @@ class ProjectRepositoryTest extends BaseTestCase
             new Project('project-id3', 'project name 3'),
         ];
 
-        $this->relationshipManagerInterfaceMock->expects($this->once())
-            ->method('getIdsManyToMany')
-            ->with($user, Project::class)
-            ->willReturn(new Success($projectIds))
+        $userMock->expects($this->once())
+            ->method('getProjects')
+            ->willReturn($projects)
         ;
 
-        $this->fetchManagerInterfaceMock->expects($this->once())
-            ->method('fetchCollectionByIds')
-            ->with(Project::class, $projectIds)
-            ->willReturn(new Success($projects))
-        ;
-
-        $resultPromise = $this->repository->getAllByUser($user);
+        $resultPromise = $this->repository->getAllByUser($userMock);
 
         $result = \Amp\wait($resultPromise);
 
         $this->assertCount(3, $result);
         array_map(
-            function ($project) {
+            function (Project $project) {
                 $this->assertInstanceOf(Project::class, $project);
             },
             $result
@@ -141,8 +103,8 @@ class ProjectRepositoryTest extends BaseTestCase
         $projectId = 'id1';
         $project = new Project('project-id', 'project name');
 
-        $this->fetchManagerInterfaceMock->expects($this->once())
-            ->method('fetchById')
+        $this->modelManagerMock->expects($this->once())
+            ->method('find')
             ->with(Project::class, $projectId)
             ->willReturn(new Success($project))
         ;
@@ -156,16 +118,24 @@ class ProjectRepositoryTest extends BaseTestCase
 
     public function testAddUser()
     {
-        $project = new Project('project-id', 'project name');
-        $user = new User();
+        $projectMock = $this->createMock(Project::class);
+        $userMock = $this->createMock(User::class);
 
-        $this->relationshipManagerInterfaceMock->expects($this->once())
-            ->method('addManyToMany')
-            ->with($project, $user)
+        $this->modelManagerMock->expects($this->exactly(2))
+            ->method('persist')
+            ->withConsecutive(
+                [$projectMock, $this->isInstanceOf(IdentityMap::class)],
+                [$userMock, $this->isInstanceOf(IdentityMap::class)]
+            )
             ->willReturn(new Success(true))
         ;
 
-        $result = \Amp\wait($this->repository->addUser($project, $user));
+        $projectMock->expects($this->once())
+            ->method('share')
+            ->with($userMock)
+        ;
+
+        $result = \Amp\wait($this->repository->addUser($projectMock, $userMock));
 
         $this->assertTrue($result);
     }

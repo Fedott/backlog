@@ -30,22 +30,31 @@ class EditStory extends AbstractAction
 
     public function getExpectedRequestPayload(): string
     {
-        return Story::class;
+        return EditStoryPayload::class;
     }
 
     protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
     {
+        /** @var EditStoryPayload $payload */
+        $payload = $request->getAttribute('payloadObject');
+
         /** @var Story $story */
-        $story = $request->getAttribute('payloadObject');
+        $story = yield $this->storyRepository->get($payload->id);
 
-        $result = yield $this->storyRepository->save($story);
+        if (null !== $story) {
+            $story->edit($payload->title, $payload->text);
 
-        if ($result === true) {
+            yield $this->storyRepository->save($story);
+
             $response = $response->withType('story-edited');
-            $response = $response->withPayload((array) $story);
+            $response = $response->withPayload([
+                'id' => $story->getId(),
+                'title' => $story->getTitle(),
+                'text' => $story->getText(),
+            ]);
         } else {
             $response = $response->withType('error');
-            $response = $response->withPayload((array) new ErrorPayload("Story id '{$story->id}' do not saved"));
+            $response = $response->withPayload((array) new ErrorPayload("Story id '{$payload->id}' do not saved"));
         }
 
         $promisor->resolve($response);

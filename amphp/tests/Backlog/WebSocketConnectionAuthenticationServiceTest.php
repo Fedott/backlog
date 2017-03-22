@@ -12,9 +12,9 @@ class WebSocketConnectionAuthenticationServiceTest extends BaseTestCase
     {
         $service = new WebSocketConnectionAuthenticationService();
 
-        $user1 = new User();
-        $user2 = new User();
-        $user3 = new User();
+        $user1 = new User('testUser', 'hash');
+        $user2 = new User('testUser2', 'hash');
+        $user3 = new User('testUser3', 'hash');
 
         $service->authorizeClient(34, $user1);
         $service->authorizeClient(23, $user2);
@@ -49,9 +49,9 @@ class WebSocketConnectionAuthenticationServiceTest extends BaseTestCase
     {
         $service = new WebSocketConnectionAuthenticationService();
 
-        $user1 = new User();
-        $user2 = new User();
-        $user3 = new User();
+        $user1 = new User('testUser', 'hash');
+        $user2 = new User('testUser2', 'hash');
+        $user3 = new User('testUser3', 'hash');
 
         $service->authorizeClient(34, $user1);
         $service->authorizeClient(23, $user2);

@@ -40,6 +40,11 @@ class LoginTokenTest extends ActionTestCase
         return 'login-token';
     }
 
+    protected function getExpectedPayloadType(): ?string
+    {
+        return TokenPayload::class;
+    }
+
     public function testGetExpectedRequestPayload()
     {
         $processor = new LoginToken(
@@ -66,10 +71,16 @@ class LoginTokenTest extends ActionTestCase
             ->willReturn(new Success('testUser'))
         ;
 
+        $this->authMock->expects($this->once())
+            ->method('findUserByUsername')
+            ->with('testUser')
+            ->willReturn(new Success(new User('testUser', 'hash')))
+        ;
+
         $this->webSocketAuthMock->expects($this->once())
             ->method('authorizeClient')
             ->with($this->equalTo(777), $this->callback(function (User $user) {
-                $this->assertEquals('testUser', $user->username);
+                $this->assertEquals('testUser', $user->getUsername());
 
                 return true;
             }))

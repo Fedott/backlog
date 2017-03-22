@@ -5,6 +5,7 @@ use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\AuthenticationService;
 use Fedot\Backlog\Exception\AuthenticationException;
+use Fedot\Backlog\Model\User;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
@@ -45,13 +46,15 @@ class LoginUsernamePassword extends AbstractAction
         $payload = $request->getAttribute('payloadObject');
 
         try {
+            /** @var User $user */
+            /** @var string $token */
             list($user, $token) = yield $this->authenticationService->authByUsernamePassword(
                 $payload->username,
                 $payload->password
             );
 
             $newPayload = new LoginSuccessPayload();
-            $newPayload->username = $user->username;
+            $newPayload->username = $user->getUsername();
             $newPayload->token = $token;
             $response = $response->withType('login-success');
             $response = $response->withPayload((array) $newPayload);

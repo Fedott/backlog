@@ -46,6 +46,11 @@ class GetProjectsTest extends ActionTestCase
         return 'get-projects';
     }
 
+    protected function getExpectedPayloadType(): ?string
+    {
+        return EmptyPayload::class;
+    }
+
     public function testProcess()
     {
         $processor = $this->getProcessorInstance();
@@ -55,7 +60,7 @@ class GetProjectsTest extends ActionTestCase
         $request = $this->makeRequest(66, 432, 'get-projects', $payload);
         $response = $this->makeResponse($request);
 
-        $user = new User();
+        $user = new User('testUser', 'hash');
 
         $this->webSocketAuthServiceMock
             ->expects($this->once())

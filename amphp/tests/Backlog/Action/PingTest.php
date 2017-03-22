@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace Tests\Fedot\Backlog\Action;
 
+use Fedot\Backlog\Action\EmptyPayload;
 use Fedot\Backlog\Action\Ping;
 use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\WebSocket\Request;
@@ -17,6 +18,11 @@ class PingTest extends ActionTestCase
     protected function getExpectedValidRequestType(): string
     {
         return 'ping';
+    }
+
+    protected function getExpectedPayloadType(): ?string
+    {
+        return EmptyPayload::class;
     }
 
     public function testProcess()

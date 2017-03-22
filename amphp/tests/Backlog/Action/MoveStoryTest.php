@@ -39,6 +39,11 @@ class MoveStoryTest extends ActionTestCase
         return 'move-story';
     }
 
+    protected function getExpectedPayloadType(): ?string
+    {
+        return MoveStoryPayload::class;
+    }
+
     public function testProcess()
     {
         $processor = $this->getProcessorInstance();
@@ -48,9 +53,9 @@ class MoveStoryTest extends ActionTestCase
         $payload->beforeStoryId = 'before-story-id';
         $payload->projectId = 'project-id';
 
-        $project = new Project('project-id', 'name');
-        $story = new Story();
-        $positionStory = new Story();
+        $project = $this->createMock(Project::class);
+        $story = $this->createMock(Story::class);
+        $positionStory = $this->createMock(Story::class);
 
         $this->projectRepositoryMock->expects($this->once())
             ->method('get')
@@ -89,8 +94,6 @@ class MoveStoryTest extends ActionTestCase
         $payload->projectId = 'project-id';
 
         $project = new Project('project-id', 'name');
-        $story = new Story();
-        $positionStory = new Story();
 
         $this->projectRepositoryMock->expects($this->once())
             ->method('get')

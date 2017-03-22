@@ -5,6 +5,7 @@ use Amp\Success;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\UserRepository;
 use Fedot\DataMapper\Redis\FetchManager;
+use Fedot\DataMapper\Redis\ModelManager;
 use Fedot\DataMapper\Redis\PersistManager;
 use Tests\Fedot\Backlog\BaseTestCase;
 
@@ -12,18 +13,21 @@ class UserRepositoryTest extends BaseTestCase
 {
     public function testCreate()
     {
-        $fetchManagerMock = $this->createMock(FetchManager::class);
-        $persistManagerMock = $this->createMock(PersistManager::class);
+        $modelManagerMock = $this->createMock(ModelManager::class);
 
-        $repository = new UserRepository($fetchManagerMock, $persistManagerMock);
+        $repository = new UserRepository($modelManagerMock);
 
-        $user = new User();
-        $user->username = 'testUser';
-        $user->password = 'testPassword';
+        $user = new User('testUser', 'testPassword');
 
-        $persistManagerMock->expects($this->once())
+        $modelManagerMock->expects($this->once())
+            ->method('find')
+            ->with(User::class, 'testUser')
+            ->willReturn(new Success(null))
+        ;
+
+        $modelManagerMock->expects($this->once())
             ->method('persist')
-            ->with($user, false)
+            ->with($user)
             ->willReturn(new Success(true))
         ;
 
@@ -34,19 +38,21 @@ class UserRepositoryTest extends BaseTestCase
 
     public function testCreateNegative()
     {
-        $fetchManagerMock = $this->createMock(FetchManager::class);
-        $persistManagerMock = $this->createMock(PersistManager::class);
+        $modelManagerMock = $this->createMock(ModelManager::class);
 
-        $repository = new UserRepository($fetchManagerMock, $persistManagerMock);
+        $repository = new UserRepository($modelManagerMock);
 
-        $user = new User();
-        $user->username = 'testUser';
-        $user->password = 'testPassword';
+        $user = new User('testUser', 'testPassword');
+        $userLoaded = new User('testUser', 'testPassword');
 
-        $persistManagerMock->expects($this->once())
+        $modelManagerMock->expects($this->once())
+            ->method('find')
+            ->with(User::class, 'testUser')
+            ->willReturn(new Success($userLoaded))
+        ;
+
+        $modelManagerMock->expects($this->never())
             ->method('persist')
-            ->with($user, false)
-            ->willReturn(new Success(false))
         ;
 
         $actualResult = \Amp\wait($repository->create($user));
@@ -56,17 +62,14 @@ class UserRepositoryTest extends BaseTestCase
 
     public function testGet()
     {
-        $fetchManagerMock = $this->createMock(FetchManager::class);
-        $persistManagerMock = $this->createMock(PersistManager::class);
+        $modelManagerMock = $this->createMock(ModelManager::class);
 
-        $repository = new UserRepository($fetchManagerMock, $persistManagerMock);
+        $repository = new UserRepository($modelManagerMock);
 
-        $user = new User();
-        $user->username = 'testUser';
-        $user->password = 'testPassword';
+        $user = new User('testUser', 'testPassword');
 
-        $fetchManagerMock->expects($this->once())
-            ->method('fetchById')
+        $modelManagerMock->expects($this->once())
+            ->method('find')
             ->with(User::class, 'testUser')
             ->willReturn(new Success($user))
         ;

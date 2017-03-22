@@ -5,26 +5,19 @@ use Amp\Deferred;
 use AsyncInterop\Loop;
 use AsyncInterop\Promise;
 use Fedot\Backlog\Model\User;
-use Fedot\DataMapper\FetchManagerInterface;
-use Fedot\DataMapper\PersistManagerInterface;
+use Fedot\DataMapper\ModelManagerInterface;
 use function Amp\wrap;
 
 class UserRepository
 {
     /**
-     * @var FetchManagerInterface
+     * @var ModelManagerInterface
      */
-    protected $fetchManager;
+    private $modelManager;
 
-    /**
-     * @var PersistManagerInterface
-     */
-    protected $persistManager;
-
-    public function __construct(FetchManagerInterface $fetchManager, PersistManagerInterface $persistManager)
+    public function __construct(ModelManagerInterface $modelManager)
     {
-        $this->fetchManager = $fetchManager;
-        $this->persistManager = $persistManager;
+        $this->modelManager = $modelManager;
     }
 
     public function create(User $user): Promise
@@ -32,7 +25,13 @@ class UserRepository
         $promisor = new Deferred();
 
         Loop::defer(wrap(function () use ($promisor, $user) {
-            $result = yield $this->persistManager->persist($user);
+            $loadedUser = yield $this->modelManager->find(User::class, $user->getUsername());
+
+            if (null === $loadedUser) {
+                $result = yield $this->modelManager->persist($user);
+            } else {
+                $result = false;
+            }
 
             $promisor->resolve($result);
         }));
@@ -45,7 +44,7 @@ class UserRepository
         $promisor = new Deferred();
 
         Loop::defer(wrap(function () use ($promisor, $username) {
-            $user = yield $this->fetchManager->fetchById(User::class, $username);
+            $user = yield $this->modelManager->find(User::class, $username);
 
             $promisor->resolve($user);
         }));

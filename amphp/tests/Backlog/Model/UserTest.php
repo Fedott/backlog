@@ -9,9 +9,9 @@ class UserTest extends BaseTestCase
 {
     public function testGetId()
     {
-        $user = new User();
-        $user->username = 'username1';
+        $user = new User('testUser', 'hash');
 
-        $this->assertEquals('username1', $user->getId());
+        $this->assertEquals('testUser', $user->getUsername());
+        $this->assertEquals('hash', $user->getPasswordHash());
     }
 }

@@ -51,15 +51,16 @@ class AuthenticationService
 
         Loop::defer(wrap(function () use ($username, $password, $deferred) {
             try {
+                /** @var User $user */
                 $user = yield $this->findUserByUsername($username);
             } catch (UserNotFoundException $exception) {
-                $deferred->fail(new AuthenticationException("Invalid username or password"));
+                $deferred->fail(new AuthenticationException('Invalid username or password'));
 
                 return;
             }
 
-            if (!$this->passwordVerify($password, $user->password)) {
-                $deferred->fail(new AuthenticationException("Invalid username or password"));
+            if (!$this->passwordVerify($password, $user->getPasswordHash())) {
+                $deferred->fail(new AuthenticationException('Invalid username or password'));
 
                 return;
             }
@@ -97,7 +98,7 @@ class AuthenticationService
         return $deferred->promise();
     }
 
-    private function findUserByUsername(string $username): Promise
+    public function findUserByUsername(string $username): Promise
     {
         $deferred = new Deferred();
 
@@ -113,9 +114,10 @@ class AuthenticationService
                 return;
             }
 
-            $user = new User();
-            $user->username = $username;
-            $user->password = $this->userPasswords[$username];
+            $user = new User(
+                $username,
+                $this->userPasswords[$username]
+            );
 
             $deferred->resolve($user);
         }));
@@ -123,12 +125,6 @@ class AuthenticationService
         return $deferred->promise();
     }
 
-    /**
-     * @param string $password
-     * @param string $hash
-     *
-     * @return bool
-     */
     private function passwordVerify(string $password, string $hash): bool
     {
         return password_verify($password, $hash);
@@ -150,7 +146,7 @@ class AuthenticationService
                 $token = bin2hex(random_bytes(32));
 
                 $uniqueTokenGenerated = yield $this->redisClient
-                    ->set("auth:token:{$token}", $user->username, $ttl, false, 'NX')
+                    ->set("auth:token:{$token}", $user->getUsername(), $ttl, false, 'NX')
                 ;
             } while (!$uniqueTokenGenerated);
 

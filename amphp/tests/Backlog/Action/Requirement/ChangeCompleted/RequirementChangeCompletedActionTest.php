@@ -31,6 +31,11 @@ class RequirementChangeCompletedActionTest extends ActionTestCase
         return 'story/requirements/change-completed';
     }
 
+    protected function getExpectedPayloadType(): ?string
+    {
+        return RequirementChangeCompletedPayload::class;
+    }
+
     /**
      * @dataProvider providerTestProcess
      */

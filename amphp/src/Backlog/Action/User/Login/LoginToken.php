@@ -58,8 +58,8 @@ class LoginToken extends AbstractAction
             $response = $response->withType('login-success');
             $response = $response->withPayload((array) $newPayload);
 
-            $user = new User();
-            $user->username = $username;
+            /** @var User $user */
+            $user = yield $this->authenticationService->findUserByUsername($username);
 
             $this->webSocketAuthService->authorizeClient($request->getClientId(), $user);
         } catch (AuthenticationException $exception) {

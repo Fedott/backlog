@@ -7,6 +7,7 @@ use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class GetStories extends AbstractAction
 {
@@ -20,12 +21,19 @@ class GetStories extends AbstractAction
      */
     protected $projectRepository;
 
+    /**
+     * @var NormalizerInterface
+     */
+    protected $normalizer;
+
     public function __construct(
         StoryRepository $storyRepository,
-        ProjectRepository $projectRepository
+        ProjectRepository $projectRepository,
+        NormalizerInterface $normalizer
     ) {
         $this->storyRepository = $storyRepository;
         $this->projectRepository = $projectRepository;
+        $this->normalizer = $normalizer;
     }
 
     public function getSupportedType(): string
@@ -48,7 +56,7 @@ class GetStories extends AbstractAction
         $response = $response->withType('stories');
         $storiesPayload = new StoriesPayload();
         $storiesPayload->stories = $stories;
-        $response = $response->withPayload((array)$storiesPayload);
+        $response = $response->withPayload($this->normalizer->normalize($storiesPayload));
 
         $promisor->resolve($response);
     }

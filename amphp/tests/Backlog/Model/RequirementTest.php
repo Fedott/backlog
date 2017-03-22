@@ -3,6 +3,7 @@
 namespace Tests\Fedot\Backlog\Model;
 
 use Fedot\Backlog\Model\Requirement;
+use Fedot\Backlog\Model\Story;
 use Fedot\DataMapper\Identifiable;
 use PHPUnit\Framework\TestCase;
 
@@ -10,9 +11,8 @@ class RequirementTest extends TestCase
 {
     public function test()
     {
-        $requirement = new Requirement('id', 'text');
-
-        $this->assertInstanceOf(Identifiable::class, $requirement);
+        $story = $this->createMock(Story::class);
+        $requirement = new Requirement('id', 'text', $story);
 
         $this->assertEquals('id', $requirement->getId());
         $this->assertEquals('text', $requirement->getText());

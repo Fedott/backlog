@@ -10,8 +10,10 @@ use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\StoryRepository;
+use Fedot\DataMapper\IdentityMap;
 use Fedot\DataMapper\Redis\FetchManager;
 use Fedot\DataMapper\Redis\KeyGenerator;
+use Fedot\DataMapper\Redis\ModelManager;
 use Fedot\DataMapper\Redis\PersistManager;
 use Fedot\DataMapper\Redis\RelationshipManager;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -21,71 +23,38 @@ use Tests\Fedot\Backlog\BaseTestCase;
 class StoryRepositoryTest extends BaseTestCase
 {
     /**
-     * @var RelationshipManager|PHPUnit_Framework_MockObject_MockObject
+     * @var ModelManager|PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indexManager;
-
-    /**
-     * @var PersistManager|PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $persistManager;
-
-    /**
-     * @var FetchManager|PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $fetchManager;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|ProjectRepository
-     */
-    protected $projectRepositoryMock;
+    protected $modelManagerMock;
 
     /**
      * @return StoryRepository
      */
     protected function getRepositoryInstance()
     {
-        $this->indexManager = $this->createMock(RelationshipManager::class);
-        $this->persistManager = $this->createMock(PersistManager::class);
-        $this->fetchManager = $this->createMock(FetchManager::class);
-        $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
+        $this->modelManagerMock = $this->createMock(ModelManager::class);
 
-        $repository = new StoryRepository($this->fetchManager, $this->persistManager, $this->indexManager, $this->projectRepositoryMock);
-
-        return $repository;
+        return new StoryRepository($this->modelManagerMock);
     }
 
     public function testGetAllByProject()
     {
         $repository = $this->getRepositoryInstance();
 
-        $project = new Project('project-id', 'project name');
-
-        $keys = [
-            "entity:fedot_backlog_model_story:story-id1",
-            "entity:fedot_backlog_model_story:story-id2",
-            "entity:fedot_backlog_model_story:story-id3",
-        ];
-
-        $this->indexManager->expects($this->once())
-            ->method('getIdsOneToMany')
-            ->with($project, Story::class)
-            ->willReturn(new Success($keys))
-        ;
-
         $stories = [
-            new Story(),
-            new Story(),
-            new Story()
+            $this->createMock(Story::class),
+            $this->createMock(Story::class),
+            $this->createMock(Story::class),
         ];
 
-        $this->fetchManager->expects($this->once())
-            ->method('fetchCollectionByIds')
-            ->with(Story::class, $keys)
-            ->willReturn(new Success($stories))
+        $projectMock = $this->createMock(Project::class);
+
+        $projectMock->expects($this->once())
+            ->method('getStories')
+            ->willReturn($stories)
         ;
 
-        $resultPromise = $repository->getAllByProject($project);
+        $resultPromise = $repository->getAllByProject($projectMock);
         $this->assertInstanceOf(Promise::class, $resultPromise);
 
         $result = \Amp\wait($resultPromise);
@@ -93,105 +62,52 @@ class StoryRepositoryTest extends BaseTestCase
         $this->assertEquals($stories, $result);
     }
 
-    public function testGetAllEmpty()
-    {
-        $repository = $this->getRepositoryInstance();
-
-        $project = new Project('project-id', 'project name');
-
-        $keys = [];
-        $this->indexManager->expects($this->once())
-            ->method('getIdsOneToMany')
-            ->with($project, Story::class)
-            ->willReturn(new Success($keys))
-        ;
-
-        $this->fetchManager->expects($this->never())
-            ->method($this->anything())
-        ;
-
-        $resultPromise = $repository->getAllByProject($project);
-        $this->assertInstanceOf(Promise::class, $resultPromise);
-
-        $result = \Amp\wait($resultPromise);
-
-        $this->assertCount(0, $result);
-        $this->assertEquals([], $result);
-    }
-
     public function testCreate()
     {
         $repository = $this->getRepositoryInstance();
 
-        $story = new Story();
-        $story->id = 'story-id';
+        $storyMock = $this->createMock(Story::class);
+        $project = $this->createMock(Project::class);
 
-        $project = new Project('project-id', 'project name');
-
-        $this->persistManager->expects($this->once())
+        $this->modelManagerMock->expects($this->exactly(2))
             ->method('persist')
-            ->with($story)
+            ->withConsecutive(
+                [$storyMock, $this->isInstanceOf(IdentityMap::class)],
+                [$project, $this->isInstanceOf(IdentityMap::class)]
+            )
             ->willReturn(new Success(true))
         ;
 
-        $this->indexManager->expects($this->once())
-            ->method('addOneToMany')
-            ->with($project, $story)
-            ->willReturn(new Success(true))
-        ;
-
-        $resultPromise = $repository->create($project, $story);
+        $resultPromise = $repository->create($project, $storyMock);
         $result = \Amp\wait($resultPromise);
         $this->assertEquals(true, $result);
     }
 
-    public function testCreateErrorAlreadyExist()
-    {
-        $repository = $this->getRepositoryInstance();
-
-        $story = new Story();
-        $story->id = 'story-id';
-
-        $project = new Project('project-id', 'project name');
-
-        $this->persistManager->expects($this->once())
-            ->method('persist')
-            ->with($story)
-            ->willReturn(new Success(false))
-        ;
-
-        $this->indexManager->expects($this->never())
-            ->method($this->anything())
-        ;
-
-        $resultPromise = $repository->create($project, $story);
-        $result = \Amp\wait($resultPromise);
-        $this->assertEquals(false, $result);
-    }
-
     public function testDelete()
     {
-        $project = new Project('project-id', 'project name');
-
-        $story = new Story();
-        $story->id = 'story-id';
+        $project = $this->createMock(Project::class);
+        $story = $this->createMock(Story::class);
 
         $repository = $this->getRepositoryInstance();
 
-        $this->persistManager->expects($this->once())
+        $this->modelManagerMock->expects($this->once())
             ->method('remove')
             ->with($story)
             ->willReturn(new Success(true))
         ;
 
-        $this->indexManager->expects($this->once())
-            ->method('removeOneToMany')
-            ->with($project, $story)
+        $this->modelManagerMock->expects($this->once())
+            ->method('persist')
+            ->with($project)
             ->willReturn(new Success(true))
         ;
 
-        $resultPromise = $repository->delete($project, $story);
-        $result = \Amp\wait($resultPromise);
+        $project->expects($this->once())
+            ->method('removeStory')
+            ->with($story)
+        ;
+
+        $result = wait($repository->delete($project, $story));
         $this->assertEquals(true, $result);
     }
 
@@ -199,12 +115,11 @@ class StoryRepositoryTest extends BaseTestCase
     {
         $repository = $this->getRepositoryInstance();
 
-        $story = new Story();
-        $story->id = 'story-id';
+        $story = $this->createMock(Story::class);
 
-        $this->persistManager->expects($this->once())
+        $this->modelManagerMock->expects($this->once())
             ->method('persist')
-            ->with($story, true)
+            ->with($story)
             ->willReturn(new Success(true))
         ;
 
@@ -216,17 +131,20 @@ class StoryRepositoryTest extends BaseTestCase
     {
         $repository = $this->getRepositoryInstance();
 
-        $project = new Project('project-id', 'project name');
+        $project = $this->createMock(Project::class);
+        $story = $this->createMock(Story::class);
+        $positionStory = $this->createMock(Story::class);
 
-        $story = new Story();
-        $story->id = 'story-id';
+        $project->expects($this->once())
+            ->method('moveStoryBeforeStory')
+            ->with($story, $positionStory)
+        ;
 
-        $positionStory = new Story();
-        $positionStory->id = 'story-id2';
-
-        $this->indexManager->expects($this->once())
-            ->method('moveValueOnOneToMany')
-            ->with($project, $story, $positionStory)
+        $this->modelManagerMock->expects($this->exactly(1))
+            ->method('persist')
+            ->withConsecutive(
+                [$project]
+            )
             ->willReturn(new Success(true))
         ;
 
@@ -239,11 +157,10 @@ class StoryRepositoryTest extends BaseTestCase
     {
         $storyRepository = $this->getRepositoryInstance();
 
-        $story = new Story();
+        $story = $this->createMock(Story::class);
 
-        $this->fetchManager
-            ->expects($this->once())
-            ->method('fetchById')
+        $this->modelManagerMock->expects($this->once())
+            ->method('find')
             ->with(Story::class, 'story-id')
             ->willReturn(new Success($story))
         ;

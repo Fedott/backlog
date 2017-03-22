@@ -5,6 +5,7 @@ use Amp\Success;
 use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\Action\Story\GetAll\GetStories;
 use Fedot\Backlog\Action\Story\GetAll\ProjectIdPayload;
+use Fedot\Backlog\Action\Story\GetAll\StoriesPayload;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\ProjectRepository;
@@ -30,7 +31,8 @@ class GetStoriesTest extends ActionTestCase
     {
         return new GetStories(
             $this->storyRepositoryMock,
-            $this->projectRepositoryMock
+            $this->projectRepositoryMock,
+            $this->normalizerMock
         );
     }
 
@@ -39,12 +41,17 @@ class GetStoriesTest extends ActionTestCase
         return 'get-stories';
     }
 
+    protected function getExpectedPayloadType(): ?string
+    {
+        return ProjectIdPayload::class;
+    }
+
     public function testProcess()
     {
         $stories = [
-            new Story(),
-            new Story(),
-            new Story(),
+            $this->createMock(Story::class),
+            $this->createMock(Story::class),
+            $this->createMock(Story::class),
         ];
 
         $processor = $this->getProcessorInstance();
@@ -52,7 +59,7 @@ class GetStoriesTest extends ActionTestCase
         $payload = new ProjectIdPayload();
         $payload->projectId = 'project-id';
 
-        $project = new Project('project-id', 'Project');
+        $project = $this->createMock(Project::class);
 
         $request = $this->makeRequest(34, 777, 'get-stories', $payload);
         $response = $this->makeResponse($request);
@@ -69,11 +76,22 @@ class GetStoriesTest extends ActionTestCase
             ->willReturn(new Success($stories))
         ;
 
+        $normalizedStories = ['stories' => [
+            ['id' => 'test'],
+            ['id' => 'test2'],
+            ['id' => 'test3'],
+        ]];
+        $this->normalizerMock->expects($this->once())
+            ->method('normalize')
+            ->with($this->isInstanceOf(StoriesPayload::class))
+            ->willReturn($normalizedStories)
+        ;
+
         /** @var Response $response */
         $response = \Amp\wait($processor->process($request, $response));
 
         $this->assertResponseBasic($response, 34, 777, 'stories');
 
-        $this->assertEquals((array) $stories, $response->getPayload()['stories']);
+        $this->assertEquals($normalizedStories, $response->getPayload());
     }
 }
