@@ -81,7 +81,7 @@ class ShareProjectTest extends ActionTestCase
         $request = $this->makeRequest(1, 2, 'project/share', $payload);
         $response = $this->makeResponse($request);
 
-        $response = \Amp\wait($this->action->process($request, $response));
+        $response = \Amp\Promise\wait($this->action->process($request, $response));
 
         $this->assertResponseBasic($response, 1, 2, 'success');
     }
@@ -113,7 +113,7 @@ class ShareProjectTest extends ActionTestCase
         $request = $this->makeRequest(1, 2, 'project/share', $payload);
         $response = $this->makeResponse($request);
 
-        $response = \Amp\wait($this->action->process($request, $response));
+        $response = \Amp\Promise\wait($this->action->process($request, $response));
 
         $this->assertResponseError($response, 1, 2, 'User or Project not found');
     }
@@ -145,7 +145,7 @@ class ShareProjectTest extends ActionTestCase
         $request = $this->makeRequest(1, 2, 'project/share', $payload);
         $response = $this->makeResponse($request);
 
-        $response = \Amp\wait($this->action->process($request, $response));
+        $response = \Amp\Promise\wait($this->action->process($request, $response));
 
         $this->assertResponseError($response, 1, 2, 'User or Project not found');
     }

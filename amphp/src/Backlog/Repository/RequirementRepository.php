@@ -4,8 +4,8 @@ namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
 use Amp\Success;
-use AsyncInterop\Loop;
-use AsyncInterop\Promise;
+use Amp\Loop;
+use Amp\Promise;
 use Fedot\Backlog\Model\Requirement;
 use Fedot\Backlog\Model\Story;
 use Fedot\DataMapper\ModelManagerInterface;

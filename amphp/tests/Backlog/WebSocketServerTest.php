@@ -5,14 +5,18 @@ use Aerys\Request;
 use Aerys\Response;
 use Aerys\Websocket\Endpoint;
 use Amp\Success;
-use function Amp\wrap;
-use AsyncInterop\Loop;
+use Amp\Loop;
 use Fedot\Backlog\MessageProcessor;
 use Fedot\Backlog\WebSocketConnectionAuthenticationService;
 use Fedot\Backlog\WebSocketServer;
 
 class WebSocketServerTest extends BaseTestCase
 {
+    public static function setUpBeforeClass()
+    {
+        Loop::set(new Loop\NativeDriver());
+    }
+
     public function testProcessMessage()
     {
         $messageProcessorMock = $this->createMock(MessageProcessor::class);
@@ -35,9 +39,9 @@ class WebSocketServerTest extends BaseTestCase
             })
         ;
 
-        Loop::execute(wrap(function () use ($webSocketServer) {
+        Loop::run(function () use ($webSocketServer) {
             yield from $webSocketServer->processMessage(123, "jj");
-        }));
+        });
 
         $this->assertTrue(true);
     }

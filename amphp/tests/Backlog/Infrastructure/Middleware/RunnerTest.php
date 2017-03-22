@@ -38,7 +38,7 @@ class RunnerTest extends BaseTestCase
         $response = new Response(1, 31);
 
         $responsePromise = $runner($request, $response);
-        $actualResponse = \Amp\wait($responsePromise);
+        $actualResponse = \Amp\Promise\wait($responsePromise);
 
         $this->assertEquals($response, $actualResponse);
         $this->assertEquals(3, $runCount);

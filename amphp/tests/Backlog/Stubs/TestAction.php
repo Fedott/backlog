@@ -2,7 +2,7 @@
 
 namespace Tests\Fedot\Backlog\Stubs;
 
-use AsyncInterop\Promise;
+use Amp\Promise;
 use Amp\Success;
 use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\WebSocket\RequestInterface;

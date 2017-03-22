@@ -13,7 +13,7 @@ use Fedot\Backlog\WebSocket\Response;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Tests\Fedot\Backlog\ActionTestCase;
-use function Amp\wait;
+use function Amp\Promise\wait;
 
 class GetAllRequirementsActionTest extends ActionTestCase
 {

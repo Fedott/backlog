@@ -33,7 +33,7 @@ class PingTest extends ActionTestCase
         $processor = new Ping();
 
         /** @var Response $response */
-        $response = \Amp\wait($processor->process($request, $response));
+        $response = \Amp\Promise\wait($processor->process($request, $response));
 
         $this->assertResponseBasic($response, 321, 777, 'pong');
 

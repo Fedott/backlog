@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e0906b0c7a6d0aed435825b99f52956",
+    "content-hash": "51a8d044a0db3d10f3373d1ea1c0dbb1",
     "packages": [
         {
             "name": "amphp/aerys",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/aerys.git",
-                "reference": "b414eb1a85f31617ca03d8939c090b7bb16d9f71"
+                "reference": "360d0d2ea5a22625fa51d252e8c36b2a8da8bca7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/aerys/zipball/b414eb1a85f31617ca03d8939c090b7bb16d9f71",
-                "reference": "b414eb1a85f31617ca03d8939c090b7bb16d9f71",
+                "url": "https://api.github.com/repos/amphp/aerys/zipball/360d0d2ea5a22625fa51d252e8c36b2a8da8bca7",
+                "reference": "360d0d2ea5a22625fa51d252e8c36b2a8da8bca7",
                 "shasum": ""
             },
             "require": {
@@ -31,10 +31,10 @@
             },
             "require-dev": {
                 "amphp/artax": "dev-amp_v2",
-                "amphp/loop": "dev-master",
+                "amphp/phpunit-util": "dev-master",
                 "friendsofphp/php-cs-fixer": "~1.9",
                 "http2jp/hpack-test-case": "1.0",
-                "phpunit/phpunit": "^5.2"
+                "phpunit/phpunit": "^6.0"
             },
             "bin": [
                 "bin/aerys"
@@ -86,7 +86,7 @@
                 "server",
                 "websocket"
             ],
-            "time": "2017-02-28 05:45:38"
+            "time": "2017-03-22 03:44:33"
         },
         {
             "name": "amphp/amp",
@@ -94,26 +94,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/amp.git",
-                "reference": "72378e2b82d9f1dee6b93de2bee8aa138e7f67e1"
+                "reference": "95b3f624972f28b347e5ce48a1498d9acbd38b44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/amp/zipball/72378e2b82d9f1dee6b93de2bee8aa138e7f67e1",
-                "reference": "72378e2b82d9f1dee6b93de2bee8aa138e7f67e1",
+                "url": "https://api.github.com/repos/amphp/amp/zipball/95b3f624972f28b347e5ce48a1498d9acbd38b44",
+                "reference": "95b3f624972f28b347e5ce48a1498d9acbd38b44",
                 "shasum": ""
             },
             "require": {
-                "async-interop/event-loop": "^0.5",
-                "async-interop/event-loop-implementation": "^0.5",
-                "async-interop/promise": "^0.4",
                 "php": ">=7"
             },
             "require-dev": {
-                "amphp/loop": "dev-master",
-                "async-interop/promise-test": "^0.4.1",
+                "amphp/phpunit-util": "dev-master",
                 "friendsofphp/php-cs-fixer": "~1.9",
-                "humbug/humbug": "^1@dev",
-                "phpunit/phpunit": "^5.7"
+                "phpunit/phpunit": "^6.0.9",
+                "react/promise": "^2"
             },
             "type": "library",
             "extra": {
@@ -126,7 +122,6 @@
                     "Amp\\": "lib/"
                 },
                 "files": [
-                    "lib/bootstrap.php",
                     "lib/functions.php"
                 ]
             },
@@ -136,14 +131,20 @@
             ],
             "authors": [
                 {
+                    "name": "Bob Weinand",
+                    "email": "bobwei9@hotmail.com"
+                },
+                {
+                    "name": "Niklas Keller",
+                    "email": "me@kelunik.com"
+                },
+                {
                     "name": "Daniel Lowrey",
-                    "email": "rdlowrey@php.net",
-                    "role": "Creator / Lead Developer"
+                    "email": "rdlowrey@php.net"
                 },
                 {
                     "name": "Aaron Piotrowski",
-                    "email": "aaron@trowski.com",
-                    "role": "v2.0 Developer"
+                    "email": "aaron@trowski.com"
                 }
             ],
             "description": "A non-blocking concurrency framework for PHP applications",
@@ -158,7 +159,7 @@
                 "non-blocking",
                 "promise"
             ],
-            "time": "2017-02-22 21:52:30"
+            "time": "2017-03-21 19:05:45"
         },
         {
             "name": "amphp/cache",
@@ -166,20 +167,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/cache.git",
-                "reference": "eb4004bb2ae89f80fb01bb0aed272770f3d41c83"
+                "reference": "558565a35e9b414298fbbf5784bf5b86b2c18b01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/cache/zipball/eb4004bb2ae89f80fb01bb0aed272770f3d41c83",
-                "reference": "eb4004bb2ae89f80fb01bb0aed272770f3d41c83",
+                "url": "https://api.github.com/repos/amphp/cache/zipball/558565a35e9b414298fbbf5784bf5b86b2c18b01",
+                "reference": "558565a35e9b414298fbbf5784bf5b86b2c18b01",
                 "shasum": ""
             },
             "require": {
-                "amphp/amp": "dev-master as 2.0",
-                "async-interop/event-loop": "^0.5"
+                "amphp/amp": "dev-master as 2.0"
             },
             "require-dev": {
-                "amphp/loop": "dev-master",
                 "friendsofphp/php-cs-fixer": "~1.9",
                 "phpunit/phpunit": "^5"
             },
@@ -208,7 +207,7 @@
             ],
             "description": "A promise-aware caching API built on the amp concurrency framework",
             "homepage": "https://github.com/amphp/cache",
-            "time": "2017-01-11 13:14:16"
+            "time": "2017-03-17 15:42:09"
         },
         {
             "name": "amphp/dns",
@@ -216,12 +215,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/dns.git",
-                "reference": "badf3a91003814ce574030a3d695978099d15301"
+                "reference": "1d8dc615bf7140c87e52156f31c834b0daba2e01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/dns/zipball/badf3a91003814ce574030a3d695978099d15301",
-                "reference": "badf3a91003814ce574030a3d695978099d15301",
+                "url": "https://api.github.com/repos/amphp/dns/zipball/1d8dc615bf7140c87e52156f31c834b0daba2e01",
+                "reference": "1d8dc615bf7140c87e52156f31c834b0daba2e01",
                 "shasum": ""
             },
             "require": {
@@ -233,7 +232,6 @@
                 "php": ">=7.0"
             },
             "require-dev": {
-                "amphp/loop": "dev-master",
                 "friendsofphp/php-cs-fixer": "^1.9",
                 "phpunit/phpunit": "^5.2.8"
             },
@@ -278,7 +276,7 @@
                 "dns",
                 "resolve"
             ],
-            "time": "2017-01-25 15:36:19"
+            "time": "2017-03-17 04:01:58"
         },
         {
             "name": "amphp/file",
@@ -286,21 +284,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/file.git",
-                "reference": "0d76557e8e1295de7c9b276710aed6a23178e5a3"
+                "reference": "97256b902961a4b0c2b82a9b97b671ab962fef64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/file/zipball/0d76557e8e1295de7c9b276710aed6a23178e5a3",
-                "reference": "0d76557e8e1295de7c9b276710aed6a23178e5a3",
+                "url": "https://api.github.com/repos/amphp/file/zipball/97256b902961a4b0c2b82a9b97b671ab962fef64",
+                "reference": "97256b902961a4b0c2b82a9b97b671ab962fef64",
                 "shasum": ""
             },
             "require": {
-                "amphp/amp": "dev-master as 2.0",
-                "async-interop/event-loop": "^0.5",
-                "async-interop/promise": "^0.4"
+                "amphp/amp": "dev-master as 2.0"
             },
             "require-dev": {
-                "amphp/loop": "dev-master",
                 "amphp/parallel": "dev-master as 0.1",
                 "friendsofphp/php-cs-fixer": "~1.9",
                 "phpunit/phpunit": "^5.0"
@@ -348,54 +343,7 @@
                 "non-blocking",
                 "static"
             ],
-            "time": "2017-01-11 16:29:14"
-        },
-        {
-            "name": "amphp/loop",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/amphp/loop.git",
-                "reference": "302a5c714c2700d32ca9444be09f21b2835b213f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/amphp/loop/zipball/302a5c714c2700d32ca9444be09f21b2835b213f",
-                "reference": "302a5c714c2700d32ca9444be09f21b2835b213f",
-                "shasum": ""
-            },
-            "require": {
-                "async-interop/event-loop": "^0.5"
-            },
-            "provide": {
-                "async-interop/event-loop-implementation": "0.5"
-            },
-            "require-dev": {
-                "async-interop/event-loop-test": "^0.5",
-                "friendsofphp/php-cs-fixer": "~1.9"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Amp\\Loop\\": "lib"
-                },
-                "files": [
-                    "lib/bootstrap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "homepage": "http://amphp.org",
-            "keywords": [
-                "async",
-                "asynchronous",
-                "event",
-                "loop",
-                "reactor"
-            ],
-            "time": "2017-02-17 06:02:04"
+            "time": "2017-03-21 23:53:55"
         },
         {
             "name": "amphp/process",
@@ -403,20 +351,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/process.git",
-                "reference": "37cf53aa278ccf5806ad5c6a8a83abae40caee0d"
+                "reference": "6b965310b0f84a2e8290d02ec2bd68e6b2526a1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/process/zipball/37cf53aa278ccf5806ad5c6a8a83abae40caee0d",
-                "reference": "37cf53aa278ccf5806ad5c6a8a83abae40caee0d",
+                "url": "https://api.github.com/repos/amphp/process/zipball/6b965310b0f84a2e8290d02ec2bd68e6b2526a1b",
+                "reference": "6b965310b0f84a2e8290d02ec2bd68e6b2526a1b",
                 "shasum": ""
             },
             "require": {
                 "amphp/amp": "dev-master as 2.0"
             },
             "require-dev": {
-                "amphp/loop": "dev-master",
                 "friendsofphp/php-cs-fixer": "~1.9",
+                "kelunik/fqn-check": "^0.1.3",
                 "phpunit/phpunit": "^5.0"
             },
             "type": "library",
@@ -441,7 +389,7 @@
             ],
             "description": "Asynchronous process manager",
             "homepage": "https://github.com/amphp/process",
-            "time": "2017-02-03 22:32:30"
+            "time": "2017-03-21 22:37:12"
         },
         {
             "name": "amphp/redis",
@@ -449,12 +397,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/redis.git",
-                "reference": "dd6867469dbd580f834f6f3abfa5b9d824478652"
+                "reference": "1f77f931598b67214f485d277a7489e4e9a584be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/redis/zipball/dd6867469dbd580f834f6f3abfa5b9d824478652",
-                "reference": "dd6867469dbd580f834f6f3abfa5b9d824478652",
+                "url": "https://api.github.com/repos/amphp/redis/zipball/1f77f931598b67214f485d277a7489e4e9a584be",
+                "reference": "1f77f931598b67214f485d277a7489e4e9a584be",
                 "shasum": ""
             },
             "require": {
@@ -463,8 +411,7 @@
                 "php": ">=7.0"
             },
             "require-dev": {
-                "amphp/loop": "dev-master",
-                "fabpot/php-cs-fixer": "^1.9",
+                "friendsofphp/php-cs-fixer": "^1.9",
                 "phpunit/phpunit": "^4.8|^5.2"
             },
             "type": "library",
@@ -493,7 +440,7 @@
                 "client",
                 "redis"
             ],
-            "time": "2017-01-22 08:15:01"
+            "time": "2017-03-22 00:20:35"
         },
         {
             "name": "amphp/socket",
@@ -501,12 +448,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/socket.git",
-                "reference": "0bbf94b246b104e4945fd5a3026bfc7f91469c9a"
+                "reference": "e77bb743d0cfd13b0ddd00d4b9b424db7133f7a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/socket/zipball/0bbf94b246b104e4945fd5a3026bfc7f91469c9a",
-                "reference": "0bbf94b246b104e4945fd5a3026bfc7f91469c9a",
+                "url": "https://api.github.com/repos/amphp/socket/zipball/e77bb743d0cfd13b0ddd00d4b9b424db7133f7a6",
+                "reference": "e77bb743d0cfd13b0ddd00d4b9b424db7133f7a6",
                 "shasum": ""
             },
             "require": {
@@ -516,7 +463,6 @@
                 "php": ">=7.0"
             },
             "require-dev": {
-                "amphp/loop": "dev-master",
                 "friendsofphp/php-cs-fixer": "~1.9",
                 "phpunit/phpunit": "^4|^5"
             },
@@ -555,7 +501,7 @@
                 "tcp",
                 "tls"
             ],
-            "time": "2017-01-18 16:34:50"
+            "time": "2017-03-18 14:05:46"
         },
         {
             "name": "amphp/stream",
@@ -563,26 +509,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/stream.git",
-                "reference": "4c5b7f539b3efbf932baf139965a768e7f20902d"
+                "reference": "4414c6bbe439b6d38d5b2ffcb68cacfb63234ee6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/stream/zipball/4c5b7f539b3efbf932baf139965a768e7f20902d",
-                "reference": "4c5b7f539b3efbf932baf139965a768e7f20902d",
+                "url": "https://api.github.com/repos/amphp/stream/zipball/4414c6bbe439b6d38d5b2ffcb68cacfb63234ee6",
+                "reference": "4414c6bbe439b6d38d5b2ffcb68cacfb63234ee6",
                 "shasum": ""
             },
             "require": {
                 "amphp/amp": "dev-master as 2.0"
             },
             "require-dev": {
-                "amphp/loop": "dev-master",
                 "friendsofphp/php-cs-fixer": "~1.9",
                 "phpunit/phpunit": "^5"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Amp\\Stream\\": "lib/"
+                    "Amp\\ByteStream\\": "lib/"
                 },
                 "files": [
                     "lib/functions.php",
@@ -607,7 +552,7 @@
                 "non-blocking",
                 "stream"
             ],
-            "time": "2017-01-09 16:53:42"
+            "time": "2017-03-16 21:49:09"
         },
         {
             "name": "amphp/windows-registry",
@@ -615,20 +560,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/windows-registry.git",
-                "reference": "b3fa7b624defbd6a4b584be619208640643c2d3a"
+                "reference": "8f96a07f75b9ca36931b39665fc92cde2eda97d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/windows-registry/zipball/b3fa7b624defbd6a4b584be619208640643c2d3a",
-                "reference": "b3fa7b624defbd6a4b584be619208640643c2d3a",
+                "url": "https://api.github.com/repos/amphp/windows-registry/zipball/8f96a07f75b9ca36931b39665fc92cde2eda97d4",
+                "reference": "8f96a07f75b9ca36931b39665fc92cde2eda97d4",
                 "shasum": ""
             },
             "require": {
                 "amphp/amp": "dev-master as 2.0",
                 "amphp/process": "dev-amp_v2 as 0.2"
-            },
-            "require-dev": {
-                "amphp/loop": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -647,90 +589,7 @@
                 }
             ],
             "description": "Windows Registry Reader.",
-            "time": "2017-01-15 16:17:25"
-        },
-        {
-            "name": "async-interop/event-loop",
-            "version": "v0.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/async-interop/event-loop.git",
-                "reference": "372272601b3f43064bd06e90fa1c8f3a009accd8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/async-interop/event-loop/zipball/372272601b3f43064bd06e90fa1c8f3a009accd8",
-                "reference": "372272601b3f43064bd06e90fa1c8f3a009accd8",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "jakub-onderka/php-console-highlighter": "^0.3.2",
-                "jakub-onderka/php-parallel-lint": "^0.9.2",
-                "phpunit/phpunit": "^4|^5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "AsyncInterop\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "An event loop interface for interoperability.",
-            "keywords": [
-                "async",
-                "event",
-                "interop",
-                "loop"
-            ],
-            "time": "2017-01-05T10:19:16+00:00"
-        },
-        {
-            "name": "async-interop/promise",
-            "version": "v0.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/async-interop/promise.git",
-                "reference": "511ae43724719c2419712fa3ebeb020ab94633d0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/async-interop/promise/zipball/511ae43724719c2419712fa3ebeb020ab94633d0",
-                "reference": "511ae43724719c2419712fa3ebeb020ab94633d0",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "jakub-onderka/php-console-highlighter": "^0.3.2",
-                "jakub-onderka/php-parallel-lint": "^0.9.2",
-                "phpunit/phpunit": "^4|^5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "AsyncInterop\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A promise interface for interoperability in async operations.",
-            "keywords": [
-                "async",
-                "awaitable",
-                "future",
-                "interop",
-                "promise"
-            ],
-            "time": "2017-01-06T20:45:59+00:00"
+            "time": "2017-03-17 03:47:16"
         },
         {
             "name": "daverandom/libdns",
@@ -1013,27 +872,26 @@
         },
         {
             "name": "fedot/async-data-mapper",
-            "version": "dev-dev-annotation-mapping",
+            "version": "dev-dev-update-amphp",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Fedott/async-data-mapper.git",
-                "reference": "bca9ab912af5dc4f21e68811d729af22e372d8d1"
+                "reference": "5e7007172e4e2d653303cbb8433f9a36753ff37a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Fedott/async-data-mapper/zipball/bca9ab912af5dc4f21e68811d729af22e372d8d1",
-                "reference": "bca9ab912af5dc4f21e68811d729af22e372d8d1",
+                "url": "https://api.github.com/repos/Fedott/async-data-mapper/zipball/5e7007172e4e2d653303cbb8433f9a36753ff37a",
+                "reference": "5e7007172e4e2d653303cbb8433f9a36753ff37a",
                 "shasum": ""
             },
             "require": {
-                "async-interop/promise": "^0.4",
+                "amphp/amp": "^2@dev",
                 "doctrine/annotations": "^1.4",
                 "doctrine/instantiator": "^1.0",
                 "jms/metadata": "^1.6",
                 "php": "^7.1"
             },
             "require-dev": {
-                "amphp/loop": "dev-master",
                 "amphp/redis": "dev-amp_v2",
                 "phpunit/phpunit": "^6.0",
                 "symfony/property-access": "^3.2",
@@ -1041,7 +899,6 @@
                 "symfony/serializer": "^3.2"
             },
             "suggest": {
-                "amphp/loop": "Needed for Redis implementation",
                 "amphp/redis": "Needed for Redis implementation",
                 "symfony/serializer": "Needed for Redis implementation"
             },
@@ -1062,7 +919,7 @@
                 }
             ],
             "description": "Simple async datamaper",
-            "time": "2017-03-21 15:41:44"
+            "time": "2017-03-22 10:28:49"
         },
         {
             "name": "jms/metadata",
@@ -1211,16 +1068,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.8",
+            "version": "v2.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "eeb4c23c7b84c1dc87db3c92856bd57ff1844ca4"
+                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/eeb4c23c7b84c1dc87db3c92856bd57ff1844ca4",
-                "reference": "eeb4c23c7b84c1dc87db3c92856bd57ff1844ca4",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/634bae8e911eefa89c1abfbf1b66da679ac8f54d",
+                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d",
                 "shasum": ""
             },
             "require": {
@@ -1255,7 +1112,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2017-03-03T14:11:40+00:00"
+            "time": "2017-03-13T16:27:32+00:00"
         },
         {
             "name": "psr/container",
@@ -1355,21 +1212,21 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.5.2",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "5677cfe02397dd6b58c861870dfaa5d9007d3954"
+                "reference": "0b7bdfb180e72c8d76e75a649ced67e392201458"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/5677cfe02397dd6b58c861870dfaa5d9007d3954",
-                "reference": "5677cfe02397dd6b58c861870dfaa5d9007d3954",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/0b7bdfb180e72c8d76e75a649ced67e392201458",
+                "reference": "0b7bdfb180e72c8d76e75a649ced67e392201458",
                 "shasum": ""
             },
             "require": {
                 "paragonie/random_compat": "^1.0|^2.0",
-                "php": ">=5.4"
+                "php": "^5.4 || ^7.0"
             },
             "replace": {
                 "rhumsaa/uuid": "self.version"
@@ -1433,20 +1290,20 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2016-11-22T19:21:44+00:00"
+            "time": "2017-03-18T15:38:09+00:00"
         },
         {
             "name": "seld/cli-prompt",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/cli-prompt.git",
-                "reference": "8cbe10923cae5bcd7c5a713f6703fc4727c8c1b4"
+                "reference": "a19a7376a4689d4d94cab66ab4f3c816019ba8dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/cli-prompt/zipball/8cbe10923cae5bcd7c5a713f6703fc4727c8c1b4",
-                "reference": "8cbe10923cae5bcd7c5a713f6703fc4727c8c1b4",
+                "url": "https://api.github.com/repos/Seldaek/cli-prompt/zipball/a19a7376a4689d4d94cab66ab4f3c816019ba8dd",
+                "reference": "a19a7376a4689d4d94cab66ab4f3c816019ba8dd",
                 "shasum": ""
             },
             "require": {
@@ -1481,7 +1338,7 @@
                 "input",
                 "prompt"
             ],
-            "time": "2016-04-18T09:31:41+00:00"
+            "time": "2017-03-18T11:32:45+00:00"
         },
         {
             "name": "symfony/config",
@@ -1489,12 +1346,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "43a6a41fc7baf5f65861c92353216a85fedfa251"
+                "reference": "c7b22412a63602c443956344bec700707a74c494"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/43a6a41fc7baf5f65861c92353216a85fedfa251",
-                "reference": "43a6a41fc7baf5f65861c92353216a85fedfa251",
+                "url": "https://api.github.com/repos/symfony/config/zipball/c7b22412a63602c443956344bec700707a74c494",
+                "reference": "c7b22412a63602c443956344bec700707a74c494",
                 "shasum": ""
             },
             "require": {
@@ -1541,20 +1398,20 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2017-03-02 19:13:25"
+            "time": "2017-03-07 19:35:42"
         },
         {
             "name": "symfony/console",
-            "version": "v3.2.4",
+            "version": "v3.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "0e5e6899f82230fcb1153bcaf0e106ffaa44b870"
+                "reference": "28fb243a2b5727774ca309ec2d92da240f1af0dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/0e5e6899f82230fcb1153bcaf0e106ffaa44b870",
-                "reference": "0e5e6899f82230fcb1153bcaf0e106ffaa44b870",
+                "url": "https://api.github.com/repos/symfony/console/zipball/28fb243a2b5727774ca309ec2d92da240f1af0dd",
+                "reference": "28fb243a2b5727774ca309ec2d92da240f1af0dd",
                 "shasum": ""
             },
             "require": {
@@ -1604,20 +1461,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-02-16T14:07:22+00:00"
+            "time": "2017-03-06T19:30:27+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.2.4",
+            "version": "v3.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "9b98854cb45bc59d100b7d4cc4cf9e05f21026b9"
+                "reference": "b90c9f91ad8ac37d9f114e369042d3226b34dc1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/9b98854cb45bc59d100b7d4cc4cf9e05f21026b9",
-                "reference": "9b98854cb45bc59d100b7d4cc4cf9e05f21026b9",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/b90c9f91ad8ac37d9f114e369042d3226b34dc1a",
+                "reference": "b90c9f91ad8ac37d9f114e369042d3226b34dc1a",
                 "shasum": ""
             },
             "require": {
@@ -1661,7 +1518,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-02-16T16:34:18+00:00"
+            "time": "2017-02-18T17:28:00+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -1669,12 +1526,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "e707fbb95b587009b748c333494835ad9985db32"
+                "reference": "51fd4c973356f79cd35bc4b4c15b4838f546ddb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/e707fbb95b587009b748c333494835ad9985db32",
-                "reference": "e707fbb95b587009b748c333494835ad9985db32",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/51fd4c973356f79cd35bc4b4c15b4838f546ddb2",
+                "reference": "51fd4c973356f79cd35bc4b4c15b4838f546ddb2",
                 "shasum": ""
             },
             "require": {
@@ -1731,20 +1588,20 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2017-03-01 21:48:20"
+            "time": "2017-03-21 21:56:35"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v3.2.4",
+            "version": "v3.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "a0c6ef2dc78d33b58d91d3a49f49797a184d06f4"
+                "reference": "bc0f17bed914df2cceb989972c3b996043c4da4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/a0c6ef2dc78d33b58d91d3a49f49797a184d06f4",
-                "reference": "a0c6ef2dc78d33b58d91d3a49f49797a184d06f4",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/bc0f17bed914df2cceb989972c3b996043c4da4a",
+                "reference": "bc0f17bed914df2cceb989972c3b996043c4da4a",
                 "shasum": ""
             },
             "require": {
@@ -1780,20 +1637,20 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2017-01-08T20:47:33+00:00"
+            "time": "2017-03-06T19:30:27+00:00"
         },
         {
             "name": "symfony/inflector",
-            "version": "v3.2.4",
+            "version": "v3.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/inflector.git",
-                "reference": "20a37c39c1f29badc188e4c50a061b79c8bf3ff6"
+                "reference": "4ff27abb356742aa2495ad87a79d724c397ee5c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/inflector/zipball/20a37c39c1f29badc188e4c50a061b79c8bf3ff6",
-                "reference": "20a37c39c1f29badc188e4c50a061b79c8bf3ff6",
+                "url": "https://api.github.com/repos/symfony/inflector/zipball/4ff27abb356742aa2495ad87a79d724c397ee5c4",
+                "reference": "4ff27abb356742aa2495ad87a79d724c397ee5c4",
                 "shasum": ""
             },
             "require": {
@@ -1837,7 +1694,7 @@
                 "symfony",
                 "words"
             ],
-            "time": "2017-01-02T20:32:22+00:00"
+            "time": "2017-02-20T13:34:33+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1959,16 +1816,16 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v3.2.4",
+            "version": "v3.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "dba6dcd9876bb1bba8fd38e23f311301e6ef385f"
+                "reference": "1e5f1abf1d5e78cd032355d9dba7f3187185ff9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/dba6dcd9876bb1bba8fd38e23f311301e6ef385f",
-                "reference": "dba6dcd9876bb1bba8fd38e23f311301e6ef385f",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/1e5f1abf1d5e78cd032355d9dba7f3187185ff9c",
+                "reference": "1e5f1abf1d5e78cd032355d9dba7f3187185ff9c",
                 "shasum": ""
             },
             "require": {
@@ -2023,20 +1880,20 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2017-02-02T13:47:35+00:00"
+            "time": "2017-02-18T17:28:00+00:00"
         },
         {
             "name": "symfony/property-info",
-            "version": "v3.2.4",
+            "version": "v3.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
-                "reference": "b1c1298c35826233c3badadd869da57227b4707d"
+                "reference": "773ee1519a82983e1d24172f3b0473e7da9226f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-info/zipball/b1c1298c35826233c3badadd869da57227b4707d",
-                "reference": "b1c1298c35826233c3badadd869da57227b4707d",
+                "url": "https://api.github.com/repos/symfony/property-info/zipball/773ee1519a82983e1d24172f3b0473e7da9226f6",
+                "reference": "773ee1519a82983e1d24172f3b0473e7da9226f6",
                 "shasum": ""
             },
             "require": {
@@ -2097,20 +1954,20 @@
                 "type",
                 "validator"
             ],
-            "time": "2017-01-21T17:06:35+00:00"
+            "time": "2017-02-20T13:34:33+00:00"
         },
         {
             "name": "symfony/serializer",
-            "version": "v3.2.4",
+            "version": "v3.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "56588a4e0c65c540f8bfb3723d7b187e4c75aa5b"
+                "reference": "a51ec869cd38d3732ee4092b2e511d9381847c0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/56588a4e0c65c540f8bfb3723d7b187e4c75aa5b",
-                "reference": "56588a4e0c65c540f8bfb3723d7b187e4c75aa5b",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/a51ec869cd38d3732ee4092b2e511d9381847c0a",
+                "reference": "a51ec869cd38d3732ee4092b2e511d9381847c0a",
                 "shasum": ""
             },
             "require": {
@@ -2172,7 +2029,7 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2017-02-16T14:07:22+00:00"
+            "time": "2017-03-05T17:42:14+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -2180,12 +2037,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "902dfb757bbeab73e75258685b3661f92bbe087d"
+                "reference": "c8471462f8f84082f3c8f52124a9f929fb9118ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/902dfb757bbeab73e75258685b3661f92bbe087d",
-                "reference": "902dfb757bbeab73e75258685b3661f92bbe087d",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/c8471462f8f84082f3c8f52124a9f929fb9118ba",
+                "reference": "c8471462f8f84082f3c8f52124a9f929fb9118ba",
                 "shasum": ""
             },
             "require": {
@@ -2227,7 +2084,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-03-01 22:36:19"
+            "time": "2017-03-20 13:59:57"
         }
     ],
     "packages-dev": [
@@ -2484,16 +2341,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "5.0.2",
+            "version": "5.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "531553c4795a1df54114342d68ca337d5d81c8a0"
+                "reference": "4e99e1c4f9b05cbf4d6e84b100b3ff4107cf8cd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/531553c4795a1df54114342d68ca337d5d81c8a0",
-                "reference": "531553c4795a1df54114342d68ca337d5d81c8a0",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/4e99e1c4f9b05cbf4d6e84b100b3ff4107cf8cd1",
+                "reference": "4e99e1c4f9b05cbf4d6e84b100b3ff4107cf8cd1",
                 "shasum": ""
             },
             "require": {
@@ -2543,7 +2400,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-03-01T09:14:18+00:00"
+            "time": "2017-03-06T14:22:16+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2733,16 +2590,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.0.8",
+            "version": "6.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "47ee3fa1bca5c50f1d25105201eb20df777bd7b6"
+                "reference": "8a536f409ebae632b92b7e7288e068248fe365ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/47ee3fa1bca5c50f1d25105201eb20df777bd7b6",
-                "reference": "47ee3fa1bca5c50f1d25105201eb20df777bd7b6",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/8a536f409ebae632b92b7e7288e068248fe365ed",
+                "reference": "8a536f409ebae632b92b7e7288e068248fe365ed",
                 "shasum": ""
             },
             "require": {
@@ -2753,18 +2610,18 @@
                 "ext-xml": "*",
                 "myclabs/deep-copy": "^1.3",
                 "php": "^7.0",
-                "phpspec/prophecy": "^1.6.2",
+                "phpspec/prophecy": "^1.7",
                 "phpunit/php-code-coverage": "^5.0",
                 "phpunit/php-file-iterator": "^1.4",
                 "phpunit/php-text-template": "^1.2",
                 "phpunit/php-timer": "^1.0.6",
                 "phpunit/phpunit-mock-objects": "^4.0",
-                "sebastian/comparator": "^1.2.4 || ^2.0",
+                "sebastian/comparator": "^2.0",
                 "sebastian/diff": "^1.2",
                 "sebastian/environment": "^2.0",
-                "sebastian/exporter": "^2.0 || ^3.0",
+                "sebastian/exporter": "^3.0",
                 "sebastian/global-state": "^1.1 || ^2.0",
-                "sebastian/object-enumerator": "^2.0 || ^3.0",
+                "sebastian/object-enumerator": "^3.0.2",
                 "sebastian/resource-operations": "^1.0",
                 "sebastian/version": "^2.0"
             },
@@ -2811,7 +2668,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-03-02T15:24:03+00:00"
+            "time": "2017-03-19T16:54:28+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2874,23 +2731,23 @@
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/code-unit-reverse-lookup.git",
-                "reference": "c36f5e7cfce482fde5bf8d10d41a53591e0198fe"
+                "reference": "4419fcdb5eabb9caa61a27c7a1db532a6b55dd18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/code-unit-reverse-lookup/zipball/c36f5e7cfce482fde5bf8d10d41a53591e0198fe",
-                "reference": "c36f5e7cfce482fde5bf8d10d41a53591e0198fe",
+                "url": "https://api.github.com/repos/sebastianbergmann/code-unit-reverse-lookup/zipball/4419fcdb5eabb9caa61a27c7a1db532a6b55dd18",
+                "reference": "4419fcdb5eabb9caa61a27c7a1db532a6b55dd18",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6"
+                "php": "^5.6 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~5"
+                "phpunit/phpunit": "^5.7 || ^6.0"
             },
             "type": "library",
             "extra": {
@@ -2915,7 +2772,7 @@
             ],
             "description": "Looks up which function or method a line of code belongs to",
             "homepage": "https://github.com/sebastianbergmann/code-unit-reverse-lookup/",
-            "time": "2016-02-13T06:45:14+00:00"
+            "time": "2017-03-04T06:30:41+00:00"
         },
         {
             "name": "sebastian/comparator",
@@ -3203,20 +3060,21 @@
         },
         {
             "name": "sebastian/object-enumerator",
-            "version": "3.0.0",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/object-enumerator.git",
-                "reference": "de6e32f7192dfea2e4bedc892434f4830b5c5794"
+                "reference": "31dd3379d16446c5d86dec32ab1ad1f378581ad8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/object-enumerator/zipball/de6e32f7192dfea2e4bedc892434f4830b5c5794",
-                "reference": "de6e32f7192dfea2e4bedc892434f4830b5c5794",
+                "url": "https://api.github.com/repos/sebastianbergmann/object-enumerator/zipball/31dd3379d16446c5d86dec32ab1ad1f378581ad8",
+                "reference": "31dd3379d16446c5d86dec32ab1ad1f378581ad8",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.0",
+                "sebastian/object-reflector": "^1.0",
                 "sebastian/recursion-context": "^3.0"
             },
             "require-dev": {
@@ -3245,7 +3103,52 @@
             ],
             "description": "Traverses array structures and object graphs to enumerate all referenced objects",
             "homepage": "https://github.com/sebastianbergmann/object-enumerator/",
-            "time": "2017-03-03T06:21:01+00:00"
+            "time": "2017-03-12T15:17:29+00:00"
+        },
+        {
+            "name": "sebastian/object-reflector",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/object-reflector.git",
+                "reference": "afd5797e7af7c9f529879ad5e8e8abe126c89dab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/object-reflector/zipball/afd5797e7af7c9f529879ad5e8e8abe126c89dab",
+                "reference": "afd5797e7af7c9f529879ad5e8e8abe126c89dab",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de"
+                }
+            ],
+            "description": "Allows reflection of object attributes, including inherited and non-public ones",
+            "homepage": "https://github.com/sebastianbergmann/object-reflector/",
+            "time": "2017-03-16T14:05:21+00:00"
         },
         {
             "name": "sebastian/recursion-context",
@@ -3441,7 +3344,7 @@
     "stability-flags": {
         "amphp/aerys": 20,
         "amphp/redis": 20,
-        "amphp/loop": 20,
+        "amphp/amp": 20,
         "symfony/dependency-injection": 20,
         "fedot/async-data-mapper": 20
     },

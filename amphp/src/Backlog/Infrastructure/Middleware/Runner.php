@@ -2,7 +2,7 @@
 namespace Fedot\Backlog\Infrastructure\Middleware;
 
 use Amp\Success;
-use AsyncInterop\Promise;
+use Amp\Promise;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
 

@@ -31,7 +31,7 @@ class UserRepositoryTest extends BaseTestCase
             ->willReturn(new Success(true))
         ;
 
-        $actualResult = \Amp\wait($repository->create($user));
+        $actualResult = \Amp\Promise\wait($repository->create($user));
 
         $this->assertTrue($actualResult);
     }
@@ -55,7 +55,7 @@ class UserRepositoryTest extends BaseTestCase
             ->method('persist')
         ;
 
-        $actualResult = \Amp\wait($repository->create($user));
+        $actualResult = \Amp\Promise\wait($repository->create($user));
 
         $this->assertFalse($actualResult);
     }
@@ -74,7 +74,7 @@ class UserRepositoryTest extends BaseTestCase
             ->willReturn(new Success($user))
         ;
 
-        $actualUser = \Amp\wait($repository->get('testUser'));
+        $actualUser = \Amp\Promise\wait($repository->get('testUser'));
 
         $this->assertEquals($user, $actualUser);
     }

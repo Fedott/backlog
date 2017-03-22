@@ -3,8 +3,8 @@ namespace Fedot\Backlog;
 
 use Amp\Deferred;
 use Amp\Redis\Client;
-use AsyncInterop\Loop;
-use AsyncInterop\Promise;
+use Amp\Loop;
+use Amp\Promise;
 use Fedot\Backlog\Exception\AuthenticationException;
 use Fedot\Backlog\Exception\UserNotFoundException;
 use Fedot\Backlog\Model\User;

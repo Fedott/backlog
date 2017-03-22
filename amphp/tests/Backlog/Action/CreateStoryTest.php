@@ -99,7 +99,7 @@ class CreateStoryTest extends ActionTestCase
         $response = new Response($request->getId(), $request->getClientId());
 
         /** @var Response $response */
-        $response = \Amp\wait($processor->process($request, $response));
+        $response = \Amp\Promise\wait($processor->process($request, $response));
 
         $this->assertEquals(33, $response->getRequestId());
         $this->assertEquals(432, $response->getClientId());

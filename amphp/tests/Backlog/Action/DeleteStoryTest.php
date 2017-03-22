@@ -82,7 +82,7 @@ class DeleteStoryTest extends ActionTestCase
         $request = $request->withAttribute('payloadObject', $deleteStoryPayload);
         $response = new Response($request->getId(), $request->getClientId());
 
-        $response = \Amp\wait($processor->process($request, $response));
+        $response = \Amp\Promise\wait($processor->process($request, $response));
 
         $this->assertEquals('story-deleted', $response->getType());
         $this->assertEquals([], $response->getPayload());

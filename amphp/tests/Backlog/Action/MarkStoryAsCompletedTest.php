@@ -53,7 +53,7 @@ class MarkStoryAsCompletedTest extends ActionTestCase
         $response = $this->makeResponse($request);
 
         /** @var Response $response */
-        $response = \Amp\wait($this->getProcessorInstance()->process($request, $response));
+        $response = \Amp\Promise\wait($this->getProcessorInstance()->process($request, $response));
 
         $this->assertResponseBasic($response, 3, 166, 'story-marked-as-completed');
     }
@@ -74,7 +74,7 @@ class MarkStoryAsCompletedTest extends ActionTestCase
         $response = $this->makeResponse($request);
 
         /** @var Response $response */
-        $response = \Amp\wait($this->getProcessorInstance()->process($request, $response));
+        $response = \Amp\Promise\wait($this->getProcessorInstance()->process($request, $response));
 
         $this->assertResponseBasic($response, 3, 166, 'error');
     }

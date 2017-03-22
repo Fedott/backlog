@@ -2,8 +2,8 @@
 namespace Fedot\Backlog\Middleware;
 
 use Amp\Deferred;
-use AsyncInterop\Loop;
-use AsyncInterop\Promise;
+use Amp\Loop;
+use Amp\Promise;
 use Fedot\Backlog\Action\ActionManager;
 use Fedot\Backlog\Infrastructure\Middleware\MiddlewareInterface;
 use Fedot\Backlog\WebSocket\RequestInterface;

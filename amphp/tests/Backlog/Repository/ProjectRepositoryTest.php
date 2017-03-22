@@ -66,7 +66,7 @@ class ProjectRepositoryTest extends BaseTestCase
 
         $promise = $this->repository->create($userMock, $project);
 
-        $result = \Amp\wait($promise);
+        $result = \Amp\Promise\wait($promise);
         $this->assertEquals(true, $result);
     }
 
@@ -87,7 +87,7 @@ class ProjectRepositoryTest extends BaseTestCase
 
         $resultPromise = $this->repository->getAllByUser($userMock);
 
-        $result = \Amp\wait($resultPromise);
+        $result = \Amp\Promise\wait($resultPromise);
 
         $this->assertCount(3, $result);
         array_map(
@@ -111,7 +111,7 @@ class ProjectRepositoryTest extends BaseTestCase
 
         $resultPromise = $this->repository->get('id1');
 
-        $actualProject = \Amp\wait($resultPromise);
+        $actualProject = \Amp\Promise\wait($resultPromise);
 
         $this->assertEquals($project, $actualProject);
     }
@@ -135,7 +135,7 @@ class ProjectRepositoryTest extends BaseTestCase
             ->with($userMock)
         ;
 
-        $result = \Amp\wait($this->repository->addUser($projectMock, $userMock));
+        $result = \Amp\Promise\wait($this->repository->addUser($projectMock, $userMock));
 
         $this->assertTrue($result);
     }

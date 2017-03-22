@@ -3,7 +3,7 @@
 namespace Tests\Fedot\Backlog;
 
 use Amp\Redis\Client;
-use function Amp\wait;
+use function Amp\Promise\wait;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Instantiator\Instantiator;
 use Fedot\Backlog\Model\Project;

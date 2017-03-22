@@ -3,7 +3,7 @@
 namespace Tests\Fedot\Backlog\Repository;
 
 use Amp\Success;
-use function Amp\wait;
+use function Amp\Promise\wait;
 use Fedot\Backlog\Model\Requirement;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\RequirementRepository;

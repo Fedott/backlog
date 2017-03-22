@@ -2,8 +2,8 @@
 
 namespace Tests\Fedot\Backlog\Repository;
 
-use function Amp\wait;
-use AsyncInterop\Promise;
+use function Amp\Promise\wait;
+use Amp\Promise;
 use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
@@ -57,7 +57,7 @@ class StoryRepositoryTest extends BaseTestCase
         $resultPromise = $repository->getAllByProject($projectMock);
         $this->assertInstanceOf(Promise::class, $resultPromise);
 
-        $result = \Amp\wait($resultPromise);
+        $result = \Amp\Promise\wait($resultPromise);
 
         $this->assertEquals($stories, $result);
     }
@@ -79,7 +79,7 @@ class StoryRepositoryTest extends BaseTestCase
         ;
 
         $resultPromise = $repository->create($project, $storyMock);
-        $result = \Amp\wait($resultPromise);
+        $result = \Amp\Promise\wait($resultPromise);
         $this->assertEquals(true, $result);
     }
 
@@ -149,7 +149,7 @@ class StoryRepositoryTest extends BaseTestCase
         ;
 
         $resultPromise = $repository->move($project, $story, $positionStory);
-        $result = \Amp\wait($resultPromise);
+        $result = \Amp\Promise\wait($resultPromise);
         $this->assertEquals(true, $result);
     }
 

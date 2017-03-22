@@ -27,7 +27,7 @@ class RequestProcessorTest extends BaseTestCase
             ->willReturn(new Success($processedResponse))
         ;
 
-        $actualResponse = \Amp\wait($requestProcessor($request, $incomingResponse));
+        $actualResponse = \Amp\Promise\wait($requestProcessor($request, $incomingResponse));
 
         $this->assertNotEquals($incomingResponse, $actualResponse);
         $this->assertEquals($processedResponse, $actualResponse);
@@ -57,7 +57,7 @@ class RequestProcessorTest extends BaseTestCase
             return new Success($nextResponse);
         };
 
-        $actualResponse = \Amp\wait($requestProcessor($request, $incomingResponse, $next));
+        $actualResponse = \Amp\Promise\wait($requestProcessor($request, $incomingResponse, $next));
 
         $this->assertNotEquals($incomingResponse, $actualResponse);
         $this->assertNotEquals($processedResponse, $actualResponse);
