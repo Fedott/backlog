@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "51a8d044a0db3d10f3373d1ea1c0dbb1",
+    "content-hash": "5e6a7d06d9d62e8e50be040b90502e4e",
     "packages": [
         {
             "name": "amphp/aerys",
@@ -397,12 +397,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/redis.git",
-                "reference": "1f77f931598b67214f485d277a7489e4e9a584be"
+                "reference": "6084ce8bb4138c394c6dcaec33734ca4a8f82853"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/redis/zipball/1f77f931598b67214f485d277a7489e4e9a584be",
-                "reference": "1f77f931598b67214f485d277a7489e4e9a584be",
+                "url": "https://api.github.com/repos/amphp/redis/zipball/6084ce8bb4138c394c6dcaec33734ca4a8f82853",
+                "reference": "6084ce8bb4138c394c6dcaec33734ca4a8f82853",
                 "shasum": ""
             },
             "require": {
@@ -412,7 +412,7 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^1.9",
-                "phpunit/phpunit": "^4.8|^5.2"
+                "phpunit/phpunit": "^6.0"
             },
             "type": "library",
             "autoload": {
@@ -440,7 +440,7 @@
                 "client",
                 "redis"
             ],
-            "time": "2017-03-22 00:20:35"
+            "time": "2017-03-22 15:09:53"
         },
         {
             "name": "amphp/socket",
@@ -872,16 +872,16 @@
         },
         {
             "name": "fedot/async-data-mapper",
-            "version": "dev-dev-update-amphp",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Fedott/async-data-mapper.git",
-                "reference": "5e7007172e4e2d653303cbb8433f9a36753ff37a"
+                "reference": "55b12da03a758b38a99273652586b7c87eb0d00b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Fedott/async-data-mapper/zipball/5e7007172e4e2d653303cbb8433f9a36753ff37a",
-                "reference": "5e7007172e4e2d653303cbb8433f9a36753ff37a",
+                "url": "https://api.github.com/repos/Fedott/async-data-mapper/zipball/55b12da03a758b38a99273652586b7c87eb0d00b",
+                "reference": "55b12da03a758b38a99273652586b7c87eb0d00b",
                 "shasum": ""
             },
             "require": {
@@ -919,7 +919,7 @@
                 }
             ],
             "description": "Simple async datamaper",
-            "time": "2017-03-22 10:28:49"
+            "time": "2017-03-22T22:34:54+00:00"
         },
         {
             "name": "jms/metadata",
@@ -1526,12 +1526,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "51fd4c973356f79cd35bc4b4c15b4838f546ddb2"
+                "reference": "a87a5533ddc3d5c9d0dad8d141d79982e101d99d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/51fd4c973356f79cd35bc4b4c15b4838f546ddb2",
-                "reference": "51fd4c973356f79cd35bc4b4c15b4838f546ddb2",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/a87a5533ddc3d5c9d0dad8d141d79982e101d99d",
+                "reference": "a87a5533ddc3d5c9d0dad8d141d79982e101d99d",
                 "shasum": ""
             },
             "require": {
@@ -1588,7 +1588,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2017-03-21 21:56:35"
+            "time": "2017-03-22 21:08:21"
         },
         {
             "name": "symfony/filesystem",
@@ -2037,12 +2037,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "c8471462f8f84082f3c8f52124a9f929fb9118ba"
+                "reference": "76ae7f27e17ab4e5e177d8f9aa6c116d56fe47df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/c8471462f8f84082f3c8f52124a9f929fb9118ba",
-                "reference": "c8471462f8f84082f3c8f52124a9f929fb9118ba",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/76ae7f27e17ab4e5e177d8f9aa6c116d56fe47df",
+                "reference": "76ae7f27e17ab4e5e177d8f9aa6c116d56fe47df",
                 "shasum": ""
             },
             "require": {
@@ -2084,7 +2084,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-03-20 13:59:57"
+            "time": "2017-03-22 19:08:11"
         }
     ],
     "packages-dev": [
@@ -3345,8 +3345,7 @@
         "amphp/aerys": 20,
         "amphp/redis": 20,
         "amphp/amp": 20,
-        "symfony/dependency-injection": 20,
-        "fedot/async-data-mapper": 20
+        "symfony/dependency-injection": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
