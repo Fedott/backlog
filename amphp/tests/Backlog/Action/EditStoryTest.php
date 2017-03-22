@@ -8,7 +8,6 @@ use Fedot\Backlog\Action\Story\Edit\EditStory;
 use Fedot\Backlog\Action\Story\Edit\EditStoryPayload;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
-use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
 use Tests\Fedot\Backlog\ActionTestCase;

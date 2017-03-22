@@ -2,9 +2,9 @@
 
 namespace Tests\Fedot\Backlog;
 
+use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\PayloadInterface;
 use Fedot\Backlog\Repository\StoryRepository;
-use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\Response;

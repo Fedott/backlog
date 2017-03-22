@@ -3,13 +3,13 @@
 namespace Tests\Fedot\Backlog\Action\Project\Share;
 
 use Amp\Success;
-use Fedot\Backlog\Action\Project\Share\ProjectSharePayload;
+use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\Action\Project\Share\ProjectShare;
+use Fedot\Backlog\Action\Project\Share\ProjectSharePayload;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\UserRepository;
-use Fedot\Backlog\Action\ActionInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 use Tests\Fedot\Backlog\ActionTestCase;
 

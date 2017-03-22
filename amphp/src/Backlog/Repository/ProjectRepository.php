@@ -2,14 +2,13 @@
 namespace Fedot\Backlog\Repository;
 
 use Amp\Deferred;
-use Amp\Success;
 use Amp\Loop;
 use Amp\Promise;
+use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\DataMapper\IdentityMap;
 use Fedot\DataMapper\Redis\ModelManager;
-use function Amp\wrap;
 
 class ProjectRepository
 {
@@ -27,7 +26,7 @@ class ProjectRepository
     {
         $promisor = new Deferred();
 
-        Loop::defer(wrap(function () use ($promisor, $user, $project) {
+        Loop::defer(function () use ($promisor, $user, $project) {
             $user->addProject($project);
 
             $identityMap = new IdentityMap();
@@ -35,7 +34,7 @@ class ProjectRepository
             yield $this->modelManager->persist($user, $identityMap);
 
             $promisor->resolve(true);
-        }));
+        });
 
         return $promisor->promise();
     }
@@ -54,7 +53,7 @@ class ProjectRepository
     {
         $deferred = new Deferred();
 
-        Loop::defer(wrap(function () use ($deferred, $user, $project) {
+        Loop::defer(function () use ($deferred, $user, $project) {
             $project->share($user);
 
             $identityMap = new IdentityMap();
@@ -62,7 +61,7 @@ class ProjectRepository
             yield $this->modelManager->persist($user, $identityMap);
 
             $deferred->resolve(true);
-        }));
+        });
 
         return $deferred->promise();
     }

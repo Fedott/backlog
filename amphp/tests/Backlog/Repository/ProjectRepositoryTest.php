@@ -2,7 +2,6 @@
 
 namespace Tests\Fedot\Backlog\Repository;
 
-use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
@@ -13,7 +12,6 @@ use Fedot\DataMapper\PersistManagerInterface;
 use Fedot\DataMapper\Redis\ModelManager;
 use Fedot\DataMapper\RelationshipManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
-use Symfony\Component\Serializer\SerializerInterface;
 use Tests\Fedot\Backlog\BaseTestCase;
 
 class ProjectRepositoryTest extends BaseTestCase

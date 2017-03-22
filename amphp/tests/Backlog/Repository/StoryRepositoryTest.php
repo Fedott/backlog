@@ -2,13 +2,10 @@
 
 namespace Tests\Fedot\Backlog\Repository;
 
-use function Amp\Promise\wait;
 use Amp\Promise;
-use Amp\Redis\Client;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Story;
-use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\DataMapper\IdentityMap;
 use Fedot\DataMapper\Redis\FetchManager;
@@ -17,8 +14,8 @@ use Fedot\DataMapper\Redis\ModelManager;
 use Fedot\DataMapper\Redis\PersistManager;
 use Fedot\DataMapper\Redis\RelationshipManager;
 use PHPUnit_Framework_MockObject_MockObject;
-use Symfony\Component\Serializer\SerializerInterface;
 use Tests\Fedot\Backlog\BaseTestCase;
+use function Amp\Promise\wait;
 
 class StoryRepositoryTest extends BaseTestCase
 {
