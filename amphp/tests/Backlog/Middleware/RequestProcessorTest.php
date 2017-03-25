@@ -2,7 +2,7 @@
 namespace Tests\Fedot\Backlog\Middleware;
 
 use Amp\Success;
-use Fedot\Backlog\Action\ActionManager;
+use Fedot\Backlog\ActionManager;
 use Fedot\Backlog\Middleware\ActionProcessor;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\RequestInterface;

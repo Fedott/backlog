@@ -2,14 +2,15 @@
 declare(strict_types = 1);
 use Aerys\Request;
 use Aerys\Response;
+use Fedot\Backlog\WebSocketServer;
 
 require_once __DIR__ . "/bootstrap.php";
 
 $root = Aerys\root(__DIR__."/../web");
 
-$container->compile();
+$container->compile(true);
 
-$webSocketServer = $container->get('backlog.web-socket.server');
+$webSocketServer = $container->get(WebSocketServer::class);
 $websocket       = \Aerys\websocket($webSocketServer);
 
 $router = \Aerys\router()

@@ -12,11 +12,6 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 $container = new ContainerBuilder();
 
-$container->addCompilerPass(new MiddlewarePass());
-$container->addCompilerPass(new SerializerPass());
-$container->addCompilerPass(new PropertyInfoPass());
-$container->addCompilerPass(new ActionPass());
-
 $phpLoader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../app/config'));
 $yamlLoader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../app/config'));
 
@@ -26,5 +21,10 @@ $resolver = new LoaderResolver([
 ]);
 
 $yamlLoader->load('services.yml');
+
+$container->addCompilerPass(new MiddlewarePass());
+$container->addCompilerPass(new SerializerPass());
+$container->addCompilerPass(new PropertyInfoPass());
+$container->addCompilerPass(new ActionPass());
 
 return $container;

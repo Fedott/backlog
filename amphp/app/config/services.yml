@@ -1,14 +1,11 @@
 imports:
-    - { resource: parameters.php }
     - { resource: services/actions.yml }
 
 parameters:
+  backlog.data-storage.redis.client.uri: '%env(REDIS_URI)%'
+  env(REDIS_URI): tcp://localhost:6379?database=11
 
 services:
-  backlog.web-socket.server:
-    class: Fedot\Backlog\WebSocketServer
-    autowire: true
-
   backlog.infrastructure.runner-factory:
     class: Fedot\Backlog\Infrastructure\Middleware\RunnerFactory
     autowire: true
@@ -18,40 +15,8 @@ services:
     arguments:
       - "@serializer"
 
-  backlog.middleware.payload-parser:
-    class: Fedot\Backlog\Middleware\PayloadParser
-    autowire: true
-    tags:
-      - { name: backlog.middleware, priority: 5 }
-
-  backlog.middleware.request-processor:
-    class: Fedot\Backlog\Middleware\ActionProcessor
-    autowire: true
-    tags:
-      - { name: backlog.middleware, priority: 0 }
-
   backlog.action.manager:
-    class: Fedot\Backlog\Action\ActionManager
-
-  backlog.data-storage.redis.key-generator:
-    class: Fedot\DataMapper\Redis\KeyGenerator
-
-  backlog.data-storage.redis.fetch-manager:
-    class: Fedot\DataMapper\Redis\FetchManager
-    autowire: true
-
-  backlog.data-storage.redis.persist-manager:
-    class: Fedot\DataMapper\Redis\PersistManager
-    autowire: true
-
-  backlog.data-storage.redis.relationship-manager:
-    class: Fedot\DataMapper\Redis\RelationshipManager
-    autowire: true
-
-  backlog.data-storage.redis.client:
-    class: Amp\Redis\Client
-    arguments:
-      - "%backlog.data-storage.redis.client.uri%"
+    class: Fedot\Backlog\ActionManager
 
   serializer:
     class: Symfony\Component\Serializer\Serializer
@@ -61,8 +26,7 @@ services:
       - Symfony\Component\Serializer\Normalizer\DenormalizerInterface
       - Symfony\Component\Serializer\SerializerInterface
 
-  serializer.normalizer.object:
-    class: Fedot\Backlog\ExcludePluralPropertiesObjectNormalizer
+  Fedot\Backlog\ExcludePluralPropertiesObjectNormalizer:
     arguments:
       - '@Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory'
       - null
@@ -71,14 +35,7 @@ services:
     tags:
       - { name: serializer.normalizer, priority: 0 }
 
-  Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory:
-    autowire: true
-
-  Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader:
-    autowire: true
-
-  serializer.encoder.json:
-    class: Symfony\Component\Serializer\Encoder\JsonEncoder
+  Symfony\Component\Serializer\Encoder\JsonEncoder:
     tags:
       - { name: serializer.encoder, priority: 0 }
 
@@ -86,11 +43,32 @@ services:
     class: Symfony\Component\PropertyInfo\PropertyInfoExtractor
     arguments: ['', '', '', '']
 
-  property_info.type_extractor.php-doc:
-    class: Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor
+  Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor:
     tags:
       - { name: property_info.type_extractor, priority: 0 }
 
+  Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory:
+    autowire: true
+
+  Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader:
+    autowire: true
+
+  Amp\Redis\Client:
+    arguments:
+      - "%backlog.data-storage.redis.client.uri%"
+
+  Fedot\Backlog\Middleware\PayloadParser:
+    autowire: true
+    tags:
+      - { name: backlog.middleware, priority: 5 }
+
+  Fedot\Backlog\Middleware\ActionProcessor:
+    autowire: true
+    tags:
+      - { name: backlog.middleware, priority: 0 }
+
+  Fedot\Backlog\WebSocketServer:
+    autowire: true
   Fedot\DataMapper\Metadata\Driver\AnnotationDriver:
     autowire: true
   Symfony\Component\PropertyAccess\PropertyAccessor:
@@ -98,4 +76,6 @@ services:
   Doctrine\Common\Annotations\AnnotationReader:
     autowire: true
   Fedot\DataMapper\Redis\ModelManager:
+    autowire: true
+  Fedot\Backlog\MessageProcessor:
     autowire: true

@@ -1,12 +1,11 @@
 <?php declare(strict_types=1);
-namespace Tests\Fedot\Backlog\Action;
+namespace Tests\Fedot\Backlog;
 
 use Amp\Success;
 use Fedot\Backlog\Action\ActionInterface;
-use Fedot\Backlog\Action\ActionManager;
+use Fedot\Backlog\ActionManager;
 use Fedot\Backlog\WebSocket\Request;
 use Fedot\Backlog\WebSocket\Response;
-use Tests\Fedot\Backlog\BaseTestCase;
 
 class ActionManagerTest extends BaseTestCase
 {

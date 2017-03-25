@@ -4,7 +4,7 @@ namespace Fedot\Backlog\Middleware;
 use Amp\Deferred;
 use Amp\Loop;
 use Amp\Promise;
-use Fedot\Backlog\Action\ActionManager;
+use Fedot\Backlog\ActionManager;
 use Fedot\Backlog\Infrastructure\Middleware\MiddlewareInterface;
 use Fedot\Backlog\WebSocket\RequestInterface;
 use Fedot\Backlog\WebSocket\ResponseInterface;
