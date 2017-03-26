@@ -3,6 +3,7 @@ namespace Fedot\Backlog\Action\Story\GetAll;
 
 use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
+use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\Repository\StoryRepository;
 use Fedot\Backlog\WebSocket\RequestInterface;
@@ -52,6 +53,13 @@ class GetStories extends AbstractAction
         $payload = $request->getAttribute('payloadObject');
         $project = yield $this->projectRepository->get($payload->projectId);
         $stories = yield $this->storyRepository->getAllByProject($project);
+
+        $stories = array_filter(
+            $stories,
+            function (Story $story) {
+                return !$story->isCompleted();
+            }
+        );
 
         $response = $response->withType('stories');
         $storiesPayload = new StoriesPayload();

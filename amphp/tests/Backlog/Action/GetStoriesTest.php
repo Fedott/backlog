@@ -48,11 +48,18 @@ class GetStoriesTest extends ActionTestCase
 
     public function testProcess()
     {
+        /** @var Story[]|PHPUnit_Framework_MockObject_MockObject[] $stories */
         $stories = [
             $this->createMock(Story::class),
             $this->createMock(Story::class),
             $this->createMock(Story::class),
         ];
+
+        $stories[1]->expects($this->once())->method('isCompleted')->willReturn(true);
+        $stories[0]->expects($this->once())->method('isCompleted')->willReturn(false);
+        $stories[2]->expects($this->once())->method('isCompleted')->willReturn(false);
+
+        $completedStory = $stories[1];
 
         $processor = $this->getProcessorInstance();
 
@@ -78,12 +85,19 @@ class GetStoriesTest extends ActionTestCase
 
         $normalizedStories = ['stories' => [
             ['id' => 'test'],
-            ['id' => 'test2'],
             ['id' => 'test3'],
         ]];
         $this->normalizerMock->expects($this->once())
             ->method('normalize')
-            ->with($this->isInstanceOf(StoriesPayload::class))
+            ->with($this->callback(function (StoriesPayload $payload) use ($completedStory) {
+                $this->assertCount(2, $payload->stories);
+
+                foreach ($payload->stories as $story) {
+                    $this->assertNotSame($completedStory, $story);
+                }
+
+                return true;
+            }))
             ->willReturn($normalizedStories)
         ;
 
