@@ -113,7 +113,7 @@ class StoryEditFrom extends React.Component {
         />;
 
         return (
-            <Card className="backlog-story">
+            <Card className="backlog-story" data-story-id={this.state.story.id}>
                 <CardTitle title={titleField} className="backlog-story-title" />
                 <CardText>
                     <TextField

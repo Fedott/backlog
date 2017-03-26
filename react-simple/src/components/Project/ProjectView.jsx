@@ -61,7 +61,7 @@ class ProjectView extends React.Component {
         };
 
         return (
-            <Card className="backlog-project" style={style}>
+            <Card className="backlog-project" style={style} data-project-id={this.state.project.id}>
                 <CardTitle title={this.state.project.name} className="backlog-project-name"/>
                 <Divider />
                 <CardActions showExpandableButton={true}>

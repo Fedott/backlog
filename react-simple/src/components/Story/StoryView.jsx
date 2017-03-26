@@ -92,7 +92,7 @@ class StoryView extends React.Component {
         }
 
         return (
-            <Card className="backlog-story" style={style}>
+            <Card className="backlog-story" style={style} data-story-id={this.state.story.id}>
                 <CardTitle title={this.state.story.title} className="backlog-story-title"/>
                 <CardText>
                     {cardText}
