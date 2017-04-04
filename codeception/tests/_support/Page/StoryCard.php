@@ -77,4 +77,24 @@ class StoryCard
     {
         $this->tester->dontSeeElement($this->cardSelector);
     }
+
+    public function clickRequirements()
+    {
+        $this->tester->click('Требования', $this->cardSelector);
+    }
+
+    public function fillNewRequirementInput(string $text)
+    {
+        $this->tester->fillField("{$this->cardSelector} input[data-requirement-form-text-field]", $text);
+    }
+
+    public function clickSaveRequirement()
+    {
+        $this->tester->click("button[data-requirement-form-save]", $this->cardSelector);
+    }
+
+    public function waitRequirement(string $text, int $timeout = 1)
+    {
+        $this->tester->waitForText($text, $timeout, $this->cardSelector);
+    }
 }

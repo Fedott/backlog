@@ -23,8 +23,18 @@ $I->waitForText('Story title', 1);
 $I->see('Story title');
 $I->see('Story text');
 
-
 $story1Card = new \Page\StoryCard($I, 'Story title');
+
+$story1Card->clickRequirements();
+$firstRequirementText = 'First requirement';
+$story1Card->fillNewRequirementInput($firstRequirementText);
+$story1Card->clickSaveRequirement();
+$story1Card->waitRequirement($firstRequirementText);
+
+$secondRequirement = 'Second requirement';
+$story1Card->fillNewRequirementInput($secondRequirement);
+$story1Card->clickSaveRequirement();
+$story1Card->waitRequirement($secondRequirement);
 
 $story1Card->clickEdit();
 $story1Card->appendFieldTitle(' edited');
