@@ -27,6 +27,16 @@ export default class RequirementListItem extends React.Component {
         };
     }
 
+    componentWillReceiveProps = (nextProps) => {
+        this.setState({
+            requirement: nextProps.requirement,
+            editMode: nextProps.editMode || false,
+            createForm: nextProps.createForm || false,
+            requirementText: null,
+            disabled: false,
+        });
+    };
+
     enableEditMode = () => {
         this.setState({
             editMode: true,
@@ -130,13 +140,18 @@ export default class RequirementListItem extends React.Component {
 
         if (this.state.editMode) {
             primaryText = <TextField value={this.state.requirementText}
+                data-requirement-form-text-field
                 onChange={this.handleTextChange}
                 onKeyUp={this.handleKeyPress}
                 fullWidth={true}
                 disabled={this.state.disabled}
                 autoFocus
             />;
-            rightControls = <IconButton onTouchTap={this.save} disabled={this.state.disabled}><ContentSave /></IconButton>;
+            rightControls = <IconButton
+                data-requirement-form-save
+                onTouchTap={this.save}
+                disabled={this.state.disabled}
+            ><ContentSave /></IconButton>;
             leftControls = <Checkbox checked={this.state.requirement.completed} disabled={true}/>;
         } else {
             primaryText = this.state.requirement.text;

@@ -1,5 +1,9 @@
 {
+    "config": {
+        "bin-dir": "bin"
+    },
     "require": {
-        "codeception/codeception": "^2.2"
+        "codeception/codeception": "^2.2",
+        "consolidation/robo": "^1.0"
     }
 }

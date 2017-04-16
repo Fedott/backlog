@@ -1,5 +1,6 @@
 tests/_output
 vendor/
+bin/
 
 # User-specific stuff:
 .idea/workspace.xml

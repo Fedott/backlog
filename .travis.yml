@@ -3,7 +3,7 @@ sudo: false
 language: php
 
 php:
-  - 7.1.1 #@todo set 7.1 after release 7.1.3
+  - 7.1
   - nightly
 
 matrix:

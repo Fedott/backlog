@@ -11,4 +11,5 @@ modules:
             url: http://backlog.local:8080/
             browser: chrome
             window_size: 1280x800
+            restart: true
         - \Helper\Acceptance
