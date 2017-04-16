@@ -27,6 +27,16 @@ export default class RequirementListItem extends React.Component {
         };
     }
 
+    componentWillReceiveProps = (nextProps) => {
+        this.setState({
+            requirement: nextProps.requirement,
+            editMode: nextProps.editMode || false,
+            createForm: nextProps.createForm || false,
+            requirementText: null,
+            disabled: false,
+        });
+    };
+
     enableEditMode = () => {
         this.setState({
             editMode: true,

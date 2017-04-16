@@ -35,5 +35,13 @@ class StoryTest extends BaseTestCase
             $requirement,
             $requirement3,
         ], $story->getRequirements());
+
+        $requirement4 = new Requirement('id4', 'text', $story);
+
+        $this->assertSame([
+            $requirement,
+            $requirement3,
+            $requirement4
+        ], $story->getRequirements());
     }
 }

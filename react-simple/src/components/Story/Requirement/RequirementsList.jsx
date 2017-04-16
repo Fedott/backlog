@@ -30,19 +30,26 @@ export default class RequirementsList extends React.Component {
             });
             this.setState({
                 requirementsCollection: requirements,
-            })
+            });
         }.bind(this));
     }
 
+    onCreate = (requirement: Requirement) => {
+        this.state.requirementsCollection.push(requirement);
+        this.forceUpdate();
+    };
+
     render() {
-        let requirements = this.state.requirementsCollection.reverse().map(function (requirement: Requirement) {
+        let requirements = this.state.requirementsCollection.map(function (requirement: Requirement) {
             return <RequirementListItem requirement={requirement} />
         });
+
+        let createForm = <RequirementListItem requirement={{storyId: this.state.storyId}} createForm={true} editMode={true} onSavedHandler={this.onCreate}/>;
 
         return (
             <List>
                 {requirements}
-                {<RequirementListItem requirement={{storyId: this.state.storyId}} createForm={true} editMode={true} />}
+                {createForm}
             </List>
         );
     }

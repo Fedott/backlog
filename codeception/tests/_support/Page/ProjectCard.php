@@ -37,6 +37,11 @@ class ProjectCard
         $this->projectCardSelector = "div.backlog-project[data-project-id='{$this->projectId}']";
     }
 
+    public function waitSeeCard()
+    {
+        $this->tester->waitForElement($this->projectCardSelector);
+    }
+
     public function showStoryList()
     {
         $this->tester->see('Список историй', $this->projectCardSelector);

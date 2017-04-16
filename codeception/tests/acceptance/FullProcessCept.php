@@ -50,6 +50,7 @@ $story1Card->checkDontSee();
 
 $I->amOnPage('/');
 
+$project1Card->waitSeeCard();
 $project1Card->showStoryList();
 
 $story1Card->checkDontSee();

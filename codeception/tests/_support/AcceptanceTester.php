@@ -23,7 +23,7 @@ class AcceptanceTester extends \Codeception\Actor
     public function clearLocalStorage()
     {
         $this->amOnPage('/');
-        $this->executeJS('localStorage.clear();');
+        $this->executeJS('window.localStorage.clear();');
     }
 
     public function loginAsTestUser()
