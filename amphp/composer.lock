@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "89ddb48e4f704b82f885a0a67aaab1a9",
+    "content-hash": "bf42b95c2329ed3f9e709149bdeeecfb",
     "packages": [
         {
             "name": "amphp/aerys",
@@ -95,12 +95,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/amp.git",
-                "reference": "e75c62a5fd3c3f72c64c9e4f540dd57bb04b039d"
+                "reference": "c3fc6659cde9b3f4eb150c6e58f8c19f76c509c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/amp/zipball/e75c62a5fd3c3f72c64c9e4f540dd57bb04b039d",
-                "reference": "e75c62a5fd3c3f72c64c9e4f540dd57bb04b039d",
+                "url": "https://api.github.com/repos/amphp/amp/zipball/c3fc6659cde9b3f4eb150c6e58f8c19f76c509c8",
+                "reference": "c3fc6659cde9b3f4eb150c6e58f8c19f76c509c8",
                 "shasum": ""
             },
             "require": {
@@ -108,7 +108,7 @@
             },
             "require-dev": {
                 "amphp/phpunit-util": "dev-master",
-                "friendsofphp/php-cs-fixer": "~1.9",
+                "friendsofphp/php-cs-fixer": "^2.3",
                 "phpunit/phpunit": "^6.0.9",
                 "react/promise": "^2"
             },
@@ -161,7 +161,7 @@
                 "non-blocking",
                 "promise"
             ],
-            "time": "2017-04-21 17:18:40"
+            "time": "2017-04-24 14:28:56"
         },
         {
             "name": "amphp/cache",
@@ -398,13 +398,13 @@
             "version": "dev-amp_v2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Fedott/redis.git",
-                "reference": "d0e6cdce7180da8791fc0e408122e47390b2fd7b"
+                "url": "https://github.com/amphp/redis.git",
+                "reference": "8222cf7a80a72bf7444b630b344e45f7ac60ebe0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Fedott/redis/zipball/d0e6cdce7180da8791fc0e408122e47390b2fd7b",
-                "reference": "d0e6cdce7180da8791fc0e408122e47390b2fd7b",
+                "url": "https://api.github.com/repos/amphp/redis/zipball/8222cf7a80a72bf7444b630b344e45f7ac60ebe0",
+                "reference": "8222cf7a80a72bf7444b630b344e45f7ac60ebe0",
                 "shasum": ""
             },
             "require": {
@@ -422,11 +422,7 @@
                     "Amp\\Redis\\": "lib"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Amp\\Redis\\": "test"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -446,11 +442,7 @@
                 "client",
                 "redis"
             ],
-            "support": {
-                "issues": "https://github.com/amphp/redis/issues",
-                "source": "https://github.com/Fedott/redis/tree/amp_v2"
-            },
-            "time": "2017-04-24 10:27:17"
+            "time": "2017-04-24 13:28:56"
         },
         {
             "name": "amphp/socket",
