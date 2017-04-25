@@ -16,7 +16,7 @@ class RoboFile extends \Robo\Tasks
             ->run()
         ;
 
-        $result = $this->taskCodecept()
+        $result = $this->taskCodecept('bin/codecept')
             ->run()
         ;
 

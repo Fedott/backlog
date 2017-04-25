@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/amphp.iml" filepath="$PROJECT_DIR$/.idea/amphp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/amphp/redis/.idea/redis.iml" filepath="$PROJECT_DIR$/vendor/amphp/redis/.idea/redis.iml" />
     </modules>
   </component>
 </project>

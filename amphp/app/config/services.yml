@@ -79,3 +79,9 @@ services:
     autowire: true
   Fedot\Backlog\MessageProcessor:
     autowire: true
+  Ramsey\Uuid\UuidFactory:
+    autowire: true
+  Metadata\MetadataFactory:
+    autowire: true
+  Doctrine\Instantiator\Instantiator:
+    autowire: true
