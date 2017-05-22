@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Repository;
 
-use Amp\Deferred;
-use Amp\Loop;
+use function Amp\call;
 use Amp\Promise;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
@@ -24,19 +23,15 @@ class ProjectRepository
 
     public function create(User $user, Project $project): Promise /** @yield bool */
     {
-        $promisor = new Deferred();
-
-        Loop::defer(function () use ($promisor, $user, $project) {
+        return call(function (User $user, Project $project) {
             $user->addProject($project);
 
             $identityMap = new IdentityMap();
             yield $this->modelManager->persist($project, $identityMap);
             yield $this->modelManager->persist($user, $identityMap);
 
-            $promisor->resolve(true);
-        });
-
-        return $promisor->promise();
+            return true;
+        }, $user, $project);
     }
 
     public function getAllByUser(User $user): Promise /** @yield Project[] */
@@ -51,18 +46,14 @@ class ProjectRepository
 
     public function addUser(Project $project, User $user): Promise /** @yield bool */
     {
-        $deferred = new Deferred();
-
-        Loop::defer(function () use ($deferred, $user, $project) {
+        return call(function (Project $project, User $user) {
             $project->share($user);
 
             $identityMap = new IdentityMap();
             yield $this->modelManager->persist($project, $identityMap);
             yield $this->modelManager->persist($user, $identityMap);
 
-            $deferred->resolve(true);
-        });
-
-        return $deferred->promise();
+            return true;
+        }, $project, $user);
     }
 }

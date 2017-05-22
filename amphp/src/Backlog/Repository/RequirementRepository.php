@@ -2,8 +2,7 @@
 
 namespace Fedot\Backlog\Repository;
 
-use Amp\Deferred;
-use Amp\Loop;
+use function Amp\call;
 use Amp\Promise;
 use Amp\Success;
 use Fedot\Backlog\Model\Requirement;
@@ -24,16 +23,12 @@ class RequirementRepository
 
     public function create(Story $story, Requirement $requirement): Promise /** @yield bool */
     {
-        $promisor = new Deferred();
-
-        Loop::defer(function () use ($promisor, $story, $requirement) {
+        return call(function (Story $story, Requirement $requirement) {
             yield $this->modelManager->persist($requirement);
             yield $this->modelManager->persist($story);
 
-            $promisor->resolve(true);
-        });
-
-        return $promisor->promise();
+            return true;
+        }, $story, $requirement);
     }
 
     public function save(Requirement $requirement): Promise /** @yield bool */

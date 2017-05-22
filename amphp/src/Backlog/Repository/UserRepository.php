@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Repository;
 
-use Amp\Deferred;
-use Amp\Loop;
+use function Amp\call;
 use Amp\Promise;
 use Fedot\Backlog\Model\User;
 use Fedot\DataMapper\ModelManagerInterface;
@@ -21,9 +20,7 @@ class UserRepository
 
     public function create(User $user): Promise
     {
-        $promisor = new Deferred();
-
-        Loop::defer(function () use ($promisor, $user) {
+        return call(function (User $user) {
             $loadedUser = yield $this->modelManager->find(User::class, $user->getUsername());
 
             if (null === $loadedUser) {
@@ -32,22 +29,16 @@ class UserRepository
                 $result = false;
             }
 
-            $promisor->resolve($result);
-        });
-
-        return $promisor->promise();
+            return $result;
+        }, $user);
     }
 
     public function get(string $username): Promise
     {
-        $promisor = new Deferred();
-
-        Loop::defer(function () use ($promisor, $username) {
+        return call(function (string $username) {
             $user = yield $this->modelManager->find(User::class, $username);
 
-            $promisor->resolve($user);
-        });
-
-        return $promisor->promise();
+            return $user;
+        }, $username);
     }
 }
