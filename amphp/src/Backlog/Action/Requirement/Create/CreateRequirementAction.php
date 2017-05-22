@@ -2,7 +2,6 @@
 
 namespace Fedot\Backlog\Action\Requirement\Create;
 
-use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Action\ErrorPayload;
 use Fedot\Backlog\Model\Requirement;
@@ -39,7 +38,7 @@ class CreateRequirementAction extends AbstractAction
         $this->uuidFactory = $uuidFactory;
     }
 
-    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
+    protected function execute(RequestInterface $request, ResponseInterface $response)
     {
         /** @var CreateRequirementPayload $payload */
         $payload = $request->getAttribute('payloadObject');
@@ -52,8 +51,7 @@ class CreateRequirementAction extends AbstractAction
                 ->withPayload((array)new ErrorPayload("Story '{$payload->storyId}' not found"))
             ;
 
-            $promisor->resolve($response);
-            return;
+            return $response;
         }
 
         $uuid = $this->uuidFactory->uuid4()->toString();
@@ -68,8 +66,7 @@ class CreateRequirementAction extends AbstractAction
             'completed' => $requirement->isCompleted(),
         ]);
 
-        $promisor->resolve($response);
-        return;
+        return $response;
     }
 
     public function getSupportedType(): string

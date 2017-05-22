@@ -30,7 +30,7 @@
         "symfony/config": "^3.3",
         "symfony/console": "^3.3",
         "symfony/finder": "^3.3",
-        "fedot/async-data-mapper": "0.2.0"
+        "fedot/async-data-mapper": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0"

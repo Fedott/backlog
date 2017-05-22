@@ -2,7 +2,6 @@
 
 namespace Fedot\Backlog\Action\Story\Move;
 
-use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Action\EmptyPayload;
 use Fedot\Backlog\Action\ErrorPayload;
@@ -39,7 +38,7 @@ class MoveStory extends AbstractAction
         return MoveStoryPayload::class;
     }
 
-    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
+    protected function execute(RequestInterface $request, ResponseInterface $response)
     {
         /** @var MoveStoryPayload $payload */
         $payload = $request->getAttribute('payloadObject');
@@ -65,6 +64,6 @@ class MoveStory extends AbstractAction
             $response = $response->withPayload((array)$errorPayload);
         }
 
-        $promisor->resolve($response);
+        return $response;
     }
 }

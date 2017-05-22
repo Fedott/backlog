@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Action\Story\MarkAsCompleted;
 
-use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Action\ErrorPayload;
 use Fedot\Backlog\Model\Story;
@@ -21,7 +20,7 @@ class MarkStoryAsCompleted extends AbstractAction
         $this->storyRepository = $storyRepository;
     }
 
-    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
+    protected function execute(RequestInterface $request, ResponseInterface $response)
     {
         /** @var StoryIdPayload $payload */
         $payload = $request->getAttribute('payloadObject');
@@ -39,7 +38,7 @@ class MarkStoryAsCompleted extends AbstractAction
             $response = $response->withPayload((array) $errorPayload);
         }
 
-        $promisor->resolve($response);
+        return $response;
     }
 
     public function getSupportedType(): string

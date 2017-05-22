@@ -2,7 +2,6 @@
 
 namespace Fedot\Backlog\Action\Story\Edit;
 
-use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Action\ErrorPayload;
 use Fedot\Backlog\Model\Story;
@@ -33,7 +32,7 @@ class EditStory extends AbstractAction
         return EditStoryPayload::class;
     }
 
-    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
+    protected function execute(RequestInterface $request, ResponseInterface $response)
     {
         /** @var EditStoryPayload $payload */
         $payload = $request->getAttribute('payloadObject');
@@ -57,6 +56,6 @@ class EditStory extends AbstractAction
             $response = $response->withPayload((array) new ErrorPayload("Story id '{$payload->id}' do not saved"));
         }
 
-        $promisor->resolve($response);
+        return $response;
     }
 }

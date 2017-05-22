@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Middleware;
 
-use Amp\Deferred;
-use Amp\Loop;
+use function Amp\call;
 use Amp\Promise;
 use Fedot\Backlog\ActionManager;
 use Fedot\Backlog\Infrastructure\Middleware\MiddlewareInterface;
@@ -32,16 +31,8 @@ class ActionProcessor implements MiddlewareInterface
             return $responsePromise;
         }
 
-        $promisor = new Deferred();
-
-        Loop::defer(function () use ($promisor, $request, $responsePromise, $next) {
-            $response = yield $responsePromise;
-
-            $nextResponse = yield $next($request, $response);
-
-            $promisor->resolve($nextResponse);
-        });
-
-        return $promisor->promise();
+        return call(function (RequestInterface $request, Promise $responsePromise, callable $next) {
+            return yield $next($request, yield $responsePromise);
+        }, $request, $responsePromise, $next);
     }
 }
