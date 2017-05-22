@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Repository;
 
-use Amp\Deferred;
-use Amp\Loop;
+use function Amp\call;
 use Amp\Promise;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
@@ -42,17 +41,13 @@ class StoryRepository
      */
     public function create(Project $project, Story $story): Promise
     {
-        $promisor = new Deferred();
-
-        Loop::defer(function () use ($promisor, $story, $project) {
+        return call(function (Project $project, Story $story) {
             $identityMap = new IdentityMap();
             yield $this->modelManager->persist($story, $identityMap);
             yield $this->modelManager->persist($project, $identityMap);
 
-            $promisor->resolve(true);
-        });
-
-        return $promisor->promise();
+            return true;
+        }, $project, $story);
     }
 
     /**
@@ -75,18 +70,14 @@ class StoryRepository
      */
     public function delete(Project $project, Story $story): Promise
     {
-        $promisor = new Deferred();
-
-        Loop::defer(function () use ($promisor, $story, $project) {
+        return call(function (Project $project, Story $story) {
             $project->removeStory($story);
 
             yield $this->modelManager->remove($story);
             yield $this->modelManager->persist($project);
 
-            $promisor->resolve(true);
-        });
-
-        return $promisor->promise();
+            return true;
+        }, $project, $story);
     }
 
     /**
