@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog;
 
-use Amp\Deferred;
-use Amp\Loop;
+use function Amp\call;
 use Amp\Promise;
 use Amp\Redis\Client;
 use Fedot\Backlog\Exception\AuthenticationException;
@@ -46,30 +45,22 @@ class AuthenticationService
      */
     public function authByUsernamePassword(string $username, string $password): Promise
     {
-        $deferred = new Deferred();
-
-        Loop::defer(function () use ($username, $password, $deferred) {
+        return call(function (string $username, string $password) {
             try {
                 /** @var User $user */
                 $user = yield $this->findUserByUsername($username);
             } catch (UserNotFoundException $exception) {
-                $deferred->fail(new AuthenticationException('Invalid username or password'));
-
-                return;
+                throw new AuthenticationException('Invalid username or password');
             }
 
             if (!$this->passwordVerify($password, $user->getPasswordHash())) {
-                $deferred->fail(new AuthenticationException('Invalid username or password'));
-
-                return;
+                throw new AuthenticationException('Invalid username or password');
             }
 
             $token = yield $this->getNewTokenForUser($user, 10*24*60*60);
 
-            $deferred->resolve([$user, $token]);
-        });
-
-        return $deferred->promise();
+            return [$user, $token];
+        }, $username, $password);
     }
 
     /**
@@ -80,37 +71,27 @@ class AuthenticationService
      */
     public function authByToken(string $token): Promise
     {
-        $deferred = new Deferred();
-
-        Loop::defer(function () use ($token, $deferred) {
+        return call(function (string $token) {
             $username = yield $this->redisClient->get("auth:token:{$token}");
 
             if (null === $username) {
-                $deferred->fail(new AuthenticationException("Invalid or expired token"));
-
-                return;
+                throw new AuthenticationException("Invalid or expired token");
             }
 
-            $deferred->resolve($username);
-        });
-
-        return $deferred->promise();
+            return $username;
+        }, $token);
     }
 
     public function findUserByUsername(string $username): Promise
     {
-        $deferred = new Deferred();
-
-        Loop::defer(function () use ($deferred, $username) {
+        return call(function (string $username) {
             $user = yield $this->userRepository->get($username);
             if ($user) {
-                $deferred->resolve($user);
-                return;
+                return $user;
             }
 
             if (!array_key_exists($username, $this->userPasswords)) {
-                $deferred->fail(new UserNotFoundException('User not found'));
-                return;
+                throw new UserNotFoundException('User not found');
             }
 
             $user = new User(
@@ -118,10 +99,8 @@ class AuthenticationService
                 $this->userPasswords[$username]
             );
 
-            $deferred->resolve($user);
-        });
-
-        return $deferred->promise();
+            return $user;
+        }, $username);
     }
 
     private function passwordVerify(string $password, string $hash): bool
@@ -138,9 +117,7 @@ class AuthenticationService
      */
     private function getNewTokenForUser(User $user, int $ttl): Promise
     {
-        $deferred = new Deferred();
-
-        Loop::defer(function () use ($user, $ttl, $deferred) {
+        return call(function (User $user, int $ttl) {
             do {
                 $token = bin2hex(random_bytes(32));
 
@@ -149,9 +126,7 @@ class AuthenticationService
                 ;
             } while (!$uniqueTokenGenerated);
 
-            $deferred->resolve($token);
-        });
-
-        return $deferred->promise();
+            return $token;
+        }, $user, $ttl);
     }
 }

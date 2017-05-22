@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Action\Story\Create;
 
-use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\ProjectRepository;
@@ -55,7 +54,7 @@ class CreateStory extends AbstractAction
         return StoryCreatePayload::class;
     }
 
-    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
+    protected function execute(RequestInterface $request, ResponseInterface $response)
     {
         /** @var StoryCreatePayload $payload */
         $payload = $request->getAttribute('payloadObject');
@@ -77,6 +76,6 @@ class CreateStory extends AbstractAction
             'text' => $story->getText(),
         ]);
 
-        $promisor->resolve($response);
+        return $response;
     }
 }

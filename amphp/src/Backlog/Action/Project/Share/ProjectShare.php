@@ -2,7 +2,6 @@
 
 namespace Fedot\Backlog\Action\Project\Share;
 
-use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Action\ErrorPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
@@ -28,7 +27,7 @@ class ProjectShare extends AbstractAction
         $this->projectRepository = $projectRepository;
     }
 
-    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
+    protected function execute(RequestInterface $request, ResponseInterface $response)
     {
         /** @var ProjectSharePayload $payload */
         $payload = $request->getAttribute('payloadObject');
@@ -47,7 +46,7 @@ class ProjectShare extends AbstractAction
             ;
         }
 
-        $promisor->resolve($response);
+        return $response;
     }
 
     public function getSupportedType(): string

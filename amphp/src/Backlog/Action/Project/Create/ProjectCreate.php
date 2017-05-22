@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Action\Project\Create;
 
-use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Repository\ProjectRepository;
@@ -47,7 +46,7 @@ class ProjectCreate extends AbstractAction
         return ProjectCreatePayload::class;
     }
 
-    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
+    protected function execute(RequestInterface $request, ResponseInterface $response)
     {
         /** @var ProjectCreatePayload $createProjectPayload */
         $createProjectPayload = $request->getAttribute('payloadObject');
@@ -67,6 +66,6 @@ class ProjectCreate extends AbstractAction
             'name' => $project->getName()
         ]);
 
-        $promisor->resolve($response);
+        return $response;
     }
 }

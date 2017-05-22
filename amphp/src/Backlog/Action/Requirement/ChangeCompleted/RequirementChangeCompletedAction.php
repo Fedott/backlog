@@ -2,7 +2,6 @@
 
 namespace Fedot\Backlog\Action\Requirement\ChangeCompleted;
 
-use Amp\Deferred;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Model\Requirement;
 use Fedot\Backlog\Repository\RequirementRepository;
@@ -21,7 +20,7 @@ class RequirementChangeCompletedAction extends AbstractAction
         $this->requirementRepository = $requirementRepository;
     }
 
-    protected function execute(Deferred $promisor, RequestInterface $request, ResponseInterface $response)
+    protected function execute(RequestInterface $request, ResponseInterface $response)
     {
         /** @var RequirementChangeCompletedPayload $payload */
         $payload = $request->getAttribute('payloadObject');
@@ -35,21 +34,19 @@ class RequirementChangeCompletedAction extends AbstractAction
                     $requirement->complete();
                     yield $this->requirementRepository->save($requirement);
 
-                    $promisor->resolve($response->withType('success'));
-                    return;
+                    return $response->withType('success');
                 }
             } elseif ($payload->completed === false) {
                 if ($requirement->isCompleted()) {
                     $requirement->incomplete();
                     yield $this->requirementRepository->save($requirement);
 
-                    $promisor->resolve($response->withType('success'));
-                    return;
+                    return $response->withType('success');
                 }
             }
         }
 
-        $promisor->resolve($response->withType('error'));
+        return $response->withType('error');
     }
 
     public function getSupportedType(): string

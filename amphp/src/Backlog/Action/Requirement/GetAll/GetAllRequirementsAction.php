@@ -2,7 +2,6 @@
 
 namespace Fedot\Backlog\Action\Requirement\GetAll;
 
-use Amp\Deferred;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Repository\RequirementRepository;
 use Fedot\Backlog\Repository\StoryRepository;
@@ -37,7 +36,7 @@ class GetAllRequirementsAction extends AbstractAction
         $this->normalizer = $normalizer;
     }
 
-    protected function execute(Deferred $promisor, RequestInterface $request, ResponseInterface $response)
+    protected function execute(RequestInterface $request, ResponseInterface $response)
     {
         /** @var GetAllRequirementsPayload $payload */
         $payload = $request->getAttribute('payloadObject');
@@ -48,7 +47,7 @@ class GetAllRequirementsAction extends AbstractAction
         $response = $response->withType('requirements');
         $response = $response->withPayload(['requirements' => $this->normalizer->normalize($requirements)]);
 
-        $promisor->resolve($response);
+        return $response;
     }
 
     public function getSupportedType(): string

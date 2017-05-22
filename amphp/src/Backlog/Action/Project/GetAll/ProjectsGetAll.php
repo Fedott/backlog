@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Action\Project\GetAll;
 
-use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Action\EmptyPayload;
 use Fedot\Backlog\Repository\ProjectRepository;
@@ -47,7 +46,7 @@ class ProjectsGetAll extends AbstractAction
         return EmptyPayload::class;
     }
 
-    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
+    protected function execute(RequestInterface $request, ResponseInterface $response)
     {
         $user = $this->webSocketAuthService->getAuthorizedUserForClient($request->getClientId());
         $projects = yield $this->projectRepository->getAllByUser($user);
@@ -58,6 +57,6 @@ class ProjectsGetAll extends AbstractAction
         $response = $response->withType('projects');
         $response = $response->withPayload($this->normalizer->normalize($payload));
 
-        $promisor->resolve($response);
+        return $response;
     }
 }

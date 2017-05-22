@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Action\User\Registration;
 
-use Amp\Deferred as Promisor;
 use Fedot\Backlog\Action\AbstractAction;
 use Fedot\Backlog\Action\ErrorPayload;
 use Fedot\Backlog\Action\User\Login\UsernamePasswordPayload;
@@ -22,7 +21,7 @@ class Registration extends AbstractAction
         $this->userRepository = $userRepository;
     }
 
-    protected function execute(Promisor $promisor, RequestInterface $request, ResponseInterface $response)
+    protected function execute(RequestInterface $request, ResponseInterface $response)
     {
         /** @var UsernamePasswordPayload $payload */
         $payload = $request->getAttribute('payloadObject');
@@ -46,7 +45,7 @@ class Registration extends AbstractAction
             $response = $response->withPayload((array) new ErrorPayload('Username busy'));
         }
 
-        $promisor->resolve($response);
+        return $response;
     }
 
     public function getSupportedType(): string
