@@ -62,7 +62,7 @@ class GetStories extends AbstractAction
 
         $response = $response->withType('stories');
         $storiesPayload = new StoriesPayload();
-        $storiesPayload->stories = $stories;
+        $storiesPayload->stories = array_values($stories);
         $response = $response->withPayload($this->normalizer->normalize($storiesPayload));
 
         return $response;

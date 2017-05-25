@@ -11,6 +11,7 @@ use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Repository\ProjectRepository;
 use Fedot\Backlog\WebSocket\Response;
 use PHPUnit_Framework_MockObject_MockObject;
+use Symfony\Component\Serializer\Serializer;
 use Tests\Fedot\Backlog\ActionTestCase;
 
 class GetStoriesTest extends ActionTestCase
@@ -29,10 +30,12 @@ class GetStoriesTest extends ActionTestCase
 
     protected function getProcessorInstance(): ActionInterface
     {
+        global $container;
+
         return new GetStories(
             $this->storyRepositoryMock,
             $this->projectRepositoryMock,
-            $this->normalizerMock
+            $container->get('serializer')
         );
     }
 
@@ -50,16 +53,10 @@ class GetStoriesTest extends ActionTestCase
     {
         /** @var Story[]|PHPUnit_Framework_MockObject_MockObject[] $stories */
         $stories = [
-            $this->createMock(Story::class),
-            $this->createMock(Story::class),
-            $this->createMock(Story::class),
+            new Story('id1', 'title1', 'text1', $this->createMock(Project::class), false),
+            new Story('id2', 'title2', 'text2', $this->createMock(Project::class), true),
+            new Story('id3', 'title3', 'text3', $this->createMock(Project::class), false),
         ];
-
-        $stories[1]->expects($this->once())->method('isCompleted')->willReturn(true);
-        $stories[0]->expects($this->once())->method('isCompleted')->willReturn(false);
-        $stories[2]->expects($this->once())->method('isCompleted')->willReturn(false);
-
-        $completedStory = $stories[1];
 
         $processor = $this->getProcessorInstance();
 
@@ -83,29 +80,16 @@ class GetStoriesTest extends ActionTestCase
             ->willReturn(new Success($stories))
         ;
 
-        $normalizedStories = ['stories' => [
-            ['id' => 'test'],
-            ['id' => 'test3'],
+        $expectedStoriesArray = ['stories' => [
+            ['id' => 'id1', 'title' => 'title1', 'text' => 'text1', 'completed' => false, 'project' => ['id' => '', 'name' => '']],
+            ['id' => 'id3', 'title' => 'title3', 'text' => 'text3', 'completed' => false, 'project' => ['id' => '', 'name' => '']],
         ]];
-        $this->normalizerMock->expects($this->once())
-            ->method('normalize')
-            ->with($this->callback(function (StoriesPayload $payload) use ($completedStory) {
-                $this->assertCount(2, $payload->stories);
-
-                foreach ($payload->stories as $story) {
-                    $this->assertNotSame($completedStory, $story);
-                }
-
-                return true;
-            }))
-            ->willReturn($normalizedStories)
-        ;
 
         /** @var Response $response */
         $response = \Amp\Promise\wait($processor->process($request, $response));
 
         $this->assertResponseBasic($response, 34, 777, 'stories');
 
-        $this->assertEquals($normalizedStories, $response->getPayload());
+        $this->assertEquals($expectedStoriesArray, $response->getPayload());
     }
 }
