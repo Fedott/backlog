@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea1ca71632550d538b72c43618f5ee3b",
+    "content-hash": "63c4ee0d1747cf36a0235190a98a7bf2",
     "packages": [
         {
             "name": "amphp/aerys",
@@ -12,30 +12,30 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/aerys.git",
-                "reference": "c40583181bf1e76081d8e8882eba0cd91333e241"
+                "reference": "1a7cc1a3018bc8175f52948f7d05211be4286632"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/aerys/zipball/c40583181bf1e76081d8e8882eba0cd91333e241",
-                "reference": "c40583181bf1e76081d8e8882eba0cd91333e241",
+                "url": "https://api.github.com/repos/amphp/aerys/zipball/1a7cc1a3018bc8175f52948f7d05211be4286632",
+                "reference": "1a7cc1a3018bc8175f52948f7d05211be4286632",
                 "shasum": ""
             },
             "require": {
                 "amphp/amp": "^2",
-                "amphp/byte-stream": "dev-master",
-                "amphp/file": "dev-amp_v2",
-                "amphp/socket": "dev-amp_v2",
+                "amphp/byte-stream": "^1",
+                "amphp/file": "^0.2",
+                "amphp/socket": "^0.10",
                 "league/climate": "^3",
                 "nikic/fast-route": "^1",
                 "php": ">=7",
                 "psr/log": "^1"
             },
             "require-dev": {
-                "amphp/artax": "^3@dev",
-                "amphp/phpunit-util": "dev-master",
-                "friendsofphp/php-cs-fixer": "~1.9",
-                "http2jp/hpack-test-case": "1.0",
-                "phpunit/phpunit": "^6.0"
+                "amphp/artax": "dev-master",
+                "amphp/phpunit-util": "^1",
+                "friendsofphp/php-cs-fixer": "^2.3",
+                "http2jp/hpack-test-case": "^1",
+                "phpunit/phpunit": "^6"
             },
             "bin": [
                 "bin/aerys"
@@ -73,6 +73,10 @@
                 {
                     "name": "Niklas Keller",
                     "role": "Quality Assurance / Developer"
+                },
+                {
+                    "name": "Aaron Piotrowski",
+                    "email": "aaron@trowski.com"
                 }
             ],
             "description": "A non-blocking HTTP/Websocket server",
@@ -87,27 +91,27 @@
                 "server",
                 "websocket"
             ],
-            "time": "2017-05-17 15:48:59"
+            "time": "2017-06-27 06:04:53"
         },
         {
             "name": "amphp/amp",
-            "version": "dev-master",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/amp.git",
-                "reference": "7e500548df1fbf4413ccdf17f0413a5e6133777a"
+                "reference": "62e7956c93043b9f98e25e5bc9b9a216a6241ea4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/amp/zipball/7e500548df1fbf4413ccdf17f0413a5e6133777a",
-                "reference": "7e500548df1fbf4413ccdf17f0413a5e6133777a",
+                "url": "https://api.github.com/repos/amphp/amp/zipball/62e7956c93043b9f98e25e5bc9b9a216a6241ea4",
+                "reference": "62e7956c93043b9f98e25e5bc9b9a216a6241ea4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7"
             },
             "require-dev": {
-                "amphp/phpunit-util": "dev-master",
+                "amphp/phpunit-util": "^1",
                 "friendsofphp/php-cs-fixer": "^2.3",
                 "phpunit/phpunit": "^6.0.9",
                 "react/promise": "^2"
@@ -120,7 +124,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Amp\\": "lib/"
+                    "Amp\\": "lib"
                 },
                 "files": [
                     "lib/functions.php",
@@ -149,8 +153,8 @@
                     "email": "aaron@trowski.com"
                 }
             ],
-            "description": "A non-blocking concurrency framework for PHP applications",
-            "homepage": "https://github.com/amphp/amp",
+            "description": "A non-blocking concurrency framework for PHP applications.",
+            "homepage": "http://amphp.org/amp",
             "keywords": [
                 "async",
                 "asynchronous",
@@ -162,34 +166,34 @@
                 "non-blocking",
                 "promise"
             ],
-            "time": "2017-05-20 16:12:17"
+            "time": "2017-06-15T15:50:28+00:00"
         },
         {
             "name": "amphp/byte-stream",
-            "version": "dev-master",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/byte-stream.git",
-                "reference": "6b369657a13cd675c5d1c4a592b7d83fa118857e"
+                "reference": "704adf70cfa7cd34172203bf6abae226323a77d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/byte-stream/zipball/6b369657a13cd675c5d1c4a592b7d83fa118857e",
-                "reference": "6b369657a13cd675c5d1c4a592b7d83fa118857e",
+                "url": "https://api.github.com/repos/amphp/byte-stream/zipball/704adf70cfa7cd34172203bf6abae226323a77d1",
+                "reference": "704adf70cfa7cd34172203bf6abae226323a77d1",
                 "shasum": ""
             },
             "require": {
-                "amphp/amp": "^2.0"
+                "amphp/amp": "^2"
             },
             "require-dev": {
-                "amphp/phpunit-util": "dev-master",
+                "amphp/phpunit-util": "^1",
                 "friendsofphp/php-cs-fixer": "^2.3",
                 "phpunit/phpunit": "^6"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Amp\\ByteStream\\": "lib/"
+                    "Amp\\ByteStream\\": "lib"
                 },
                 "files": [
                     "lib/functions.php"
@@ -210,43 +214,43 @@
                 }
             ],
             "description": "A stream abstraction to make working with non-blocking I/O simple.",
-            "homepage": "https://github.com/amphp/byte-stream",
+            "homepage": "http://amphp.org/byte-stream",
             "keywords": [
                 "amp",
+                "amphp",
                 "async",
+                "io",
                 "non-blocking",
                 "stream"
             ],
-            "time": "2017-05-22 08:41:35"
+            "time": "2017-06-23T14:33:13+00:00"
         },
         {
             "name": "amphp/cache",
-            "version": "dev-amp_v2",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/cache.git",
-                "reference": "558565a35e9b414298fbbf5784bf5b86b2c18b01"
+                "reference": "3b5c5243f81eb71f63f49dc03764754345810636"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/cache/zipball/558565a35e9b414298fbbf5784bf5b86b2c18b01",
-                "reference": "558565a35e9b414298fbbf5784bf5b86b2c18b01",
+                "url": "https://api.github.com/repos/amphp/cache/zipball/3b5c5243f81eb71f63f49dc03764754345810636",
+                "reference": "3b5c5243f81eb71f63f49dc03764754345810636",
                 "shasum": ""
             },
             "require": {
-                "amphp/amp": "dev-master as 2.0"
+                "amphp/amp": "^2"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "~1.9",
-                "phpunit/phpunit": "^5"
-            },
-            "suggest": {
-                "amphp/redis": "For redis cache driver support"
+                "amphp/phpunit-util": "^1",
+                "friendsofphp/php-cs-fixer": "^2.3",
+                "phpunit/phpunit": "^6"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Amp\\Cache\\": "lib/"
+                    "Amp\\Cache\\": "lib"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -263,35 +267,39 @@
                     "email": "rdlowrey@php.net"
                 }
             ],
-            "description": "A promise-aware caching API built on the amp concurrency framework",
+            "description": "A promise-aware caching API for Amp.",
             "homepage": "https://github.com/amphp/cache",
-            "time": "2017-03-17 15:42:09"
+            "time": "2017-06-16T19:14:28+00:00"
         },
         {
             "name": "amphp/dns",
-            "version": "dev-amp_v2",
+            "version": "v0.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/dns.git",
-                "reference": "20069da691a6665229f9080966f918ed39e2f5c9"
+                "reference": "216725196676dfc63a8833375eb4ac4289e06c83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/dns/zipball/20069da691a6665229f9080966f918ed39e2f5c9",
-                "reference": "20069da691a6665229f9080966f918ed39e2f5c9",
+                "url": "https://api.github.com/repos/amphp/dns/zipball/216725196676dfc63a8833375eb4ac4289e06c83",
+                "reference": "216725196676dfc63a8833375eb4ac4289e06c83",
                 "shasum": ""
             },
             "require": {
-                "amphp/amp": "^2.0",
-                "amphp/cache": "dev-amp_v2 as 0.2",
-                "amphp/file": "dev-amp_v2 as 0.2",
-                "amphp/windows-registry": "dev-amp_v2 as 0.3",
+                "amphp/amp": "^2",
+                "amphp/byte-stream": "^1.1",
+                "amphp/cache": "^1",
+                "amphp/file": "^0.2",
+                "amphp/parser": "^1",
+                "amphp/uri": "^0.1",
+                "amphp/windows-registry": "^0.3",
                 "daverandom/libdns": "^1",
                 "php": ">=7.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^1.9",
-                "phpunit/phpunit": "^5.2.8"
+                "amphp/phpunit-util": "^1",
+                "friendsofphp/php-cs-fixer": "^2.3",
+                "phpunit/phpunit": "^6"
             },
             "type": "library",
             "autoload": {
@@ -299,7 +307,6 @@
                     "Amp\\Dns\\": "lib"
                 },
                 "files": [
-                    "lib/constants.php",
                     "lib/functions.php"
                 ]
             },
@@ -323,53 +330,49 @@
                 {
                     "name": "Chris Wright",
                     "email": "addr@daverandom.com"
+                },
+                {
+                    "name": "Aaron Piotrowski",
+                    "email": "aaron@trowski.com"
                 }
             ],
-            "description": "Async DNS resolution built on the amp concurrency framework",
+            "description": "Async DNS resolution for Amp.",
             "homepage": "https://github.com/amphp/dns",
             "keywords": [
                 "amp",
+                "amphp",
                 "async",
                 "client",
                 "dns",
                 "resolve"
             ],
-            "time": "2017-05-04 22:12:13"
+            "time": "2017-06-24T06:14:50+00:00"
         },
         {
             "name": "amphp/file",
-            "version": "dev-amp_v2",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/file.git",
-                "reference": "3c2e542fd27b95f178c206bafb78b0334ada0012"
+                "reference": "edc6c097c2a1e67e25fce7480564cedad9bb84d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/file/zipball/3c2e542fd27b95f178c206bafb78b0334ada0012",
-                "reference": "3c2e542fd27b95f178c206bafb78b0334ada0012",
+                "url": "https://api.github.com/repos/amphp/file/zipball/edc6c097c2a1e67e25fce7480564cedad9bb84d1",
+                "reference": "edc6c097c2a1e67e25fce7480564cedad9bb84d1",
                 "shasum": ""
             },
             "require": {
-                "amphp/amp": "^2.0",
-                "amphp/byte-stream": "dev-master as 0.1"
+                "amphp/amp": "^2",
+                "amphp/byte-stream": "^1",
+                "amphp/parallel": "^0.1.5"
             },
             "require-dev": {
-                "amphp/parallel": "dev-master as 0.1",
-                "amphp/phpunit-util": "dev-master",
+                "amphp/phpunit-util": "^1",
                 "friendsofphp/php-cs-fixer": "^2.3",
-                "phpunit/phpunit": "^6.0"
-            },
-            "suggest": {
-                "amphp/parallel": "Provides async file access without the eio or uv extension."
+                "phpunit/phpunit": "^6"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.1.0-dev",
-                    "dev-amp_v2": "0.2.0-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Amp\\File\\": "lib"
@@ -384,6 +387,10 @@
             ],
             "authors": [
                 {
+                    "name": "Niklas Keller",
+                    "email": "me@kelunik.com"
+                },
+                {
                     "name": "Daniel Lowrey",
                     "email": "rdlowrey@php.net"
                 },
@@ -392,7 +399,7 @@
                     "email": "aaron@trowski.com"
                 }
             ],
-            "description": "An async filesystem library built on the amp concurrency framework",
+            "description": "Allows non-blocking access to the filesystem for Amp.",
             "homepage": "https://github.com/amphp/file",
             "keywords": [
                 "amp",
@@ -400,32 +407,157 @@
                 "async",
                 "disk",
                 "file",
+                "filesystem",
+                "io",
                 "non-blocking",
                 "static"
             ],
-            "time": "2017-05-18 16:15:29"
+            "time": "2017-06-23T22:47:32+00:00"
         },
         {
-            "name": "amphp/process",
-            "version": "dev-amp_v2",
+            "name": "amphp/parallel",
+            "version": "v0.1.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/amphp/process.git",
-                "reference": "594a5ef03945da8bf157cbee40d8df341ad13a3e"
+                "url": "https://github.com/amphp/parallel.git",
+                "reference": "8ecfed57bfb258a219ddfa7ebaac453caf735bc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/process/zipball/594a5ef03945da8bf157cbee40d8df341ad13a3e",
-                "reference": "594a5ef03945da8bf157cbee40d8df341ad13a3e",
+                "url": "https://api.github.com/repos/amphp/parallel/zipball/8ecfed57bfb258a219ddfa7ebaac453caf735bc4",
+                "reference": "8ecfed57bfb258a219ddfa7ebaac453caf735bc4",
                 "shasum": ""
             },
             "require": {
-                "amphp/amp": "dev-master as 2.0"
+                "amphp/amp": "^2",
+                "amphp/byte-stream": "^1.1",
+                "amphp/parser": "^1",
+                "amphp/process": "^0.2"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "~1.9",
+                "amphp/phpunit-util": "^1",
+                "friendsofphp/php-cs-fixer": "^2.3",
+                "phpunit/phpunit": "^6"
+            },
+            "suggest": {
+                "ext-pcntl": "Required for fork contexts",
+                "ext-pthreads": "Required for thread contexts",
+                "ext-sysvsem": "Required for fork synchronization",
+                "ext-sysvshm": "Required for fork contexts"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Amp\\Parallel\\": "lib"
+                },
+                "files": [
+                    "lib/Worker/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stephen Coakley",
+                    "email": "me@stephencoakley.com"
+                },
+                {
+                    "name": "Aaron Piotrowski",
+                    "email": "aaron@trowski.com"
+                }
+            ],
+            "description": "Parallel processing component for Amp.",
+            "homepage": "https://github.com/amphp/parallel",
+            "keywords": [
+                "async",
+                "asynchronous",
+                "concurrent",
+                "multi-processing",
+                "multi-threading"
+            ],
+            "time": "2017-06-23T14:44:17+00:00"
+        },
+        {
+            "name": "amphp/parser",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/amphp/parser.git",
+                "reference": "f83e68f03d5b8e8e0365b8792985a7f341c57ae1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/amphp/parser/zipball/f83e68f03d5b8e8e0365b8792985a7f341c57ae1",
+                "reference": "f83e68f03d5b8e8e0365b8792985a7f341c57ae1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.3",
+                "phpunit/phpunit": "^6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Amp\\Parser\\": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Niklas Keller",
+                    "email": "me@kelunik.com"
+                },
+                {
+                    "name": "Aaron Piotrowski",
+                    "email": "aaron@trowski.com"
+                }
+            ],
+            "description": "A generator parser to make streaming parsers simple.",
+            "homepage": "https://github.com/amphp/parser",
+            "keywords": [
+                "async",
+                "non-blocking",
+                "parser",
+                "stream"
+            ],
+            "time": "2017-06-06T05:29:10+00:00"
+        },
+        {
+            "name": "amphp/process",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/amphp/process.git",
+                "reference": "cc85c607b90ae33f97f3630ede5477cc7fa29a99"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/amphp/process/zipball/cc85c607b90ae33f97f3630ede5477cc7fa29a99",
+                "reference": "cc85c607b90ae33f97f3630ede5477cc7fa29a99",
+                "shasum": ""
+            },
+            "require": {
+                "amphp/amp": "^2",
+                "amphp/byte-stream": "^1"
+            },
+            "require-dev": {
+                "amphp/phpunit-util": "^1",
+                "friendsofphp/php-cs-fixer": "^2.3",
                 "kelunik/fqn-check": "^0.1.3",
-                "phpunit/phpunit": "^5.0"
+                "phpunit/phpunit": "^6"
             },
             "type": "library",
             "autoload": {
@@ -449,29 +581,30 @@
             ],
             "description": "Asynchronous process manager",
             "homepage": "https://github.com/amphp/process",
-            "time": "2017-04-12 23:57:19"
+            "time": "2017-06-16T03:53:33+00:00"
         },
         {
             "name": "amphp/redis",
-            "version": "dev-amp_v2",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/redis.git",
-                "reference": "4f3e53f03f37cec0700da429f99b4c447f1e4a1b"
+                "reference": "2786e2d9d85a54a50994cc9526b39a7d35b280f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/redis/zipball/4f3e53f03f37cec0700da429f99b4c447f1e4a1b",
-                "reference": "4f3e53f03f37cec0700da429f99b4c447f1e4a1b",
+                "url": "https://api.github.com/repos/amphp/redis/zipball/2786e2d9d85a54a50994cc9526b39a7d35b280f3",
+                "reference": "2786e2d9d85a54a50994cc9526b39a7d35b280f3",
                 "shasum": ""
             },
             "require": {
-                "amphp/amp": "dev-master as 2.0",
-                "amphp/socket": "dev-amp_v2 as 1.0",
+                "amphp/amp": "^2",
+                "amphp/cache": "^1",
+                "amphp/socket": "^0.10",
                 "php": ">=7.0"
             },
             "require-dev": {
-                "amphp/phpunit-util": "dev-master",
+                "amphp/phpunit-util": "^1",
                 "friendsofphp/php-cs-fixer": "^2.3",
                 "phpunit/phpunit": "^6"
             },
@@ -491,7 +624,7 @@
                     "email": "me@kelunik.com"
                 }
             ],
-            "description": "Async Redis client.",
+            "description": "A non-blocking Redis client for Amp.",
             "homepage": "https://github.com/amphp/redis",
             "keywords": [
                 "amp",
@@ -500,29 +633,31 @@
                 "client",
                 "redis"
             ],
-            "time": "2017-05-21 20:50:13"
+            "time": "2017-06-24T09:40:47+00:00"
         },
         {
             "name": "amphp/socket",
-            "version": "dev-amp_v2",
+            "version": "v0.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/socket.git",
-                "reference": "8dc9ddbe95539a1ba19df8caf8bb7f447c61e32f"
+                "reference": "ee1af9a716af7ba3c500f532566dd62182de94ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/socket/zipball/8dc9ddbe95539a1ba19df8caf8bb7f447c61e32f",
-                "reference": "8dc9ddbe95539a1ba19df8caf8bb7f447c61e32f",
+                "url": "https://api.github.com/repos/amphp/socket/zipball/ee1af9a716af7ba3c500f532566dd62182de94ad",
+                "reference": "ee1af9a716af7ba3c500f532566dd62182de94ad",
                 "shasum": ""
             },
             "require": {
-                "amphp/amp": "dev-master as 2.0",
-                "amphp/byte-stream": "dev-master as 0.1",
-                "amphp/dns": "dev-amp_v2 as 0.2",
+                "amphp/amp": "^2",
+                "amphp/byte-stream": "^1.1",
+                "amphp/dns": "^0.9",
+                "amphp/uri": "^0.1",
                 "php": ">=7.0"
             },
             "require-dev": {
+                "amphp/phpunit-util": "^1",
                 "friendsofphp/php-cs-fixer": "^2.3",
                 "phpunit/phpunit": "^6"
             },
@@ -554,7 +689,7 @@
                     "email": "aaron@trowski.com"
                 }
             ],
-            "description": "Async socket connection tools for the amp concurrency framework",
+            "description": "Async socket connection / server tools for Amp.",
             "homepage": "https://github.com/amphp/socket",
             "keywords": [
                 "amp",
@@ -565,25 +700,72 @@
                 "tcp",
                 "tls"
             ],
-            "time": "2017-05-18 15:28:42"
+            "time": "2017-06-24T14:00:35+00:00"
         },
         {
-            "name": "amphp/windows-registry",
-            "version": "dev-amp_v2",
+            "name": "amphp/uri",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/amphp/windows-registry.git",
-                "reference": "8f96a07f75b9ca36931b39665fc92cde2eda97d4"
+                "url": "https://github.com/amphp/uri.git",
+                "reference": "59b0d5df331f7a02da8b1c7f2d092c4722e97aa9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/windows-registry/zipball/8f96a07f75b9ca36931b39665fc92cde2eda97d4",
-                "reference": "8f96a07f75b9ca36931b39665fc92cde2eda97d4",
+                "url": "https://api.github.com/repos/amphp/uri/zipball/59b0d5df331f7a02da8b1c7f2d092c4722e97aa9",
+                "reference": "59b0d5df331f7a02da8b1c7f2d092c4722e97aa9",
+                "shasum": ""
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.3",
+                "phpunit/phpunit": "^6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Amp\\Uri\\": "src"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Niklas Keller",
+                    "email": "me@kelunik.com"
+                },
+                {
+                    "name": "Daniel Lowrey"
+                }
+            ],
+            "description": "Uri Parser and Resolver.",
+            "homepage": "https://github.com/amphp/uri",
+            "time": "2017-06-24T07:41:03+00:00"
+        },
+        {
+            "name": "amphp/windows-registry",
+            "version": "v0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/amphp/windows-registry.git",
+                "reference": "9a5957ee3694c6d78440acd5a1c7adbd2d749de7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/amphp/windows-registry/zipball/9a5957ee3694c6d78440acd5a1c7adbd2d749de7",
+                "reference": "9a5957ee3694c6d78440acd5a1c7adbd2d749de7",
                 "shasum": ""
             },
             "require": {
-                "amphp/amp": "dev-master as 2.0",
-                "amphp/process": "dev-amp_v2 as 0.2"
+                "amphp/amp": "^2",
+                "amphp/process": "^0.2"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.3"
             },
             "type": "library",
             "autoload": {
@@ -602,7 +784,7 @@
                 }
             ],
             "description": "Windows Registry Reader.",
-            "time": "2017-03-17 03:47:16"
+            "time": "2017-06-16T08:55:58+00:00"
         },
         {
             "name": "daverandom/libdns",
@@ -889,12 +1071,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Fedott/async-data-mapper.git",
-                "reference": "9ab31b9c23cfa8eafea928a2e1fa7f0c166f984a"
+                "reference": "119825e37ef24605e2c24b7f5d06340221f2d5ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Fedott/async-data-mapper/zipball/9ab31b9c23cfa8eafea928a2e1fa7f0c166f984a",
-                "reference": "9ab31b9c23cfa8eafea928a2e1fa7f0c166f984a",
+                "url": "https://api.github.com/repos/Fedott/async-data-mapper/zipball/119825e37ef24605e2c24b7f5d06340221f2d5ee",
+                "reference": "119825e37ef24605e2c24b7f5d06340221f2d5ee",
                 "shasum": ""
             },
             "require": {
@@ -932,7 +1114,7 @@
                 }
             ],
             "description": "Simple async datamaper",
-            "time": "2017-05-22 09:51:16"
+            "time": "2017-05-24 15:12:42"
         },
         {
             "name": "jms/metadata",
@@ -1355,16 +1537,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v3.3.0-RC1",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "a20ae356da7674117f77bab604d9af11fe57d97d"
+                "reference": "35716d4904e0506a7a5a9bcf23f854aeb5719bca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/a20ae356da7674117f77bab604d9af11fe57d97d",
-                "reference": "a20ae356da7674117f77bab604d9af11fe57d97d",
+                "url": "https://api.github.com/repos/symfony/config/zipball/35716d4904e0506a7a5a9bcf23f854aeb5719bca",
+                "reference": "35716d4904e0506a7a5a9bcf23f854aeb5719bca",
                 "shasum": ""
             },
             "require": {
@@ -1411,20 +1593,20 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-03T13:21:08+00:00"
+            "time": "2017-06-02T18:07:20+00:00"
         },
         {
             "name": "symfony/console",
-            "version": "v3.3.0-RC1",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "bdbaaa623c914a4654450452351c45857708dbcf"
+                "reference": "70d2a29b2911cbdc91a7e268046c395278238b2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/bdbaaa623c914a4654450452351c45857708dbcf",
-                "reference": "bdbaaa623c914a4654450452351c45857708dbcf",
+                "url": "https://api.github.com/repos/symfony/console/zipball/70d2a29b2911cbdc91a7e268046c395278238b2e",
+                "reference": "70d2a29b2911cbdc91a7e268046c395278238b2e",
                 "shasum": ""
             },
             "require": {
@@ -1437,6 +1619,7 @@
             },
             "require-dev": {
                 "psr/log": "~1.0",
+                "symfony/config": "~3.3",
                 "symfony/dependency-injection": "~3.3",
                 "symfony/event-dispatcher": "~2.8|~3.0",
                 "symfony/filesystem": "~2.8|~3.0",
@@ -1479,20 +1662,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-15T12:04:53+00:00"
+            "time": "2017-06-02T19:24:58+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.2.8",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "fd6eeee656a5a7b384d56f1072243fe1c0e81686"
+                "reference": "e9c50482841ef696e8fa1470d950a79c8921f45d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/fd6eeee656a5a7b384d56f1072243fe1c0e81686",
-                "reference": "fd6eeee656a5a7b384d56f1072243fe1c0e81686",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/e9c50482841ef696e8fa1470d950a79c8921f45d",
+                "reference": "e9c50482841ef696e8fa1470d950a79c8921f45d",
                 "shasum": ""
             },
             "require": {
@@ -1503,13 +1686,12 @@
                 "symfony/http-kernel": ">=2.3,<2.3.24|~2.4.0|>=2.5,<2.5.9|>=2.6,<2.6.2"
             },
             "require-dev": {
-                "symfony/class-loader": "~2.8|~3.0",
                 "symfony/http-kernel": "~2.8|~3.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -1536,20 +1718,20 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-19T20:17:50+00:00"
+            "time": "2017-06-01T21:01:25+00:00"
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v3.3.0-RC1",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "1d736dfbdc726c1eba0efe3b8ab3a0a338767b13"
+                "reference": "4cec19ec1d25f22e1ec8ab14635d3879a1287053"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/1d736dfbdc726c1eba0efe3b8ab3a0a338767b13",
-                "reference": "1d736dfbdc726c1eba0efe3b8ab3a0a338767b13",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/4cec19ec1d25f22e1ec8ab14635d3879a1287053",
+                "reference": "4cec19ec1d25f22e1ec8ab14635d3879a1287053",
                 "shasum": ""
             },
             "require": {
@@ -1557,7 +1739,7 @@
                 "psr/container": "^1.0"
             },
             "conflict": {
-                "symfony/config": "<=3.3-beta1",
+                "symfony/config": "<3.3.1",
                 "symfony/finder": "<3.3",
                 "symfony/yaml": "<3.3"
             },
@@ -1606,20 +1788,20 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-13T17:10:49+00:00"
+            "time": "2017-06-06T03:13:52+00:00"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v3.2.8",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "040651db13cf061827a460cc10f6e36a445c45b4"
+                "reference": "c709670bf64721202ddbe4162846f250735842c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/040651db13cf061827a460cc10f6e36a445c45b4",
-                "reference": "040651db13cf061827a460cc10f6e36a445c45b4",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/c709670bf64721202ddbe4162846f250735842c0",
+                "reference": "c709670bf64721202ddbe4162846f250735842c0",
                 "shasum": ""
             },
             "require": {
@@ -1628,7 +1810,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -1655,20 +1837,20 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-12T14:13:17+00:00"
+            "time": "2017-05-28T14:08:56+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v3.3.0-RC1",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "ce309911aabd89ef885673ddb924076c1c410356"
+                "reference": "baea7f66d30854ad32988c11a09d7ffd485810c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/ce309911aabd89ef885673ddb924076c1c410356",
-                "reference": "ce309911aabd89ef885673ddb924076c1c410356",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/baea7f66d30854ad32988c11a09d7ffd485810c4",
+                "reference": "baea7f66d30854ad32988c11a09d7ffd485810c4",
                 "shasum": ""
             },
             "require": {
@@ -1704,20 +1886,20 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-12T14:14:56+00:00"
+            "time": "2017-06-01T21:01:25+00:00"
         },
         {
             "name": "symfony/inflector",
-            "version": "v3.2.8",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/inflector.git",
-                "reference": "93cdcef6a06d74379cc314d39bafeb55368e447c"
+                "reference": "aed5a0874a3bcfd8d0393a2d91b4cf828f29c7fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/inflector/zipball/93cdcef6a06d74379cc314d39bafeb55368e447c",
-                "reference": "93cdcef6a06d74379cc314d39bafeb55368e447c",
+                "url": "https://api.github.com/repos/symfony/inflector/zipball/aed5a0874a3bcfd8d0393a2d91b4cf828f29c7fb",
+                "reference": "aed5a0874a3bcfd8d0393a2d91b4cf828f29c7fb",
                 "shasum": ""
             },
             "require": {
@@ -1726,7 +1908,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -1761,20 +1943,20 @@
                 "symfony",
                 "words"
             ],
-            "time": "2017-04-12T14:13:17+00:00"
+            "time": "2017-04-12T14:14:56+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.3.0",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "e79d363049d1c2128f133a2667e4f4190904f7f4"
+                "reference": "f29dca382a6485c3cbe6379f0c61230167681937"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/e79d363049d1c2128f133a2667e4f4190904f7f4",
-                "reference": "e79d363049d1c2128f133a2667e4f4190904f7f4",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f29dca382a6485c3cbe6379f0c61230167681937",
+                "reference": "f29dca382a6485c3cbe6379f0c61230167681937",
                 "shasum": ""
             },
             "require": {
@@ -1786,7 +1968,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.3-dev"
+                    "dev-master": "1.4-dev"
                 }
             },
             "autoload": {
@@ -1820,20 +2002,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14T01:06:16+00:00"
+            "time": "2017-06-09T14:24:12+00:00"
         },
         {
             "name": "symfony/polyfill-php70",
-            "version": "v1.3.0",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php70.git",
-                "reference": "13ce343935f0f91ca89605a2f6ca6f5c2f3faac2"
+                "reference": "032fd647d5c11a9ceab8ee8747e13b5448e93874"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/13ce343935f0f91ca89605a2f6ca6f5c2f3faac2",
-                "reference": "13ce343935f0f91ca89605a2f6ca6f5c2f3faac2",
+                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/032fd647d5c11a9ceab8ee8747e13b5448e93874",
+                "reference": "032fd647d5c11a9ceab8ee8747e13b5448e93874",
                 "shasum": ""
             },
             "require": {
@@ -1843,7 +2025,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.3-dev"
+                    "dev-master": "1.4-dev"
                 }
             },
             "autoload": {
@@ -1879,20 +2061,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14T01:06:16+00:00"
+            "time": "2017-06-09T14:24:12+00:00"
         },
         {
             "name": "symfony/property-access",
-            "version": "v3.3.0-RC1",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "1bb34c37830cd44e2514d56c717c2422be3e43db"
+                "reference": "70bbfe28f77070d41957495bc6fed34f139fe6f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/1bb34c37830cd44e2514d56c717c2422be3e43db",
-                "reference": "1bb34c37830cd44e2514d56c717c2422be3e43db",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/70bbfe28f77070d41957495bc6fed34f139fe6f7",
+                "reference": "70bbfe28f77070d41957495bc6fed34f139fe6f7",
                 "shasum": ""
             },
             "require": {
@@ -1947,11 +2129,11 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2017-04-12T14:14:56+00:00"
+            "time": "2017-06-02T09:51:43+00:00"
         },
         {
             "name": "symfony/property-info",
-            "version": "v3.3.0-RC1",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
@@ -2027,16 +2209,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v3.3.0-RC1",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "c8d1ce30e172140cec7a83bdd5faa8af75bc4c5b"
+                "reference": "cc9b41611f4853cd01216f8765faba3db91a1583"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/c8d1ce30e172140cec7a83bdd5faa8af75bc4c5b",
-                "reference": "c8d1ce30e172140cec7a83bdd5faa8af75bc4c5b",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/cc9b41611f4853cd01216f8765faba3db91a1583",
+                "reference": "cc9b41611f4853cd01216f8765faba3db91a1583",
                 "shasum": ""
             },
             "require": {
@@ -2100,20 +2282,20 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-01T15:01:29+00:00"
+            "time": "2017-05-22T09:36:51+00:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.3.0-RC1",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "924d16e27b592d8bb8aa8ef531005a3f564f64e7"
+                "reference": "9752a30000a8ca9f4b34b5227d15d0101b96b063"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/924d16e27b592d8bb8aa8ef531005a3f564f64e7",
-                "reference": "924d16e27b592d8bb8aa8ef531005a3f564f64e7",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/9752a30000a8ca9f4b34b5227d15d0101b96b063",
+                "reference": "9752a30000a8ca9f4b34b5227d15d0101b96b063",
                 "shasum": ""
             },
             "require": {
@@ -2155,7 +2337,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-15T12:04:53+00:00"
+            "time": "2017-06-02T22:05:06+00:00"
         }
     ],
     "packages-dev": [
@@ -2764,16 +2946,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.1.4",
+            "version": "6.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "42b7f394a8e009516582331b1e03a1aba40175d1"
+                "reference": "f2786490399836d2a544a34785c4a8d3ab32cf0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/42b7f394a8e009516582331b1e03a1aba40175d1",
-                "reference": "42b7f394a8e009516582331b1e03a1aba40175d1",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f2786490399836d2a544a34785c4a8d3ab32cf0e",
+                "reference": "f2786490399836d2a544a34785c4a8d3ab32cf0e",
                 "shasum": ""
             },
             "require": {
@@ -2818,7 +3000,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.1.x-dev"
+                    "dev-master": "6.2.x-dev"
                 }
             },
             "autoload": {
@@ -2844,7 +3026,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-05-22T07:45:30+00:00"
+            "time": "2017-06-13T14:07:07+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -3068,16 +3250,16 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "3.0.3",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "02b6b2c7aefe2cdb1185b8dbf8718b0bcedf3ab3"
+                "reference": "74776f8dbc081cab9287c2a601c0c1d842568744"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/02b6b2c7aefe2cdb1185b8dbf8718b0bcedf3ab3",
-                "reference": "02b6b2c7aefe2cdb1185b8dbf8718b0bcedf3ab3",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/74776f8dbc081cab9287c2a601c0c1d842568744",
+                "reference": "74776f8dbc081cab9287c2a601c0c1d842568744",
                 "shasum": ""
             },
             "require": {
@@ -3114,7 +3296,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2017-05-18T10:10:00+00:00"
+            "time": "2017-06-20T16:25:05+00:00"
         },
         {
             "name": "sebastian/exporter",
@@ -3559,8 +3741,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "amphp/aerys": 20,
-        "amphp/redis": 20,
-        "amphp/amp": 20,
         "fedot/async-data-mapper": 20
     },
     "prefer-stable": true,

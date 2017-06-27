@@ -17,8 +17,8 @@
     "require": {
         "php": "^7.1",
         "amphp/aerys": "dev-amp_v2",
-        "amphp/redis": "dev-amp_v2",
-        "amphp/amp": "^2@dev",
+        "amphp/redis": "^0.3",
+        "amphp/amp": "^2",
         "doctrine/annotations": "^1.2",
         "doctrine/cache": "^1.6",
         "ramsey/uuid": "^3.4",

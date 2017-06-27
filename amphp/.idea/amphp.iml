@@ -9,10 +9,13 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/cache" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/dns" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/file" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/parallel" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/parser" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/process" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/redis" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/socket" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/stream" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/uri" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/amphp/windows-registry" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/container-interop/container-interop" />
@@ -85,9 +88,12 @@
           <root url="file://$MODULE_DIR$/vendor/amphp/cache" />
           <root url="file://$MODULE_DIR$/vendor/amphp/dns" />
           <root url="file://$MODULE_DIR$/vendor/amphp/file" />
+          <root url="file://$MODULE_DIR$/vendor/amphp/parallel" />
+          <root url="file://$MODULE_DIR$/vendor/amphp/parser" />
           <root url="file://$MODULE_DIR$/vendor/amphp/process" />
           <root url="file://$MODULE_DIR$/vendor/amphp/redis" />
           <root url="file://$MODULE_DIR$/vendor/amphp/socket" />
+          <root url="file://$MODULE_DIR$/vendor/amphp/uri" />
           <root url="file://$MODULE_DIR$/vendor/amphp/windows-registry" />
           <root url="file://$MODULE_DIR$/vendor/composer" />
           <root url="file://$MODULE_DIR$/vendor/daverandom/libdns" />
@@ -151,9 +157,12 @@
           <root url="file://$MODULE_DIR$/vendor/amphp/cache" />
           <root url="file://$MODULE_DIR$/vendor/amphp/dns" />
           <root url="file://$MODULE_DIR$/vendor/amphp/file" />
+          <root url="file://$MODULE_DIR$/vendor/amphp/parallel" />
+          <root url="file://$MODULE_DIR$/vendor/amphp/parser" />
           <root url="file://$MODULE_DIR$/vendor/amphp/process" />
           <root url="file://$MODULE_DIR$/vendor/amphp/redis" />
           <root url="file://$MODULE_DIR$/vendor/amphp/socket" />
+          <root url="file://$MODULE_DIR$/vendor/amphp/uri" />
           <root url="file://$MODULE_DIR$/vendor/amphp/windows-registry" />
           <root url="file://$MODULE_DIR$/vendor/composer" />
           <root url="file://$MODULE_DIR$/vendor/daverandom/libdns" />
@@ -216,14 +225,18 @@
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$MODULE_DIR$/vendor/symfony/dependency-injection/Tests/Fixtures/includes/ProjectWithXsdExtensionInPhar.phar/" />
           <root url="phar://$MODULE_DIR$/vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.1.phar/" />
           <root url="phar://$MODULE_DIR$/vendor/phar-io/manifest/tests/_fixture/test.phar/" />
+          <root url="phar://$MODULE_DIR$/vendor/symfony/dependency-injection/Tests/Fixtures/includes/ProjectWithXsdExtensionInPhar.phar/" />
+          <root url="phar://$MODULE_DIR$/vendor/amphp/redis/vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.1.phar/" />
+          <root url="phar://$MODULE_DIR$/vendor/amphp/redis/vendor/phar-io/manifest/tests/_fixture/test.phar/" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$MODULE_DIR$/vendor/symfony/dependency-injection/Tests/Fixtures/includes/ProjectWithXsdExtensionInPhar.phar/" />
           <root url="phar://$MODULE_DIR$/vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.1.phar/" />
           <root url="phar://$MODULE_DIR$/vendor/phar-io/manifest/tests/_fixture/test.phar/" />
+          <root url="phar://$MODULE_DIR$/vendor/symfony/dependency-injection/Tests/Fixtures/includes/ProjectWithXsdExtensionInPhar.phar/" />
+          <root url="phar://$MODULE_DIR$/vendor/amphp/redis/vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.1.phar/" />
+          <root url="phar://$MODULE_DIR$/vendor/amphp/redis/vendor/phar-io/manifest/tests/_fixture/test.phar/" />
         </SOURCES>
       </library>
     </orderEntry>
