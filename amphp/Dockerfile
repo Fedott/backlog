@@ -21,7 +21,7 @@ RUN apk add --no-cache \
 
 WORKDIR /application/
 
-EXPOSE 80 443
-CMD php -d zend.assertions=1 bin/aerys -c app/aerys-prod.php -d
+EXPOSE 80 443 8080
+CMD php -d zend.assertions=1 bin/aerys -c app/aerys-config.php -d
 
 COPY . /application/
