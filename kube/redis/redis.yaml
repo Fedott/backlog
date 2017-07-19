@@ -16,7 +16,7 @@ spec:
   volumes:
     - name: redis-data
       persistentVolumeClaim:
-        claimName: gluster-1g
+        claimName: gluster1
 
 ---
 apiVersion: v1
