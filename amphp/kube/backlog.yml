@@ -1,34 +1,37 @@
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-    name: backlog-web-server
+  name: backlog-web-server
 spec:
-    replicas: 2
-    template:
-        metadata:
-            labels:
-                app: backlog
-                role: web-server
-            annotations:
-                deployVersion: "1"
-        spec:
-            containers:
-              - name: backlog-web-server
-                image: fedot/backlog-web-server
-                ports:
-                  - containerPort: 80
-                  - containerPort: 443
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: backlog
+        role: web-server
+      annotations:
+        deployVersion: "11"
+    spec:
+      containers:
+        - name: backlog-web-server
+          image: fedot/backlog-web-server
+          ports:
+          - containerPort: 80
+          env:
+            - name: WEBSERVER_PORT
+              value: "80"
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-    name: backlog-web-server
+  name: backlog-web-server
 spec:
-    ports:
-      - name: http
-        port: 80
-        targetPort: 8080
-    selector:
-        app: backlog
-        role: web-server
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: backlog
+    role: web-server

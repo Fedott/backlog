@@ -1,4 +1,5 @@
-FROM fedot/php:7.1.1-alpine
+FROM php:7-alpine
+
 RUN apk add --no-cache \
     libevent-dev \
     autoconf \
@@ -8,20 +9,13 @@ RUN apk add --no-cache \
     && apk del \
     libevent-dev \
     autoconf \
-    build-base
-
-## uncomment for debug
-#RUN php /usr/share/php7/peclcmd.php install -f xdebug && \
-#    echo "zend_extension=xdebug.so" > /etc/php7/conf.d/99-xdebug.ini && \
-#    echo "xdebug.remote_enable=1" >> /etc/php7/conf.d/99-xdebug.ini && \
-#    echo "xdebug.remote_host=188.134.65.253" >> /etc/php7/conf.d/99-xdebug.ini && \
-#    echo "xdebug.remote_autostart=1" >> /etc/php7/conf.d/99-xdebug.ini && \
-#    echo "xdebug.idekey=phpstorm" >> /etc/php7/conf.d/99-xdebug.ini
-#ENV PHP_IDE_CONFIG="serverName=new-backlog"
+    build-base \
+    && echo 'grep -c ^processor /proc/cpuinfo 2>/dev/null || 1' > /usr/bin/nproc && chmod +x /usr/bin/nproc
 
 WORKDIR /application/
 
 EXPOSE 80 443 8080
-CMD php -d zend.assertions=1 bin/aerys -c app/aerys-config.php -d
+
+CMD php -d zend.assertions=-1 bin/aerys -c app/aerys-prod.php
 
 COPY . /application/
