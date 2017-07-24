@@ -11,7 +11,7 @@ spec:
         app: backlog
         role: web-server
       annotations:
-        deployVersion: "11"
+        deployVersion: "14"
     spec:
       containers:
         - name: backlog-web-server
@@ -21,6 +21,8 @@ spec:
           env:
             - name: WEBSERVER_PORT
               value: "80"
+            - name: REDIS_DATABASE
+              value: "0"
 
 ---
 apiVersion: v1
@@ -35,3 +37,17 @@ spec:
   selector:
     app: backlog
     role: web-server
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: backlog
+spec:
+  rules:
+  - host: k8s-backlog.fedot.name
+    http:
+      paths:
+      - backend:
+          serviceName: backlog-web-server
+          servicePort: 80

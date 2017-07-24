@@ -3,9 +3,11 @@ imports:
 
 parameters:
   backlog.data-storage.redis.client.uri: '%env(REDIS_URI)%'
-  env(REDIS_URI): tcp://localhost:6379?database=11
+  env(REDIS_URI): tcp://%env(REDIS_SINGLE_SERVICE_HOST)%:6379?database=%env(REDIS_DATABASE)%
   webserver-port: '%env(WEBSERVER_PORT)%'
   env(WEBSERVER_PORT): 8080
+  env(REDIS_SINGLE_SERVICE_HOST): localhost #ugly hack for fix not resolve domain in k8s
+  env(REDIS_DATABASE): 11
 
 services:
   backlog.infrastructure.runner-factory:
