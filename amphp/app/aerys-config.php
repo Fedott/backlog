@@ -25,15 +25,13 @@ $reWriter = new class implements \Aerys\Bootable
     public function boot(\Aerys\Server $server, \Psr\Log\LoggerInterface $logger)
     {
         return function (Request $request, Response $response) {
-            $response->end(file_get_contents(__DIR__ . "/../web/index.html"));
+            $response->end(file_get_contents(realpath(__DIR__ . "/../web/index.html")));
         };
     }
 };
 
 (new Aerys\Host)
-    ->name('backlog.local')
-    ->expose('0.0.0.0', 8080)
-//    ->encrypt(__DIR__ . '/keys/crt', __DIR__ . '/keys/key')
+    ->expose('*', 8080)
     ->use($router)
     ->use($root)
     ->use($reWriter)

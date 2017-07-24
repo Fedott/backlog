@@ -2,7 +2,8 @@ import * as React from "react";
 import {
     Dialog,
     FlatButton,
-    TextField
+    TextField,
+    Snackbar
 } from 'material-ui';
 import webSocketClient from '../../libraries/WebSocket/WebSocketClient'
 import User from "../Application/User";
@@ -24,6 +25,7 @@ export default class LoginDialog extends React.Component {
                 username: null,
                 password: null,
             },
+            error: null,
         };
 
         this.onLoginSuccess = props.onLoginSuccess;
@@ -52,6 +54,7 @@ export default class LoginDialog extends React.Component {
     async onSignInClick() {
         this.setState({
             isWaiting: true,
+            error: null,
         });
 
         let request = {
@@ -73,6 +76,8 @@ export default class LoginDialog extends React.Component {
             user.username = response.payload.username;
             user.token = response.payload.token;
             this.onLoginSuccess(user);
+        } else {
+            this.setState({error: response.payload.message});
         }
     }
 
@@ -98,6 +103,16 @@ export default class LoginDialog extends React.Component {
                 disabled={this.state.isWaiting}
             />
         ];
+
+        let snackbar = null;
+        if (this.state.error) {
+            snackbar = <Snackbar
+                open={true}
+                message={this.state.error}
+                autoHideDuration={15000}
+            />
+        }
+
         return (
             <Dialog
                 className="login-dialog"
@@ -121,6 +136,7 @@ export default class LoginDialog extends React.Component {
                     onKeyPress={this.onKeyPress}
                     type="password"
                 />
+                {snackbar}
             </Dialog>
         );
     }

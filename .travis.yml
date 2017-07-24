@@ -1,31 +1,36 @@
 sudo: false
 
+dist: trusty
+addons:
+  chrome: stable
 language: php
 
-php:
-  - 7.1
-  - nightly
-
-matrix:
-  allow_failures:
-    - php: nightly
-  fast_finish: true
-
-before_install:
-  - cd amphp
-
-install:
-  - composer self-update
-  - composer install --no-interaction --prefer-source
-
-script:
-  - php bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
-
-after_script:
-  - composer require satooshi/php-coveralls dev-master
-  - php bin/coveralls -v
+php: 7.1
   
 cache:
   directories:
     - $HOME/.composer/cache
 
+jobs:
+  include:
+    - stage: tests
+      script:
+        - cd $TRAVIS_BUILD_DIR/amphp
+        - composer install --no-interaction
+        - php bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
+        - composer require satooshi/php-coveralls dev-master
+        - php bin/coveralls -v
+
+    - stage: autotests
+      script:
+        - cd $TRAVIS_BUILD_DIR/amphp
+        - composer install --no-interaction --no-dev
+        - cd $TRAVIS_BUILD_DIR/codeception
+        - composer install --no-interaction
+#        - wget https://chromedriver.storage.googleapis.com/2.30/chromedriver_linux64.zip
+#        - unzip chromedriver_linux64.zip
+        - wget https://github.com/davidthornton/chromedriver-2.31/raw/master/chromedriver && chmod +x chromedriver
+        - export PATH="`pwd`:$PATH"
+        - php bin/robo test
+#        - cat /tmp/web-log* /tmp/driver-log*
+#        - cat `ls tests/_output/*.fail.png | sort -n | head -1` | base64

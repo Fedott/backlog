@@ -8,8 +8,14 @@ class_name: AcceptanceTester
 modules:
     enabled:
         - WebDriver:
-            url: http://backlog.local:8080/
+            url: http://localhost:8080/
             browser: chrome
-            window_size: 1280x800
+            # window_size: 1280x800
+            window_size: false
             restart: true
+            port: 9515
+            capabilities:
+                chromeOptions:
+                    args: ["--headless", "--disable-gpu", "window-size=1280x800"]
+                    binary: "/usr/bin/google-chrome-stable"
         - \Helper\Acceptance
