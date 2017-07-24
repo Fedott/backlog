@@ -42,20 +42,6 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: backlog
-spec:
-  rules:
-  - host: k8s-backlog.fedot.name
-    http:
-      paths:
-      - backend:
-          serviceName: backlog-web-server
-          servicePort: 80
-
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
   name: backlog-tls
   annotations:
     kubernetes.io/tls-acme: "true"
@@ -64,8 +50,15 @@ spec:
   tls:
   - hosts:
     - k8s-backlog.fedot.name
+    - backlog.fedot.name
     secretName: backlog-tls
   rules:
+  - host: backlog.fedot.name
+    http:
+      paths:
+      - backend:
+          serviceName: backlog-web-server
+          servicePort: 80
   - host: k8s-backlog.fedot.name
     http:
       paths:
