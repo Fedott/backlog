@@ -1,6 +1,7 @@
 vendor/
 app/keys/
-web/
+/bin/*
+/web/assets/*.map
 
 # User-specific stuff:
 .idea/workspace.xml
