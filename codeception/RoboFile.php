@@ -33,7 +33,9 @@ class RoboFile extends \Robo\Tasks
 
     private function startChromeDriver(): void
     {
+        $this->say('Running chromedriver');
         passthru('chromedriver --url-base=/wd/hub > /tmp/driver-log 2>/tmp/driver-log-err &');
+        $this->say('[OK]');
 
         register_shutdown_function(
             function () {
@@ -44,7 +46,11 @@ class RoboFile extends \Robo\Tasks
 
     private function startAerys(): void
     {
-        passthru('cd ../amphp && REDIS_URI=tcp://localhost:25325 bin/aerys -c app/aerys-config.php -d > /tmp/web-log 2>/tmp/web-log-err &');
+        $this->say('Running aerys');
+        chdir('../amphp');
+        passthru('REDIS_URI=tcp://localhost:25325 bin/aerys -c app/aerys-config.php -d > /tmp/web-log 2>/tmp/web-log-err &');
+        $this->say('[OK]');
+        chdir(__DIR__);
 
         register_shutdown_function(
             function () {
