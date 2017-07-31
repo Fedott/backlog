@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f1ce34da0cd3ff57af9971eb94d3c4bf",
+    "content-hash": "96f79cf559db41cdfcbb8b20b25210eb",
     "packages": [
         {
             "name": "amphp/aerys",
@@ -1071,31 +1071,32 @@
         },
         {
             "name": "fedot/async-data-mapper",
-            "version": "dev-master",
+            "version": "dev-dev-mongodb",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Fedott/async-data-mapper.git",
-                "reference": "119825e37ef24605e2c24b7f5d06340221f2d5ee"
+                "reference": "89fd539795e1012172a6288ea0229eb42c786a6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Fedott/async-data-mapper/zipball/119825e37ef24605e2c24b7f5d06340221f2d5ee",
-                "reference": "119825e37ef24605e2c24b7f5d06340221f2d5ee",
+                "url": "https://api.github.com/repos/Fedott/async-data-mapper/zipball/89fd539795e1012172a6288ea0229eb42c786a6b",
+                "reference": "89fd539795e1012172a6288ea0229eb42c786a6b",
                 "shasum": ""
             },
             "require": {
-                "amphp/amp": "^2@dev",
+                "amphp/amp": "^2",
                 "doctrine/annotations": "^1.4",
                 "doctrine/instantiator": "^1.0",
                 "jms/metadata": "^1.6",
                 "php": "^7.1"
             },
             "require-dev": {
-                "amphp/redis": "dev-amp_v2",
+                "amphp/redis": "^0.3",
+                "mongodb/mongodb": "^1.1",
                 "phpunit/phpunit": "^6.0",
-                "symfony/property-access": "^3.2",
-                "symfony/property-info": "^3.2",
-                "symfony/serializer": "^3.2"
+                "symfony/property-access": "^3.3",
+                "symfony/property-info": "^3.3",
+                "symfony/serializer": "^3.3"
             },
             "suggest": {
                 "amphp/redis": "Needed for Redis implementation",
@@ -1118,7 +1119,7 @@
                 }
             ],
             "description": "Simple async datamaper",
-            "time": "2017-05-24 15:12:42"
+            "time": "2017-07-27 13:19:28"
         },
         {
             "name": "jms/metadata",

@@ -29,7 +29,7 @@
         "symfony/config": "^3.3",
         "symfony/console": "^3.3",
         "symfony/finder": "^3.3",
-        "fedot/async-data-mapper": "dev-master",
+        "fedot/async-data-mapper": "dev-dev-mongodb",
         "phpdocumentor/reflection-docblock": "^3.2"
     },
     "require-dev": {
