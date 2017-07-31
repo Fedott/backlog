@@ -1,6 +1,7 @@
 <?php declare(strict_types = 1);
 namespace Tests\Fedot\Backlog\Action\Project;
 
+use function Amp\Promise\wait;
 use Amp\Success;
 use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\Action\Project\Create\ProjectCreate;
@@ -16,9 +17,9 @@ use Tests\Fedot\Backlog\ActionTestCase;
 class ProjectCreateTest extends ActionTestCase
 {
     /**
-     * @var ProjectRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProjectRepository
      */
-    protected $projectRepositoryMock;
+    protected $projectRepository;
 
     /**
      * @var UuidFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -30,13 +31,13 @@ class ProjectCreateTest extends ActionTestCase
         parent::initActionMocks();
 
         $this->uuidFactoryMock = $this->createMock(UuidFactory::class);
-        $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
+        $this->projectRepository = new ProjectRepository($this->modelManager);
     }
 
     protected function getProcessorInstance(): ActionInterface
     {
         return new ProjectCreate(
-            $this->projectRepositoryMock,
+            $this->projectRepository,
             $this->uuidFactoryMock,
             $this->webSocketAuthServiceMock
         );
@@ -81,17 +82,6 @@ class ProjectCreateTest extends ActionTestCase
             ->willReturn('UUIDSuperUnique')
         ;
 
-        $this->projectRepositoryMock->expects($this->once())
-            ->method('create')
-            ->with($this->equalTo($user), $this->callback(function (Project $project) {
-                $this->assertEquals('UUIDSuperUnique', $project->getId());
-                $this->assertEquals('first project', $project->getName());
-
-                return true;
-            }))
-            ->willReturn(new Success(true))
-        ;
-
         $processor = $this->getProcessorInstance();
 
         /** @var Response $response */
@@ -101,5 +91,10 @@ class ProjectCreateTest extends ActionTestCase
 
         $this->assertEquals('UUIDSuperUnique', $response->getPayload()['id']);
         $this->assertEquals('first project', $response->getPayload()['name']);
+
+        /** @var Project $actualProject */
+        $actualProject = wait($this->projectRepository->get('UUIDSuperUnique'));
+        $this->assertEquals('first project', $actualProject->getName());
+        $this->assertEquals('UUIDSuperUnique', $actualProject->getId());
     }
 }
