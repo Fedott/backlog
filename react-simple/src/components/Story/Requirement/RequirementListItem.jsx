@@ -78,13 +78,15 @@ export default class RequirementListItem extends React.Component {
                 }
             };
         }
+
         let response = await webSocketClient.sendRequest(request);
 
-        if (response.type === 'success' || (this.state.createForm && response.type === 'requirement-created')) {
+        if (response.type === 'requirement-saved' || (this.state.createForm && response.type === 'requirement-created')) {
             if (this.state.createForm) {
                 this.state.requirement.id = response.payload.id;
             }
             this.state.requirement.text = this.state.requirementText;
+            this.state.requirement.completed = payload.completed;
 
             this.setState({
                 disabled: false,
