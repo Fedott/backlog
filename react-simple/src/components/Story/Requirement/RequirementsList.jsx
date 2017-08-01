@@ -1,5 +1,5 @@
 import * as React from "react";
-import {List} from "material-ui";
+import {List, Subheader} from "material-ui";
 import webSocketClient from "../../../libraries/WebSocket/WebSocketClient.js";
 import Request from "../../../libraries/WebSocket/Request";
 import Response from "../../../libraries/WebSocket/Response";
@@ -9,6 +9,7 @@ import RequirementListItem from "./RequirementListItem.jsx";
 export default class RequirementsList extends React.Component {
     static propTypes = {
         storyId: React.PropTypes.string.isRequired,
+        editMode: React.PropTypes.bool
     };
 
     constructor(props, context) {
@@ -17,6 +18,7 @@ export default class RequirementsList extends React.Component {
         this.state = {
             requirementsCollection: [],
             storyId: props.storyId,
+            editMode: props.editMode || false,
         };
 
         const request = new Request('story/requirements/getAll', {
@@ -44,10 +46,15 @@ export default class RequirementsList extends React.Component {
             return <RequirementListItem requirement={requirement} />
         });
 
-        let createForm = <RequirementListItem requirement={{storyId: this.state.storyId}} createForm={true} editMode={true} onSavedHandler={this.onCreate}/>;
+        let createForm = null;
+
+        if (this.state.editMode) {
+            createForm = <RequirementListItem requirement={{storyId: this.state.storyId}} createForm={true} editMode={true} onSavedHandler={this.onCreate}/>
+        }
 
         return (
             <List>
+                <Subheader>Требования</Subheader>
                 {requirements}
                 {createForm}
             </List>

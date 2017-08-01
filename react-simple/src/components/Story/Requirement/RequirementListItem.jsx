@@ -147,7 +147,6 @@ export default class RequirementListItem extends React.Component {
                 onKeyUp={this.handleKeyPress}
                 fullWidth={true}
                 disabled={this.state.disabled}
-                autoFocus
             />;
             rightControls = <IconButton
                 data-requirement-form-save

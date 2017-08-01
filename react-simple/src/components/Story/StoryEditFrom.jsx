@@ -11,6 +11,7 @@ import {
 } from 'material-ui';
 
 import webSocketClient from './../../libraries/WebSocket/WebSocketClient';
+import RequirementsList from "./Requirement/RequirementsList.jsx";
 
 class StoryEditFrom extends React.Component {
     static propTypes = {
@@ -129,6 +130,9 @@ class StoryEditFrom extends React.Component {
                         }}
                     />
                 </CardText>
+                <CardText
+                    children={<RequirementsList storyId={this.state.story.id} editMode={true}/>}
+                />
                 {progressBar}
                 <Divider />
                 <CardActions>

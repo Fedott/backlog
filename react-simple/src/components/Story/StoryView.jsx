@@ -27,7 +27,6 @@ class StoryView extends React.Component {
         this.state = {
             story: props.story,
             isDragging: props.isDragging,
-            isRequirements: false,
         };
 
         this.onChangeEdit = props.onChangeEdit || (() => {});
@@ -36,7 +35,6 @@ class StoryView extends React.Component {
 
         this.onDelete = this.onDelete.bind(this);
         this.onMarkAsCompleted = this.onMarkAsCompleted.bind(this);
-        this.toggleShowRequirements = this.toggleShowRequirements.bind(this);
     }
 
     async onDelete() {
@@ -64,12 +62,6 @@ class StoryView extends React.Component {
         }
     }
 
-    toggleShowRequirements() {
-        this.setState({
-            isRequirements: !this.state.isRequirements,
-        });
-    }
-
     componentWillReceiveProps(nextProps) {
         if (undefined !== nextProps.isDragging || undefined !== nextProps.isOver ) {
             this.setState({
@@ -84,23 +76,23 @@ class StoryView extends React.Component {
             style = {opacity: 0.1}
         }
 
-        let cardText;
-        if (this.state.isRequirements) {
-            cardText = <RequirementsList storyId={this.state.story.id}/>
-        } else {
-            cardText = nl2br(this.state.story.text);
-        }
-
         return (
             <Card className="backlog-story" style={style} data-story-id={this.state.story.id}>
-                <CardTitle title={this.state.story.title} className="backlog-story-title"/>
+                <CardTitle
+                    title={this.state.story.title}
+                    className="backlog-story-title"
+                    actAsExpander={true}
+                />
                 <CardText>
-                    {cardText}
+                    {nl2br(this.state.story.text)}
                 </CardText>
+                <CardText
+                    expandable={true}
+                    children={<RequirementsList storyId={this.state.story.id}/>}
+                />
                 <Divider />
                 <CardActions showExpandableButton={true}>
                     <FlatButton label="Редактировать" onTouchTap={this.onChangeEdit} />
-                    <FlatButton label="Требования" onTouchTap={this.toggleShowRequirements} />
                     <FlatButton label="Пометить готовой" onTouchTap={this.onMarkAsCompleted} />
                 </CardActions>
                 <CardActions expandable={true}>
