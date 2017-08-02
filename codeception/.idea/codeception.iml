@@ -63,9 +63,6 @@
     <orderEntry type="module-library">
       <library name="PHP" type="php">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/vendor/amphp/amp" />
-          <root url="file://$MODULE_DIR$/vendor/amphp/byte-stream" />
-          <root url="file://$MODULE_DIR$/vendor/amphp/process" />
           <root url="file://$MODULE_DIR$/vendor/behat/gherkin" />
           <root url="file://$MODULE_DIR$/vendor/codeception/codeception" />
           <root url="file://$MODULE_DIR$/vendor/composer" />
@@ -119,9 +116,6 @@
           <root url="file://$MODULE_DIR$/vendor/webmozart/assert" />
         </CLASSES>
         <SOURCES>
-          <root url="file://$MODULE_DIR$/vendor/amphp/amp" />
-          <root url="file://$MODULE_DIR$/vendor/amphp/byte-stream" />
-          <root url="file://$MODULE_DIR$/vendor/amphp/process" />
           <root url="file://$MODULE_DIR$/vendor/behat/gherkin" />
           <root url="file://$MODULE_DIR$/vendor/codeception/codeception" />
           <root url="file://$MODULE_DIR$/vendor/composer" />

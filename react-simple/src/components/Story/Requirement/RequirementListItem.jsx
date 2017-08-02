@@ -86,7 +86,7 @@ export default class RequirementListItem extends React.Component {
                 this.state.requirement.id = response.payload.id;
             }
             this.state.requirement.text = this.state.requirementText;
-            this.state.requirement.completed = payload.completed;
+            this.state.requirement.completed = response.payload.completed;
 
             this.setState({
                 disabled: false,
