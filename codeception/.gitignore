@@ -1,6 +1,7 @@
 tests/_output
 vendor/
 bin/
+_generated
 
 # User-specific stuff:
 .idea/workspace.xml
