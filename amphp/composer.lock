@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a1cc13be2282c7edfbd36c30ad320ab",
+    "content-hash": "89ba4a3fad43d128478504748a00b23d",
     "packages": [
         {
             "name": "amphp/aerys",
@@ -1071,7 +1071,7 @@
         },
         {
             "name": "fedot/async-data-mapper",
-            "version": "dev-master",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Fedott/async-data-mapper.git",
@@ -1126,7 +1126,7 @@
                 }
             ],
             "description": "Simple async datamaper",
-            "time": "2017-08-22 08:51:47"
+            "time": "2017-08-22T08:51:47+00:00"
         },
         {
             "name": "jms/metadata",
@@ -3753,9 +3753,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "fedot/async-data-mapper": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
