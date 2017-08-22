@@ -4,6 +4,7 @@
     },
     "require": {
         "codeception/codeception": "^2.2",
-        "consolidation/robo": "^1.0"
+        "consolidation/robo": "^1.0",
+        "fedot/process-runner": "dev-master"
     }
 }

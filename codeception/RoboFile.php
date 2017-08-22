@@ -1,4 +1,7 @@
 <?php
+
+use Fedot\ProcessRunner\Runner;
+
 /**
  * This is project's console commands configuration for Robo task runner.
  *
@@ -9,14 +12,12 @@ class RoboFile extends \Robo\Tasks
     public function test()
     {
         $this->startChromeDriver();
-        $this->taskExec('redis-server --port 25325 --timeout 3')->background()->run();
-
+        $this->startRedisServer();
         $this->startAerys();
 
         sleep(1);
 
         $result = $this->taskCodecept('bin/codecept')
-            ->debug()
             ->run()
         ;
 
@@ -31,10 +32,34 @@ class RoboFile extends \Robo\Tasks
         }
     }
 
+    private function startRedisServer()
+    {
+        $runner = new Runner(
+            'redis-server --port 25325 --timeout 3 --pidfile /tmp/amp-redis.pid',
+            'Ready to accept connections',
+            3
+        );
+
+        $this->say('Running redis');
+        $runner->startAndWait();
+        $this->say('[OK]');
+
+        register_shutdown_function(
+            function () {
+                `pkill -f 'redis-server \*:25325'`;
+            }
+        );
+    }
+
     private function startChromeDriver(): void
     {
+        $runner = new Runner(
+            'chromedriver --url-base=/wd/hub',
+            'Only local connections are allowed',
+            3
+        );
         $this->say('Running chromedriver');
-        passthru('chromedriver --url-base=/wd/hub > /tmp/driver-log 2>/tmp/driver-log-err &');
+        $runner->startAndWait();
         $this->say('[OK]');
 
         register_shutdown_function(
@@ -46,11 +71,16 @@ class RoboFile extends \Robo\Tasks
 
     private function startAerys(): void
     {
+        $runner = new Runner(
+            'sh -c "REDIS_URI=tcp://localhost:25325 bin/aerys -c app/aerys-config.php -d"',
+            'started',
+            3,
+            realpath(__DIR__ . '/../amphp')
+        );
+
         $this->say('Running aerys');
-        chdir('../amphp');
-        passthru('REDIS_URI=tcp://localhost:25325 bin/aerys -c app/aerys-config.php -d > /tmp/web-log 2>/tmp/web-log-err &');
+        $runner->startAndWait();
         $this->say('[OK]');
-        chdir(__DIR__);
 
         register_shutdown_function(
             function () {

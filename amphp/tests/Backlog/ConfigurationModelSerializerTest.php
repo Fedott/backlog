@@ -8,7 +8,7 @@ use Fedot\Backlog\Model\Story;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Serializer;
 
-class ModelSerializerTest extends TestCase
+class ConfigurationModelSerializerTest extends TestCase
 {
     /**
      * @var Serializer

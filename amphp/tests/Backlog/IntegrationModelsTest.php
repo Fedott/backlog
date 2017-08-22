@@ -3,52 +3,24 @@
 namespace Tests\Fedot\Backlog;
 
 use Amp\Redis\Client;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Instantiator\Instantiator;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\Requirement;
 use Fedot\Backlog\Model\Story;
 use Fedot\Backlog\Model\User;
 use Fedot\DataMapper\IdentityMap;
-use Fedot\DataMapper\Metadata\Driver\AnnotationDriver;
-use Fedot\DataMapper\Redis\ModelManager;
-use Metadata\MetadataFactory;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Fedot\DataMapper\ModelManagerInterface;
 use function Amp\Promise\wait;
 
-class IntegrationModelsTest extends TestCase
+class IntegrationModelsTest extends BaseTestCase
 {
     /**
      * @var Client
      */
     public $redisClient;
 
-    public static function setUpBeforeClass()
+    protected function getModelManager(): ModelManagerInterface
     {
-        parent::setUpBeforeClass();
-        print `redis-server --daemonize yes --port 25325 --timeout 333 --pidfile /tmp/amp-redis.pid`;
-    }
-
-    public static function tearDownAfterClass()
-    {
-        $pid = @file_get_contents('/tmp/amp-redis.pid');
-        @unlink('/tmp/amp-redis.pid');
-        if (!empty($pid)) {
-            print `kill $pid`;
-        }
-    }
-
-    protected function getModelManager(): ModelManager
-    {
-        $this->redisClient = new Client('tcp://localhost:25325?database=7');
-        $propertyAccessor = new PropertyAccessor();
-        $modelManager = new ModelManager(
-            new MetadataFactory(new AnnotationDriver(new AnnotationReader())), $this->redisClient,
-            $propertyAccessor,
-            new Instantiator()
-        );
-        return $modelManager;
+        return $this->modelManager;
     }
 
     public function testUserModel()

@@ -1,22 +1,22 @@
 <?php declare(strict_types=1);
 namespace Fedot\Backlog\Repository;
 
-use function Amp\call;
 use Amp\Promise;
 use Amp\Success;
 use Fedot\Backlog\Model\Project;
 use Fedot\Backlog\Model\User;
 use Fedot\DataMapper\IdentityMap;
-use Fedot\DataMapper\Redis\ModelManager;
+use Fedot\DataMapper\ModelManagerInterface;
+use function Amp\call;
 
 class ProjectRepository
 {
     /**
-     * @var ModelManager
+     * @var ModelManagerInterface
      */
     private $modelManager;
 
-    public function __construct(ModelManager $modelManager)
+    public function __construct(ModelManagerInterface $modelManager)
     {
         $this->modelManager = $modelManager;
     }

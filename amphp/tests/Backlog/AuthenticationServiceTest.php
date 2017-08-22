@@ -12,9 +12,9 @@ use PHPUnit_Framework_MockObject_MockObject;
 class AuthenticationServiceTest extends BaseTestCase
 {
     /**
-     * @var UserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var UserRepository
      */
-    protected $userRepositoryMock;
+    protected $userRepository;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject|Client
@@ -27,9 +27,9 @@ class AuthenticationServiceTest extends BaseTestCase
     protected function getServiceInstance()
     {
         $this->redisClientMock = $this->createMock(Client::class);
-        $this->userRepositoryMock = $this->createMock(UserRepository::class);
+        $this->userRepository = new UserRepository($this->modelManager);
 
-        return new AuthenticationService($this->redisClientMock, $this->userRepositoryMock);
+        return new AuthenticationService($this->redisClientMock, $this->userRepository);
     }
 
     public function testAuthByUsernamePassword()
@@ -41,11 +41,7 @@ class AuthenticationServiceTest extends BaseTestCase
             '$2y$10$kEYXDhRhNmS1mk226hurv.i23tmnFXuqa1LCMG7UoyhZ3nF/PK7a2'
         );
 
-        $this->userRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with('testUser')
-            ->willReturn(new Success($user))
-        ;
+        $this->modelManager->persist($user);
 
         $this->redisClientMock->expects($this->once())
             ->method('set')
@@ -75,17 +71,6 @@ class AuthenticationServiceTest extends BaseTestCase
     {
         $service = $this->getServiceInstance();
 
-        $user = new User(
-            'testUser',
-            '$2y$10$kEYXDhRhNmS1mk226hurv.i23tmnFXuqa1LCMG7UoyhZ3nF/PK7a2'
-        );
-
-        $this->userRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with('testUser')
-            ->willReturn(new Success(null))
-        ;
-
         $this->redisClientMock->expects($this->once())
             ->method('set')
             ->with(
@@ -114,12 +99,6 @@ class AuthenticationServiceTest extends BaseTestCase
     {
         $service = $this->getServiceInstance();
 
-        $this->userRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with('notFound')
-            ->willReturn(new Success(null))
-        ;
-
         $this->redisClientMock->expects($this->never())
             ->method('set')
         ;
@@ -139,12 +118,7 @@ class AuthenticationServiceTest extends BaseTestCase
             '$2y$10$kEYXDhRhNmS1mk226hurv.i23tmnFXuqa1LCMG7UoyhZ3nF/PK7a2'
         );
 
-        $this->userRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with('testUser')
-            ->willReturn(new Success($user))
-        ;
-
+        $this->modelManager->persist($user);
         $this->redisClientMock->expects($this->never())
             ->method('set')
         ;
@@ -164,11 +138,7 @@ class AuthenticationServiceTest extends BaseTestCase
             '$2y$10$kEYXDhRhNmS1mk226hurv.i23tmnFXuqa1LCMG7UoyhZ3nF/PK7a2'
         );
 
-        $this->userRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with('testUser')
-            ->willReturn(new Success($user))
-        ;
+        $this->modelManager->persist($user);
 
         $this->redisClientMock->expects($this->exactly(2))
             ->method('set')

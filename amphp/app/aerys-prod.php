@@ -37,3 +37,5 @@ $http = (new Host())
     ->use($root)
     ->use($reWriter)
 ;
+
+return [$host];

@@ -25,7 +25,7 @@ $I->see('Story text');
 
 $story1Card = new \Page\StoryCard($I, 'Story title');
 
-$story1Card->clickRequirements();
+$story1Card->clickEdit();
 $firstRequirementText = 'First requirement';
 $story1Card->fillNewRequirementInput($firstRequirementText);
 $story1Card->clickSaveRequirement();
@@ -36,7 +36,6 @@ $story1Card->fillNewRequirementInput($secondRequirement);
 $story1Card->clickSaveRequirement();
 $story1Card->waitRequirement($secondRequirement);
 
-$story1Card->clickEdit();
 $story1Card->appendFieldTitle(' edited');
 $story1Card->appendFieldText(' edited');
 $story1Card->clickSave();

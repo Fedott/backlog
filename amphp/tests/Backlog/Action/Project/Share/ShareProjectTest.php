@@ -2,6 +2,8 @@
 
 namespace Tests\Fedot\Backlog\Action\Project\Share;
 
+use function Amp\Promise\all;
+use function Amp\Promise\wait;
 use Amp\Success;
 use Fedot\Backlog\Action\ActionInterface;
 use Fedot\Backlog\Action\Project\Share\ProjectShare;
@@ -16,28 +18,28 @@ use Tests\Fedot\Backlog\ActionTestCase;
 class ShareProjectTest extends ActionTestCase
 {
     /**
-     * @var UserRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var UserRepository
      */
-    protected $userRepositoryMock;
+    protected $userRepository;
 
     /**
-     * @var ProjectRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var ProjectRepository
      */
-    protected $projectRepositoryMock;
+    protected $projectRepository;
 
     protected function initActionMocks()
     {
         parent::initActionMocks();
 
-        $this->userRepositoryMock = $this->createMock(UserRepository::class);
-        $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
+        $this->userRepository = new UserRepository($this->modelManager);
+        $this->projectRepository = new ProjectRepository($this->modelManager);
     }
 
     protected function getProcessorInstance(): ActionInterface
     {
         return new ProjectShare(
-            $this->userRepositoryMock,
-            $this->projectRepositoryMock
+            $this->userRepository,
+            $this->projectRepository
         );
     }
 
@@ -58,32 +60,26 @@ class ShareProjectTest extends ActionTestCase
         $payload->userId = 'user-id';
 
         $project = new Project('project-id', 'project 1');
-        $user = new User('testUser', 'hash');
+        $user = new User('user-id', 'hash');
 
-        $this->projectRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with('project-id')
-            ->willReturn(new Success($project))
-        ;
-
-        $this->userRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with('user-id')
-            ->willReturn(new Success($user))
-        ;
-
-        $this->projectRepositoryMock->expects($this->once())
-            ->method('addUser')
-            ->with($project, $user)
-            ->willReturn(new Success(true))
-        ;
+        all([
+            $this->modelManager->persist($project),
+            $this->modelManager->persist($user),
+        ]);
 
         $request = $this->makeRequest(1, 2, 'project/share', $payload);
         $response = $this->makeResponse($request);
 
-        $response = \Amp\Promise\wait($this->action->process($request, $response));
+        $response = wait($this->action->process($request, $response));
 
         $this->assertResponseBasic($response, 1, 2, 'success');
+
+        /** @var Project $actualProject */
+        $actualProject = wait($this->projectRepository->get('project-id'));
+        /** @var User $actualUser */
+        $actualUser = wait($this->userRepository->get('user-id'));
+        $this->assertEquals([$actualUser], $actualProject->getUsers());
+        $this->assertEquals([$actualProject], $actualUser->getProjects());
     }
 
     public function testShareUserNotFound()
@@ -94,28 +90,18 @@ class ShareProjectTest extends ActionTestCase
 
         $project = new Project('project-id', 'project 1');
 
-        $this->projectRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with('project-id')
-            ->willReturn(new Success($project))
-        ;
-
-        $this->userRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with('user-id')
-            ->willReturn(new Success(null))
-        ;
-
-        $this->projectRepositoryMock->expects($this->never())
-            ->method('addUser')
-        ;
+        wait($this->modelManager->persist($project));
 
         $request = $this->makeRequest(1, 2, 'project/share', $payload);
         $response = $this->makeResponse($request);
 
-        $response = \Amp\Promise\wait($this->action->process($request, $response));
+        $response = wait($this->action->process($request, $response));
 
         $this->assertResponseError($response, 1, 2, 'User or Project not found');
+
+        /** @var Project $actualProject */
+        $actualProject = wait($this->projectRepository->get('project-id'));
+        $this->assertEquals([], $actualProject->getUsers());
     }
 
     public function testShareProjectNotFound()
@@ -124,29 +110,19 @@ class ShareProjectTest extends ActionTestCase
         $payload->projectId = 'project-id';
         $payload->userId = 'user-id';
 
-        $user = new User('testUser', 'hash');
+        $user = new User('user-id', 'hash');
 
-        $this->projectRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with('project-id')
-            ->willReturn(new Success(null))
-        ;
-
-        $this->userRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with('user-id')
-            ->willReturn(new Success($user))
-        ;
-
-        $this->projectRepositoryMock->expects($this->never())
-            ->method('addUser')
-        ;
+        wait($this->modelManager->persist($user));
 
         $request = $this->makeRequest(1, 2, 'project/share', $payload);
         $response = $this->makeResponse($request);
 
-        $response = \Amp\Promise\wait($this->action->process($request, $response));
+        $response = wait($this->action->process($request, $response));
 
         $this->assertResponseError($response, 1, 2, 'User or Project not found');
+
+        /** @var User $actualUser */
+        $actualUser = wait($this->userRepository->get('user-id'));
+        $this->assertEquals([], $actualUser->getProjects());
     }
 }

@@ -19,9 +19,9 @@ use Tests\Fedot\Backlog\ActionTestCase;
 class GetProjectsTest extends ActionTestCase
 {
     /**
-     * @var ProjectRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var ProjectRepository
      */
-    protected $projectRepositoryMock;
+    protected $projectRepository;
 
     /**
      * @var WebSocketConnectionAuthenticationService|PHPUnit_Framework_MockObject_MockObject
@@ -35,10 +35,10 @@ class GetProjectsTest extends ActionTestCase
 
     protected function getProcessorInstance(): ActionInterface
     {
-        $this->projectRepositoryMock = $this->createMock(ProjectRepository::class);
+        $this->projectRepository = new ProjectRepository($this->modelManager);
         $this->normalizerMock = $this->createMock(NormalizerInterface::class);
 
-        return new ProjectsGetAll($this->projectRepositoryMock, $this->webSocketAuthServiceMock, $this->normalizerMock);
+        return new ProjectsGetAll($this->projectRepository, $this->webSocketAuthServiceMock, $this->normalizerMock);
     }
 
     protected function getExpectedValidRequestType(): string
@@ -75,11 +75,13 @@ class GetProjectsTest extends ActionTestCase
             new Project('project-id3', 'project name 3'),
         ];
 
-        $this->projectRepositoryMock->expects($this->once())
-            ->method('getAllByUser')
-            ->with($user)
-            ->willReturn(new Success($projects))
-        ;
+        array_map(function (Project $project) use ($user) {
+            $this->modelManager->persist($project);
+
+            $user->addProject($project);
+        }, $projects);
+
+        $this->modelManager->persist($user);
 
         $this->normalizerMock->expects($this->once())
             ->method('normalize')

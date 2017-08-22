@@ -30,9 +30,11 @@ $reWriter = new class implements \Aerys\Bootable
     }
 };
 
-(new Aerys\Host)
+$host = (new Aerys\Host)
     ->expose('*', 8080)
     ->use($router)
     ->use($root)
     ->use($reWriter)
 ;
+
+return [$host];
