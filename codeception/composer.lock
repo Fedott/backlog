@@ -818,12 +818,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Fedott/process-runner.git",
-                "reference": "abf6dbd6d87b7e0b3600b53aeae63f97711d04ca"
+                "reference": "f0244149882dfcb128632eb48608a7172a6c5d48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Fedott/process-runner/zipball/abf6dbd6d87b7e0b3600b53aeae63f97711d04ca",
-                "reference": "abf6dbd6d87b7e0b3600b53aeae63f97711d04ca",
+                "url": "https://api.github.com/repos/Fedott/process-runner/zipball/f0244149882dfcb128632eb48608a7172a6c5d48",
+                "reference": "f0244149882dfcb128632eb48608a7172a6c5d48",
                 "shasum": ""
             },
             "require": {
@@ -849,7 +849,7 @@
                 }
             ],
             "description": "Process runner with wait some text on output",
-            "time": "2017-08-22 09:45:02"
+            "time": "2017-08-22 10:21:23"
         },
         {
             "name": "grasmash/yaml-expander",
