@@ -15,7 +15,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.1",
-        "amphp/aerys": "dev-amp_v2",
+        "amphp/aerys": "^0.6",
         "amphp/redis": "^0.3",
         "amphp/amp": "^2",
         "doctrine/annotations": "^1.2",
@@ -29,7 +29,7 @@
         "symfony/config": "^3.3",
         "symfony/console": "^3.3",
         "symfony/finder": "^3.3",
-        "fedot/async-data-mapper": "dev-dev-mongodb",
+        "fedot/async-data-mapper": "dev-master",
         "phpdocumentor/reflection-docblock": "^3.2"
     },
     "require-dev": {
